@@ -1,0 +1,224 @@
+{% extends "website/inc/www_base.html" %}
+{% load staticfiles %}
+
+{# page title #}
+{% block title %}MotorJab Garage | Autoriparazioni Meccatronica Gommista a Torino{% endblock %}
+
+{# page description #}
+{% block description %}{% endblock %}
+
+{# custom page css block #}
+{% block custom_css %}{% endblock %}
+{# Custom page script block #}
+{% block custom_js %}{% endblock %}
+
+{# menu active element #}
+{% block navigation_active_home %}active{% endblock %}
+
+{# container content #}
+{% block www_main_content %}
+<!-- Begin Carousel -->
+<div class="carousel">
+	<div id="carouselHome" class="carousel slide carousel-fade" data-ride="carousel">
+		<!-- Indicators -->
+		<ol class="carousel-indicators">
+			<li data-target="#carouselHome" data-slide-to="0" class="active"></li>
+			<li data-target="#carouselHome" data-slide-to="1" class=""></li>
+			<li data-target="#carouselHome" data-slide-to="2" class=""></li>
+		</ol>
+		<!-- Progress Bar -->
+		<hr class="transition-timer-carousel-progress-bar" style="width: 37.5%;">
+		<!-- Begin Wrapper for slides -->
+		<div class="carousel-inner">
+			<!-- Begin Item 1 -->
+			<div class="item active">
+				<!-- Item BG -->
+				<div class="background-main skrollable skrollable-between" style='background-image: url("https://picsum.photos/1600/820"); background-position: 0px 0px;' data-0="background-position:0px 0px;" data-500="background-position:0px -250px;">
+					<div class="container">
+						<div class="row carousel-content center-vertically-right">
+							<!-- Content -->
+							<div class="" data-animation="fadeInRight">
+								<div class="carousel-description col-sm-6 col-sm-offset-5">
+									<h3 class="heavy text-white"><span class="carousel-title-bgclear">Top Fasion Shop</span></h3>
+									<p class="mt20">Maecenas est ex, placerat at tortor nec, 
+										facilisis semper ex. Sed vulputate sollicitudin elementum. Cum sociis 
+										natoque penatibus et <strong>magnis dis</strong> parturient montes, nascetur ridiculus mus.
+									</p>
+								</div>
+							</div>
+						</div>
+						<!-- /content container -->
+					</div>
+					<!-- /container -->
+				</div>
+				<!-- /bg div -->
+			</div>
+			<!-- /item -->
+			<!-- End Item 1 -->
+			<!-- Begin Item 2 -->
+			<div class="item">
+				<!-- Item BG -->
+				<div style='background-image: url("{% static "website/img/slide1.jpg" %}"); background-position: center center; background-size: cover;' data-0="background-position:0px 0px;" data-500="background-position:0px -250px;" class="skrollable skrollable-between">
+					<div class="container">
+						<div class="row carousel-content center-vertically-right">
+							<div class="" data-animation="fadeInUpBig">
+								<div class="carousel-description col-sm-8 col-sm-offset-2 text-center">
+									<!-- Content -->
+									<span class="fa fa-anchor fa-4x text-white mb20"></span>
+									<h2 class="heavy text-white"><span class="carousel-title-bgclear">Bracelet &amp; Necklace</span></h2>
+									Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+									Donec hendrerit facilisis augue, ac bibendum sem vulputate quis. Nam in 
+									ultricies quam, sed tempor velit. Phasellus ac ullamcorper augue. Cras 
+									eu sem ut elit pharetra tempor in et velit. <br>
+								</div>
+							</div>
+						</div>
+						<!-- /content container -->
+					</div>
+					<!-- /container -->
+				</div>
+				<!-- /bg div -->
+			</div>
+			<!-- /item -->
+			<!-- End Item 2 -->
+			<!-- Begin Item 3 -->
+			<div class="item">
+				<!-- Item BG -->
+				<div style='background-image: url("https://picsum.photos/1600/850"); background-position: 0px 0px;' data-0="background-position:0px 0px;" data-500="background-position:0px -250px;" class="skrollable skrollable-between">
+					<div class="container">
+						<div class="row carousel-content center-vertically-left">
+							<!-- Content -->
+							<div class="">
+								<div class="carousel-description mt10 col-md-8 col-md-offset-2">
+									<h3 class="heavy text-white" data-animation="fadeInRight"><span class="carousel-title-bgclear">Sales Month</span></h3>
+									<p class="mt20" data-animation="fadeInLeft">Maecenas est ex, placerat at tortor nec, 
+										facilisis semper ex. Sed vulputate sollicitudin elementum. Cum sociis 
+										natoque penatibus et magnis dis parturient montes, nascetur ridiculus 
+										mus. Maecenas est ex, placerat at tortor nec.
+									</p>
+								</div>
+							</div>
+						</div>
+						<!-- /content container -->
+					</div>
+					<!-- /container -->
+				</div>
+				<!-- /bg div -->
+			</div>
+			<!-- /item -->
+			<!-- End Item 3 -->
+		</div>
+		<!-- /carousel inner -->
+		<!-- End Wrapper for slides -->
+		<!-- Controls -->
+		<a class="left carousel-control" href="#carouselHome" role="button" data-slide="prev">
+		<span class="ion-ios-arrow-back carousel-arrow-left" aria-hidden="true"></span>
+		</a>
+		<a class="right carousel-control" href="#carouselHome" role="button" data-slide="next">
+		<span class="ion-ios-arrow-forward carousel-arrow-right" aria-hidden="true"></span>
+		</a>
+	</div>
+	<!-- /carousel id div -->
+</div>
+<!-- /carousel div -->
+<!-- End Carousel -->
+<!-- three elements block -->
+<div class="row elements_container no_gutter">
+	<div class="col-sm-12">
+		<div class="col-sm-4 text-center no_gutter">
+			<a class="simple_link hvr-grow" href="#">
+				<img class="img-responsive" src="{% static "website/img/tagliando-completo.png" %}" alt="">
+				<div class="block-label">Tagliando completo</div>
+			</a>
+		</div>
+		<div class="col-sm-4 text-center no_gutter">
+			<a class="simple_link hvr-grow" href="#">
+				<img class="img-responsive" src="{% static "website/img/meccatronica.png" %}" alt="Meccanicatronica">
+				<div class="block-label">Meccatronica</div>
+			</a>
+		</div>
+		<div class="col-sm-4 text-center no_gutter">
+			<a class="simple_link hvr-grow" href="#">
+				<img class="img-responsive" src="{% static "website/img/gommista.png" %}" alt="Gommista">
+				<div class="block-label">Gommista</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="container-fluid info_block info_block_color2">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="col-md-7 padding-xs-only padding-sm-only">
+				<div class="col-lg-12 no_gutter">
+					<h4>Bielle, cilindri, pistoni e...</h4>
+				</div>
+				<div class="col-lg-12 no_gutter">
+					<h1>MotorJab Garage</h1>
+				</div>
+				<div class="col-lg-12 no_gutter readable_text1">
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus. Ut egestas ex eu convallis elementum. Nam eros ligula, commodo ut tortor et, venenatis feugiat augue. In ut ultrices massa, ut rutrum tortor. Cras lobortis purus finibus tortor euismod condimentum.
+				</div>
+				<div class="col-lg-12 no_gutter"><a href="/howto/concorsi-a-tema/">Maggiori informazioni</a></div>
+			</div>
+			<div class="col-md-offset-1 col-md-4 text-xs-center text-md-right">
+				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
+				<img class="img-responsive" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/img1.png" %}">
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container-fluid info_block info_block_color1">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="col-md-offset-1 col-md-7 col-md-push-4 padding-xs-only padding-sm-only">
+				<div class="col-lg-12 no_gutter">
+					<h4>Una piccola anteprima</h4>
+				</div>
+				<div class="col-lg-12 no_gutter">
+					<h1 class="service_pie_title servicePieTitleAction">Ecco alcuni dei nostri servizi</h1>
+				</div>
+				<div class="col-lg-12 no_gutter">
+					<span class="hidden service_content_pie1">PIE1: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus. Ut egestas ex eu convallis elementum. Nam eros ligula, commodo ut tortor et, venenatis feugiat augue. In ut ultrices massa, ut rutrum tortor. Cras lobortis purus finibus tortor euismod condimentum.</span>
+					<span class="hidden service_content_pie2">PIE2: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus. Ut egestas ex eu convallis elementum. Nam eros ligula, commodo ut tortor et, venenatis feugiat augue. In ut ultrices massa, ut rutrum tortor. Cras lobortis purus finibus tortor euismod condimentum.</span>
+					<span class="hidden service_content_pie3">PIE3: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus. Ut egestas ex eu convallis elementum. Nam eros ligula, commodo ut tortor et, venenatis feugiat augue. In ut ultrices massa, ut rutrum tortor. Cras lobortis purus finibus tortor euismod condimentum.</span>
+					<span class="hidden service_content_pie4">PIE4: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus. Ut egestas ex eu convallis elementum. Nam eros ligula, commodo ut tortor et, venenatis feugiat augue. In ut ultrices massa, ut rutrum tortor. Cras lobortis purus finibus tortor euismod condimentum.</span>
+					<span class="hidden service_content_pie5">PIE5: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus. Ut egestas ex eu convallis elementum. Nam eros ligula, commodo ut tortor et, venenatis feugiat augue. In ut ultrices massa, ut rutrum tortor. Cras lobortis purus finibus tortor euismod condimentum.</span>
+					<span class="hidden service_content_pie6">PIE6: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus. Ut egestas ex eu convallis elementum. Nam eros ligula, commodo ut tortor et, venenatis feugiat augue. In ut ultrices massa, ut rutrum tortor. Cras lobortis purus finibus tortor euismod condimentum.</span>
+					<span class="hidden service_content_pie7">PIE7: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus. Ut egestas ex eu convallis elementum. Nam eros ligula, commodo ut tortor et, venenatis feugiat augue. In ut ultrices massa, ut rutrum tortor. Cras lobortis purus finibus tortor euismod condimentum.</span>
+					<span class="hidden service_content_pie8">PIE8: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus. Ut egestas ex eu convallis elementum. Nam eros ligula, commodo ut tortor et, venenatis feugiat augue. In ut ultrices massa, ut rutrum tortor. Cras lobortis purus finibus tortor euismod condimentum.</span>
+					<span class="hidden service_content_pie9">Tagliando completo: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus. Ut egestas ex eu convallis elementum. Nam eros ligula, commodo ut tortor et, venenatis feugiat augue. In ut ultrices massa, ut rutrum tortor. Cras lobortis purus finibus tortor euismod condimentum.</span>
+					<span class="hidden service_title_pie1"><img alt="Cambio frizione" src="{% static "website/img/service_pie/cambio-frizione.png" %}">&nbsp;Cambio e frizione</span>
+					<span class="hidden service_title_pie2"><img alt="Diagnosi elettronica" src="{% static "website/img/service_pie/diagnosi-elettronica.png" %}">&nbsp;Diagnosi elettronica</span>
+					<span class="hidden service_title_pie3"><img alt="Distribuzione" src="{% static "website/img/service_pie/distribuzione.png" %}">&nbsp;Distribuzione</span>
+					<span class="hidden service_title_pie4"><img alt="Gommista" src="{% static "website/img/service_pie/gommista.png" %}">&nbsp;Gommista</span>
+					<span class="hidden service_title_pie5"><img alt="Impianto di scarico" src="{% static "website/img/service_pie/impianto-di-scarico.png" %}">&nbsp;Impianto di scarico</span>
+					<span class="hidden service_title_pie6"><img alt="Impianto elettrico" src="{% static "website/img/service_pie/impianto-elettrico.png" %}">&nbsp;Impianto elettrico</span>
+					<span class="hidden service_title_pie7"><img alt="Impianto frenante" src="{% static "website/img/service_pie/impianto-frenante.png" %}">&nbsp;Impianto frenante</span>
+					<span class="hidden service_title_pie8"><img alt="Sospensioni" src="{% static "website/img/service_pie/sospensioni.png" %}">&nbsp;Sospensioni</span>
+					<span class="hidden service_title_pie9"><img alt="Tagliando" src="{% static "website/img/service_pie/tagliando.png" %}">&nbsp;Tagliando</span>
+					<span class="current_service_pie_content readable_text1 servicePieContentAction">Scopri quali sono tutti i nostri servizi, da lavori di meccanica come frizioni, freni, cinghia di distribuzione, fino ad analisi elettroniche della tua auto. Seleziona sulla ruota un servizio per visualizzarne una descrizione rapida.</span>
+				</div>
+				<div class="col-lg-12 no_gutter"><a href="/caratteristiche/">Scopri tutti i nostri servizi</a></div>
+			</div>
+			<div class="col-md-4 col-md-pull-8 text-xs-center text-md-left">
+				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
+				<!-- torta con i servizi -->
+				<div class="cn-wrapper" style="border-radius: 50%; overflow: hidden;">
+					<ul>
+						<li class="circle-1 circle servicePieAction" data-pie-name="pie1"><a><img alt="Cambio frizione" src="{% static "website/img/service_pie/cambio-frizione.png" %}"></span></a></li>
+						<li class="circle-2 circle servicePieAction" data-pie-name="pie2"><a><img alt="Diagnosi elettronica" src="{% static "website/img/service_pie/diagnosi-elettronica.png" %}"></a></li>
+						<li class="circle-3 circle servicePieAction" data-pie-name="pie3"><a><img alt="Distribuzione" src="{% static "website/img/service_pie/distribuzione.png" %}"></a></li>
+						<li class="circle-4 circle servicePieAction" data-pie-name="pie4"><a><img alt="Gommista" src="{% static "website/img/service_pie/gommista.png" %}"></a></li>
+						<li class="circle-5 circle servicePieAction" data-pie-name="pie5"><a><img alt="Impianto di scarico" src="{% static "website/img/service_pie/impianto-di-scarico.png" %}"></a></li>
+						<li class="circle-6 circle servicePieAction" data-pie-name="pie6"><a><img alt="Impianto elettrico" src="{% static "website/img/service_pie/impianto-elettrico.png" %}"></a></li>
+						<li class="circle-7 circle servicePieAction" data-pie-name="pie7"><a><img alt="Impianto frenante" src="{% static "website/img/service_pie/impianto-frenante.png" %}"></a></li>
+						<li class="circle-8 circle servicePieAction" data-pie-name="pie8"><a><img alt="Sospensioni" src="{% static "website/img/service_pie/sospensioni.png" %}"></a></li>
+						<li class="circle-9 circle servicePieAction" data-pie-name="pie9"><a><img alt="Tagliando" src="{% static "website/img/service_pie/tagliando.png" %}"></a></li>
+					</ul>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
