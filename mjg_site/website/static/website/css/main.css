@@ -1041,6 +1041,8 @@ blockquote {
 .page_title_separator h2 { margin-top: 0px; margin-bottom: 20px; }
 .nav.navbar-nav a.active { color: black!important; background-color: gray!important; }
 .page_title_separator { margin-left: 0px; margin-right: 0px; padding-left: 30px!important; padding-right: 30px!important; }
+.no-spinners { -moz-appearance:textfield; }
+.no-spinners::-webkit-outer-spin-button, .no-spinners::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
 /* resolution generic style */
 .text-xs-left { text-align: left; }

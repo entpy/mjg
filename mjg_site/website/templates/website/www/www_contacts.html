@@ -10,31 +10,16 @@
 {# custom page css block #}
 {% block custom_css %}
 <style type="text/css">
-#map {
-	height: 400px;  /* The height is 400 pixels */
-	width: 100%;  /* The width is the width of the web page */
-	margin-top: 80px;
-}
-#footer { margin-top: 0px; }
-.contact_form_textarea { resize: none; }
+	#footer { margin-top: 0px; }
+	.contact_form_textarea { resize: none; }
+	.info_block { margin-bottom: 80px; }
+	.google_maps_iframe { float: left; width: 100%; margin-bottom: 50px; }
 </style>
 {% endblock %}
 {# Custom page script block #}
-{% block custom_js %}{% endblock %}
-{% block extra_js %}
-<script>
-	// Initialize and add the map
-	function initMap() {
-		// The location of marker
-		var default_marker = {lat: -25.344, lng: 131.036};
-		// The map, centered at Uluru
-		var map = new google.maps.Map(
-		document.getElementById('map'), {zoom: 4, center: default_marker});
-		// The marker, positioned at Uluru
-		var marker = new google.maps.Marker({position: default_marker, map: map});
-	}
-</script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzqjdh6nbQs6n1Vt7RK2Yo01w0eFOs2Vg&callback=initMap"></script>
+{% block custom_js %}
+{# howto: https://validatejs.org #}
+<script src="{% static "website/js/vendor/validate.min.js" %}"></script>
 {% endblock %}
 
 {# menu active element #}
@@ -49,34 +34,36 @@
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
 			<div class="col-md-offset-1 col-md-7 col-md-push-4 padding-xs-only padding-sm-only">
-				<form class="form-horizontal" name="contact_form" method="POST" action="">
-					<input type="hidden" name="contact_form_sent" value="1">
-					<fieldset>
-						<div class="form-group">
-							<label for="inputEmail" class="col-lg-2 control-label">Email</label>
-							<div class="col-lg-10">
-								<input id="inputEmail" class="form-control" placeholder="Inserisci la tua email" type="email" required>
+				<div class="well bs-component">
+					<form class="form-horizontal validateFormAction" name="contact_form" method="POST" action="">
+						<input type="hidden" name="contact_form_sent" value="1">
+						<fieldset>
+							<div class="form-group formGroupAction inputEmailGroup">
+								<label for="inputEmail" class="col-lg-2 control-label">Email</label>
+								<div class="col-lg-10">
+									<input id="inputEmail" name="inputEmail" class="form-control" placeholder="Inserisci la tua email" type="email" required>
+								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							<label for="inputPhone" class="col-lg-2 control-label">Telefono</label>
-							<div class="col-lg-10">
-								<input id="inputPhone" class="form-control" placeholder="Inserisci il tuo numero di telefono" type="tel" required>
+							<div class="form-group formGroupAction inputPhoneGroup">
+								<label for="inputPhone" class="col-lg-2 control-label">Telefono</label>
+								<div class="col-lg-10">
+									<input id="inputPhone" name="inputPhone" class="form-control no-spinners" placeholder="Inserisci il tuo numero di telefono" type="number" required>
+								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							<label for="textArea" class="col-lg-2 control-label">Messaggio</label>
-							<div class="col-lg-10">
-								<textarea class="form-control contact_form_textarea" placeholder="Scrivi qui la tua richiesta..." rows="3" id="textArea"></textarea>
+							<div class="form-group formGroupAction inputTextGroup">
+								<label for="textArea" class="col-lg-2 control-label">Messaggio</label>
+								<div class="col-lg-10">
+									<textarea id="textArea" name="inputText"class="form-control contact_form_textarea" placeholder="Scrivi qui la tua richiesta..." rows="3" required></textarea>
+								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							<div class="col-lg-10 col-lg-offset-2">
-								<button type="submit" class="btn btn-primary">Richiedi informazioni</button>
+							<div class="form-group">
+								<div class="col-lg-10 col-lg-offset-2">
+									<button type="submit" class="btn btn-primary btn-lg formSendButtonClickAction">Richiedi informazioni</button>
+								</div>
 							</div>
-						</div>
-					</fieldset>
-				</form>
+						</fieldset>
+					</form>
+				</div>
 			</div>
 			<div class="col-md-4 col-md-pull-8 text-xs-center text-md-left">
 				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
@@ -92,7 +79,7 @@
 							<div class="mu-contact-widget">
 							<h4>Orari di apertura</h4>                      
 							<address>
-								<p><span>Lunedì - Venerdì:</span><br /><b>8.00 - 12.00 / 14.00 - 18.30</b></p>
+								<p><span>Lunedì - Venerdì:</span><br /><b>8.00 - 12.00 / 14.00 - 19.00</b></p>
 								<p><span>Sabato:</span> <b>Chiuso</b></p>
 								<p><span>Domenica:</span> <b>Chiuso</b></p>
 							</address>
@@ -103,5 +90,69 @@
 		</div>
 	</div>
 </div>
-<div id="map"></div>
+<iframe class="google_maps_iframe" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4739.290115330831!2d7.670063568528338!3d45.0655361808836!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47886d1364c06c41%3A0x1b7cfdd92a867de3!2sd%2C+Via+Vincenzo+Bellini%2C+7%2C+10121+Torino+TO!5e0!3m2!1sit!2sit!4v1540503472282" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function(){
+	$(document).on("click", ".formSendButtonClickAction", function(){
+		return validateForm();
+	});
+});
+
+function validateForm() {
+	// elimino eventuali classi di errore
+	clearFormErrorClasses();
+
+	// lavora sui "name" NON sugli "id"
+	var constraints = {
+		inputEmail: {
+			presence: true,
+			email: true,
+		},
+		inputPhone: {
+			presence: true,
+			numericality: {
+				onlyInteger: true,
+			},
+		},
+		inputText: {
+			presence: true,
+		},
+	};
+
+	var validateResult = validate($(".validateFormAction"), constraints);
+	// manage form errors
+	return manageFormError(validateResult);
+}
+
+function manageFormError(validateResult) {
+	var returnVar = true;
+	// console.log("manageFormError function");
+	// console.log(validateResult);
+	if (validateResult && Object.keys(validateResult).length) {
+		for (var property in validateResult) {
+			if (validateResult.hasOwnProperty(property)) {
+				// console.log("property: " + property);
+				$("." + property + "Group").addClass("has-error");
+				// TODO
+				// eventualmente aggiungere il messaggio di errore in un blocco superiore
+
+				// se presente anche un solo errore, blocco il submit del form
+				returnVar = false;
+			}
+		}
+	}
+
+	return returnVar;
+}
+
+// TODO
+function clearFormErrorClasses() {
+	$(".formGroupAction").removeClass("has-error");
+
+	return true;
+}
+</script>
 {% endblock %}
