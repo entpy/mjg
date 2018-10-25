@@ -1,7 +1,7 @@
-html,
+/*html,
 html * {
 	font-family: 'Montserrat', sans-serif;
-}
+}*/
 
 /* =Carousel
 -------------------------------------------------------------- */
@@ -750,7 +750,7 @@ html * {
 	margin: 0;
 }
 
-#footer ul {
+#footer ul, ul.contact-us {
 	list-style: outside none none;
 }
 
@@ -854,7 +854,8 @@ a.scrollup:focus i {
 }
 
 .contact-us {
-	margin: 15px 0 0;
+	margin: 9px 0 0;
+	padding: 0;
 	background: url("../img/mappa-contatti.png") no-repeat center bottom;
 }
 
@@ -873,7 +874,7 @@ footer .contact-us a {
 .contact-us li i {
 	color: #777777;
 	float: left;
-	margin: 4px 0 0;
+	margin: 0;
 }
 
 .contact-us p {
@@ -966,12 +967,6 @@ blockquote {
 	padding: 18px;
 }
 
-.contact-us li i {
-	color: #777777;
-	float: left;
-	margin: 4px 0 0;
-}
-
 .no_gutter {
 	padding-left: 0!important;
 	padding-right: 0!important;
@@ -1030,14 +1025,15 @@ blockquote {
 .service_pie_title img { height: 43px; vertical-align: text-top; }
 .simple_link, .simple_link:hover, .simple_link:active { display: inline-block; text-decoration: none; }
 .info_block { margin-top: 80px; }
-.info_block h1 { margin-top: 0px; }
-.info_block h4 { margin-bottom: 4px; color: #414f5a; }
+.info_block h3 { margin-top: 0px; }
+.info_block h5 { margin-bottom: 4px; color: #414f5a; }
 .readable_text1 { letter-spacing: 0.02em; line-height: 1.8678; }
 .img-responsive { display: inline-block; }
 .page_header_block { display: inline-block; padding: 70px 0; text-align: center; width: 100%; }
 .page_header_block h1 { background-color: black; color: white; display: inline-block; font-size: 57px; font-weight: 100; padding: 10px 20px; text-transform: uppercase; }
 .page_header_block h4 { background-color: black; color: white; display: inline-block; font-size: 22px; font-weight: 100; padding: 5px 10px; }
 .service_header_block { background-image: url("../img/service_bg.png"); background-position: center center; background-size: initial; background-attachment: fixed; }
+.contacts_header_block { background-image: url("../img/contacts_bg.png"); background-position: center center; background-size: initial; background-attachment: fixed; }
 .single_service_block { text-align: center; }
 .single_service_block .readable_text1 { margin-top: 20px; text-align: left; }
 .page_title_separator { background-color: #d6d6d6; }

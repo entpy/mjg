@@ -57,3 +57,21 @@ $(document).ready(function () {
 		return false;
 	});
 });
+
+function page_anchor(anchorName) {
+	if (!anchorName) {
+		var window_location = window.location;
+		var myRe = new RegExp("#(.+)$");
+		var myArray = myRe.exec(window_location);
+	}
+
+	if (myArray) {
+		var scrollToElement = myArray[1];
+	} else if (anchorName) {
+		var scrollToElement = anchorName;
+	}
+
+	$.scrollTo('#_' + scrollToElement, 2500, { offset:-80 });
+
+	return true;
+}
