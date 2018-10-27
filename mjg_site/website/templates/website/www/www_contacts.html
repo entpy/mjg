@@ -38,25 +38,31 @@
 					<form class="form-horizontal validateFormAction" name="contact_form" method="POST" action="">
 						<input type="hidden" name="contact_form_sent" value="1">
 						<fieldset>
+							<div class="form-group formGroupAction inputNameGroup">
+								<label for="inputName" class="col-lg-2 control-label">Nome&nbsp;*</label>
+								<div class="col-lg-10">
+									<input id="inputName" name="inputName" class="form-control" placeholder="Inserisci il tuo nome" type="text" required>
+								</div>
+							</div>
 							<div class="form-group formGroupAction inputEmailGroup">
-								<label for="inputEmail" class="col-lg-2 control-label">Email</label>
+								<label for="inputEmail" class="col-lg-2 control-label">Email&nbsp;*</label>
 								<div class="col-lg-10">
 									<input id="inputEmail" name="inputEmail" class="form-control" placeholder="Inserisci la tua email" type="email" required>
 								</div>
 							</div>
 							<div class="form-group formGroupAction inputPhoneGroup">
-								<label for="inputPhone" class="col-lg-2 control-label">Telefono</label>
+								<label for="inputPhone" class="col-lg-2 control-label">Telefono&nbsp;*</label>
 								<div class="col-lg-10">
 									<input id="inputPhone" name="inputPhone" class="form-control no-spinners" placeholder="Inserisci il tuo numero di telefono" type="number" required>
 								</div>
 							</div>
 							<div class="form-group formGroupAction inputTextGroup">
-								<label for="textArea" class="col-lg-2 control-label">Messaggio</label>
+								<label for="textArea" class="col-lg-2 control-label">Messaggio&nbsp;*</label>
 								<div class="col-lg-10">
 									<textarea id="textArea" name="inputText"class="form-control contact_form_textarea" placeholder="Scrivi qui la tua richiesta..." rows="3" required></textarea>
 								</div>
 							</div>
-							<div class="form-group">
+							<div class="form-group text-md-right">
 								<div class="col-lg-10 col-lg-offset-2">
 									<button type="submit" class="btn btn-primary btn-lg formSendButtonClickAction">Richiedi informazioni</button>
 								</div>
@@ -76,7 +82,7 @@
 								<p><i class="ion-ios-at"></i>&nbsp;Via Bellini, 7, 10121 Torino TO</p>
 							</address>
 						</div>
-							<div class="mu-contact-widget">
+						<div class="mu-contact-widget">
 							<h4>Orari di apertura</h4>                      
 							<address>
 								<p><span>Lunedì - Venerdì:</span><br /><b>8.00 - 12.00 / 14.00 - 19.00</b></p>
@@ -97,62 +103,27 @@
 <script>
 $(document).ready(function(){
 	$(document).on("click", ".formSendButtonClickAction", function(){
-		return validateForm();
+		// lavora sui "name" NON sugli "id"
+		var constraints = {
+			inputName: {
+				presence: true,
+			},
+			inputEmail: {
+				presence: true,
+				email: true,
+			},
+			inputPhone: {
+				presence: true,
+				numericality: {
+					onlyInteger: true,
+				},
+			},
+			inputText: {
+				presence: true,
+			},
+		};
+		return validateForm(constraints);
 	});
 });
-
-function validateForm() {
-	// elimino eventuali classi di errore
-	clearFormErrorClasses();
-
-	// lavora sui "name" NON sugli "id"
-	var constraints = {
-		inputEmail: {
-			presence: true,
-			email: true,
-		},
-		inputPhone: {
-			presence: true,
-			numericality: {
-				onlyInteger: true,
-			},
-		},
-		inputText: {
-			presence: true,
-		},
-	};
-
-	var validateResult = validate($(".validateFormAction"), constraints);
-	// manage form errors
-	return manageFormError(validateResult);
-}
-
-function manageFormError(validateResult) {
-	var returnVar = true;
-	// console.log("manageFormError function");
-	// console.log(validateResult);
-	if (validateResult && Object.keys(validateResult).length) {
-		for (var property in validateResult) {
-			if (validateResult.hasOwnProperty(property)) {
-				// console.log("property: " + property);
-				$("." + property + "Group").addClass("has-error");
-				// TODO
-				// eventualmente aggiungere il messaggio di errore in un blocco superiore
-
-				// se presente anche un solo errore, blocco il submit del form
-				returnVar = false;
-			}
-		}
-	}
-
-	return returnVar;
-}
-
-// TODO
-function clearFormErrorClasses() {
-	$(".formGroupAction").removeClass("has-error");
-
-	return true;
-}
 </script>
 {% endblock %}

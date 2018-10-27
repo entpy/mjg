@@ -766,7 +766,7 @@ html * {
 	background: #272727;
 	color: #888;
 	line-height: 38px;
-	padding: 15px;
+	padding: 40px 15px;
 }
 
 .social-icons-footer-bottom {
@@ -1012,10 +1012,6 @@ blockquote {
 	max-width: 1200px;
 }
 
-.navbar-wrapper {
-	width: 100%;
-}
-
 .title_image_block {
 	margin-top: 80px;
 }
@@ -1044,6 +1040,15 @@ blockquote {
 .no-spinners { -moz-appearance:textfield; }
 .no-spinners::-webkit-outer-spin-button, .no-spinners::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
+/* cookie law {{{ */
+#cookie-law { background: #000 none repeat scroll 0 0; margin: 0 auto; width: 100%; z-index: 9999; position: fixed; bottom: 0px; opacity: 0.8; }
+#cookie-law p { color: #fff; font-size: 0.9em; margin: 0; padding: 10px; text-align: center; }
+/* cookie law }}} */
+
+input[type="checkbox"], .checkbox input[type="checkbox"], .checkbox-inline input[type="checkbox"] { position: relative; margin-top: 6px; margin-right: 12px; vertical-align: top; border: none; background-color: transparent; -webkit-appearance: none; appearance: none; cursor: pointer; }
+input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio"] { margin-right: 12px; }
+
+
 /* resolution generic style */
 .text-xs-left { text-align: left; }
 .text-xs-right { text-align: right; }
@@ -1056,6 +1061,11 @@ blockquote {
 	.padding-xs-only { padding-bottom: 30px; }
 	.single_service_block .readable_text1 { padding-bottom: 80px; }
 	.single_service_block:last-child .readable_text1 { padding-bottom: 0px; }
+}
+/* xs sm only */
+@media (max-width: 992px) {
+	.coupon_image_container img { max-width: 60%; }
+	.info_block { margin-top: 40px; }
 }
 /* sm only */
 @media (min-width: 768px) and (max-width: 992px) {

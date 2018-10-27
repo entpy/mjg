@@ -34,3 +34,11 @@ def www_tires(request):
 def www_checkup(request):
     """View to show checkup info page"""
     return render(request, 'website/www/www_checkup.html')
+
+def www_privacy_cookie_policy(request):
+    """View to show privacy policy info page"""
+    return render(request, 'website/www/www_privacy_cookie_policy.html')
+
+def www_cookie_law(request):
+    """View to show cookie law info page"""
+    return render(request, 'website/www/www_cookie_law.html')

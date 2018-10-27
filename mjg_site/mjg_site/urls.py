@@ -28,4 +28,6 @@ urlpatterns = [
     url(r'^meccatronica/?$', website.views.www_mechanics, name='www_mechanics'),
     url(r'^gommista/?$', website.views.www_tires, name='www_tires'),
     url(r'^tagliando-completo/?$', website.views.www_checkup, name='www_checkup'),
+    url(r'^privacy/?$', website.views.www_privacy_cookie_policy, name='www_privacy_cookie_policy'),
+    url(r'^cookie-policy/?$', website.views.www_cookie_law, name='www_cookie_law'),
 ]

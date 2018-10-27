@@ -2,29 +2,21 @@
 {% load staticfiles %}
 
 {# page title #}
-{% block title %}MotorJab Garage | Ricevi le nostre offerte{% endblock %}
+{% block title %}MotorJab Garage | Offerte esclusive dedicate a te{% endblock %}
 
 {# page description #}
 {% block description %}{% endblock %}
 
 {# custom page css block #}
-{% block custom_css %}{% endblock %}
+{% block custom_css %}
+<style>
+	.coupon_image_container { margin-top: 40px; margin-bottom: 20px; }
+</style>
+{% endblock %}
 {# Custom page script block #}
 {% block custom_js %}
-<script src="{% static "website/js/vendor/jquery.scrollTo.min.js" %}"></script>
-{% endblock %}
-{% block extra_js %}
-<script>
-	page_anchor();
-	$(document).ready(function(){
-		$(document).on("click", ".serviceNavigationClick", function(){
-			var anchorName = $(this).data("navigationAnchor");
-			if (anchorName) {
-				page_anchor(anchorName);
-			}
-		});
-	})
-</script>
+{# howto: https://validatejs.org #}
+<script src="{% static "website/js/vendor/validate.min.js" %}"></script>
 {% endblock %}
 
 {# menu active element #}
@@ -32,171 +24,241 @@
 
 {# container content #}
 {% block www_main_content %}
-<div class="page_header_block service_header_block">
-	<div><h1>Ricevi le nostre offerte</h1></div>
+<div class="page_header_block contacts_header_block">
+	<div><h1>Ottieni uno sconto del 30%</h1></div>
 	<div><h4>Offerte esclusive dedicate a te</h4></div>
 </div>
-<!-- three elements block -->
-<div id="_meccanica" class="row page_title_separator">
-	<div class="col-sm-12">
-		<h2>Meccanica</h2>
-		<div class="readable_text1">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-		</div>
-	</div>
-</div>
-<div class="row elements_container no_gutter">
-	<div class="col-sm-12">
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/tagliando-cambio-olio.png" %}" alt="">
-			<div class="block-label">Cambio olio, tagliando completo</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/sistema-frenante.png" %}" alt="">
-			<div class="block-label">Sistema frenante</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/ammortizzatori.png" %}" alt="">
-			<div class="block-label">Ammortizzatori</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-12">
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/distribuzione.png" %}" alt="">
-			<div class="block-label">Distribuzione</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/frizione.png" %}" alt="">
-			<div class="block-label">Frizione</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/sistema-di-scarico.png" %}" alt="">
-			<div class="block-label">Sistema di scarico</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-12">
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/climatizzatore.png" %}" alt="">
-			<div class="block-label">Climatizzatore</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-	</div>
-</div>
-<div id="_elettronica" class="row page_title_separator">
-	<div class="col-sm-12">
-		<h2>Elettronica</h2>
-		<div class="readable_text1">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-		</div>
-	</div>
-</div>
-<div class="row elements_container no_gutter">
-	<div class="col-sm-12">
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/diagnosi-elettronica.png" %}" alt="">
-			<div class="block-label">Diagnosi elettronica</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/sostituzione-ricarica-batteria.png" %}" alt="">
-			<div class="block-label">Sostituzione / Ricarica batteria</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/lampadine.png" %}" alt="">
-			<div class="block-label">Lampadine</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-12">
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/efficienza-impianto-elettrico.png" %}" alt="">
-			<div class="block-label">Efficienza impianto elettrico</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-	</div>
-</div>
-<div id="_gommista" class="row page_title_separator">
-	<div class="col-sm-12">
-		<h2>Gommista</h2>
-		<div class="readable_text1">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-		</div>
-	</div>
-</div>
-<div class="row elements_container no_gutter">
-	<div class="col-sm-12">
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/sostituzione-riparazione.png" %}" alt="">
-			<div class="block-label">Sostituzione / Riparazione</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/rimessaggio-gomme.png" %}" alt="">
-			<div class="block-label">Rimessaggio</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/equilibratura-gomme.png" %}" alt="">
-			<div class="block-label">Equilibratura</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-	</div>
-</div>
-<div class="container-fluid info_block info_block_color2">
+<div class="container-fluid info_block info_block_color1">
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
-			<div class="col-md-7 padding-xs-only padding-sm-only">
-				<div class="col-lg-12 no_gutter">
-					<h4>Bielle, cilindri, pistoni e...</h4>
-				</div>
-				<div class="col-lg-12 no_gutter">
-					<h1>MotorJab Garage</h1>
-				</div>
-				<div class="col-lg-12 no_gutter readable_text1">
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus. Ut egestas ex eu convallis elementum. Nam eros ligula, commodo ut tortor et, venenatis feugiat augue. In ut ultrices massa, ut rutrum tortor. Cras lobortis purus finibus tortor euismod condimentum.
-				</div>
-				<div class="col-lg-12 no_gutter"><a href="/howto/concorsi-a-tema/">Maggiori informazioni</a></div>
+			<div class="col-md-4 padding-xs-only padding-sm-only">
+				<h4>Perchè registrarsi</h4>
+				<p>Registrati per ricevere offerte e sconti una volta ogni tanto, per esempio sconti sul cambio gomma stagionale, sconti sul tagliando prima di partire per le vacanze, consigli su come mantenere la tua auto in buono stato e tanto altro.</p>
+				<p><b>Se ti registri riceverai subito uno sconto del 30% da utilizzare presso di noi.</b></p>
+				<div class="coupon_image_container text-sm-center text-xs-center"><img class="img-responsive" alt="Sconto del 30%" src="{% static "website/img/coupon.png" %}"></div>
 			</div>
-			<div class="col-md-offset-1 col-md-4 text-xs-center text-md-right">
+			<div class="col-md-offset-1 col-md-7">
 				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
-				<img class="img-responsive" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/img1.png" %}">
+					<div class="well bs-component">
+						<form class="form-horizontal validateFormAction" name="contact_form" method="POST" action="">
+							<input type="hidden" name="contact_form_sent" value="1">
+							<fieldset>
+								<div class="form-group formGroupAction inputNameGroup">
+									<label for="inputName" class="col-lg-2 control-label">Nome&nbsp;*</label>
+									<div class="col-lg-10">
+										<input id="inputName" name="inputName" class="form-control" placeholder="Inserisci il tuo nome" type="text" required>
+									</div>
+								</div>
+								<div class="form-group formGroupAction inputSurnameGroup">
+									<label for="inputSurname" class="col-lg-2 control-label">Cognome</label>
+									<div class="col-lg-10">
+										<input id="inputSurname" name="inputSurname" class="form-control" placeholder="Inserisci il tuo cognome" type="text">
+									</div>
+								</div>
+								<div class="form-group formGroupAction inputEmailGroup">
+									<label for="inputEmail" class="col-lg-2 control-label">Email&nbsp;*</label>
+									<div class="col-lg-10">
+										<input id="inputEmail" name="inputEmail" class="form-control" placeholder="Inserisci la tua email" type="email" required>
+									</div>
+								</div>
+								<div class="form-group formGroupAction inputPhoneGroup">
+									<label for="inputPhone" class="col-lg-2 control-label">Telefono</label>
+									<div class="col-lg-10">
+										<input id="inputPhone" name="inputPhone" class="form-control no-spinners" placeholder="Inserisci il tuo numero di telefono" type="number">
+									</div>
+								</div>
+								<div class="form-group formGroupAction inputBirthdayGroup">
+									<label for="select" class="col-lg-2 control-label">Data di nascita</label>
+									<div class="col-lg-10">
+										<div class="col-sm-4">
+											<select id="inputBirthdayDay" class="form-control">
+												<option value="">Giorno</option>
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+												<option value="6">6</option>
+												<option value="7">7</option>
+												<option value="8">8</option>
+												<option value="9">9</option>
+												<option value="10">10</option>
+												<option value="11">11</option>
+												<option value="12">12</option>
+												<option value="13">13</option>
+												<option value="14">14</option>
+												<option value="15">15</option>
+												<option value="16">16</option>
+												<option value="17">17</option>
+												<option value="18">18</option>
+												<option value="19">19</option>
+												<option value="20">20</option>
+												<option value="21">21</option>
+												<option value="22">22</option>
+												<option value="23">23</option>
+												<option value="24">24</option>
+												<option value="25">25</option>
+												<option value="26">26</option>
+												<option value="27">27</option>
+												<option value="28">28</option>
+												<option value="29">29</option>
+												<option value="30">30</option>
+												<option value="31">31</option>
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<select id="inputBirthdayMonth" class="form-control">
+												<option value="">Mese</option>
+												<option value="1">Gennaio</option>
+												<option value="2">Febbraio</option>
+												<option value="3">Marzo</option>
+												<option value="4">Aprile</option>
+												<option value="5">Maggio</option>
+												<option value="6">Giungno</option>
+												<option value="7">Luglio</option>
+												<option value="8">Agosto</option>
+												<option value="9">Settembre</option>
+												<option value="10">Ottobre</option>
+												<option value="11">Novembre</option>
+												<option value="12">Dicembre</option>
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<select id="inputBirthdayYear" class="form-control">
+												<option value="">Anno</option>
+												<option value="2000">2000</option>
+												<option value="1999">1999</option>
+												<option value="1998">1998</option>
+												<option value="1997">1997</option>
+												<option value="1996">1996</option>
+												<option value="1995">1995</option>
+												<option value="1994">1994</option>
+												<option value="1993">1993</option>
+												<option value="1992">1992</option>
+												<option value="1991">1991</option>
+												<option value="1990">1990</option>
+												<option value="1989">1989</option>
+												<option value="1988">1988</option>
+												<option value="1987">1987</option>
+												<option value="1986">1986</option>
+												<option value="1985">1985</option>
+												<option value="1984">1984</option>
+												<option value="1983">1983</option>
+												<option value="1982">1982</option>
+												<option value="1981">1981</option>
+												<option value="1980">1980</option>
+												<option value="1979">1979</option>
+												<option value="1978">1978</option>
+												<option value="1977">1977</option>
+												<option value="1976">1976</option>
+												<option value="1975">1975</option>
+												<option value="1974">1974</option>
+												<option value="1973">1973</option>
+												<option value="1972">1972</option>
+												<option value="1971">1971</option>
+												<option value="1970">1970</option>
+												<option value="1969">1969</option>
+												<option value="1968">1968</option>
+												<option value="1967">1967</option>
+												<option value="1966">1966</option>
+												<option value="1965">1965</option>
+												<option value="1964">1964</option>
+												<option value="1963">1963</option>
+												<option value="1962">1962</option>
+												<option value="1961">1961</option>
+												<option value="1960">1960</option>
+												<option value="1959">1959</option>
+												<option value="1958">1958</option>
+												<option value="1957">1957</option>
+												<option value="1956">1956</option>
+												<option value="1955">1955</option>
+												<option value="1954">1954</option>
+												<option value="1953">1953</option>
+												<option value="1952">1952</option>
+												<option value="1951">1951</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="form-group formGroupAction inputPrivacyGroup">
+									<label class="col-lg-2 control-label">Privacy</label>
+									<div class="col-lg-10">
+										<div class="checkbox">
+											<label>
+												<input name="inputPrivacy" id="inputPrivacy" value="1" type="checkbox" required>Ho letto l'<a target="_blank" href="/privacy">informativa sulla privacy</a> e acconsento al trattamento dei miei dati personali.
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="form-group text-md-right">
+									<div class="col-lg-10 col-lg-offset-2">
+										<button type="submit" class="btn btn-primary btn-lg formSendButtonClickAction">Registrati</button>
+									</div>
+								</div>
+							</fieldset>
+						</form>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function(){
+	$(document).on("click", ".formSendButtonClickAction", function(){
+
+		var inputPhone = document.getElementById('inputPhone');
+
+		var returnVar = false;
+		// lavora sui "name" NON sugli "id"
+		var constraints = {
+			inputName: {
+				presence: true,
+			},
+			inputSurname: {
+				presence: false,
+			},
+			inputEmail: {
+				presence: true,
+				email: true,
+			},
+			inputPhone: {
+				// trick per validare un campo di tipo number senza attributo required
+				presence: (!inputPhone.validity.valid),
+				numericality: {
+					onlyInteger: true,
+				},
+			},
+			inputPrivacy: {
+				presence: true,
+			},
+		};
+
+		returnVar = validateForm(constraints);
+
+		// TODO
+		// se presente un campo compleanno controllare che tutti e tre siano
+		// inseriti, se nessun campo compleanno selezionato si può proseguire
+		/*inputBirthdayDay
+		inputBirthdayMonth
+		inputBirthdayYear*/
+		var inputBirthdayDayVal = $("#inputBirthdayDay").val();
+		var inputBirthdayMonthVal = $("#inputBirthdayMonth").val();
+		var inputBirthdayYearVal = $("#inputBirthdayYear").val();
+		if (inputBirthdayDayVal || inputBirthdayMonthVal || inputBirthdayYearVal) {
+			// almeno uno con valore, se dei tre non ha valore aggiungo classe di errore
+			if (!inputBirthdayDayVal || !inputBirthdayMonthVal || !inputBirthdayYearVal) {
+				returnVar = false;
+				$(".inputBirthdayGroup").addClass("has-error");
+			}
+		}
+
+		return returnVar;
+	});
+});
+
+</script>
 {% endblock %}
