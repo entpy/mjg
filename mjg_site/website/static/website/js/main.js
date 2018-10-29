@@ -39,7 +39,11 @@ $(document).ready(function () {
 		});
 	});
 
+	// popup to show cookie policy
 	lawCookieCompliance.createDivOnLoad();
+
+	// write bootstrap modal inside body tag
+	bootstrapModalsObect.writeModalInsideBodyTag();
 
 	/* services pie */
 	$(document).on("click mouseover", ".servicePieAction", function(){
@@ -179,3 +183,171 @@ var lawCookieCompliance = {
 		}
 	},
 };
+
+
+/* Object to manage bootstrap modals */
+var bootstrapModalsObect = {
+
+	// popup message tags
+	success_message_tags : "success",
+	alert_message_tags : "alert",
+	error_message_tags : "error",
+
+	/* Function to write bootstrap modal inside body tag, only if not already exists */
+	writeModalInsideBodyTag: function() {
+		if (!$(".bootstrap_modal").length) {
+			var bootstrapModal = '';
+			bootstrapModal += '<div class="bootstrap_modal modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">';
+			bootstrapModal += this.getBootstrapModalHtmlTemplate();
+			bootstrapModal += '</div>';
+			$("body").prepend(bootstrapModal);
+		}
+
+		return true;
+	},
+
+	/* Function to retrieve bootstrap modal html template */
+	getBootstrapModalHtmlTemplate: function() {
+		var bootstrapModal = '';
+		bootstrapModal += '<div class="modal-dialog">';
+		bootstrapModal += '<div class="modal-content">';
+		bootstrapModal += '<div class="modal-header">';
+		bootstrapModal += '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+		bootstrapModal += '<h4 class="modal-title">&nbsp;</h4>';
+		bootstrapModal += '</div>';
+		bootstrapModal += '<div class="modal-body">';
+		bootstrapModal += '</div>';
+		bootstrapModal += '<div class="modal-footer"></div>';
+		bootstrapModal += '</div><!-- /.modal-content -->';
+		bootstrapModal += '</div><!-- /.modal-dialog -->';
+
+		return bootstrapModal;
+	},
+
+	/* Function to reset bootstrap modal */
+	resetBootstrapModal: function() {
+		// questo è un layer che non scompare se vengono aperte
+		// modal in modo consecutivo, quindi lo nascondo io forzatamente
+		$('.modal-backdrop').remove();
+		$('body').attr("style", "padding-right: 0px;");
+		$(".bootstrap_modal").removeData();
+		$(".bootstrap_modal").remove();
+		this.writeModalInsideBodyTag();
+
+		return true;
+	},
+
+	/* Function to show bootstrap modal */
+	showBootstrapModal: function() {
+		$(".bootstrap_modal").modal('show');
+
+		return true;
+	},
+
+	/* Function to show popup message with bootstrap modal */
+	showPopupMessage : function(message, message_tags){
+		if (message_tags == this.success_message_tags) {
+			// show a success modal popup
+			this.showSuccessModal(message);
+		} else if (message_tags == this.alert_message_tags) {
+			// show an alert modal popup
+			this.showAlertModal(message);
+		} else if (message_tags == this.error_message_tags) {
+			// show an error modal popup
+			this.showErrorModal(message);
+		} else if (message_tags == this.simple_message_tags) {
+			// show a simple message popup without style
+			this.showMessageModal(message);
+		}
+	},
+
+	/* Function to build and show a success bootstrap modal */
+	showSuccessModal: function(message, popup_title) {
+		if (message) {
+			this.resetBootstrapModal();
+			var messageBlockTemplate = '';
+			messageBlockTemplate += '<div class="row">';
+			messageBlockTemplate += '<div class="col-md-12 margin_top_30">';
+			messageBlockTemplate += '<div class="alert alert-success">';
+			messageBlockTemplate += message;
+			messageBlockTemplate += '</div>';
+			messageBlockTemplate += '</div>';
+			messageBlockTemplate += '</div>';
+			$(".bootstrap_modal").find('.modal-title').html("Ottimo");
+			if (popup_title) {
+				$(".bootstrap_modal").find('.modal-title').html(popup_title);
+			}
+			$(".bootstrap_modal").find('.modal-footer').html('<button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>');
+			$(".bootstrap_modal").find('.modal-body').html(messageBlockTemplate);
+			this.showBootstrapModal();
+		}
+
+		return false;
+	},
+
+	/* Function to build and show a message bootstrap modal */
+	showMessageModal: function(message, popup_title) {
+		if (message) {
+			this.resetBootstrapModal();
+			var messageBlockTemplate = '';
+			messageBlockTemplate += '<div class="row">';
+			messageBlockTemplate += '<div class="col-md-12 margin_top_30">';
+			messageBlockTemplate += '<div class="alert">';
+			messageBlockTemplate += message;
+			messageBlockTemplate += '</div>';
+			messageBlockTemplate += '</div>';
+			messageBlockTemplate += '</div>';
+			$(".bootstrap_modal").find('.modal-title').html("Ottimo");
+			if (popup_title) {
+				$(".bootstrap_modal").find('.modal-title').html(popup_title);
+			}
+			$(".bootstrap_modal").find('.modal-footer').html('<button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>');
+			$(".bootstrap_modal").find('.modal-body').html(messageBlockTemplate);
+			this.showBootstrapModal();
+		}
+
+		return false;
+	},
+
+	/* Function to build and show an alert bootstrap modal */
+	showAlertModal: function(message) {
+		if (message) {
+			this.resetBootstrapModal();
+			var messageBlockTemplate = '';
+			messageBlockTemplate += '<div class="row">';
+			messageBlockTemplate += '<div class="col-md-12 margin_top_30">';
+			messageBlockTemplate += '<div class="alert alert-warning">';
+			messageBlockTemplate += message;
+			messageBlockTemplate += '</div>';
+			messageBlockTemplate += '</div>';
+			messageBlockTemplate += '</div>';
+			$(".bootstrap_modal").find('.modal-title').html("Gulp!");
+			$(".bootstrap_modal").find('.modal-footer').html('<button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>');
+			$(".bootstrap_modal").find('.modal-body').html(messageBlockTemplate);
+			this.showBootstrapModal();
+		}
+
+		return false;
+	},
+
+	/* Function to build and show an error bootstrap modal */
+	showErrorModal: function(message) {
+		if (message) {
+			this.resetBootstrapModal();
+			var messageBlockTemplate = '';
+			messageBlockTemplate += '<div class="row">';
+			messageBlockTemplate += '<div class="col-md-12 margin_top_30">';
+			messageBlockTemplate += '<div class="alert alert-danger">';
+			messageBlockTemplate += message;
+			messageBlockTemplate += '</div>';
+			messageBlockTemplate += '</div>';
+			messageBlockTemplate += '</div>';
+			$(".bootstrap_modal").find('.modal-title').html("Ops...");
+			$(".bootstrap_modal").find('.modal-footer').html('<button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>');
+			$(".bootstrap_modal").find('.modal-body').html(messageBlockTemplate);
+			this.showBootstrapModal();
+		}
+
+		return false;
+	}
+}

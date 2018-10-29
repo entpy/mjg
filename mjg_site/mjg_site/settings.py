@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'f8t_-f!filk*vhx3+&9@%+4!8g%enw(+*^#h96%#di%t9j8t3i'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'website',
+    'account_app',
 ]
 
 MIDDLEWARE = [
@@ -104,9 +105,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'it-IT'
+LOCALE = 'it_IT.utf8'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Rome'
 
 USE_I18N = True
 
@@ -114,8 +116,83 @@ USE_L10N = True
 
 USE_TZ = True
 
+"""
+HOW TO SUL LOGGING
+------------------
+Il logger e' un contenitore per i log, vengono inseriti dentro di esso
+solo se i livelli di logging del file sono >= a quelli del contenitore
+l' handler del logger gestisce dove i messaggi di log raccolti dal logger
+andranno spediti, per esempio su file, console, ecc..
+E' inoltre possibile impostare filtri e formattazione per i log
+"""
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(name)s:%(lineno)s %(levelname)s %(asctime)s %(funcName)s %(process)d %(thread)d %(message)s',
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(name)s %(levelname)s %(asctime)s %(message)s',
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+    },
+    'handlers': {
+        # Send all messages to console
+        'console_debug': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        # Send info messages to local file
+        'file_info':{
+            'level':'INFO',
+            'class': 'logging.FileHandler',
+            'filename': '/tmp/mjg_info.log',
+            'formatter': 'simple',
+        },
+        # Warning messages are sent to admin emails
+        'mail_warning': {
+            'level': 'WARNING',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'verbose',
+        },
+        # Critical errors are sent to local file
+        'file_error': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'logging.FileHandler',
+            'filename': '/tmp/mjg_error.log',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        # This is the "catch all" logger
+        '': {
+            'handlers': ['file_info', 'console_debug', 'mail_warning', 'file_error'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    }
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# loading local settings
+try:
+    LOCAL_SETTINGS
+except NameError:
+    try:
+        from local_settings import *
+    except ImportError:
+        pass

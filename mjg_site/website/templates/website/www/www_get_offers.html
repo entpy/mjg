@@ -31,6 +31,39 @@
 <div class="container-fluid info_block info_block_color1">
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
+			<div class="col-xs-12 padding-xs-only padding-sm-only">
+				{# messages block #}
+				<div class="error_container"></div>
+				{% if form.errors %}
+					<div class="alert alert-danger">
+						<h4>Controlla questi errori</h4>
+						<ul>
+							{% for field in form %}
+								{% for error in field.errors %}
+									<li>{{ field.label|escape }}: {{ error|escape }}</li>
+								{% endfor %}
+							{% endfor %}
+							{% for form_error in form.non_field_errors %}
+								<li>{{ form_error }}</li>
+							{% endfor %}
+						</ul>
+					</div>
+				{% endif %}
+				{% if messages %}
+					{% for message in messages %}
+						{% if message.tags == "success" %}
+							<div class="alert alert-success">
+								<h4>Grazie per esserti registrato</h4>
+								<strong>Il tuo bonus ti è stato inviato via email</strong>.
+							</div>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
 			<div class="col-md-4 padding-xs-only padding-sm-only">
 				<h4>Perchè registrarsi</h4>
 				<p>Registrati per ricevere offerte e sconti una volta ogni tanto, per esempio sconti sul cambio gomma stagionale, sconti sul tagliando prima di partire per le vacanze, consigli su come mantenere la tua auto in buono stato e tanto altro.</p>
@@ -41,147 +74,64 @@
 				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
 					<div class="well bs-component">
 						<form class="form-horizontal validateFormAction" name="contact_form" method="POST" action="">
+							{% csrf_token %}
 							<input type="hidden" name="contact_form_sent" value="1">
 							<fieldset>
-								<div class="form-group formGroupAction inputNameGroup">
-									<label for="inputName" class="col-lg-2 control-label">Nome&nbsp;*</label>
+								<div class="form-group formGroupAction first_nameGroup">
+									<label for="first_name" class="col-lg-2 control-label">{{ form.first_name.label }}&nbsp;*</label>
 									<div class="col-lg-10">
-										<input id="inputName" name="inputName" class="form-control" placeholder="Inserisci il tuo nome" type="text" required>
+										<input id="first_name" name="first_name" class="form-control" placeholder="{{ form.first_name.field.widget.attrs.placeholder }}" type="text" value="{{ post.first_name }}" required>
 									</div>
 								</div>
-								<div class="form-group formGroupAction inputSurnameGroup">
-									<label for="inputSurname" class="col-lg-2 control-label">Cognome</label>
+								<div class="form-group formGroupAction last_nameGroup">
+									<label for="last_name" class="col-lg-2 control-label">Cognome</label>
 									<div class="col-lg-10">
-										<input id="inputSurname" name="inputSurname" class="form-control" placeholder="Inserisci il tuo cognome" type="text">
+										<input id="last_name" name="last_name" class="form-control" placeholder="{{ form.last_name.field.widget.attrs.placeholder }}" value="{{ post.last_name }}" type="text">
 									</div>
 								</div>
-								<div class="form-group formGroupAction inputEmailGroup">
-									<label for="inputEmail" class="col-lg-2 control-label">Email&nbsp;*</label>
+								<div class="form-group formGroupAction emailGroup">
+									<label for="email" class="col-lg-2 control-label">Email&nbsp;*</label>
 									<div class="col-lg-10">
-										<input id="inputEmail" name="inputEmail" class="form-control" placeholder="Inserisci la tua email" type="email" required>
+										<input id="email" name="email" class="form-control" placeholder="{{ form.email.field.widget.attrs.placeholder }}" type="email" value="{{ post.email }}" required>
 									</div>
 								</div>
-								<div class="form-group formGroupAction inputPhoneGroup">
-									<label for="inputPhone" class="col-lg-2 control-label">Telefono</label>
+								<div class="form-group formGroupAction mobile_numberGroup">
+									<label for="mobile_number" class="col-lg-2 control-label">Telefono</label>
 									<div class="col-lg-10">
-										<input id="inputPhone" name="inputPhone" class="form-control no-spinners" placeholder="Inserisci il tuo numero di telefono" type="number">
+										<input id="mobile_number" name="mobile_number" class="form-control no-spinners" placeholder="{{ form.mobile_number.field.widget.attrs.placeholder }}" type="number">
 									</div>
 								</div>
 								<div class="form-group formGroupAction inputBirthdayGroup">
 									<label for="select" class="col-lg-2 control-label">Data di nascita</label>
 									<div class="col-lg-10">
 										<div class="col-sm-4">
-											<select id="inputBirthdayDay" class="form-control">
-												<option value="">Giorno</option>
-												<option value="1">1</option>
-												<option value="2">2</option>
-												<option value="3">3</option>
-												<option value="4">4</option>
-												<option value="5">5</option>
-												<option value="6">6</option>
-												<option value="7">7</option>
-												<option value="8">8</option>
-												<option value="9">9</option>
-												<option value="10">10</option>
-												<option value="11">11</option>
-												<option value="12">12</option>
-												<option value="13">13</option>
-												<option value="14">14</option>
-												<option value="15">15</option>
-												<option value="16">16</option>
-												<option value="17">17</option>
-												<option value="18">18</option>
-												<option value="19">19</option>
-												<option value="20">20</option>
-												<option value="21">21</option>
-												<option value="22">22</option>
-												<option value="23">23</option>
-												<option value="24">24</option>
-												<option value="25">25</option>
-												<option value="26">26</option>
-												<option value="27">27</option>
-												<option value="28">28</option>
-												<option value="29">29</option>
-												<option value="30">30</option>
-												<option value="31">31</option>
+											<select id="birthday_date" class="form-control" name="birthday_day">
+												<option value="" selected="selected">Giorno</option>
+												{% for key,value in form.fields.birthday_day.choices %}
+													<option value="{{ key }}" {% if post.birthday_day == key|slugify %}selected="selected"{% endif %}>{{ value }}</option>
+												{% endfor %}
 											</select>
 										</div>
 										<div class="col-sm-4">
-											<select id="inputBirthdayMonth" class="form-control">
-												<option value="">Mese</option>
-												<option value="1">Gennaio</option>
-												<option value="2">Febbraio</option>
-												<option value="3">Marzo</option>
-												<option value="4">Aprile</option>
-												<option value="5">Maggio</option>
-												<option value="6">Giungno</option>
-												<option value="7">Luglio</option>
-												<option value="8">Agosto</option>
-												<option value="9">Settembre</option>
-												<option value="10">Ottobre</option>
-												<option value="11">Novembre</option>
-												<option value="12">Dicembre</option>
+											<select id="birthday_month" class="form-control" name="birthday_month">
+												<option value="" selected="selected">Mese</option>
+												{% for key,value in form.fields.birthday_month.choices %}
+													<option value="{{ key }}" {% if post.birthday_month == key|slugify %}selected="selected"{% endif %}>{{ value }}</option>
+												{% endfor %}
 											</select>
 										</div>
 										<div class="col-sm-4">
-											<select id="inputBirthdayYear" class="form-control">
-												<option value="">Anno</option>
-												<option value="2000">2000</option>
-												<option value="1999">1999</option>
-												<option value="1998">1998</option>
-												<option value="1997">1997</option>
-												<option value="1996">1996</option>
-												<option value="1995">1995</option>
-												<option value="1994">1994</option>
-												<option value="1993">1993</option>
-												<option value="1992">1992</option>
-												<option value="1991">1991</option>
-												<option value="1990">1990</option>
-												<option value="1989">1989</option>
-												<option value="1988">1988</option>
-												<option value="1987">1987</option>
-												<option value="1986">1986</option>
-												<option value="1985">1985</option>
-												<option value="1984">1984</option>
-												<option value="1983">1983</option>
-												<option value="1982">1982</option>
-												<option value="1981">1981</option>
-												<option value="1980">1980</option>
-												<option value="1979">1979</option>
-												<option value="1978">1978</option>
-												<option value="1977">1977</option>
-												<option value="1976">1976</option>
-												<option value="1975">1975</option>
-												<option value="1974">1974</option>
-												<option value="1973">1973</option>
-												<option value="1972">1972</option>
-												<option value="1971">1971</option>
-												<option value="1970">1970</option>
-												<option value="1969">1969</option>
-												<option value="1968">1968</option>
-												<option value="1967">1967</option>
-												<option value="1966">1966</option>
-												<option value="1965">1965</option>
-												<option value="1964">1964</option>
-												<option value="1963">1963</option>
-												<option value="1962">1962</option>
-												<option value="1961">1961</option>
-												<option value="1960">1960</option>
-												<option value="1959">1959</option>
-												<option value="1958">1958</option>
-												<option value="1957">1957</option>
-												<option value="1956">1956</option>
-												<option value="1955">1955</option>
-												<option value="1954">1954</option>
-												<option value="1953">1953</option>
-												<option value="1952">1952</option>
-												<option value="1951">1951</option>
+											<select id="birthday_year" class="form-control" name="birthday_year">
+												<option value="" selected="selected">Anno</option>
+												{% for key,value in form.fields.birthday_year.choices %}
+													<option value="{{ key }}" {% if post.birthday_year == key|slugify %}selected="selected"{% endif %}>{{ value }}</option>
+												{% endfor %}
 											</select>
 										</div>
 									</div>
 								</div>
 								<div class="form-group formGroupAction inputPrivacyGroup">
-									<label class="col-lg-2 control-label">Privacy</label>
+									<label class="col-lg-2 control-label">Privacy *</label>
 									<div class="col-lg-10">
 										<div class="checkbox">
 											<label>
@@ -210,24 +160,24 @@
 $(document).ready(function(){
 	$(document).on("click", ".formSendButtonClickAction", function(){
 
-		var inputPhone = document.getElementById('inputPhone');
+		var mobile_number = document.getElementById('mobile_number');
 
 		var returnVar = false;
 		// lavora sui "name" NON sugli "id"
 		var constraints = {
-			inputName: {
+			first_name: {
 				presence: true,
 			},
-			inputSurname: {
+			last_name: {
 				presence: false,
 			},
-			inputEmail: {
+			email: {
 				presence: true,
 				email: true,
 			},
-			inputPhone: {
+			mobile_number: {
 				// trick per validare un campo di tipo number senza attributo required
-				presence: (!inputPhone.validity.valid),
+				presence: (!mobile_number.validity.valid),
 				numericality: {
 					onlyInteger: true,
 				},
@@ -242,15 +192,15 @@ $(document).ready(function(){
 		// TODO
 		// se presente un campo compleanno controllare che tutti e tre siano
 		// inseriti, se nessun campo compleanno selezionato si può proseguire
-		/*inputBirthdayDay
-		inputBirthdayMonth
-		inputBirthdayYear*/
-		var inputBirthdayDayVal = $("#inputBirthdayDay").val();
-		var inputBirthdayMonthVal = $("#inputBirthdayMonth").val();
-		var inputBirthdayYearVal = $("#inputBirthdayYear").val();
-		if (inputBirthdayDayVal || inputBirthdayMonthVal || inputBirthdayYearVal) {
+		/*birthday_date
+		birthday_month
+		birthday_year*/
+		var birthday_dateVal = $("#birthday_date").val();
+		var birthday_monthVal = $("#birthday_month").val();
+		var birthday_yearVal = $("#birthday_year").val();
+		if (birthday_dateVal || birthday_monthVal || birthday_yearVal) {
 			// almeno uno con valore, se dei tre non ha valore aggiungo classe di errore
-			if (!inputBirthdayDayVal || !inputBirthdayMonthVal || !inputBirthdayYearVal) {
+			if (!birthday_dateVal || !birthday_monthVal || !birthday_yearVal) {
 				returnVar = false;
 				$(".inputBirthdayGroup").addClass("has-error");
 			}
@@ -259,6 +209,5 @@ $(document).ready(function(){
 		return returnVar;
 	});
 });
-
 </script>
 {% endblock %}

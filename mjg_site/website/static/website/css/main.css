@@ -1039,6 +1039,7 @@ blockquote {
 .page_title_separator { margin-left: 0px; margin-right: 0px; padding-left: 30px!important; padding-right: 30px!important; }
 .no-spinners { -moz-appearance:textfield; }
 .no-spinners::-webkit-outer-spin-button, .no-spinners::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.modal { z-index: 999999!important; }
 
 /* cookie law {{{ */
 #cookie-law { background: #000 none repeat scroll 0 0; margin: 0 auto; width: 100%; z-index: 9999; position: fixed; bottom: 0px; opacity: 0.8; }
