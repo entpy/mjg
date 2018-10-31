@@ -30,4 +30,5 @@ urlpatterns = [
     url(r'^tagliando-completo/?$', website.views.www_checkup, name='www_checkup'),
     url(r'^privacy/?$', website.views.www_privacy_cookie_policy, name='www_privacy_cookie_policy'),
     url(r'^cookie-policy/?$', website.views.www_cookie_law, name='www_cookie_law'),
+    url(r'^test-page/?$', website.views.www_test_page, name='www_test_page'),
 ]

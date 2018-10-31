@@ -48,13 +48,17 @@
 							{% endfor %}
 						</ul>
 					</div>
-				{% endif %}
-				{% if messages %}
+				{% elif messages %}
 					{% for message in messages %}
 						{% if message.tags == "success" %}
 							<div class="alert alert-success">
 								<h4>Grazie per esserti registrato</h4>
 								<strong>Il tuo bonus ti è stato inviato via email</strong>.
+							</div>
+						{% elif message.tags == "error" %}
+							<div class="alert alert-danger">
+								<h4>Controlla questi errori</h4>
+								<strong>I dati inseriti (email e/o telefono) sono già presenti</strong>.
 							</div>
 						{% endif %}
 					{% endfor %}
@@ -98,7 +102,7 @@
 								<div class="form-group formGroupAction mobile_numberGroup">
 									<label for="mobile_number" class="col-lg-2 control-label">Telefono</label>
 									<div class="col-lg-10">
-										<input id="mobile_number" name="mobile_number" class="form-control no-spinners" placeholder="{{ form.mobile_number.field.widget.attrs.placeholder }}" type="number">
+										<input id="mobile_number" name="mobile_number" class="form-control no-spinners" placeholder="{{ form.mobile_number.field.widget.attrs.placeholder }}" value="{{ post.mobile_number }}" type="number">
 									</div>
 								</div>
 								<div class="form-group formGroupAction inputBirthdayGroup">

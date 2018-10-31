@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'website',
     'account_app',
+    'mkauto_app',
 ]
 
 MIDDLEWARE = [
@@ -115,6 +116,26 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+"""
+HOW TO SUL TIMEZONE
+
+SE UTILIZZO USE_TZ = True
+Le date sono memorizzate con UTC, va utilizzata la funzione timezone.now() per ottenere la data in UTC,
+per poterla visualizzare con il timezone settato di default (TIME_ZONE) utilizzare la funzione timezone.localtime(timezone.now())
+Postgres di default salva le date in formato UTC, mysql no, in questo caso settare nella configurazione del db
+il timezone da utilizzare:
+https://docs.djangoproject.com/en/1.11/topics/i18n/timezones/#setup
+
+Alcune funzioni di esempio:
+logger.info("datetime.datetime.today(): " + str(datetime.datetime.today()))
+logger.info("datetime.datetime.now(): " + str(datetime.datetime.now()))
+logger.info("timezone.now(): " + str(timezone.now()))
+logger.info("datetime.timedelta(days=30): " + str(datetime.timedelta(hours=1)))
+logger.info("timezone.localtime(timezone.now()): " + str(timezone.localtime(timezone.now())))
+logger.info("timezone.now()-datetime.timedelta(hours=1): " + str(timezone.now()-datetime.timedelta(hours=1)))
+logger.info("timezone.now()-datetime.timedelta(hours=1): " + str(timezone.now()-datetime.timedelta(days=days_from_creation)))
+"""
 
 """
 HOW TO SUL LOGGING

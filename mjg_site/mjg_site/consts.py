@@ -11,3 +11,8 @@ class project_constants(object):
     RECEIVE_PROMOTIONS_BITMASK = 2
     RECEIVE_NEWSLETTERS_BITMASK = 4
     # notify bitmask }}}
+
+    # channels bitmask {{{
+    CHANNEL_EMAIL = 1
+    CHANNEL_SMS = 2
+    # notify bitmask }}}

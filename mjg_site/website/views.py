@@ -4,10 +4,15 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+from mjg_site.exceptions import *
 from website.forms import AccountForm
 from account_app.models import Account
+from mkauto_app.models import MaEvent
 from django.views.decorators.csrf import ensure_csrf_cookie
 import logging
+
+# TODO: solo per test, rimuovere
+from django.http import HttpResponse
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -36,18 +41,24 @@ def www_get_offers(request):
         form = AccountForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            # process the data in form.cleaned_data as required
             # TODO: salvo i dati validi nell'oggetto account
-            # Account_obj = Account()
-            # Account_obj.create_account(form.cleaned_data)
-
-            # TODO creo messaggio di successo
-            messages.add_message(request, messages.SUCCESS, True)
-            # redirect to a new URL:
-            return HttpResponseRedirect('/ricevi-offerte/')
+            try:
+                account_obj = Account()
+                account_obj.create_account(form.cleaned_data)
+            except UserAlreadyExistsError:
+                # creo messaggio di errore
+                messages.add_message(request, messages.ERROR, True)
+            else:
+                # creo messaggio di successo
+                messages.add_message(request, messages.SUCCESS, True)
+                # redirect to a new URL:
+                return HttpResponseRedirect('/ricevi-offerte/')
     # if a GET (or any other method) we'll create a blank form
     else:
         form = AccountForm()
+
+    account_obj = Account()
+    account_obj.get_mkauto_accounts(days_from_creation=10)
 
     context = {
         "post" : request.POST,
@@ -75,3 +86,18 @@ def www_privacy_cookie_policy(request):
 def www_cookie_law(request):
     """View to show cookie law info page"""
     return render(request, 'website/www/www_cookie_law.html')
+
+def www_test_page(request):
+    ma_event_obj = MaEvent()
+
+    # creo i default della mkauto
+    ma_event_obj.create_mkauto_defaults()
+
+    # ma_event_obj.add_event_log(user_id=20, ma_event_id=38)
+
+    # TODO
+    # provo ad eseguire un evento di test
+    ma_event_obj.make_prize(user_id=20, ma_code="welcome_prize")
+
+
+    return HttpResponse("Test page!")
