@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.db.models import F
 from mjg_site.consts import project_constants
 from mjg_site.exceptions import *
 import datetime, sys, logging
@@ -33,7 +34,6 @@ class Account(models.Model):
     def __unicode__(self):
         return self.user.email
 
-    # TODO
     def create_account(self, account_data):
         """Function to create a new account"""
 
@@ -49,13 +49,11 @@ class Account(models.Model):
         birthday_year = account_data["birthday_year"]
         """
 
-        # TODO
         # fare un get_by_email
         # se presente restituire un errore, altrimenti procedere con l'inserimento
         if self.check_if_user_exists(account_data["email"], account_data["mobile_number"]):
             raise UserAlreadyExistsError
 
-        # TODO
         # creo l'oggetto Account che estende l'oggetto User con una relazione 1-1
         new_account_obj = Account(
             user=User.objects.create_user(username=account_data["email"], first_name=account_data["first_name"], last_name=account_data.get("last_name"), email=account_data["email"]),
@@ -128,6 +126,10 @@ class Account(models.Model):
         return_var = None
 
         return_var = User.objects.values('id', 'first_name', 'last_name', 'email', 'account__mobile_number', 'account__notify_bitmask').filter(account__creation_date__lt=timezone.now()-datetime.timedelta(days=days_from_creation))
+        # solo gli utenti che vogliono ricevere queste notifiche (controllo la bitmask)
+        return_var = return_var.annotate(annotated_field=F('account__notify_bitmask').bitand(project_constants.RECEIVE_MKAUTO_BITMASK))
+        return_var = return_var.filter(annotated_field__gt = 0)
+        # return_var = return_var.filter(account__notify_bitmask__gt=F('somefield').bitand(project_constants.RECEIVE_MKAUTO_BITMASK))
 
 	# performing query
         return_var = list(return_var)

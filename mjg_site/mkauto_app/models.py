@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from mjg_site.consts import project_constants
 from mjg_site.exceptions import *
-from mkauto_app.strings import mkauto_strings
+from mkauto_app.strings import MkautoStrings
 from mkauto_app.consts import mkauto_consts
 from account_app.models import Account
 from email_app.email_core import CustomEmailTemplate
@@ -26,6 +26,7 @@ class MaEvent(models.Model):
         ('text', 'Text'),
     )
     ma_event_id = models.AutoField(primary_key=True)
+    description = models.CharField(max_length=200, null=True, blank=True, verbose_name="Una descrizione dell'evento")
     ma_code = models.CharField(max_length=50, null=False, blank=False, verbose_name="Codice identificativo dell'evento")
     prize_type = models.CharField(max_length=10, null=False, blank=False, choices=PRIZE_TYPE, verbose_name="Il tipo di premio es. discount, bonus, text")
     prize_value = models.CharField(max_length=200, null=False, blank=False, verbose_name="Il premio es. 30, una pizza, ...")
@@ -85,12 +86,6 @@ class MaEvent(models.Model):
         se non posso inviare l'evento non inserisco un nuovo log ed esco dalla funzione
         """
 
-        """
-        ma_event_log_obj = MaEventLog()
-        ma_event_log_obj.user_id = user_id
-        ma_event_log_obj.ma_event_id = ma_event_id
-        ma_event_log_obj.save()
-        """
         ma_event_log_obj = MaEventLog.objects.create(user_id=user_id, ma_event_id=ma_event_id, ma_code=ma_code)
 
         return ma_event_log_obj
@@ -98,90 +93,58 @@ class MaEvent(models.Model):
     def add_event_code(self, user_id, ma_event_id, ma_event_log_id, ma_code):
         """Creo una nuova riga con un codice random"""
 
-        """
-        ma_event_code_obj = MaEventCode()
-        ma_event_code_obj.user_id = user_id
-        ma_event_code_obj.ma_event_id = ma_event_id
-        ma_event_code_obj.ma_event_log_id = ma_event_log_id
-        ma_event_code_obj.code = self.generate_random_code()
-        ma_event_code_obj.save()
-        """
         coupon_code = self.generate_random_code()
         ma_event_code_obj = MaEventCode.objects.create(user_id=user_id, ma_event_id=ma_event_id, ma_event_log_id=ma_event_log_id, ma_code=ma_code, code=coupon_code)
 
         return coupon_code
 
-    def create_event_strings(self, ma_code, prize_type):
+    def create_event_strings(self, ma_code, prize_type, values_dictionary={}, is_tickle=False):
         """
         Function to build event strings disctionary (subject, title and content)
         qui restituisco le label con ancora le variabili da sostitutire, es {{prize_value}}, {{name}}, ...
-        i valori verranno sostituiti in un secondo momento
-        """
-        ma_code = str(ma_code)
-        prize_type = str(prize_type)
+        i valori verranno sostituiti in un secondo momento.
 
-        strings = {
-            "subject" : mkauto_strings.strings[ma_code + "." + prize_type + ".subject"],
-            "title" : mkauto_strings.strings[ma_code + "." + prize_type + ".title"],
-            "content" : mkauto_strings.strings[ma_code + "." + prize_type + ".content"],
-            "prize_call_to_action_title" : mkauto_strings.strings.get(ma_code + "." + prize_type + ".prize_call_to_action.title"),
-            "prize_call_to_action_label" : mkauto_strings.strings.get(ma_code + "." + prize_type + ".prize_call_to_action.label"),
-            "tickle_call_to_action_title" : mkauto_strings.strings.get(ma_code + "." + prize_type + ".tickle_call_to_action.title"),
-            "tickle_call_to_action_label" : mkauto_strings.strings.get(ma_code + "." + prize_type + ".tickle_call_to_action.label"),
-            "coupon_code_extra_text" : mkauto_strings.strings.get(ma_code + ".coupon_code_extra_text"),
+        Per ottenere una stringa con le variabili sostituite:
+        MkautoStrings.get_string(key=MkautoStrings.strings[ma_code + "." + prize_type + ".subject"], values_dictionary=values_dictionary)
+        i valori verranno sostituiti con return self.strings[key].format(**values_dictionary) <- vedere oggetto strings.py
+        """
+
+        if is_tickle:
+            ma_code += "_tickle"
+        
+        return {
+            "subject" : self.create_first_name_string(string=MkautoStrings.get_string(key=ma_code + "." + prize_type + ".subject", values_dictionary=values_dictionary), separator=', ', first_name=values_dictionary.get("first_name")),
+            "title" : self.create_first_name_string(string=MkautoStrings.get_string(key=ma_code + "." + prize_type + ".title", values_dictionary=values_dictionary), separator=',<br />', first_name=values_dictionary.get("first_name")),
+            "content" : MkautoStrings.get_string(key=ma_code + "." + prize_type + ".content", values_dictionary=values_dictionary),
+            "call_to_action_title" : MkautoStrings.get_string(key=ma_code + ".prize_call_to_action.title"),
+            "call_to_action_label" : MkautoStrings.get_string(key=ma_code + ".prize_call_to_action.label"),
+            "coupon_code_extra_text" : MkautoStrings.get_string(key=ma_code + ".prize_call_to_action.label"),
+            "image_code" : ma_code,
         }
 
-        return strings
-
-    def create_final_strings(self, strings_dictionary, vars_dictionary):
+    def create_first_name_string(self, string, separator, first_name=""):
         """
-        Function to substitute string vars. Es {{name}} -> Name, {{prize_value}} -> 30
-            vars_dictionary must be like this below:
-            vars_dictionary = {
-                "{{first_name}}" : account_info_dictionary.get("first_name"),
-                "{{prize_val}}" : ma_code_dictionary.get("prize_value"),
-                "{{coupon_limitations}}" : ma_code_dictionary.get("extra_text"),
-            }
+        Function to create title or subject string
+        es. Subject: Name, welcome to ... or Welcome to ...
+        es. Title: Name,<br /> welcome to ... or Welcome to ...
+        separator can be: ', ' or ',<br />'
         """
-    
-        logger.info("dizionario di chiavi valori da sostituire")
-        logger.info(vars_dictionary)
-        logger.info("dizionario di stringhe")
-        logger.info(strings_dictionary)
-
-        # sovrascrivo le stringhe che contengono eventuali variabili da sostituire
-        if vars_dictionary:
-            for key, val in vars_dictionary.items():
-                if key == "{{first_name}}" and val:
-                    # nell'oggetto se ci fosse il nome leggerei: Nome, grazie per ...
-                    # altrimenti: Grazie per ...
-                    val = val + ", "
-                strings_dictionary["subject"] = self.ucfirst(string=strings_dictionary["subject"].replace(key, val))
-                if key == "{{first_name}}" and val:
-                    # TODO
-                    # al posto dell'ultimo spazio inserisco un <br />
-                    # nel titolo se ci fosse il nome leggerei: Nome,<br />grazie per ...
-                    # altrimenti: Grazie per ...
-                    val = val.replace(" ", "<br />")
-                strings_dictionary["title"] = self.ucfirst(string=strings_dictionary["title"].replace(key, val))
-                strings_dictionary["content"] = strings_dictionary["content"].replace(key, val)
-
-        return strings_dictionary
+        # create first name string
+        return self.ucfirst(first_name + separator + string)
 
     #TODO
-    def make_prize(self, user_id, ma_code=None, ma_code_dictionary=None):
+    def make_prize(self, user_id, ma_code=None, ma_code_dictionary=None, is_tickle=False):
         """
         Function to send a prize
-        ma_code lo utilizzo solo se non ho già tutti i dati in ma_code_dictionary per fare una get by code,
-        fatta la get_by_code inserisco i dati nel dizionario ma_code_dictionary
-        """
-        return_var = False
-        """
+            - ma_code lo utilizzo solo se non ho già tutti i dati in ma_code_dictionary per fare una get by code,
+              fatta la get_by_code inserisco i dati nel dizionario ma_code_dictionary
+            - is_tickle lo setto a True se l'evento deve essere di tipo _tickle, quindi non genero un codice ma inserisco una call to action nel codice
+
             1) Controllo se posso inviare l'evento. in base allo start/repeat delay e la tabella ma_event_log
             2) Inserisco una riga in ma_event_log
             3) Creo una riga in ma_event_code
             4) Genero i testi per la mail (oggetto, titolo e testo) in base al tipo di premio e all'evento
-            5) Sistituisco ai testi le variabili
+            5) Sostituisco ai testi le variabili
             5) Invio il premio (il codice generato in ma_event_code) all'utente via email
         """
 
@@ -199,60 +162,56 @@ class MaEvent(models.Model):
 
         # 1)
         # Controllo se l'evento può essere inviato
-        if not self.event_can_be_performed(ma_event_id=ma_code_dictionary.get("ma_event_id"), repeat_delay=ma_code_dictionary.get("repeat_delay"), user_id=user_id):
+        if not self.event_can_be_performed(ma_event_id=ma_code_dictionary["ma_event_id"], repeat_delay=ma_code_dictionary["repeat_delay"], user_id=user_id):
             # l'evento non può essere inviato (perchè non ancora oltre il repeat_delay)
             return False
 
         # 2)
         # L'evento può essere inviato, inserisco una riga in ma_event_log
-        ma_event_log_obj = self.add_event_log(user_id=user_id, ma_event_id=ma_code_dictionary.get("ma_event_id"), ma_code=ma_code_dictionary.get("ma_code"))
+        ma_event_log_obj = self.add_event_log(user_id=user_id, ma_event_id=ma_code_dictionary["ma_event_id"], ma_code=ma_code_dictionary["ma_code"])
 
-        # 3)
-        # Creo una riga in ma_event_code
-        coupon_code = self.add_event_code(user_id=user_id, ma_event_id=ma_code_dictionary.get("ma_event_id"), ma_event_log_id=ma_event_log_obj.ma_event_log_id, ma_code=ma_code_dictionary.get("ma_code"))
-
-        # 4)
-        # Genero i testi per la mail (oggetto, titolo e testo) in base al tipo di premio e all'evento
-        strings_dictionary = self.create_event_strings(ma_code=ma_code_dictionary.get("ma_code"), prize_type=ma_code_dictionary.get("prize_type"))
-
-        # TODO
-        # 5)
-        # Sostituisco ai testi le variabili, come: il premio, le limitazioni, il nome dell'utente, ...
-        # creo il dizionario con le chiavi e i valori da sostituire
-        
         # prelevo le info dell'account
         account_obj = Account()
         account_info_dictionary = account_obj.get_user_data_as_dictionary(user_id=user_id)
 
-        logger.info("Account info dict")
-        logger.info(account_info_dictionary)
+        # 3)
+        # Creo una riga in ma_event_code (ma solo se l'evento non è di tipo tickle)
+        coupon_code = False
+        if not is_tickle:
+            coupon_code = self.add_event_code(user_id=user_id, ma_event_id=ma_code_dictionary["ma_event_id"], ma_event_log_id=ma_event_log_obj.ma_event_log_id, ma_code=ma_code_dictionary["ma_code"])
 
-        # creo il dizionario con le chiavi e i valori da sostituire nella mail
-        vars_dictionary = {
-            "{{first_name}}" : account_info_dictionary.get("first_name"),
-            "{{prize_val}}" : ma_code_dictionary.get("prize_value"),
-            "{{coupon_limitations}}" : ma_code_dictionary.get("extra_text"),
+        # 4)
+        # Genero i testi per la mail (oggetto, titolo e testo) in base al tipo di premio e all'evento
+        # creo il dizionario con le chiavi e i valori da sostituire nella mail, all'interno
+        # della funzione "create_event_strings" se l'evento è "tickle" appendo al codice "_tickle"
+        values_dictionary = {
+            "first_name" : account_info_dictionary["first_name"],
+            "prize_val" : ma_code_dictionary["prize_value"],
+            "coupon_limitations" : ma_code_dictionary["extra_text"],
         }
-        event_strings = self.create_final_strings(strings_dictionary=strings_dictionary, vars_dictionary=vars_dictionary)
+
+        event_strings = self.create_event_strings(
+            ma_code=ma_code_dictionary["ma_code"],
+            prize_type=ma_code_dictionary["prize_type"],
+            values_dictionary=values_dictionary,
+            is_tickle=is_tickle
+        )
+
+        # 6) Creo la mail con i testi definitivi e invio la mail
+        email_context = {
+            "subject" : event_strings["subject"],
+            "title" : event_strings["title"],
+            "content" : event_strings["content"],
+            "image_code" : event_strings["image_code"],
+            "coupon_code" : coupon_code,
+            "coupon_code_extra_text" : event_strings["coupon_code_extra_text"],
+        }
+        CustomEmailTemplate(email_name="mkauto_email", email_context=email_context, recipient_list=[account_info_dictionary["email"],])
 
         logger.info("@@@ Stringhe finali @@@")
         logger.info(event_strings)
 
-        # TODO
-        # 6) Creo la mail con i testi definitivi e invio la mail
-        email_context = {
-            "title" : event_strings["title"],
-            "content" : event_strings["content"],
-            "image_code" : event_strings["subject"],
-            "coupon_code" : coupon_code,
-            "coupon_code_extra_text" : event_strings["coupon_code_extra_text"],
-            "subject" : event_strings["subject"],
-        }
-        CustomEmailTemplate(
-            email_name="mkauto_email",
-            email_context=email_context,
-            recipient_list=[account_info_dictionary["email"],]
-        )
+        return True
 
     #TODO
     def make_tickle(self):
@@ -294,6 +253,7 @@ class MaEvent(models.Model):
             for mkauto_row in mkauto_consts.mkauto_default_values:
                 ma_event_obj = MaEvent()
                 ma_event_obj.ma_code = mkauto_row.get("ma_code")
+                ma_event_obj.description = mkauto_row.get("description")
                 ma_event_obj.prize_type = mkauto_row.get("prize_type")
                 ma_event_obj.prize_value = mkauto_row.get("prize_value")
                 ma_event_obj.start_delay = mkauto_row.get("start_delay")

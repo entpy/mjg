@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'account_app',
     'mkauto_app',
     'email_app',
+    'anymail',
 ]
 
 MIDDLEWARE = [

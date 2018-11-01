@@ -1,0 +1,21 @@
+Sistema di gestione clienti:
+	aggiunta/modifica/rimozione clienti
+	schede clienti, ogni cliente avrà una scheda per ogni veicolo
+Promozioni automatiche basate su un flusso (dalla registrazione dell'utente sul sistema):
+	sconto alla registrazione per ricevere offerte (indicarlo anche nei volantini da spedire)
+	bonus compleanno (oggi è il tuo compleanno e vogliamo farti un regalo, ecco uno sconto del 20% da utilizzare per prenderti cura della tua auto)
+	lasciaci i tuoi dati e ricevi un bonus (data di nascita per esempio per poter inviare una promozione al compleanno)
+	promozione lasciare una recensione (info interne nostre: ti piace il servizio? cosa miglioreresti?, ...)
+	promozione per lasciare un feedback (sono un cliente da anni mi trovo bene perchè bla bla bla lo consiglio a tutti)
+	dicci i chilometri della tua auto e ottieni uno sconto per i lavori di manutenzione per mantenerla in salute (in base al chilometraggio selezionato vengono proposti lavori con un determinato sconto)
+	promozione per i clienti con un tot di chilometri, in base al chilometraggio indicato nella scheda del veicolo
+	promozione per i clienti che non fanno lavori da un tot di tempo, in base all'ultimo lavoro effettuato nella scheda del veicolo (è da un po' che non ti vediamo, torna in officina per fare un controllo alla tua auto, ecco uno sconto per un checkup)
+Promozioni automatiche basate sul tempo (indipendenti dalla data di registrazione del cliente):
+	promozione stagionale per il cambio gomme
+	promozione stagionale per un tagliando (es parti in vacanza in modo sicuro, è arrivato l'inverno preparati ad affrontarlo, identificare alri momenti buoni)
+	reminder su singolo utente per la revisione (a breve scadrà la tua revisione, passa da noi per farla, ecco uno sconto del 15% da applicare sulla prerevisione)
+	promozione carica clima (il periodo estivo si avvicina, passa da noi per ricaricare il clima, ecco uno sconto del 10% sulla ricarica)
+	promozione per i clienti che non vengono da x giorni (però la data andrebbe modificata manualmente quindi meglio di no)
+Sistema promozionale:
+	possibilità di inviare una promozione ai clienti, il cliente potrà poi prenotare un coupon e venire direttamente (pagamento posticipato) oppure acquistare il coupon on-line (pagamento anticipato) e presentare il coupon direttamente in officina al momento di fare il lavoro
+
