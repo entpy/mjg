@@ -9,6 +9,7 @@ from mjg_site.exceptions import *
 from mkauto_app.strings import mkauto_strings
 from mkauto_app.consts import mkauto_consts
 from account_app.models import Account
+from email_app.email_core import CustomEmailTemplate
 import datetime, random, string, sys, logging
 
 # force utf8 read data
@@ -105,9 +106,10 @@ class MaEvent(models.Model):
         ma_event_code_obj.code = self.generate_random_code()
         ma_event_code_obj.save()
         """
-        ma_event_code_obj = MaEventCode.objects.create(user_id=user_id, ma_event_id=ma_event_id, ma_event_log_id=ma_event_log_id, ma_code=ma_code, code=self.generate_random_code())
+        coupon_code = self.generate_random_code()
+        ma_event_code_obj = MaEventCode.objects.create(user_id=user_id, ma_event_id=ma_event_id, ma_event_log_id=ma_event_log_id, ma_code=ma_code, code=coupon_code)
 
-        return ma_event_code_obj
+        return coupon_code
 
     def create_event_strings(self, ma_code, prize_type):
         """
@@ -126,6 +128,7 @@ class MaEvent(models.Model):
             "prize_call_to_action_label" : mkauto_strings.strings.get(ma_code + "." + prize_type + ".prize_call_to_action.label"),
             "tickle_call_to_action_title" : mkauto_strings.strings.get(ma_code + "." + prize_type + ".tickle_call_to_action.title"),
             "tickle_call_to_action_label" : mkauto_strings.strings.get(ma_code + "." + prize_type + ".tickle_call_to_action.label"),
+            "coupon_code_extra_text" : mkauto_strings.strings.get(ma_code + ".coupon_code_extra_text"),
         }
 
         return strings
@@ -178,7 +181,8 @@ class MaEvent(models.Model):
             2) Inserisco una riga in ma_event_log
             3) Creo una riga in ma_event_code
             4) Genero i testi per la mail (oggetto, titolo e testo) in base al tipo di premio e all'evento
-            5) Invio il premio (il codice generato in ma_event_code) all'utente via email (Implementare i template)
+            5) Sistituisco ai testi le variabili
+            5) Invio il premio (il codice generato in ma_event_code) all'utente via email
         """
 
         if not ma_code_dictionary:
@@ -205,7 +209,7 @@ class MaEvent(models.Model):
 
         # 3)
         # Creo una riga in ma_event_code
-        self.add_event_code(user_id=user_id, ma_event_id=ma_code_dictionary.get("ma_event_id"), ma_event_log_id=ma_event_log_obj.ma_event_log_id, ma_code=ma_code_dictionary.get("ma_code"))
+        coupon_code = self.add_event_code(user_id=user_id, ma_event_id=ma_code_dictionary.get("ma_event_id"), ma_event_log_id=ma_event_log_obj.ma_event_log_id, ma_code=ma_code_dictionary.get("ma_code"))
 
         # 4)
         # Genero i testi per la mail (oggetto, titolo e testo) in base al tipo di premio e all'evento
@@ -235,10 +239,20 @@ class MaEvent(models.Model):
         logger.info(event_strings)
 
         # TODO
-        # 6) Creo la mail con i testi definitivi
-
-        # TODO
-        # 7) Invio la mail all'utente
+        # 6) Creo la mail con i testi definitivi e invio la mail
+        email_context = {
+            "title" : event_strings["title"],
+            "content" : event_strings["content"],
+            "image_code" : event_strings["subject"],
+            "coupon_code" : coupon_code,
+            "coupon_code_extra_text" : event_strings["coupon_code_extra_text"],
+            "subject" : event_strings["subject"],
+        }
+        CustomEmailTemplate(
+            email_name="mkauto_email",
+            email_context=email_context,
+            recipient_list=[account_info_dictionary["email"],]
+        )
 
     #TODO
     def make_tickle(self):

@@ -1,0 +1,4 @@
+{{plain_main_title_block}}
+===============
+{{plain_main_content_block}}
+{{plain_coupon_code_block}}

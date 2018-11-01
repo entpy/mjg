@@ -18,6 +18,7 @@ class mkauto_strings(object):
         str(mkauto_consts.event_code["welcome_prize"]) + ".text.content": "Testo per il premio libero {{coupon_limitations}}",
         str(mkauto_consts.event_code["welcome_prize"]) + ".prize_call_to_action.title": "Titolo della call to action",
         str(mkauto_consts.event_code["welcome_prize"]) + ".prize_call_to_action.label": "label call to action",
+        str(mkauto_consts.event_code["welcome_prize"]) + ".coupon_code_extra_text": "Presentaci questo coupon in sede per ottenere il bonus",
         # welcome_prize }}}
         # TODO
         # aggiungere qui i testi aggiuntivi per gli altri eventi

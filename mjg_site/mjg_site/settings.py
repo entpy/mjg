@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'website',
     'account_app',
     'mkauto_app',
+    'email_app',
 ]
 
 MIDDLEWARE = [
