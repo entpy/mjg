@@ -20,4 +20,9 @@ def run():
         2) Ottengo l'elenco di ogni utente per un dato evento
     """
 
+    account_obj = Account()
+    account_list = account_obj.get_mkauto_accounts(days_from_creation=100)
+
+    logger.info("@@@ account list @@@")
+
     return True

@@ -125,7 +125,7 @@ class Account(models.Model):
         """Function to retrieve users list created 'days_from_creation' ago"""
         return_var = None
 
-        return_var = User.objects.values('id', 'first_name', 'last_name', 'email', 'account__mobile_number', 'account__notify_bitmask').filter(account__creation_date__lt=timezone.now()-datetime.timedelta(days=days_from_creation))
+        return_var = User.objects.values('id', 'first_name', 'last_name', 'email', 'account__mobile_number', 'account__notify_bitmask').filter(account__creation_date__gt=timezone.now()-datetime.timedelta(days=days_from_creation))
         # solo gli utenti che vogliono ricevere queste notifiche (controllo la bitmask)
         return_var = return_var.annotate(annotated_field=F('account__notify_bitmask').bitand(project_constants.RECEIVE_MKAUTO_BITMASK))
         return_var = return_var.filter(annotated_field__gt = 0)

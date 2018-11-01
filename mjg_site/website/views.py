@@ -91,13 +91,18 @@ def www_test_page(request):
     ma_event_obj = MaEvent()
 
     # creo i default della mkauto
-    ma_event_obj.create_mkauto_defaults()
+    # ma_event_obj.create_mkauto_defaults()
 
     # ma_event_obj.add_event_log(user_id=20, ma_event_id=38)
 
     # TODO
     # provo ad eseguire un evento di test
-    ma_event_obj.make_prize(user_id=20, ma_code="welcome_prize")
+    # ma_event_obj.make_prize(user_id=20, ma_code="welcome_prize")
 
+    account_obj = Account()
+    account_list = account_obj.get_mkauto_accounts(days_from_creation=100)
+
+    logger.info("@@@ account list @@@")
+    logger.info(account_list)
 
     return HttpResponse("Test page!")
