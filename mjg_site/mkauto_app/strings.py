@@ -25,6 +25,18 @@ class MkautoStrings(object):
         str(mkauto_consts.event_code["welcome_prize"]) + ".call_to_action.label": "Visualizza informazioni",
         str(mkauto_consts.event_code["welcome_prize"]) + ".coupon_code_extra_text": "Presentaci questo coupon in sede per ottenere il bonus",
         # welcome_prize }}}
+        # get_birthday_date {{{
+        # get_birthday_date }}}
+        # get_feedback {{{
+        # get_feedback }}}
+        # random_promo {{{
+        # random_promo }}}
+        # refer_friend {{{
+        # refer_friend }}}
+        # get_review {{{
+        # get_review }}}
+        # happy_birthday_prize {{{
+        # happy_birthday_prize }}}
 
         # TODO
         # inserire qui i testi aggiuntivi per gli altri eventi

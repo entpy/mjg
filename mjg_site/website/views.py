@@ -97,28 +97,41 @@ def www_test_page(request):
 
     # TODO
     # provo ad eseguire un evento di test
-    # ma_event_obj.make_prize(user_id=20, ma_code="welcome_prize")
+    # ma_event_obj.make_event(user_id=20, ma_code="welcome_prize")
 
     account_obj = Account()
     account_list = account_obj.get_mkauto_accounts(days_from_creation=5)
 
     event_dictionary = ma_event_obj.get_active_ma_events()
 
-    # richiesta data di nascita
-    if event_dictionary.get("get_birthday_date", {}).get("status"):
-        """
-        1) Prelevo le informazioni per l'evento
-        2) Ottengo la lista di account validi per l'evento
-        3) Itero sull'elenco di account ed eseguo l'evento con "make_prize(user_id, ma_code=None, ma_code_dictionary=None, is_tickle=False)"
-        """
-        logger.info("@@@ richiesta data di nascita attiva @@@")
-    else:
-        logger.info("@@@ richiesta data di nascita NON attiva @@@")
 
     #logger.info("@@@ account list @@@")
     #logger.info(account_list)
 
     logger.info("@@@ event dictionary @@@")
     logger.info(event_dictionary)
+
+    # TODO: inserisco la lista di eventi
+    ##### Lasciaci la data di nascita per ricevere un bonus #####
+    if event_dictionary.get("get_birthday_date", {}).get("status"):
+        """
+        1) Prelevo le informazioni per l'evento
+        2) Ottengo la lista di account validi per l'evento
+        3) Itero sull'elenco di account ed eseguo l'evento con "make_event(user_id, ma_code=None, ma_code_dictionary=None, is_tickle=False)"
+        """
+        logger.info("@@@ richiesta data di nascita attiva @@@")
+    else:
+        logger.info("@@@ richiesta data di nascita NON attiva @@@")
+
+    ##### Chiedo all'utente di lasciare un feedback (informazioni interne) #####
+    if event_dictionary.get("get_feedback", {}).get("status"):
+        """
+        1) Prelevo le informazioni per l'evento
+        2) Ottengo la lista di account validi per l'evento
+        3) Itero sull'elenco di account ed eseguo l'evento con "make_event(user_id, ma_code=None, ma_code_dictionary=None, is_tickle=False)"
+        """
+        logger.info("@@@ richiesta data di nascita attiva @@@")
+    else:
+        logger.info("@@@ richiesta data di nascita NON attiva @@@")
 
     return HttpResponse("Test page!")

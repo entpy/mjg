@@ -10,6 +10,12 @@ Promozioni automatiche basate su un flusso (dalla registrazione dell'utente sul 
 	dicci i chilometri della tua auto e ottieni uno sconto per i lavori di manutenzione per mantenerla in salute (in base al chilometraggio selezionato vengono proposti lavori con un determinato sconto)
 	promozione per i clienti con un tot di chilometri, in base al chilometraggio indicato nella scheda del veicolo
 	promozione per i clienti che non fanno lavori da un tot di tempo, in base all'ultimo lavoro effettuato nella scheda del veicolo (è da un po' che non ti vediamo, torna in officina per fare un controllo alla tua auto, ecco uno sconto per un checkup)
+
+	# promozioni casuali a tema, premi diretti con testo e bonus differente
+	hai una spia accesa? Passa da noi per un controllo, ecco un bonus
+	hai una lampadina bruciata? Passa da noi per un controllo, ecco un bonus
+	la tua auto fa dei rumori sospetti? Passa da noi per un controllo, ecco un bonus
+	la tua auto si avvia con difficoltà? Passa da noi per un controllo, ecco un bonus
 Promozioni automatiche basate sul tempo (indipendenti dalla data di registrazione del cliente):
 	promozione stagionale per il cambio gomme
 	promozione stagionale per un tagliando (es parti in vacanza in modo sicuro, è arrivato l'inverno preparati ad affrontarlo, identificare alri momenti buoni)

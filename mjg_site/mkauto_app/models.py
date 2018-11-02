@@ -25,20 +25,26 @@ class MaEvent(models.Model):
         ('bonus', '€'),
         ('text', 'Text'),
     )
+    MA_EVENT_TYPE = (
+        (mkauto_consts["prize"], mkauto_consts["prize"]),
+        (mkauto_consts["prize_tickle"], mkauto_consts["prize_tickle"]),
+        (mkauto_consts["scheduled"], mkauto_consts["scheduled"]),
+    )
     ma_event_id = models.AutoField(primary_key=True)
     description = models.CharField(max_length=200, null=True, blank=True, verbose_name="Una descrizione dell'evento")
     ma_code = models.CharField(max_length=50, null=False, blank=False, verbose_name="Codice identificativo dell'evento")
     prize_type = models.CharField(max_length=10, null=False, blank=False, choices=PRIZE_TYPE, verbose_name="Il tipo di premio es. discount, bonus, text")
     prize_value = models.CharField(max_length=200, null=False, blank=False, verbose_name="Il premio es. 30, una pizza, ...")
+    extra_prize_value = models.CharField(max_length=200, null=True, blank=True, verbose_name="E' un premio extra per alcuni eventi, per esempio nell'evento 'proponici un amico' è il premio che riceverà l'amico")
     start_delay = models.IntegerField(null=True, blank=True, verbose_name="L'evento viene spedito se l'utente è creato da almeno questi giorni")
     repeat_delay = models.IntegerField(null=True, blank=True, verbose_name="Dopo il primo invio, tutti i successivi sono ogni x giorni, indicati da questo numero")
     # send_date = models.DateField(null=True, blank=True, verbose_name="Alternativo a start_date e repeat_date, se settato indica l'invio puntuale dell'evento in una certa data")
     extra_text = models.TextField(null=False, blank=True, verbose_name="Testo aggiuntivo, es. le limitazioni dei coupo per questo evento")
-    is_tickle = models.BooleanField(blank=True, verbose_name="Se 1 l'evento è un tickle, se è 0 l'evento è un premio")
     channels_bitmask = models.IntegerField(default=(project_constants.CHANNEL_EMAIL), null=False, blank=False, verbose_name="Indica su quali canali inviare l'evento, per il momento esiste solo il channel email")
     prize_call_to_action = models.CharField(max_length=200, null=True, blank=True, verbose_name="Se settato il premio avrà una call to action")
     tickle_call_to_action = models.CharField(max_length=200, null=True, blank=True, verbose_name="Se settato il tickle avrà una call to action")
     status = models.NullBooleanField(null=True, blank=True, default=0, verbose_name="Indica se l'evento è attivo o no (1=attivo, 0=non attivo)")
+    ma_event_type = models.CharField(max_length=30, null=False, blank=False, choices=MA_EVENT_TYPE, verbose_name="Il tipo di ma event, se solo premio, tickle+premio oppure schedulato nel tempo")
 
     class Meta:
         app_label = 'mkauto_app'
@@ -133,7 +139,7 @@ class MaEvent(models.Model):
         return self.ucfirst(first_name + separator + string)
 
     #TODO
-    def make_prize(self, user_id, ma_code=None, ma_code_dictionary=None, is_tickle=False):
+    def make_event(self, user_id, ma_code=None, ma_code_dictionary=None, is_tickle=False):
         """
         Function to send a prize
             - ma_code lo utilizzo solo se non ho già tutti i dati in ma_code_dictionary per fare una get by code,
@@ -259,7 +265,7 @@ class MaEvent(models.Model):
                 ma_event_obj.start_delay = mkauto_row.get("start_delay")
                 ma_event_obj.repeat_delay = mkauto_row.get("repeat_delay")
                 ma_event_obj.extra_text = mkauto_row.get("extra_text")
-                ma_event_obj.is_tickle = mkauto_row.get("is_tickle")
+                ma_event_obj.prize_type = mkauto_row.get("prize_type")
                 ma_event_obj.prize_call_to_action = mkauto_row.get("prize_call_to_action")
                 ma_event_obj.tickle_call_to_action = mkauto_row.get("tickle_call_to_action")
                 ma_event_obj.status = mkauto_row.get("status")
