@@ -167,6 +167,12 @@ LOGGING = {
         },
     },
     'handlers': {
+        'sql_log_debug': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/tmp/mjg_sql_debug.log',
+            'formatter': 'verbose',
+        },
         # Send all messages to console
         'console_debug': {
             'level': 'DEBUG',
@@ -205,7 +211,7 @@ LOGGING = {
         },
         'django.db.backends': {
             'level': 'DEBUG',
-            'handlers': ['console_debug'],
+            'handlers': ['sql_log_debug'],
         }
     }
 }

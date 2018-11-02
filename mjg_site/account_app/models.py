@@ -123,17 +123,22 @@ class Account(models.Model):
     # controllare le bitmask
     def get_mkauto_accounts(self, days_from_creation):
         """Function to retrieve users list created 'days_from_creation' ago"""
+        # -------NOW-80---CREAZIONE(NOW-40)---NOW-20----NOW-------
+        # ----------|--------------|-------------|-------|--------
         return_var = None
 
-        return_var = User.objects.values('id', 'first_name', 'last_name', 'email', 'account__mobile_number', 'account__notify_bitmask').filter(account__creation_date__gt=timezone.now()-datetime.timedelta(days=days_from_creation))
+        # solo gli utenti registrati da almeno x giorni
+        return_var = User.objects.values('id', 'first_name', 'last_name', 'email', 'account__mobile_number', 'account__notify_bitmask').filter(account__creation_date__date__lte=(timezone.now()-datetime.timedelta(days=days_from_creation)).date())
         # solo gli utenti che vogliono ricevere queste notifiche (controllo la bitmask)
-        return_var = return_var.annotate(annotated_field=F('account__notify_bitmask').bitand(project_constants.RECEIVE_MKAUTO_BITMASK))
-        return_var = return_var.filter(annotated_field__gt = 0)
-        # return_var = return_var.filter(account__notify_bitmask__gt=F('somefield').bitand(project_constants.RECEIVE_MKAUTO_BITMASK))
+        return_var = return_var.annotate(bitmask_annotated_field=F('account__notify_bitmask').bitand(project_constants.RECEIVE_MKAUTO_BITMASK))
+        return_var = return_var.filter(bitmask_annotated_field__gt = 0)
+        # return_var = return_var.filter(account__notify_bitmask__gte=F('account__notify_bitmask').bitand(project_constants.RECEIVE_MKAUTO_BITMASK))
 
 	# performing query
         return_var = list(return_var)
 
+        # dat = (timezone.now()-datetime.timedelta(days=days_from_creation)).date()
+        # logger.info("date: " + str(dat))
         logger.info("elenco utenti: " + str(return_var))
 
         return return_var

@@ -38,7 +38,7 @@ class MaEvent(models.Model):
     channels_bitmask = models.IntegerField(default=(project_constants.CHANNEL_EMAIL), null=False, blank=False, verbose_name="Indica su quali canali inviare l'evento, per il momento esiste solo il channel email")
     prize_call_to_action = models.CharField(max_length=200, null=True, blank=True, verbose_name="Se settato il premio avrà una call to action")
     tickle_call_to_action = models.CharField(max_length=200, null=True, blank=True, verbose_name="Se settato il tickle avrà una call to action")
-    status = models.BooleanField(blank=True, default=0, verbose_name="Indica se l'evento è attivo o no (1=attivo, 0=non attivo)")
+    status = models.NullBooleanField(null=True, blank=True, default=0, verbose_name="Indica se l'evento è attivo o no (1=attivo, 0=non attivo)")
 
     class Meta:
         app_label = 'mkauto_app'
@@ -285,6 +285,17 @@ class MaEvent(models.Model):
         """
 
         return True
+
+    # TODO
+    def get_active_ma_events(self):
+        """Function to retrieve a dictionary of all active events"""
+        return_var = {}
+
+        active_events = MaEvent.objects.values().filter(status=1)
+        if active_events:
+            for val in active_events:
+                return_var[val["ma_code"]] = val
+        return return_var
 
 class MaEventLog(models.Model):
     ma_event_log_id = models.AutoField(primary_key=True)
