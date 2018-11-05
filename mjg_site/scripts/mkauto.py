@@ -16,18 +16,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 def run():
-    """
-        1) Ottengo un dizionario con tutti gli eventi e i valori di ogni evento
-        2) Ottengo l'elenco di ogni utente per un dato evento
-    """
-
     account_obj = Account()
     ma_event_obj = MaEvent()
 
     event_dictionary = ma_event_obj.get_ma_events()
-
-    #logger.info("@@@ account list @@@")
-    #logger.info(account_list)
 
     logger.info("@@@ event dictionary @@@")
     logger.info(event_dictionary)
@@ -36,7 +28,8 @@ def run():
     Per ogni evento attivo:
     1) Prelevo le informazioni per l'evento
     2) Ottengo la lista di account validi per l'evento
-    3) Itero sull'elenco di account ed eseguo l'evento con "make_event(user_id, ma_code=None, ma_code_dictionary=None, is_tickle=False)"
+    3) Ottengo il codice per le stringhe e le immagini
+    4) Itero sull'elenco di account ed eseguo l'evento con "make_event"
     """
 
     # TODO
@@ -77,7 +70,7 @@ def run():
     return True
 
     # TODO
-    # invio la mail stagionale
+    # invio anche la mail stagionale
 
     current_ma_event = "get_birthday_date"
     if event_dictionary.get(current_ma_event, {}).get("status"):

@@ -22,16 +22,24 @@ class Account(models.Model):
     id_account = models.AutoField(primary_key=True)
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE) # Links Account to a User model instance.
     mobile_number = models.CharField(max_length=30, null=True, blank=True)
-    status = models.IntegerField(null=True, default=1)
     notify_bitmask = models.IntegerField(default=(project_constants.RECEIVE_MKAUTO_BITMASK + project_constants.RECEIVE_PROMOTIONS_BITMASK + project_constants.RECEIVE_NEWSLETTERS_BITMASK), null=True)
     birthday_date = models.DateField(null=True, blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     get_feedback_event_done = models.IntegerField(null=True, blank=True, default=0)
     get_review_event_done = models.IntegerField(null=True, blank=True, default=0)
+    status = models.IntegerField(null=True, default=1)
 
     class Meta:
         app_label = 'account_app'
+        indexes = [
+            models.Index(fields=['get_feedback_event_done',]),
+            models.Index(fields=['get_review_event_done',]),
+            models.Index(fields=['birthday_date',]),
+            models.Index(fields=['creation_date',]),
+            models.Index(fields=['notify_bitmask',]),
+            models.Index(fields=['status',]),
+        ]
 
     def __unicode__(self):
         return self.user.email
@@ -133,7 +141,9 @@ class Account(models.Model):
         return_var = User.objects.values('id', 'first_name', 'last_name', 'email', 'account__mobile_number', 'account__notify_bitmask').filter(account__creation_date__date__lte=(timezone.now()-datetime.timedelta(days=days_from_creation)).date())
         # solo gli utenti che vogliono ricevere queste notifiche (controllo la bitmask)
         return_var = return_var.annotate(bitmask_annotated_field=F('account__notify_bitmask').bitand(project_constants.RECEIVE_MKAUTO_BITMASK))
-        return_var = return_var.filter(bitmask_annotated_field__gt = 0)
+        return_var = return_var.filter(bitmask_annotated_field__gt=0)
+        # solo gli utenti attivi (status=1)
+        return_var = return_var.filter(account__status=1)
         # return_var = return_var.filter(account__notify_bitmask__gte=F('account__notify_bitmask').bitand(project_constants.RECEIVE_MKAUTO_BITMASK))
 
         # filtri dedicati agli eventi

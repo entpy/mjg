@@ -27,13 +27,13 @@ class MaEvent(models.Model):
         ('text', 'Text'),
     )
     MA_EVENT_TYPE = (
-        (mkauto_consts["prize"], mkauto_consts["prize"]),
-        (mkauto_consts["prize_tickle"], mkauto_consts["prize_tickle"]),
-        (mkauto_consts["scheduled"], mkauto_consts["scheduled"]),
+        (mkauto_consts.ma_event_type["prize"], mkauto_consts.ma_event_type["prize"]),
+        (mkauto_consts.ma_event_type["prize_tickle"], mkauto_consts.ma_event_type["prize_tickle"]),
+        (mkauto_consts.ma_event_type["scheduled"], mkauto_consts.ma_event_type["scheduled"]),
     )
     ma_event_id = models.AutoField(primary_key=True)
     description = models.CharField(max_length=200, null=True, blank=True, verbose_name="Una descrizione dell'evento")
-    ma_code = models.CharField(max_length=50, null=False, blank=False, verbose_name="Codice identificativo dell'evento")
+    ma_code = models.CharField(max_length=50, null=False, blank=False, unique=True, verbose_name="Codice identificativo dell'evento")
     prize_type = models.CharField(max_length=10, null=True, blank=True, choices=PRIZE_TYPE, verbose_name="Il tipo di premio es. discount, bonus, text")
     prize_value = models.CharField(max_length=200, null=True, blank=True, verbose_name="Il premio es. 30, una pizza, ...")
     extra_prize_value = models.CharField(max_length=200, null=True, blank=True, verbose_name="E' un premio extra per alcuni eventi, per esempio nell'evento 'proponici un amico' è il premio che riceverà l'amico")
@@ -182,6 +182,10 @@ class MaEvent(models.Model):
             # problemi con il codice passato alla funzione
             raise MaEventsCodeDoesNotExistError
 
+        if not ma_code_dictionary["status"]:
+            # se l'evento non è attivo esco dalla funzione
+            return False
+
         logger.info("MaEvent info dict")
         logger.info(ma_code_dictionary)
 
@@ -294,7 +298,7 @@ class MaEvent(models.Model):
                 ma_event_obj.save(force_insert=True)
 
         # creo i codici random
-        if mkauto_consts.random_code_default_values
+        if mkauto_consts.random_code_default_values:
             for random_code_row in mkauto_consts.random_code_default_values:
                 ma_random_code = MaRandomCode()
                 ma_random_code.random_code_type = random_code_row.get("random_code_type")
@@ -334,7 +338,7 @@ class MaEvent(models.Model):
 
         return return_var
 
-    def get_next_random_code_order(self, event_dictionary)
+    def get_next_random_code_order(self, event_dictionary):
         """Function to retrieve next random code order"""
         # ma_event_obj.json_params = {"random_code" : {"order" : -1, "expiring_date" : timezone.now() + 30gg}
 
@@ -359,6 +363,16 @@ class MaEvent(models.Model):
 
         return ma_random_code_obj.random_code
 
+    # XXX: solo per uso interno di debug
+    def delete_all_data(self):
+        """Function to delete all data from ma_event tables"""
+        MaEvent.objects.all().delete()
+        MaEventLog.objects.all().delete()
+        MaEventCode.objects.all().delete()
+        MaRandomCode.objects.all().delete()
+
+        return True
+
 class MaEventLog(models.Model):
     ma_event_log_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, related_name='user_maeventlog', on_delete=models.CASCADE)
@@ -377,7 +391,7 @@ class MaEventCode(models.Model):
     user = models.ForeignKey(User, related_name='user_maeventcode', on_delete=models.CASCADE)
     ma_event = models.ForeignKey(MaEvent, null=True, on_delete=models.SET_NULL)
     ma_event_log = models.ForeignKey(MaEventLog, on_delete=models.CASCADE)
-    ma_code = models.CharField(max_length=50, null=False, blank=False, verbose_name="Codice identificativo dell'evento")
+    ma_code = models.CharField(max_length=50, null=False, blank=False, verbose_name="Codice identificativo dell'evento, il campo è duplicato (è già presente una chiave esterna di MaEvent), viene utilizzato a solo scopo informativo")
     code = models.CharField(max_length=15, null=False, blank=False)
     status = models.IntegerField(null=False, blank=False, default=1, verbose_name="Indica se il codice è utilizzato o no (1=non utilizzato 2=utilizzato)")
     creation_date = models.DateTimeField(auto_now_add=True)
@@ -385,14 +399,17 @@ class MaEventCode(models.Model):
 
     class Meta:
         app_label = 'mkauto_app'
+        indexes = [
+            models.Index(fields=['code',]),
+        ]
 
     def __unicode__(self):
         return self.ma_event_code_id
 
 class MaRandomCode(models.Model):
     CODE_TYPE = (
-        (random_code_type["tip"], random_code_type["tip"]),
-        (random_code_type["monthly_prize"], random_code_type["monthly_prize"]),
+        (mkauto_consts.random_code_type["tip"], mkauto_consts.random_code_type["tip"]),
+        (mkauto_consts.random_code_type["monthly_prize"], mkauto_consts.random_code_type["monthly_prize"]),
     )
     ma_random_code_id = models.AutoField(primary_key=True)
     random_code_type = models.CharField(max_length=20, choices=CODE_TYPE, verbose_name="Il tipo di codice random (tip|monthly_prize)")
@@ -401,6 +418,7 @@ class MaRandomCode(models.Model):
 
     class Meta:
         app_label = 'mkauto_app'
+        unique_together = ("random_code", "order")
 
     def __unicode__(self):
         return self.ma_random_code_id

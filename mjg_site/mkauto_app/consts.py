@@ -53,10 +53,14 @@ class mkauto_consts(object):
         "monthly_prize" : "monthly_prize",
     }
     random_code = {
+        # monthly_prize
         "warning_light_prize" : "warning_light_prize", # prize -> premio se hai una spia del cruscotto accesa
         "light_burned_prize" : "light_burned_prize", # prize -> premio se hai una lampadina bruciata
         "noises_prize" : "noises_prize", # prize -> premio se la tua auto fa dei rumori sospetti
         "bad_start_prize" : "bad_start_prize", # prize -> premio se la tua auto si avvia con difficoltà
+        # tip (tip mensili)
+        "tip1" : "tip1",
+        "tip2" : "tip2",
     }
 
     random_code_default_values = [
@@ -79,6 +83,16 @@ class mkauto_consts(object):
             "random_code_type" : random_code_type["monthly_prize"],
             "random_code" : random_code["bad_start_prize"],
             "order" : "3",
+        },
+        {
+            "random_code_type" : random_code_type["tip"],
+            "random_code" : random_code["tip1"],
+            "order" : "0",
+        },
+        {
+            "random_code_type" : random_code_type["tip"],
+            "random_code" : random_code["tip2"],
+            "order" : "1",
         },
     ]
 
