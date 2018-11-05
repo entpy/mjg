@@ -14,10 +14,10 @@ class mkauto_consts(object):
     """
     ma_event_type = {
         "prize" : "prize", # premi diretti
-        "random_prize" : "random_prize", # premi diretti
+        "monthly_prize" : "monthly_prize", # premi diretti
         "prize_tickle" : "prize_tickle", # mail di tickle e poi mail di premio se viene eseguito il tickle
         "scheduled" : "scheduled", # mail schedulate nel tempo (es. cambio gomme stagionale)
-        "info" : "info", # email mensile di tip, non è una promozione ma un consiglio/curiosità sul mondo automobilistico
+        "tip" : "tip", # email mensile di tip, non è una promozione ma un consiglio/curiosità sul mondo automobilistico
     }
     event_code = {
         # promozioni automatiche su flusso dell'utente
@@ -45,7 +45,42 @@ class mkauto_consts(object):
             #"air_conditioning_promotion" : "air_conditioning_promotion", # ricarica climatizzatore
         # TODO
         # tips and tricks
+        "random_tip" : "random_tip", # prize -> premio al compleanno
     }
+
+    random_code_type = {
+        "tip" : "tip",
+        "monthly_prize" : "monthly_prize",
+    }
+    random_code = {
+        "warning_light_prize" : "warning_light_prize", # prize -> premio se hai una spia del cruscotto accesa
+        "light_burned_prize" : "light_burned_prize", # prize -> premio se hai una lampadina bruciata
+        "noises_prize" : "noises_prize", # prize -> premio se la tua auto fa dei rumori sospetti
+        "bad_start_prize" : "bad_start_prize", # prize -> premio se la tua auto si avvia con difficoltà
+    }
+
+    random_code_default_values = [
+        {
+            "random_code_type" : random_code_type["monthly_prize"],
+            "random_code" : random_code["warning_light_prize"],
+            "order" : "0",
+        },
+        {
+            "random_code_type" : random_code_type["monthly_prize"],
+            "random_code" : random_code["light_burned_prize"],
+            "order" : "1",
+        },
+        {
+            "random_code_type" : random_code_type["monthly_prize"],
+            "random_code" : random_code["noises_prize"],
+            "order" : "2",
+        },
+        {
+            "random_code_type" : random_code_type["monthly_prize"],
+            "random_code" : random_code["bad_start_prize"],
+            "order" : "3",
+        },
+    ]
 
     mkauto_default_values = [
         {
@@ -56,7 +91,7 @@ class mkauto_consts(object):
             "start_delay" : "0",
             "repeat_delay" : "0",
             "extra_text" : "",
-            "ma_event_type" : mkauto_consts["prize"],
+            "ma_event_type" : ma_event_type["prize"],
             "prize_call_to_action" : "",
             "tickle_call_to_action" : "",
             "status" : "1",
@@ -69,7 +104,7 @@ class mkauto_consts(object):
             "start_delay" : "7",
             "repeat_delay" : "112",
             "extra_text" : "",
-            "ma_event_type" : mkauto_consts["prize_tickle"],
+            "ma_event_type" : ma_event_type["prize_tickle"],
             "prize_call_to_action" : "",
             "tickle_call_to_action" : "",
             "status" : "1",
@@ -79,23 +114,10 @@ class mkauto_consts(object):
             "description" : "Chiedo all'utente di lasciare un feedback (informazioni interne)",
             "prize_type" : "discount",
             "prize_value" : "15",
-            "start_delay" : "35",
+            "start_delay" : "42",
             "repeat_delay" : "168",
             "extra_text" : "",
-            "ma_event_type" : mkauto_consts["prize_tickle"],
-            "prize_call_to_action" : "",
-            "tickle_call_to_action" : "",
-            "status" : "1",
-        },
-        {
-            "ma_code" : event_code["random_promo"],
-            "description" : "Premio con un testo random",
-            "prize_type" : "discount",
-            "prize_value" : "10",
-            "start_delay" : "49",
-            "repeat_delay" : "56",
-            "extra_text" : "",
-            "ma_event_type" : mkauto_consts["random_prize"],
+            "ma_event_type" : ma_event_type["prize_tickle"],
             "prize_call_to_action" : "",
             "tickle_call_to_action" : "",
             "status" : "1",
@@ -108,7 +130,7 @@ class mkauto_consts(object):
             "start_delay" : "70",
             "repeat_delay" : "168",
             "extra_text" : "",
-            "ma_event_type" : mkauto_consts["prize_tickle"],
+            "ma_event_type" : ma_event_type["prize_tickle"],
             "prize_call_to_action" : "",
             "tickle_call_to_action" : "",
             "status" : "1",
@@ -118,10 +140,10 @@ class mkauto_consts(object):
             "description" : "Chiedo all'utente di lasciare una recensione (informazioni pubbliche)",
             "prize_type" : "discount",
             "prize_value" : "15",
-            "start_delay" : "91",
+            "start_delay" : "98",
             "repeat_delay" : "168",
             "extra_text" : "",
-            "ma_event_type" : mkauto_consts["prize_tickle"],
+            "ma_event_type" : ma_event_type["prize_tickle"],
             "prize_call_to_action" : "",
             "tickle_call_to_action" : "",
             "status" : "1",
@@ -134,11 +156,39 @@ class mkauto_consts(object):
             "start_delay" : "0",
             "repeat_delay" : "0",
             "extra_text" : "",
-            "ma_event_type" : mkauto_consts["prize"],
+            "ma_event_type" : ma_event_type["prize"],
             "prize_call_to_action" : "",
             "tickle_call_to_action" : "",
             "status" : "1",
         },
-        # TODO: mancano i tip mensili (mail senza codice)
+        {
+            "ma_code" : event_code["random_promo"],
+            "description" : "Premio con un testo random",
+            "prize_type" : "discount",
+            "prize_value" : "10",
+            "start_delay" : "35",
+            "repeat_delay" : "56",
+            "extra_text" : "",
+            "ma_event_type" : ma_event_type["monthly_prize"],
+            "prize_call_to_action" : "",
+            "tickle_call_to_action" : "",
+            #"json_params" : '{"current_random_promo_order": "-1"}',
+            "status" : "1",
+        },
+        # tip mensili (mail senza codice)
+        {
+            "ma_code" : event_code["random_tip"],
+            "description" : "Mail di tip o info, non contiene codici sconto",
+            "prize_type" : None,
+            "prize_value" : None,
+            "start_delay" : "28",
+            "repeat_delay" : "28",
+            "extra_text" : "",
+            "ma_event_type" : ma_event_type["tip"],
+            "prize_call_to_action" : "",
+            "tickle_call_to_action" : "",
+            #"json_params" : '{"current_random_tip_order": "-1"}',
+            "status" : "1",
+        },
         # TODO: mancano le promozioni basate sul tempo
     ]

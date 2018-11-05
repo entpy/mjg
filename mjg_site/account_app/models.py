@@ -27,6 +27,8 @@ class Account(models.Model):
     birthday_date = models.DateField(null=True, blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
+    get_feedback_event_done = models.IntegerField(null=True, blank=True, default=0)
+    get_review_event_done = models.IntegerField(null=True, blank=True, default=0)
 
     class Meta:
         app_label = 'account_app'
@@ -121,7 +123,7 @@ class Account(models.Model):
 
     # TODO
     # controllare le bitmask
-    def get_mkauto_accounts(self, days_from_creation):
+    def get_mkauto_accounts(self, days_from_creation, event_code=None):
         """Function to retrieve users list created 'days_from_creation' ago"""
         # -------NOW-80---CREAZIONE(NOW-40)---NOW-20----NOW-------
         # ----------|--------------|-------------|-------|--------
@@ -133,6 +135,23 @@ class Account(models.Model):
         return_var = return_var.annotate(bitmask_annotated_field=F('account__notify_bitmask').bitand(project_constants.RECEIVE_MKAUTO_BITMASK))
         return_var = return_var.filter(bitmask_annotated_field__gt = 0)
         # return_var = return_var.filter(account__notify_bitmask__gte=F('account__notify_bitmask').bitand(project_constants.RECEIVE_MKAUTO_BITMASK))
+
+        # filtri dedicati agli eventi
+        if event_code == "get_birthday_date":
+            # solo se l'utente non ha la data di nascita
+            return_var = return_var.filter(account__birthday_date__isnull=True)
+
+        if event_code == "happy_birthday_prize":
+            # solo se il compleanno dell'utente è oggi
+            return_var = return_var.filter(birthday_date__month=timezone.now().month, birthday_date__day=timezone.now().day)
+
+        if event_code == "get_feedback":
+            # solo se l'utente non ha ancora lasciato feedback (info interne)
+            return_var = return_var.filter(account__get_feedback_event_done__isnull=True)
+
+        if event_code == "get_review":
+            # solo se l'utente non ha ancora lasciato recensioni (info pubbliche)
+            return_var = return_var.filter(account__get_review_event_done__isnull=True)
 
 	# performing query
         return_var = list(return_var)

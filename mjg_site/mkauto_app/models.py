@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.contrib.postgres.fields import JSONField
 from django.contrib.auth.models import User
 from django.utils import timezone
 from mjg_site.consts import project_constants
@@ -33,18 +34,18 @@ class MaEvent(models.Model):
     ma_event_id = models.AutoField(primary_key=True)
     description = models.CharField(max_length=200, null=True, blank=True, verbose_name="Una descrizione dell'evento")
     ma_code = models.CharField(max_length=50, null=False, blank=False, verbose_name="Codice identificativo dell'evento")
-    prize_type = models.CharField(max_length=10, null=False, blank=False, choices=PRIZE_TYPE, verbose_name="Il tipo di premio es. discount, bonus, text")
-    prize_value = models.CharField(max_length=200, null=False, blank=False, verbose_name="Il premio es. 30, una pizza, ...")
+    prize_type = models.CharField(max_length=10, null=True, blank=True, choices=PRIZE_TYPE, verbose_name="Il tipo di premio es. discount, bonus, text")
+    prize_value = models.CharField(max_length=200, null=True, blank=True, verbose_name="Il premio es. 30, una pizza, ...")
     extra_prize_value = models.CharField(max_length=200, null=True, blank=True, verbose_name="E' un premio extra per alcuni eventi, per esempio nell'evento 'proponici un amico' è il premio che riceverà l'amico")
     start_delay = models.IntegerField(null=True, blank=True, verbose_name="L'evento viene spedito se l'utente è creato da almeno questi giorni")
     repeat_delay = models.IntegerField(null=True, blank=True, verbose_name="Dopo il primo invio, tutti i successivi sono ogni x giorni, indicati da questo numero")
-    # send_date = models.DateField(null=True, blank=True, verbose_name="Alternativo a start_date e repeat_date, se settato indica l'invio puntuale dell'evento in una certa data")
     extra_text = models.TextField(null=False, blank=True, verbose_name="Testo aggiuntivo, es. le limitazioni dei coupo per questo evento")
     channels_bitmask = models.IntegerField(default=(project_constants.CHANNEL_EMAIL), null=False, blank=False, verbose_name="Indica su quali canali inviare l'evento, per il momento esiste solo il channel email")
     prize_call_to_action = models.CharField(max_length=200, null=True, blank=True, verbose_name="Se settato il premio avrà una call to action")
     tickle_call_to_action = models.CharField(max_length=200, null=True, blank=True, verbose_name="Se settato il tickle avrà una call to action")
-    status = models.NullBooleanField(null=True, blank=True, default=0, verbose_name="Indica se l'evento è attivo o no (1=attivo, 0=non attivo)")
     ma_event_type = models.CharField(max_length=30, null=False, blank=False, choices=MA_EVENT_TYPE, verbose_name="Il tipo di ma event, se solo premio, tickle+premio oppure schedulato nel tempo")
+    json_params = JSONField(null=True, blank=True, verbose_name="Parametri aggiuntivi per l'evento in formato JSON")
+    status = models.NullBooleanField(null=True, blank=True, default=0, verbose_name="Indica se l'evento è attivo o no (1=attivo, 0=non attivo)")
 
     class Meta:
         app_label = 'mkauto_app'
@@ -104,29 +105,47 @@ class MaEvent(models.Model):
 
         return coupon_code
 
-    def create_event_strings(self, ma_code, prize_type, values_dictionary={}, is_tickle=False):
+    def create_event_strings(self, ma_code_dictionary, prize_type, strings_ma_code, values_dictionary={}):
         """
         Function to build event strings disctionary (subject, title and content)
         qui restituisco le label con ancora le variabili da sostitutire, es {{prize_value}}, {{name}}, ...
         i valori verranno sostituiti in un secondo momento.
 
         Per ottenere una stringa con le variabili sostituite:
-        MkautoStrings.get_string(key=MkautoStrings.strings[ma_code + "." + prize_type + ".subject"], values_dictionary=values_dictionary)
+        MkautoStrings.get_string(key=MkautoStrings.strings[strings_ma_code + "." + prize_type + ".subject"], values_dictionary=values_dictionary)
         i valori verranno sostituiti con return self.strings[key].format(**values_dictionary) <- vedere oggetto strings.py
         """
 
-        if is_tickle:
-            ma_code += "_tickle"
-        
+        # if ma_event_type == "":
+            # ma_code += "_tickle"
+        # TODO
+        # in base al tipo di evento ottengo il codice da utilizzare per le stringhe e per le immagini
+        # ma_code = self.get_strings_ma_code(ma_code_dictionary=ma_code_dictionary)
+
         return {
-            "subject" : self.create_first_name_string(string=MkautoStrings.get_string(key=ma_code + "." + prize_type + ".subject", values_dictionary=values_dictionary), separator=', ', first_name=values_dictionary.get("first_name")),
-            "title" : self.create_first_name_string(string=MkautoStrings.get_string(key=ma_code + "." + prize_type + ".title", values_dictionary=values_dictionary), separator=',<br />', first_name=values_dictionary.get("first_name")),
-            "content" : MkautoStrings.get_string(key=ma_code + "." + prize_type + ".content", values_dictionary=values_dictionary),
-            "call_to_action_title" : MkautoStrings.get_string(key=ma_code + ".prize_call_to_action.title"),
-            "call_to_action_label" : MkautoStrings.get_string(key=ma_code + ".prize_call_to_action.label"),
-            "coupon_code_extra_text" : MkautoStrings.get_string(key=ma_code + ".prize_call_to_action.label"),
-            "image_code" : ma_code,
+            "subject" : self.create_first_name_string(string=MkautoStrings.get_string(key=strings_ma_code + "." + prize_type + ".subject", values_dictionary=values_dictionary), separator=', ', first_name=values_dictionary.get("first_name")),
+            "title" : self.create_first_name_string(string=MkautoStrings.get_string(key=strings_ma_code + "." + prize_type + ".title", values_dictionary=values_dictionary), separator=',<br />', first_name=values_dictionary.get("first_name")),
+            "content" : MkautoStrings.get_string(key=strings_ma_code + "." + prize_type + ".content", values_dictionary=values_dictionary),
+            "call_to_action_title" : MkautoStrings.get_string(key=strings_ma_code + ".prize_call_to_action.title"),
+            "call_to_action_label" : MkautoStrings.get_string(key=strings_ma_code + ".prize_call_to_action.label"),
+            "coupon_code_extra_text" : MkautoStrings.get_string(key=strings_ma_code + ".prize_call_to_action.label"),
+            "image_code" : strings_ma_code,
         }
+
+    def get_strings_ma_code(self, event_dictionary):
+        """Function to retrieve text and images final ma_code"""
+        ma_code = event_dictionary.get("ma_code")
+        ma_event_type = event_dictionary.get("ma_event_type")
+
+        if ma_event_type == "tip" or ma_event_type == "monthly_prize":
+            # prelevo il codice del prossimo tip o del prossimo monthly_prize (dipende su quale evento sto lavorando)
+            # es. monthly_prize_tires_promotion_for_summer or tip_tip_code1
+            ma_code = ma_event_type + "_" + "_" + str(self.get_next_random_code_order(event_dictionary=event_dictionary))
+        elif ma_event_type == "prize_tickle": 
+            # appendo al codice la scritta "_tickle"
+            ma_code += "_tickle"
+
+        return ma_code
 
     def create_first_name_string(self, string, separator, first_name=""):
         """
@@ -139,12 +158,12 @@ class MaEvent(models.Model):
         return self.ucfirst(first_name + separator + string)
 
     #TODO
-    def make_event(self, user_id, ma_code=None, ma_code_dictionary=None, is_tickle=False):
+    def make_event(self, user_id, ma_event_type, strings_ma_code, ma_code=None, ma_code_dictionary=None):
         """
         Function to send a prize
             - ma_code lo utilizzo solo se non ho già tutti i dati in ma_code_dictionary per fare una get by code,
               fatta la get_by_code inserisco i dati nel dizionario ma_code_dictionary
-            - is_tickle lo setto a True se l'evento deve essere di tipo _tickle, quindi non genero un codice ma inserisco una call to action nel codice
+            - ma_event_type identifica il tipo di evento corrente (prize|monthly_prize|prize_tickle|scheduled|tip)
 
             1) Controllo se posso inviare l'evento. in base allo start/repeat delay e la tabella ma_event_log
             2) Inserisco una riga in ma_event_log
@@ -181,9 +200,9 @@ class MaEvent(models.Model):
         account_info_dictionary = account_obj.get_user_data_as_dictionary(user_id=user_id)
 
         # 3)
-        # Creo una riga in ma_event_code (ma solo se l'evento non è di tipo tickle)
+        # Creo una riga in ma_event_code (ma solo se la tipologia di codice lo richiede)
         coupon_code = False
-        if not is_tickle:
+        if ma_event_type == "prize" or ma_event_type == "monthly_prize" or ma_event_type == "scheduled":
             coupon_code = self.add_event_code(user_id=user_id, ma_event_id=ma_code_dictionary["ma_event_id"], ma_event_log_id=ma_event_log_obj.ma_event_log_id, ma_code=ma_code_dictionary["ma_code"])
 
         # 4)
@@ -197,10 +216,10 @@ class MaEvent(models.Model):
         }
 
         event_strings = self.create_event_strings(
-            ma_code=ma_code_dictionary["ma_code"],
+            ma_code_dictionary=ma_code_dictionary,
             prize_type=ma_code_dictionary["prize_type"],
-            values_dictionary=values_dictionary,
-            is_tickle=is_tickle
+            strings_ma_code=strings_ma_code,
+            values_dictionary=values_dictionary
         )
 
         # 6) Creo la mail con i testi definitivi e invio la mail
@@ -217,7 +236,7 @@ class MaEvent(models.Model):
         logger.info("@@@ Stringhe finali @@@")
         logger.info(event_strings)
 
-        return True
+        return user_id
 
     #TODO
     def make_tickle(self):
@@ -255,7 +274,8 @@ class MaEvent(models.Model):
         # svuoto la tabella con i default
         MaEvent.objects.all().delete()
 
-        if mkauto_consts:
+        # creo gli ma_codes
+        if mkauto_consts.mkauto_default_values:
             for mkauto_row in mkauto_consts.mkauto_default_values:
                 ma_event_obj = MaEvent()
                 ma_event_obj.ma_code = mkauto_row.get("ma_code")
@@ -265,11 +285,22 @@ class MaEvent(models.Model):
                 ma_event_obj.start_delay = mkauto_row.get("start_delay")
                 ma_event_obj.repeat_delay = mkauto_row.get("repeat_delay")
                 ma_event_obj.extra_text = mkauto_row.get("extra_text")
-                ma_event_obj.prize_type = mkauto_row.get("prize_type")
+                ma_event_obj.ma_event_type = mkauto_row.get("ma_event_type")
                 ma_event_obj.prize_call_to_action = mkauto_row.get("prize_call_to_action")
                 ma_event_obj.tickle_call_to_action = mkauto_row.get("tickle_call_to_action")
                 ma_event_obj.status = mkauto_row.get("status")
+                # if mkauto_row.get("ma_event_type") == "tip" or mkauto_row.get("ma_event_type") == "monthly_prize":
+                    # ma_event_obj.json_params = {"random_code" : {"order" : -1, "expiring_date" : timezone.now()+datetime.timedelta(days=mkauto_row.get("repeat_delay"))}
                 ma_event_obj.save(force_insert=True)
+
+        # creo i codici random
+        if mkauto_consts.random_code_default_values
+            for random_code_row in mkauto_consts.random_code_default_values:
+                ma_random_code = MaRandomCode()
+                ma_random_code.random_code_type = random_code_row.get("random_code_type")
+                ma_random_code.random_code = random_code_row.get("random_code")
+                ma_random_code.order = random_code_row.get("order")
+                ma_random_code.save(force_insert=True)
 
         return True
 
@@ -292,16 +323,41 @@ class MaEvent(models.Model):
 
         return True
 
-    # TODO
-    def get_active_ma_events(self):
+    def get_ma_events(self):
         """Function to retrieve a dictionary of all active events"""
         return_var = {}
 
-        active_events = MaEvent.objects.values().filter(status=1)
-        if active_events:
-            for val in active_events:
+        ma_events = MaEvent.objects.values()
+        if ma_events:
+            for val in ma_events:
                 return_var[val["ma_code"]] = val
+
         return return_var
+
+    def get_next_random_code_order(self, event_dictionary)
+        """Function to retrieve next random code order"""
+        # ma_event_obj.json_params = {"random_code" : {"order" : -1, "expiring_date" : timezone.now() + 30gg}
+
+        random_order = int(event_dictionary.get("json_params", {}).get("random_code", -1).get("order"))
+        expiring_date = event_dictionary.get("json_params", {}).get("random_code", 0).get("expiring_date")
+
+        if timezone.now() >= expiring_date:
+            # posso incrementare il valore perchè il tempo per questo codice è terminato
+            random_order += 1
+            if not MaRandomCode.objects.get(order=random_order, random_code_type=event_dictionary.get("ma_event_type")):
+                # ho superato il limite, il codice random non esiste, riparto dallo '0'
+                random_order = 0
+
+            # salvo in db il nuovo ordinamento con la relativa data di scadenza
+            ma_event_obj = MaEvent.objects.get(pk=event_dictionary.get("ma_event_id"))
+            ma_event_obj.json_params["random_code"]["random_code"] = event_dictionary.get("ma_event_type")
+            ma_event_obj.json_params["random_code"]["order"] = timezone.now()+datetime.timedelta(days=event_dictionary.get("repeat_delay"))
+            ma_event_obj.save(force_update=True)
+
+        # prelevo l'order code da utilizzare
+        ma_random_code_obj = MaRandomCode.objects.get(order=random_order, random_code_type=event_dictionary.get("ma_event_type"))
+
+        return ma_random_code_obj.random_code
 
 class MaEventLog(models.Model):
     ma_event_log_id = models.AutoField(primary_key=True)
@@ -332,3 +388,19 @@ class MaEventCode(models.Model):
 
     def __unicode__(self):
         return self.ma_event_code_id
+
+class MaRandomCode(models.Model):
+    CODE_TYPE = (
+        (random_code_type["tip"], random_code_type["tip"]),
+        (random_code_type["monthly_prize"], random_code_type["monthly_prize"]),
+    )
+    ma_random_code_id = models.AutoField(primary_key=True)
+    random_code_type = models.CharField(max_length=20, choices=CODE_TYPE, verbose_name="Il tipo di codice random (tip|monthly_prize)")
+    random_code = models.CharField(max_length=50, null=False, blank=False, verbose_name="Il codice random identificativo, es. warning_light_prize")
+    order = models.IntegerField(default=0, null=True, blank=True, verbose_name="L'ordinamento del codice random")
+
+    class Meta:
+        app_label = 'mkauto_app'
+
+    def __unicode__(self):
+        return self.ma_random_code_id
