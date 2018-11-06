@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'website',
     'account_app',
     'mkauto_app',
@@ -210,7 +211,7 @@ LOGGING = {
             'propagate': False,
         },
         'django.db.backends': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'handlers': ['sql_log_debug'],
         }
     }

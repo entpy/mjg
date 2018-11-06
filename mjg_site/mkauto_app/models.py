@@ -5,6 +5,7 @@ from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.utils.dateparse import parse_date
 from mjg_site.consts import project_constants
 from mjg_site.exceptions import *
 from mkauto_app.strings import MkautoStrings
@@ -75,13 +76,20 @@ class MaEvent(models.Model):
         return_var = False
 
         # return_var = MaEventLog.objects.values('creation_date').filter(user__id=user_id, creation_date__gt=timezone.now()-datetime.timedelta(days=repeat_delay)).last()
-        return_var = MaEventLog.objects.values('ma_event_log_id', 'creation_date').filter(user__id=user_id, ma_event__ma_event_id=ma_event_id).order_by('-ma_event_log_id').first()
-        # return_var = return_var.order_by('-ma_event_log_id')[:1]
-        if not return_var:
+        ma_event_log_obj = MaEventLog.objects.values('ma_event_log_id', 'creation_date').filter(user__id=user_id, ma_event__ma_event_id=ma_event_id).order_by('-ma_event_log_id').first()
+        logger.info("@@@ check se inviare l'evento @@@")
+        if ma_event_log_obj:
+            logger.info("evento esistente, controllo le date, per lo user_id (" + str(user_id) + ")")
+            logger.info(str(timezone.now().date()) + " >= " + str((ma_event_log_obj["creation_date"]+datetime.timedelta(days=repeat_delay)).date()))
+            # controllo che la data dell'ultimo invio + i giorni di repeat dell'evento siano minori o uguali a now()
+            if timezone.now().date() >= (ma_event_log_obj["creation_date"]+datetime.timedelta(days=repeat_delay)).date():
+                logger.info("evento esistente, date controllate -> posso reinviare l'evento")
+                return_var = True
+            else:
+                logger.info("evento esistente, date controllate -> NON reinvio ancora l'evento")
+        else:
             # event_log non ancora esistente, posso inviare l'evento
-            return_var = True
-        elif return_var.get("creation_date") >= timezone.now()-datetime.timedelta(days=repeat_delay):
-            # controllo che i giorni della data dell'ultimo inserimento siano > dei giorni in repeat_delay
+            logger.info("evento non ancora esistente -> posso inviare l'evento")
             return_var = True
 
         return return_var
@@ -121,11 +129,16 @@ class MaEvent(models.Model):
         # TODO
         # in base al tipo di evento ottengo il codice da utilizzare per le stringhe e per le immagini
         # ma_code = self.get_strings_ma_code(ma_code_dictionary=ma_code_dictionary)
+        logger.info("strings_ma_code: " + str(strings_ma_code))
+        if prize_type:
+            str_key = strings_ma_code + "." + prize_type
+        else:
+            str_key = strings_ma_code
 
         return {
-            "subject" : self.create_first_name_string(string=MkautoStrings.get_string(key=strings_ma_code + "." + prize_type + ".subject", values_dictionary=values_dictionary), separator=', ', first_name=values_dictionary.get("first_name")),
-            "title" : self.create_first_name_string(string=MkautoStrings.get_string(key=strings_ma_code + "." + prize_type + ".title", values_dictionary=values_dictionary), separator=',<br />', first_name=values_dictionary.get("first_name")),
-            "content" : MkautoStrings.get_string(key=strings_ma_code + "." + prize_type + ".content", values_dictionary=values_dictionary),
+            "subject" : self.create_first_name_string(string=MkautoStrings.get_string(key=str_key + ".subject", values_dictionary=values_dictionary), separator=', ', first_name=values_dictionary.get("first_name")),
+            "title" : self.create_first_name_string(string=MkautoStrings.get_string(key=str_key + ".title", values_dictionary=values_dictionary), separator=',<br />', first_name=values_dictionary.get("first_name")),
+            "content" : MkautoStrings.get_string(key=str_key + ".content", values_dictionary=values_dictionary),
             "call_to_action_title" : MkautoStrings.get_string(key=strings_ma_code + ".prize_call_to_action.title"),
             "call_to_action_label" : MkautoStrings.get_string(key=strings_ma_code + ".prize_call_to_action.label"),
             "coupon_code_extra_text" : MkautoStrings.get_string(key=strings_ma_code + ".prize_call_to_action.label"),
@@ -140,10 +153,10 @@ class MaEvent(models.Model):
         if ma_event_type == "tip" or ma_event_type == "monthly_prize":
             # prelevo il codice del prossimo tip o del prossimo monthly_prize (dipende su quale evento sto lavorando)
             # es. monthly_prize_tires_promotion_for_summer or tip_tip_code1
-            ma_code = ma_event_type + "_" + "_" + str(self.get_next_random_code_order(event_dictionary=event_dictionary))
+            ma_code = ma_event_type + "_" + str(self.get_next_random_code_order(event_dictionary=event_dictionary))
         elif ma_event_type == "prize_tickle": 
             # appendo al codice la scritta "_tickle"
-            ma_code += "_tickle"
+            ma_code = "tickle_" + ma_code
 
         return ma_code
 
@@ -158,12 +171,11 @@ class MaEvent(models.Model):
         return self.ucfirst(first_name + separator + string)
 
     #TODO
-    def make_event(self, user_id, ma_event_type, strings_ma_code, ma_code=None, ma_code_dictionary=None):
+    def make_event(self, user_id, strings_ma_code, ma_code=None, ma_code_dictionary=None):
         """
         Function to send a prize
             - ma_code lo utilizzo solo se non ho già tutti i dati in ma_code_dictionary per fare una get by code,
               fatta la get_by_code inserisco i dati nel dizionario ma_code_dictionary
-            - ma_event_type identifica il tipo di evento corrente (prize|monthly_prize|prize_tickle|scheduled|tip)
 
             1) Controllo se posso inviare l'evento. in base allo start/repeat delay e la tabella ma_event_log
             2) Inserisco una riga in ma_event_log
@@ -206,7 +218,7 @@ class MaEvent(models.Model):
         # 3)
         # Creo una riga in ma_event_code (ma solo se la tipologia di codice lo richiede)
         coupon_code = False
-        if ma_event_type == "prize" or ma_event_type == "monthly_prize" or ma_event_type == "scheduled":
+        if ma_code_dictionary["ma_event_type"] == "prize" or ma_code_dictionary["ma_event_type"] == "monthly_prize" or ma_code_dictionary["ma_event_type"] == "scheduled":
             coupon_code = self.add_event_code(user_id=user_id, ma_event_id=ma_code_dictionary["ma_event_id"], ma_event_log_id=ma_event_log_obj.ma_event_log_id, ma_code=ma_code_dictionary["ma_code"])
 
         # 4)
@@ -342,24 +354,56 @@ class MaEvent(models.Model):
         """Function to retrieve next random code order"""
         # ma_event_obj.json_params = {"random_code" : {"order" : -1, "expiring_date" : timezone.now() + 30gg}
 
-        random_order = int(event_dictionary.get("json_params", {}).get("random_code", -1).get("order"))
-        expiring_date = event_dictionary.get("json_params", {}).get("random_code", 0).get("expiring_date")
+        logger.info("@@@ get_next_random_code_order @@@")
+        # logger.info("event_dictionary: " + str(event_dictionary))
+        if event_dictionary.get("json_params") is not None:
+            random_order = int(event_dictionary.get("json_params", {}).get("random_code", {}).get("order", -1))
+            # https://docs.djangoproject.com/en/1.11/ref/utils/#module-django.utils.dateparse
+            expiring_date = parse_date(event_dictionary.get("json_params", {}).get("random_code", {}).get("expiring_date", str(timezone.now().date())))
+            logger.info("esiste già un json salvato nella riga di ma_event")
+            logger.info("random_order retrieved: " + str(random_order))
+            logger.info("expiring_date retrieved: " + str(expiring_date))
+        else:
+            random_order = -1
+            expiring_date = timezone.now().date()
+            logger.info("NON esiste ancora un json salvato nella riga di ma_event")
 
-        if timezone.now() >= expiring_date:
+        logger.info("if timezone.now() >= expiring_date")
+        logger.info(str(timezone.now().date()) + " >= " + str(expiring_date))
+        if timezone.now().date() >= expiring_date:
+            logger.info("posso incrementare il valore perchè il tempo per questo codice è terminato")
             # posso incrementare il valore perchè il tempo per questo codice è terminato
             random_order += 1
-            if not MaRandomCode.objects.get(order=random_order, random_code_type=event_dictionary.get("ma_event_type")):
+            if not MaRandomCode.objects.filter(order=random_order, random_code_type=event_dictionary.get("ma_event_type")).exists():
+                logger.info("ho superato il limite, il codice random non esiste, riparto dallo '0'")
                 # ho superato il limite, il codice random non esiste, riparto dallo '0'
                 random_order = 0
 
+            # TODO
             # salvo in db il nuovo ordinamento con la relativa data di scadenza
             ma_event_obj = MaEvent.objects.get(pk=event_dictionary.get("ma_event_id"))
-            ma_event_obj.json_params["random_code"]["random_code"] = event_dictionary.get("ma_event_type")
-            ma_event_obj.json_params["random_code"]["order"] = timezone.now()+datetime.timedelta(days=event_dictionary.get("repeat_delay"))
+            # next code date
+            next_code_date = str((timezone.now()+datetime.timedelta(days=event_dictionary.get("repeat_delay"))).date())
+            if ma_event_obj.json_params is not None:
+                logger.info("in db il json esiste -> lo aggiorno")
+                logger.info("order: " + str(random_order))
+                logger.info("expiring_date: " + str(next_code_date))
+                # aggorno il json già esistente
+                ma_event_obj.json_params["random_code"]["order"] = random_order
+                ma_event_obj.json_params["random_code"]["expiring_date"] = next_code_date
+            else:
+                logger.info("in db il json NON esiste -> lo creo")
+                logger.info("order: " + str(random_order))
+                logger.info("expiring_date: " + str(next_code_date))
+                # creo il json perchè ancora non esiste
+                ma_event_obj.json_params = { "random_code" : { "order" : random_order, "expiring_date" : next_code_date } }
+
             ma_event_obj.save(force_update=True)
 
         # prelevo l'order code da utilizzare
         ma_random_code_obj = MaRandomCode.objects.get(order=random_order, random_code_type=event_dictionary.get("ma_event_type"))
+
+        logger.info("random_code da utilizzare: " + str(ma_random_code_obj.random_code))
 
         return ma_random_code_obj.random_code
 

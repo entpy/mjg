@@ -153,7 +153,7 @@ class Account(models.Model):
 
         if event_code == "happy_birthday_prize":
             # solo se il compleanno dell'utente è oggi
-            return_var = return_var.filter(birthday_date__month=timezone.now().month, birthday_date__day=timezone.now().day)
+            return_var = return_var.filter(account__birthday_date__month=timezone.now().month, account__birthday_date__day=timezone.now().day)
 
         if event_code == "get_feedback":
             # solo se l'utente non ha ancora lasciato feedback (info interne)

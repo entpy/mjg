@@ -57,8 +57,8 @@ def www_get_offers(request):
     else:
         form = AccountForm()
 
-    account_obj = Account()
-    account_obj.get_mkauto_accounts(days_from_creation=10)
+    # account_obj = Account()
+    # account_obj.get_mkauto_accounts(days_from_creation=0)
 
     context = {
         "post" : request.POST,

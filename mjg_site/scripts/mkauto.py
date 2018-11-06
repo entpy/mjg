@@ -8,7 +8,7 @@ script giornaliero per inviare gli eventi/tickle della mkauto
 """
 
 from django.utils import timezone
-from email_app.models import MaEvent
+from mkauto_app.models import MaEvent
 from account_app.models import Account
 import logging
 
@@ -51,6 +51,8 @@ def run():
     ##### Lasciaci la data di nascita per ricevere un bonus #####
     """
 
+    # OK
+    """
     ##### Bonus al compleanno #####
     current_ma_event = "happy_birthday_prize"
     if event_dictionary.get(current_ma_event, {}).get("status"):
@@ -60,7 +62,7 @@ def run():
         # 2) Ottengo la lista di account validi per l'evento
         account_list = account_obj.get_mkauto_accounts(days_from_creation=single_event_dictionary.get("start_delay"), event_code=current_ma_event)
         # 3) Ottengo il codice per le stringhe e le immagini
-        strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=event_dictionary)
+        strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=single_event_dictionary)
         if account_list:
             for single_account in account_list:
                 ma_event_obj.make_event(user_id=single_account["id"], strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
@@ -68,10 +70,13 @@ def run():
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
 
     return True
+    """
 
     # TODO
     # invio anche la mail stagionale
 
+    # OK
+    """
     current_ma_event = "get_birthday_date"
     if event_dictionary.get(current_ma_event, {}).get("status"):
         logger.info("@@@ " + current_ma_event + " ATTIVO @@@")
@@ -80,10 +85,10 @@ def run():
         # 2) Ottengo la lista di account validi per l'evento
         account_list = account_obj.get_mkauto_accounts(days_from_creation=single_event_dictionary.get("start_delay"), event_code=current_ma_event)
         # 3) Ottengo il codice per le stringhe e le immagini
-        strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=event_dictionary)
+        strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=single_event_dictionary)
         if account_list:
             for single_account in account_list:
-                ma_event_obj.make_event(user_id=single_account["id"], strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary, is_tickle=True)
+                ma_event_obj.make_event(user_id=single_account["id"], strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
 
@@ -96,10 +101,10 @@ def run():
         # 2) Ottengo la lista di account validi per l'evento
         account_list = account_obj.get_mkauto_accounts(days_from_creation=single_event_dictionary.get("start_delay"), event_code=current_ma_event)
         # 3) Ottengo il codice per le stringhe e le immagini
-        strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=event_dictionary)
+        strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=single_event_dictionary)
         if account_list:
             for single_account in account_list:
-                ma_event_obj.make_event(user_id=single_account["id"], strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary, is_tickle=True)
+                ma_event_obj.make_event(user_id=single_account["id"], strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
 
@@ -112,10 +117,10 @@ def run():
         # 2) Ottengo la lista di account validi per l'evento
         account_list = account_obj.get_mkauto_accounts(days_from_creation=single_event_dictionary.get("start_delay"))
         # 3) Ottengo il codice per le stringhe e le immagini
-        strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=event_dictionary)
+        strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=single_event_dictionary)
         if account_list:
             for single_account in account_list:
-                ma_event_obj.make_event(user_id=single_account["id"], strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary, is_tickle=True)
+                ma_event_obj.make_event(user_id=single_account["id"], strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
 
@@ -128,13 +133,16 @@ def run():
         # 2) Ottengo la lista di account validi per l'evento
         account_list = account_obj.get_mkauto_accounts(days_from_creation=single_event_dictionary.get("start_delay"), event_code=current_ma_event)
         # 3) Ottengo il codice per le stringhe e le immagini
-        strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=event_dictionary)
+        strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=single_event_dictionary)
         if account_list:
             for single_account in account_list:
-                ma_event_obj.make_event(user_id=single_account["id"], strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary, is_tickle=True)
+                ma_event_obj.make_event(user_id=single_account["id"], strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
+    """
 
+    # OK
+    """
     ##### Premio con un testo random #####
     current_ma_event = "random_promo"
     if event_dictionary.get(current_ma_event, {}).get("status"):
@@ -144,13 +152,15 @@ def run():
         # 2) Ottengo la lista di account validi per l'evento
         account_list = account_obj.get_mkauto_accounts(days_from_creation=single_event_dictionary.get("start_delay"))
         # 3) Ottengo il codice per le stringhe e le immagini
-        strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=event_dictionary)
+        strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=single_event_dictionary)
         if account_list:
             for single_account in account_list:
-                ma_event_obj.make_event(user_id=single_account["id"], strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary, is_tickle=True)
+                ma_event_obj.make_event(user_id=single_account["id"], strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
+    """
 
+    # OK
     ##### Tip o info random #####
     current_ma_event = "random_tip"
     if event_dictionary.get(current_ma_event, {}).get("status"):
@@ -160,10 +170,10 @@ def run():
         # 2) Ottengo la lista di account validi per l'evento
         account_list = account_obj.get_mkauto_accounts(days_from_creation=single_event_dictionary.get("start_delay"))
         # 3) Ottengo il codice per le stringhe e le immagini
-        strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=event_dictionary)
+        strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=single_event_dictionary)
         # ottengo il codice per le stringhe e per le immagini
         if account_list:
             for single_account in account_list:
-                ma_event_obj.make_event(user_id=single_account["id"], strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary, is_tickle=True)
+                ma_event_obj.make_event(user_id=single_account["id"], strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
