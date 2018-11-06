@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.db.models import F
 from mjg_site.consts import project_constants
 from mjg_site.exceptions import *
-import datetime, sys, logging
+import datetime, sys, logging, base64, hashlib
 
 # force utf8 read data
 reload(sys)
@@ -28,6 +28,7 @@ class Account(models.Model):
     update_date = models.DateTimeField(auto_now=True)
     get_feedback_event_done = models.IntegerField(null=True, blank=True, default=0)
     get_review_event_done = models.IntegerField(null=True, blank=True, default=0)
+    account_code = models.CharField(max_length=20, null=False, blank=False)
     status = models.IntegerField(null=True, default=1)
 
     class Meta:
@@ -38,11 +39,43 @@ class Account(models.Model):
             models.Index(fields=['birthday_date',]),
             models.Index(fields=['creation_date',]),
             models.Index(fields=['notify_bitmask',]),
+            models.Index(fields=['account_code',]),
             models.Index(fields=['status',]),
         ]
 
     def __unicode__(self):
         return self.user.email
+
+    def save(self, *args, **kwargs):
+        # setto il campo account_code
+        self.account_code = self.__generate_account_code(email=self.user.email)
+        super(Account, self).save(*args, **kwargs) # Call the "real" save() method.
+
+    def __generate_account_code(self, email):
+        """
+        Function to convert email to username
+        taken from -> https://github.com/dabapps/django-email-as-username/blob/master/emailusernames/utils.py
+        """
+        # Emails should be case-insensitive unique
+        email = email.lower()
+        # Deal with internationalized email addresses
+        converted = email.encode('utf8', 'ignore')
+
+        return base64.urlsafe_b64encode(hashlib.sha256(converted).digest())[:20]
+
+    # bitwise functions {{{
+    def check_bitmask(self, b1, b2):
+        """Function to compare two bitmask 'b1' and 'b2'"""
+        return int(b1) & int(b2)
+
+    def add_bitmask(self, bitmask, add_value):
+        """Function to add bitmask 'add_value' to 'bitmask'"""
+        return int(bitmask) | int(add_value);
+
+    def remove_bitmask(self, bitmask, remove_value):
+        """Function to remove bitmask 'remove_value' from 'bitmask'"""
+        return int(bitmask) & (~int(remove_value));
+    # bitwise functions }}}
 
     def create_account(self, account_data):
         """Function to create a new account"""
@@ -178,6 +211,19 @@ class Account(models.Model):
 
         try:
             return_var = User.objects.values().get(pk=user_id)
+        except User.DoesNotExist:
+            # TODO
+            # la riga non esiste, mando una mail al developer
+            pass
+
+        return return_var
+
+    def get_user_by_id_account_code(self, user_id, account_code):
+        """Function to retrieve an account by user_id and account_code"""
+        return_var = None
+
+        try:
+            return_var = User.objects.get(pk=user_id, account__account_code=account_code)
         except User.DoesNotExist:
             # TODO
             # la riga non esiste, mando una mail al developer

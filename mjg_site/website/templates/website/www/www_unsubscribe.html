@@ -1,0 +1,113 @@
+{% extends "website/inc/www_base.html" %}
+{% load staticfiles %}
+
+{# page title #}
+{% block title %}MotorJab Garage | Disiscriviti{% endblock %}
+
+{# page description #}
+{% block description %}{% endblock %}
+
+{# custom page css block #}
+{% block custom_css %}
+<style>
+	.coupon_image_container { margin-top: 40px; margin-bottom: 20px; }
+</style>
+{% endblock %}
+{# Custom page script block #}
+{% block custom_js %}
+{% endblock %}
+
+{# container content #}
+{% block www_main_content %}
+<div class="page_header_block contacts_header_block">
+	<div><h1>Disiscriviti</h1></div>
+</div>
+<div class="container-fluid info_block info_block_color1">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="col-xs-12 padding-xs-only padding-sm-only">
+				{# messages block #}
+				<div class="error_container"></div>
+				{% if messages %}
+					{% for message in messages %}
+						{% if message.tags == "success" %}
+							<div class="alert alert-success">
+								<h4>Le tue preferenze sono state modificate con successo</h4>
+							</div>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="col-md-4 padding-xs-only padding-sm-only">
+				<h4>Scegli cosa ricevere</h4>
+				{% if unsubscribe_type == "mkauto" %}
+					<p>Scegli se ricevere oppure no le promozioni e gli sconti mensili.</p>
+				{% elif unsubscribe_type == "promotions" %}
+					<p>Scegli se ricevere oppure no le promozioni stagionali.</p>
+				{% elif unsubscribe_type == "newsletters" %}
+					<p>Scegli se ricevere oppure no le newsletters e le email informative.</p>
+				{% else %}
+					<p>Da questa pagina puoi scegliere quali notifiche ricevere e quali no, deseleziona una casella per disabilitare la relativa notifica.</p>
+				{% endif %}
+			</div>
+			<div class="col-md-offset-1 col-md-7">
+				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
+					<div class="well bs-component">
+						<form class="form-horizontal" name="unsubscribe_form" method="POST" action="">
+							{% csrf_token %}
+							<input type="hidden" name="unsubscribe_form_sent" value="1">
+							<fieldset>
+								{% if unsubscribe_type == "mkauto" or unsubscribe_type == None %}
+									<div class="form-group">
+										<div class="col-lg-12">
+											<div class="checkbox">
+												<label>
+													<input name="inputMkauto" id="inputMkauto" value="{{ bitmask.mkauto }}" type="checkbox" {% if account_notify.mkauto %}checked="checked"{% endif %}>Voglio ricevere le promozioni e gli sconti mensili<br />(Bonus al compleanno, ...)
+												</label>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+								{% if unsubscribe_type == "promotions" or unsubscribe_type == None %}
+									<div class="form-group">
+										<div class="col-lg-12">
+											<div class="checkbox">
+												<label>
+													<input name="inputPromotions" id="inputPromotions" value="{{ bitmask.promotions }}" type="checkbox" {% if account_notify.promotions %}checked="checked"{% endif %}>Voglio ricevere le promozioni stagionali<br />(Cambio gomme stagionale, ...)
+												</label>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+								{% if unsubscribe_type == "newsletters" or unsubscribe_type == None %}
+									<div class="form-group">
+										<div class="col-lg-12">
+											<div class="checkbox">
+												<label>
+													<input name="inputNewsletters" id="inputNewsletters" value="{{ bitmask.newsletters }}" type="checkbox" {% if account_notify.newsletters %}checked="checked"{% endif %}>Voglio ricevere le newsletters e le email informative<br />(Newsletter mensile, ...)
+												</label>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+								<div class="form-group text-md-right">
+									<div class="col-lg-10 col-lg-offset-2">
+										<button type="submit" class="btn btn-primary btn-lg">Salva preferenze</button>
+									</div>
+								</div>
+							</fieldset>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}

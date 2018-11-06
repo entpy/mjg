@@ -211,7 +211,7 @@ LOGGING = {
             'propagate': False,
         },
         'django.db.backends': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'handlers': ['sql_log_debug'],
         }
     }

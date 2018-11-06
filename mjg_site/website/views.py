@@ -2,13 +2,14 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.contrib import messages
+from django.views.decorators.csrf import ensure_csrf_cookie
 from mjg_site.exceptions import *
 from website.forms import AccountForm
 from account_app.models import Account
 from mkauto_app.models import MaEvent
-from django.views.decorators.csrf import ensure_csrf_cookie
+from mjg_site.consts import project_constants
 import logging
 
 # TODO: solo per test, rimuovere
@@ -86,6 +87,46 @@ def www_privacy_cookie_policy(request):
 def www_cookie_law(request):
     """View to show cookie law info page"""
     return render(request, 'website/www/www_cookie_law.html')
+
+# TODO
+@ensure_csrf_cookie
+def www_unsubscribe(request, user_id, account_code, unsubscribe_type):
+    """View to show unsubscribe page"""
+    # 1) Prelevo l'account associato
+    # 2) Precompilo il form con i dati restituiti
+    # 3) In base al tipo di unsubscribe mostro il form corretto
+
+    # 1)
+    # TODO: capire come fare a mostrare tutti gli unsubscribe se unsubscribe_type non viene passato
+    account_obj = Account()
+    user_dictionary = account_obj.get_user_by_id_account_code(user_id=user_id, account_code=account_code)
+
+    if not user_dictionary:
+        raise Http404()
+
+    # 2)
+    """
+    if unsubscribe_type == project_constants.UNSUBSCRIBE_TYPE_MKAUTO:
+    elif unsubscribe_type == project_constants.UNSUBSCRIBE_TYPE_PROMOTIONS:
+    elif unsubscribe_type == project_constants.UNSUBSCRIBE_TYPE_NEWSLETTERS:
+    """
+
+    context = {
+        "post" : request.POST,
+        "bitmask" : {
+            project_constants.UNSUBSCRIBE_TYPE_MKAUTO : project_constants.RECEIVE_MKAUTO_BITMASK,
+            project_constants.UNSUBSCRIBE_TYPE_PROMOTIONS : project_constants.RECEIVE_PROMOTIONS_BITMASK,
+            project_constants.UNSUBSCRIBE_TYPE_NEWSLETTERS : project_constants.RECEIVE_NEWSLETTERS_BITMASK
+        },
+        "account_notify" : {
+            project_constants.UNSUBSCRIBE_TYPE_MKAUTO : account_obj.check_bitmask(user_dictionary.account.notify_bitmask, project_constants.RECEIVE_MKAUTO_BITMASK),
+            project_constants.UNSUBSCRIBE_TYPE_PROMOTIONS : account_obj.check_bitmask(user_dictionary.account.notify_bitmask, project_constants.RECEIVE_PROMOTIONS_BITMASK),
+            project_constants.UNSUBSCRIBE_TYPE_NEWSLETTERS : account_obj.check_bitmask(user_dictionary.account.notify_bitmask, project_constants.RECEIVE_NEWSLETTERS_BITMASK)
+        },
+        "unsubscribe_type" : unsubscribe_type,
+    }
+
+    return render(request, 'website/www/www_unsubscribe.html', context)
 
 def www_test_page(request):
     ma_event_obj = MaEvent()

@@ -8,6 +8,10 @@ class project_constants(object):
     RECEIVE_MKAUTO_BITMASK = 1
     RECEIVE_PROMOTIONS_BITMASK = 2
     RECEIVE_NEWSLETTERS_BITMASK = 4
+
+    UNSUBSCRIBE_TYPE_MKAUTO = "mkauto"
+    UNSUBSCRIBE_TYPE_PROMOTIONS = "promotions"
+    UNSUBSCRIBE_TYPE_NEWSLETTERS = "newsletters"
     # notify bitmask }}}
 
     # channels bitmask {{{
