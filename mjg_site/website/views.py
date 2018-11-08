@@ -4,9 +4,10 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, Http404
 from django.contrib import messages
+from django.urls import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from mjg_site.exceptions import *
-from website.forms import AccountForm
+from website.forms import AccountForm, AccountNotifyForm
 from account_app.models import Account
 from mkauto_app.models import MaEvent
 from mjg_site.consts import project_constants
@@ -53,7 +54,7 @@ def www_get_offers(request):
                 # creo messaggio di successo
                 messages.add_message(request, messages.SUCCESS, True)
                 # redirect to a new URL:
-                return HttpResponseRedirect('/ricevi-offerte/')
+                return HttpResponseRedirect(reverse('www_get_offers'))
     # if a GET (or any other method) we'll create a blank form
     else:
         form = AccountForm()
@@ -92,38 +93,67 @@ def www_cookie_law(request):
 @ensure_csrf_cookie
 def www_unsubscribe(request, user_id, account_code, unsubscribe_type):
     """View to show unsubscribe page"""
-    # 1) Prelevo l'account associato
-    # 2) Precompilo il form con i dati restituiti
-    # 3) In base al tipo di unsubscribe mostro il form corretto
 
-    # 1)
-    # TODO: capire come fare a mostrare tutti gli unsubscribe se unsubscribe_type non viene passato
     account_obj = Account()
-    user_dictionary = account_obj.get_user_by_id_account_code(user_id=user_id, account_code=account_code)
+    user_obj = account_obj.get_user_by_id_account_code(user_id=user_id, account_code=account_code)
 
-    if not user_dictionary:
+    if not user_obj:
+        # se non sono riuscito a tirare fuori l'utente mostro un 404
         raise Http404()
 
-    # 2)
-    """
-    if unsubscribe_type == project_constants.UNSUBSCRIBE_TYPE_MKAUTO:
-    elif unsubscribe_type == project_constants.UNSUBSCRIBE_TYPE_PROMOTIONS:
-    elif unsubscribe_type == project_constants.UNSUBSCRIBE_TYPE_NEWSLETTERS:
-    """
+    if request.method == "POST":
+        # create a form instance and populate it with data from the request:
+        form = AccountNotifyForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # TODO: salvo i dati validi nell'oggetto account
+            # TODO: non funziona la rimozione delle bitmask, probabilmente neanche l'aggiunta
+            if "mkauto_input" in request.POST:
+                if form.cleaned_data.get("mkauto_input") == 1:
+                    # aggiungo la bitmask
+                    user_obj.account.notify_bitmask = account_obj.add_bitmask(bitmask=user_obj.account.notify_bitmask, add_value=project_constants.RECEIVE_MKAUTO_BITMASK)
+                else:
+                    # rimuovo la bitmask
+                    user_obj.account.notify_bitmask = account_obj.remove_bitmask(bitmask=user_obj.account.notify_bitmask, remove_value=project_constants.RECEIVE_MKAUTO_BITMASK)
+            if "promotions_input" in request.POST:
+                if form.cleaned_data.get("promotions_input") == 1:
+                    # aggiungo la bitmask
+                    user_obj.account.notify_bitmask = account_obj.add_bitmask(bitmask=user_obj.account.notify_bitmask, add_value=project_constants.RECEIVE_PROMOTIONS_BITMASK)
+                else:
+                    # rimuovo la bitmask
+                    user_obj.account.notify_bitmask = account_obj.remove_bitmask(bitmask=user_obj.account.notify_bitmask, remove_value=project_constants.RECEIVE_PROMOTIONS_BITMASK)
+            if "newsletters_input" in request.POST:
+                if form.cleaned_data.get("newsletters_input") == 1:
+                    # aggiungo la bitmask
+                    user_obj.account.notify_bitmask = account_obj.add_bitmask(bitmask=user_obj.account.notify_bitmask, add_value=project_constants.RECEIVE_NEWSLETTERS_BITMASK)
+                else:
+                    # rimuovo la bitmask
+                    user_obj.account.notify_bitmask = account_obj.remove_bitmask(bitmask=user_obj.account.notify_bitmask, remove_value=project_constants.RECEIVE_PROMOTIONS_BITMASK)
+
+            logger.info("new account bitmask: " + str(user_obj.account.notify_bitmask))
+            # salvo le modifiche
+            user_obj.save()
+            # creo messaggio di successo
+            messages.add_message(request, messages.SUCCESS, True)
+            # redirect to a new URL:
+            return HttpResponseRedirect("/disiscriviti/" + str(user_id) + "/" + str(account_code) + "/" + str(unsubscribe_type or ""))
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = AccountNotifyForm()
 
     context = {
-        "post" : request.POST,
         "bitmask" : {
             project_constants.UNSUBSCRIBE_TYPE_MKAUTO : project_constants.RECEIVE_MKAUTO_BITMASK,
             project_constants.UNSUBSCRIBE_TYPE_PROMOTIONS : project_constants.RECEIVE_PROMOTIONS_BITMASK,
             project_constants.UNSUBSCRIBE_TYPE_NEWSLETTERS : project_constants.RECEIVE_NEWSLETTERS_BITMASK
         },
         "account_notify" : {
-            project_constants.UNSUBSCRIBE_TYPE_MKAUTO : account_obj.check_bitmask(user_dictionary.account.notify_bitmask, project_constants.RECEIVE_MKAUTO_BITMASK),
-            project_constants.UNSUBSCRIBE_TYPE_PROMOTIONS : account_obj.check_bitmask(user_dictionary.account.notify_bitmask, project_constants.RECEIVE_PROMOTIONS_BITMASK),
-            project_constants.UNSUBSCRIBE_TYPE_NEWSLETTERS : account_obj.check_bitmask(user_dictionary.account.notify_bitmask, project_constants.RECEIVE_NEWSLETTERS_BITMASK)
+            project_constants.UNSUBSCRIBE_TYPE_MKAUTO : account_obj.check_bitmask(user_obj.account.notify_bitmask, project_constants.RECEIVE_MKAUTO_BITMASK),
+            project_constants.UNSUBSCRIBE_TYPE_PROMOTIONS : account_obj.check_bitmask(user_obj.account.notify_bitmask, project_constants.RECEIVE_PROMOTIONS_BITMASK),
+            project_constants.UNSUBSCRIBE_TYPE_NEWSLETTERS : account_obj.check_bitmask(user_obj.account.notify_bitmask, project_constants.RECEIVE_NEWSLETTERS_BITMASK)
         },
         "unsubscribe_type" : unsubscribe_type,
+        "form" : form,
     }
 
     return render(request, 'website/www/www_unsubscribe.html', context)

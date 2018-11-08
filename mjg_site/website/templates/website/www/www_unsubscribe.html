@@ -32,7 +32,7 @@
 					{% for message in messages %}
 						{% if message.tags == "success" %}
 							<div class="alert alert-success">
-								<h4>Le tue preferenze sono state modificate con successo</h4>
+								<h4>Le tue preferenze sono state salvate con successo</h4>
 							</div>
 						{% endif %}
 					{% endfor %}
@@ -66,7 +66,7 @@
 										<div class="col-lg-12">
 											<div class="checkbox">
 												<label>
-													<input name="inputMkauto" id="inputMkauto" value="{{ bitmask.mkauto }}" type="checkbox" {% if account_notify.mkauto %}checked="checked"{% endif %}>Voglio ricevere le promozioni e gli sconti mensili<br />(Bonus al compleanno, ...)
+													<input name="{{ form.mkauto_input.name }}" id="inputMkauto" value="1" type="checkbox" {% if account_notify.mkauto %}checked="checked"{% endif %}>Voglio ricevere le promozioni e gli sconti mensili<br />(Bonus al compleanno, ...)
 												</label>
 											</div>
 										</div>
@@ -77,7 +77,7 @@
 										<div class="col-lg-12">
 											<div class="checkbox">
 												<label>
-													<input name="inputPromotions" id="inputPromotions" value="{{ bitmask.promotions }}" type="checkbox" {% if account_notify.promotions %}checked="checked"{% endif %}>Voglio ricevere le promozioni stagionali<br />(Cambio gomme stagionale, ...)
+													<input name="{{ form.promotions_input.name }}" id="inputPromotions" value="1" type="checkbox" {% if account_notify.promotions %}checked="checked"{% endif %}>Voglio ricevere le promozioni stagionali<br />(Cambio gomme stagionale, ...)
 												</label>
 											</div>
 										</div>
@@ -88,7 +88,7 @@
 										<div class="col-lg-12">
 											<div class="checkbox">
 												<label>
-													<input name="inputNewsletters" id="inputNewsletters" value="{{ bitmask.newsletters }}" type="checkbox" {% if account_notify.newsletters %}checked="checked"{% endif %}>Voglio ricevere le newsletters e le email informative<br />(Newsletter mensile, ...)
+													<input name="{{ form.newsletters_input.name }}" id="inputNewsletters" value="1" type="checkbox" {% if account_notify.newsletters %}checked="checked"{% endif %}>Voglio ricevere le newsletters e le email informative<br />(Newsletter mensile, ...)
 												</label>
 											</div>
 										</div>

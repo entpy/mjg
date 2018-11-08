@@ -59,3 +59,8 @@ class AccountForm(forms.Form):
             if not birthday_day or not birthday_month or not birthday_year:
             # Only do something if both fields are valid so far.
                 raise forms.ValidationError("Data di nascita: devi specificare giorno, mese e anno")
+
+class AccountNotifyForm(forms.Form):
+    mkauto_input = forms.IntegerField(required=False)
+    promotions_input = forms.IntegerField(required=False)
+    newsletters_input = forms.IntegerField(required=False)
