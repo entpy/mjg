@@ -1,3 +1,14 @@
+(function ($) {
+
+	'use strict';
+
+	$('.alert[data-auto-dismiss]').each(function (index, element) {
+		var $element = $(element), timeout  = $element.data('auto-dismiss') || 5000;
+		setTimeout(function () { $(element).slideUp(); }, timeout);
+	});
+
+})(jQuery);
+
 $(document).ready(function () {
 	var percent = 0, bar = $('.transition-timer-carousel-progress-bar'), crsl = $('#carouselHome');
 	var timing = 10;

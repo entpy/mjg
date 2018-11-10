@@ -10,11 +10,10 @@ from mjg_site.exceptions import *
 from website.forms import AccountForm, AccountNotifyForm
 from account_app.models import Account
 from mkauto_app.models import MaEvent
+from mkauto_app.strings import MkautoStrings
+from mkauto_app.consts import mkauto_consts
 from mjg_site.consts import project_constants
 import logging
-
-# TODO: solo per test, rimuovere
-from django.http import HttpResponse
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -43,7 +42,6 @@ def www_get_offers(request):
         form = AccountForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            # TODO: salvo i dati validi nell'oggetto account
             try:
                 account_obj = Account()
                 account_obj.create_account(form.cleaned_data)
@@ -89,7 +87,6 @@ def www_cookie_law(request):
     """View to show cookie law info page"""
     return render(request, 'website/www/www_cookie_law.html')
 
-# TODO
 @ensure_csrf_cookie
 def www_unsubscribe(request, user_id, account_code, unsubscribe_type):
     """View to show unsubscribe page"""
@@ -101,38 +98,43 @@ def www_unsubscribe(request, user_id, account_code, unsubscribe_type):
         # se non sono riuscito a tirare fuori l'utente mostro un 404
         raise Http404()
 
+    if unsubscribe_type and (not unsubscribe_type == project_constants.UNSUBSCRIBE_TYPE_MKAUTO and not unsubscribe_type == project_constants.UNSUBSCRIBE_TYPE_PROMOTIONS and not unsubscribe_type == project_constants.UNSUBSCRIBE_TYPE_NEWSLETTERS):
+        # se il tipo di unsubscribe non esistesse tiro un 404
+        raise Http404()
+
     if request.method == "POST":
         # create a form instance and populate it with data from the request:
         form = AccountNotifyForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            # TODO: salvo i dati validi nell'oggetto account
-            # TODO: non funziona la rimozione delle bitmask, probabilmente neanche l'aggiunta
-            if "mkauto_input" in request.POST:
+            # salvo i dati validi nell'oggetto account
+            account_bitmask = user_obj.account.notify_bitmask
+            if unsubscribe_type == project_constants.UNSUBSCRIBE_TYPE_MKAUTO or unsubscribe_type is None:
                 if form.cleaned_data.get("mkauto_input") == 1:
                     # aggiungo la bitmask
-                    user_obj.account.notify_bitmask = account_obj.add_bitmask(bitmask=user_obj.account.notify_bitmask, add_value=project_constants.RECEIVE_MKAUTO_BITMASK)
+                    account_bitmask = user_obj.account.add_bitmask(bitmask=account_bitmask, add_value=project_constants.RECEIVE_MKAUTO_BITMASK)
                 else:
                     # rimuovo la bitmask
-                    user_obj.account.notify_bitmask = account_obj.remove_bitmask(bitmask=user_obj.account.notify_bitmask, remove_value=project_constants.RECEIVE_MKAUTO_BITMASK)
-            if "promotions_input" in request.POST:
+                    account_bitmask = user_obj.account.remove_bitmask(bitmask=account_bitmask, remove_value=project_constants.RECEIVE_MKAUTO_BITMASK)
+            if unsubscribe_type == project_constants.UNSUBSCRIBE_TYPE_PROMOTIONS or unsubscribe_type is None:
                 if form.cleaned_data.get("promotions_input") == 1:
                     # aggiungo la bitmask
-                    user_obj.account.notify_bitmask = account_obj.add_bitmask(bitmask=user_obj.account.notify_bitmask, add_value=project_constants.RECEIVE_PROMOTIONS_BITMASK)
+                    account_bitmask = user_obj.account.add_bitmask(bitmask=account_bitmask, add_value=project_constants.RECEIVE_PROMOTIONS_BITMASK)
                 else:
                     # rimuovo la bitmask
-                    user_obj.account.notify_bitmask = account_obj.remove_bitmask(bitmask=user_obj.account.notify_bitmask, remove_value=project_constants.RECEIVE_PROMOTIONS_BITMASK)
-            if "newsletters_input" in request.POST:
+                    account_bitmask = user_obj.account.remove_bitmask(bitmask=account_bitmask, remove_value=project_constants.RECEIVE_PROMOTIONS_BITMASK)
+            if unsubscribe_type == project_constants.UNSUBSCRIBE_TYPE_NEWSLETTERS or unsubscribe_type is None:
                 if form.cleaned_data.get("newsletters_input") == 1:
                     # aggiungo la bitmask
-                    user_obj.account.notify_bitmask = account_obj.add_bitmask(bitmask=user_obj.account.notify_bitmask, add_value=project_constants.RECEIVE_NEWSLETTERS_BITMASK)
+                    account_bitmask = user_obj.account.add_bitmask(bitmask=account_bitmask, add_value=project_constants.RECEIVE_NEWSLETTERS_BITMASK)
                 else:
                     # rimuovo la bitmask
-                    user_obj.account.notify_bitmask = account_obj.remove_bitmask(bitmask=user_obj.account.notify_bitmask, remove_value=project_constants.RECEIVE_PROMOTIONS_BITMASK)
+                    account_bitmask = user_obj.account.remove_bitmask(bitmask=account_bitmask, remove_value=project_constants.RECEIVE_NEWSLETTERS_BITMASK)
 
-            logger.info("new account bitmask: " + str(user_obj.account.notify_bitmask))
+            # logger.debug("new account bitmask: " + str(account_bitmask))
+            save_data = { "notify_bitmask" : account_bitmask, }
             # salvo le modifiche
-            user_obj.save()
+            user_obj.account.update_account(save_data=save_data, user_obj=user_obj)
             # creo messaggio di successo
             messages.add_message(request, messages.SUCCESS, True)
             # redirect to a new URL:
@@ -158,6 +160,113 @@ def www_unsubscribe(request, user_id, account_code, unsubscribe_type):
 
     return render(request, 'website/www/www_unsubscribe.html', context)
 
+# TODO
+@ensure_csrf_cookie
+def www_profile(request, user_id, account_code, show_only_section):
+    """View to show profile"""
+
+    ma_event_obj = MaEvent()
+    account_obj = Account()
+    user_obj = account_obj.get_user_by_id_account_code(user_id=user_id, account_code=account_code)
+
+    if not user_obj:
+        # se non sono riuscito a tirare fuori l'utente mostro un 404
+        raise Http404()
+
+    if show_only_section and not show_only_section == "bd":
+        # se la sezione da mostrare non esistesse tiro un 404
+        raise Http404()
+
+    if request.method == "POST":
+        # create a form instance and populate it with data from the request:
+        form = AccountForm(request.POST)
+
+        # se devo mostrare solo la sezione "data di nascita" setto alcuni campi come facoltativi
+        # perchè non essendo mostrati nel form non mi permetterebbero di continuare con la validazione
+        if show_only_section and show_only_section == "bd":
+            form.fields['email'].required = False
+
+        # check whether it's valid:
+        if form.is_valid():
+            # salvo i dati validi nell'oggetto account
+            try:
+                # TODO
+                save_data = { }
+                if show_only_section and show_only_section == "bd":
+                    # salvo solo la data di nascita
+                    save_data["first_name"] = form.cleaned_data["first_name"]
+                    save_data["birthday_day"] = form.cleaned_data["birthday_day"]
+                    save_data["birthday_month"] = form.cleaned_data["birthday_month"]
+                    save_data["birthday_year"] = form.cleaned_data["birthday_year"]
+                else:
+                    # modifico l'intero profilo
+                    save_data["first_name"] = form.cleaned_data["first_name"]
+                    save_data["last_name"] = form.cleaned_data["last_name"]
+                    save_data["email"] = form.cleaned_data["email"]
+                    save_data["mobile_number"] = form.cleaned_data["mobile_number"]
+                    save_data["birthday_day"] = form.cleaned_data["birthday_day"]
+                    save_data["birthday_month"] = form.cleaned_data["birthday_month"]
+                    save_data["birthday_year"] = form.cleaned_data["birthday_year"]
+                # salvo le modifiche
+                # posso modificare mail e telefono, a patto che non siano già stati inseriti
+                user_obj.account.update_account(save_data=save_data, user_obj=user_obj)
+
+            except UserAlreadyExistsError:
+                # email e/o telefono già presenti
+                messages.add_message(request, messages.ERROR, "I dati inseriti (email e/o telefono) sono già presenti")
+            except UpdateUserDataError:
+                # errore nel salvataggio dei dati
+                messages.add_message(request, messages.ERROR, "Problema nel salvataggio dei dati, contatta l'amministratore")
+            else:
+                # creo messaggio di successo
+                if show_only_section and show_only_section == "bd" and user_obj.account.birthday_date:
+                    # se il premio non è ancora stato inviato, lo invio
+                    # altrimenti non invio niente mostro il messaggio di successo normale, senza più bonus
+                    if not ma_event_obj.check_event_log_exists(user_id=user_id, ma_code=mkauto_consts.event_code["get_birthday_date"]):
+                        # TODO
+                        # invio l'evento
+                        ma_event_obj.make_event(user_id=user_id, ma_code=mkauto_consts.event_code["get_birthday_date"], strings_ma_code=mkauto_consts.event_code["get_birthday_date"], ma_code_dictionary=None, force_prize=True)
+
+                        # creo messaggio di successo
+                        success_msg_mkauto_prize = "Il coupon con " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["get_birthday_date"]) + " ti è stato inviato via email"
+                        messages.add_message(request, messages.SUCCESS, "<h4>Grazie per aver inserito la tua data di nascita</h4><strong>" + str(success_msg_mkauto_prize) + "</strong>.")
+                    else:
+                        messages.add_message(request, messages.SUCCESS, "I dati sono stati salvati con successo")
+                else:
+                    messages.add_message(request, messages.SUCCESS, "I dati sono stati salvati con successo")
+
+                # redirect to a new URL:
+                return HttpResponseRedirect("/profilo/" + str(user_id) + "/" + str(account_code) + "/" + str(show_only_section or ""))
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = AccountForm()
+
+    # account_obj = Account()
+    # account_obj.get_mkauto_accounts(days_from_creation=0)
+    # prelevo la stringa del premio
+    mkauto_prize = "lasciaci la tua data di nascita, riceverai " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["get_birthday_date"]) + "."
+
+    context = {
+        "post" : request.POST,
+        "form": form,
+        "user_info_dict" : user_obj,
+        "show_only_section" : show_only_section,
+        "birthday_day" : int(request.POST.get("birthday_day", user_obj.account.birthday_date.day if user_obj.account.birthday_date else 0)),
+        "birthday_month" : int(request.POST.get("birthday_month", user_obj.account.birthday_date.month if user_obj.account.birthday_date else 0)),
+        "birthday_year" : int(request.POST.get("birthday_year", user_obj.account.birthday_date.year if user_obj.account.birthday_date else 0)),
+        "mkauto_prize" : ma_event_obj.create_first_name_string(string=mkauto_prize, separator=', ', first_name=user_obj.first_name),
+    }
+
+    return render(request, 'website/www/www_profile.html', context)
+
+
+
+
+
+
+
+
+
 def www_test_page(request):
     ma_event_obj = MaEvent()
 
@@ -169,8 +278,7 @@ def www_test_page(request):
 
     # ma_event_obj.add_event_log(user_id=20, ma_event_id=38)
 
-    # TODO
     # provo ad eseguire un evento di test
     # ma_event_obj.make_event(user_id=20, ma_code="welcome_prize")
 
-    return HttpResponse("Test page!")
+    # return HttpResponse("Test page!")

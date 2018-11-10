@@ -1,0 +1,215 @@
+{% extends "website/inc/www_base.html" %}
+{% load staticfiles %}
+
+{# page title #}
+{% block title %}MotorJab Garage | Il mio profilo{% endblock %}
+
+{# page description #}
+{% block description %}{% endblock %}
+
+{# custom page css block #}
+{% block custom_css %}
+<style>
+	.coupon_image_container { margin-top: 40px; margin-bottom: 20px; }
+</style>
+{% endblock %}
+{# Custom page script block #}
+{% block custom_js %}
+{# howto: https://validatejs.org #}
+<script src="{% static "website/js/vendor/validate.min.js" %}"></script>
+{% endblock %}
+
+{# menu active element #}
+{% block navigation_active_get_offers %}active{% endblock %}
+
+{# container content #}
+{% block www_main_content %}
+<div class="page_header_block contacts_header_block">
+	<div><h1>Il mio profilo</h1></div>
+	<div><h4>Visualizza o modifica le tue informazioni</h4></div>
+</div>
+<div class="container-fluid info_block info_block_color1">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="col-xs-12 padding-xs-only padding-sm-only">
+				{# messages block #}
+				<div class="error_container"></div>
+				{% if form.errors %}
+					<div class="alert alert-danger">
+						<h4>Controlla questi errori</h4>
+						<ul>
+							{% for field in form %}
+								{% for error in field.errors %}
+									<li>{{ field.label|escape }}: {{ error|escape }}</li>
+								{% endfor %}
+							{% endfor %}
+							{% for form_error in form.non_field_errors %}
+								<li>{{ form_error }}</li>
+							{% endfor %}
+						</ul>
+					</div>
+				{% elif messages %}
+					{% for message in messages %}
+						{% if message.tags == "success" %}
+							<div class="alert alert-success" data-auto-dismiss="10000">
+								{{ message|safe }}
+							</div>
+						{% elif message.tags == "error" %}
+							<div class="alert alert-danger">
+								<h4>Ops...</h4>
+								<strong>{{ message }}</strong>.
+							</div>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="col-md-4 padding-xs-only padding-sm-only">
+				<h4>Profilo:</h4>
+				<p>Da questa pagina puoi visualizzare e/o modificare le informazioni che hai inserito.</p>
+				{% if show_only_section and show_only_section == "bd" %}
+					<p><b>{{ mkauto_prize }}</b></p>
+					<div class="coupon_image_container text-sm-center text-xs-center"><img class="img-responsive" alt="Sconto del 30%" src="{% static "website/img/coupon.png" %}"></div>
+				{% else %}
+					<div class="coupon_image_container text-sm-center text-xs-center"><img class="img-responsive" alt="Sconto del 30%" src="{% static "website/img/coupon.png" %}"></div>
+				{% endif %}
+			</div>
+			<div class="col-md-offset-1 col-md-7">
+				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
+					<div class="well bs-component">
+						<form class="form-horizontal validateFormAction" name="contact_form" method="POST" action="">
+							{% csrf_token %}
+							<input type="hidden" name="contact_form_sent" value="1">
+							<fieldset>
+								<div class="form-group formGroupAction first_nameGroup">
+									<label for="first_name" class="col-lg-2 control-label">{{ form.first_name.label }}&nbsp;*</label>
+									<div class="col-lg-10">
+										<input id="first_name" name="first_name" class="form-control" placeholder="{{ form.first_name.field.widget.attrs.placeholder }}" type="text" value="{{ post.first_name|default:user_info_dict.first_name }}" required>
+									</div>
+								</div>
+								{% if not show_only_section %}
+									<div class="form-group formGroupAction last_nameGroup">
+										<label for="last_name" class="col-lg-2 control-label">Cognome</label>
+										<div class="col-lg-10">
+											<input id="last_name" name="last_name" class="form-control" placeholder="{{ form.last_name.field.widget.attrs.placeholder }}" value="{{ post.last_name|default:user_info_dict.last_name}}" type="text">
+										</div>
+									</div>
+									<div class="form-group formGroupAction emailGroup">
+										<label for="email" class="col-lg-2 control-label">Email&nbsp;*</label>
+										<div class="col-lg-10">
+											<input id="email" name="email" class="form-control" placeholder="{{ form.email.field.widget.attrs.placeholder }}" type="email" value="{{ post.email|default:user_info_dict.email }}" required>
+										</div>
+									</div>
+									<div class="form-group formGroupAction mobile_numberGroup">
+										<label for="mobile_number" class="col-lg-2 control-label">Telefono</label>
+										<div class="col-lg-10">
+											<input id="mobile_number" name="mobile_number" class="form-control no-spinners" placeholder="{{ form.mobile_number.field.widget.attrs.placeholder }}" value="{{ post.mobile_number|default:user_info_dict.account.mobile_number }}" type="number">
+										</div>
+									</div>
+								{% endif %}
+								<div class="form-group formGroupAction inputBirthdayGroup">
+									<label for="select" class="col-lg-2 control-label">Data di nascita</label>
+									<div class="col-lg-10">
+										<div class="col-sm-4">
+											<select id="birthday_date" class="form-control" name="birthday_day">
+												<option value="" selected="selected">Giorno</option>
+												{% for key,value in form.fields.birthday_day.choices %}
+													<option value="{{ key }}" {% if birthday_day == key %}selected="selected"{% endif %}>{{ value }}</option>
+												{% endfor %}
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<select id="birthday_month" class="form-control" name="birthday_month">
+												<option value="" selected="selected">Mese</option>
+												{% for key,value in form.fields.birthday_month.choices %}
+													<option value="{{ key }}" {% if birthday_month == key %}selected="selected"{% endif %}>{{ value }}</option>
+												{% endfor %}
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<select id="birthday_year" class="form-control" name="birthday_year">
+												<option value="" selected="selected">Anno</option>
+												{% for key,value in form.fields.birthday_year.choices %}
+													<option value="{{ key }}" {% if birthday_year == key %}selected="selected"{% endif %}>{{ value }}</option>
+												{% endfor %}
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="form-group text-md-right">
+									<div class="col-lg-10 col-lg-offset-2">
+										<button type="submit" class="btn btn-primary btn-lg formSendButtonClickAction">Salva</button>
+									</div>
+								</div>
+							</fieldset>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function(){
+	$(document).on("click", ".formSendButtonClickAction", function(){
+
+		var mobile_number = document.getElementById('mobile_number');
+
+		var returnVar = false;
+		// lavora sui "name" NON sugli "id"
+		var constraints = {
+			{% if show_only_section == "bd" %}
+				first_name: {
+					presence: true,
+				},
+			{% elif not show_only_section %}
+				first_name: {
+					presence: true,
+				},
+				last_name: {
+					presence: false,
+				},
+				email: {
+					presence: true,
+					email: true,
+				},
+				mobile_number: {
+					// trick per validare un campo di tipo number senza attributo required
+					presence: (!mobile_number.validity.valid),
+					numericality: {
+						onlyInteger: true,
+					},
+				},
+			{% endif %}
+		};
+
+		returnVar = validateForm(constraints);
+
+		// TODO
+		// se presente un campo compleanno controllare che tutti e tre siano
+		// inseriti, se nessun campo compleanno selezionato si può proseguire
+		/*birthday_date
+		birthday_month
+		birthday_year*/
+		var birthday_dateVal = $("#birthday_date").val();
+		var birthday_monthVal = $("#birthday_month").val();
+		var birthday_yearVal = $("#birthday_year").val();
+		if (birthday_dateVal || birthday_monthVal || birthday_yearVal) {
+			// almeno uno con valore, se dei tre non ha valore aggiungo classe di errore
+			if (!birthday_dateVal || !birthday_monthVal || !birthday_yearVal) {
+				returnVar = false;
+				$(".inputBirthdayGroup").addClass("has-error");
+			}
+		}
+
+		return returnVar;
+	});
+});
+</script>
+{% endblock %}

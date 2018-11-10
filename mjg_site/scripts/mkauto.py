@@ -65,7 +65,7 @@ def run():
         strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=single_event_dictionary)
         if account_list:
             for single_account in account_list:
-                ma_event_obj.make_event(user_id=single_account["id"], strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
+                ma_event_obj.make_event(user_id=single_account["id"], ma_code=current_ma_event, strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
 
@@ -88,7 +88,7 @@ def run():
         strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=single_event_dictionary)
         if account_list:
             for single_account in account_list:
-                ma_event_obj.make_event(user_id=single_account["id"], strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
+                ma_event_obj.make_event(user_id=single_account["id"], ma_code=current_ma_event, strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
 
@@ -104,7 +104,7 @@ def run():
         strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=single_event_dictionary)
         if account_list:
             for single_account in account_list:
-                ma_event_obj.make_event(user_id=single_account["id"], strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
+                ma_event_obj.make_event(user_id=single_account["id"], ma_code=current_ma_event, strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
 
@@ -120,7 +120,7 @@ def run():
         strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=single_event_dictionary)
         if account_list:
             for single_account in account_list:
-                ma_event_obj.make_event(user_id=single_account["id"], strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
+                ma_event_obj.make_event(user_id=single_account["id"], ma_code=current_ma_event, strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
 
@@ -136,7 +136,7 @@ def run():
         strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=single_event_dictionary)
         if account_list:
             for single_account in account_list:
-                ma_event_obj.make_event(user_id=single_account["id"], strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
+                ma_event_obj.make_event(user_id=single_account["id"], ma_code=current_ma_event, strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
     """
@@ -155,7 +155,7 @@ def run():
         strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=single_event_dictionary)
         if account_list:
             for single_account in account_list:
-                ma_event_obj.make_event(user_id=single_account["id"], strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
+                ma_event_obj.make_event(user_id=single_account["id"], ma_code=current_ma_event, strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
     """
@@ -174,6 +174,6 @@ def run():
         # ottengo il codice per le stringhe e per le immagini
         if account_list:
             for single_account in account_list:
-                ma_event_obj.make_event(user_id=single_account["id"], strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
+                ma_event_obj.make_event(user_id=single_account["id"], ma_code=current_ma_event, strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")

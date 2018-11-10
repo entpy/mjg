@@ -61,8 +61,8 @@ class MaEvent(models.Model):
         try:
             return_var = MaEvent.objects.values().get(ma_code=ma_code)
         except MaEvent.DoesNotExist:
-            # TODO
             # la riga non esiste, mando una mail al developer
+            logger.error("errore in get_by_ma_code, codice " + str(ma_code) + " non esistente")
             raise 
 
         return return_var
@@ -124,11 +124,7 @@ class MaEvent(models.Model):
         i valori verranno sostituiti con return self.strings[key].format(**values_dictionary) <- vedere oggetto strings.py
         """
 
-        # if ma_event_type == "":
-            # ma_code += "_tickle"
-        # TODO
         # in base al tipo di evento ottengo il codice da utilizzare per le stringhe e per le immagini
-        # ma_code = self.get_strings_ma_code(ma_code_dictionary=ma_code_dictionary)
         logger.info("strings_ma_code: " + str(strings_ma_code))
         if prize_type:
             str_key = strings_ma_code + "." + prize_type
@@ -170,8 +166,7 @@ class MaEvent(models.Model):
         # create first name string
         return self.ucfirst(first_name + separator + string)
 
-    #TODO
-    def make_event(self, user_id, strings_ma_code, ma_code=None, ma_code_dictionary=None):
+    def make_event(self, user_id, ma_code=None, strings_ma_code=None, ma_code_dictionary=None, force_prize=False):
         """
         Function to send a prize
             - ma_code lo utilizzo solo se non ho già tutti i dati in ma_code_dictionary per fare una get by code,
@@ -186,7 +181,6 @@ class MaEvent(models.Model):
         """
 
         if not ma_code_dictionary:
-            # TODO
             # faccio una get_by_ma_code e riempo il dizionario ma_code_dictionary
             ma_code_dictionary = self.get_by_ma_code(ma_code=ma_code)
 
@@ -201,6 +195,11 @@ class MaEvent(models.Model):
         logger.info("MaEvent info dict")
         logger.info(ma_code_dictionary)
 
+        # TODO
+        if not strings_ma_code:
+            # se non è presente la stringa per i testi e le immagini la prelevo
+            strings_ma_code=self.get_strings_ma_code(event_dictionary=ma_code_dictionary)
+
         # 1)
         # Controllo se l'evento può essere inviato
         if not self.event_can_be_performed(ma_event_id=ma_code_dictionary["ma_event_id"], repeat_delay=ma_code_dictionary["repeat_delay"], user_id=user_id):
@@ -208,6 +207,8 @@ class MaEvent(models.Model):
             return False
 
         # 2)
+        # TODO
+        # aggiungere una riga anche se l'evento è disabilitato per evitare che la scaletta temporale degli eventi si modifichi
         # L'evento può essere inviato, inserisco una riga in ma_event_log
         ma_event_log_obj = self.add_event_log(user_id=user_id, ma_event_id=ma_code_dictionary["ma_event_id"], ma_code=ma_code_dictionary["ma_code"])
 
@@ -218,7 +219,7 @@ class MaEvent(models.Model):
         # 3)
         # Creo una riga in ma_event_code (ma solo se la tipologia di codice lo richiede)
         coupon_code = False
-        if ma_code_dictionary["ma_event_type"] == "prize" or ma_code_dictionary["ma_event_type"] == "monthly_prize" or ma_code_dictionary["ma_event_type"] == "scheduled":
+        if force_prize or ma_code_dictionary["ma_event_type"] == "prize" or ma_code_dictionary["ma_event_type"] == "monthly_prize" or ma_code_dictionary["ma_event_type"] == "scheduled":
             coupon_code = self.add_event_code(user_id=user_id, ma_event_id=ma_code_dictionary["ma_event_id"], ma_event_log_id=ma_event_log_obj.ma_event_log_id, ma_code=ma_code_dictionary["ma_code"])
 
         # 4)
@@ -253,10 +254,6 @@ class MaEvent(models.Model):
         logger.info(event_strings)
 
         return user_id
-
-    #TODO
-    def make_tickle(self):
-        """Function to send a tickle"""
 
     def generate_random_code(self, depth = 0):
         """
@@ -379,7 +376,6 @@ class MaEvent(models.Model):
                 # ho superato il limite, il codice random non esiste, riparto dallo '0'
                 random_order = 0
 
-            # TODO
             # salvo in db il nuovo ordinamento con la relativa data di scadenza
             ma_event_obj = MaEvent.objects.get(pk=event_dictionary.get("ma_event_id"))
             # next code date
@@ -406,6 +402,34 @@ class MaEvent(models.Model):
         logger.info("random_code da utilizzare: " + str(ma_random_code_obj.random_code))
 
         return ma_random_code_obj.random_code
+
+    # TODO
+    def check_event_log_exists(self, user_id, ma_code):
+        """Function to check if a code was already sent at least one time"""
+        return_var = False
+        ma_event_obj = self.get_by_ma_code(ma_code=ma_code)
+
+        if ma_event_obj:
+            ma_event_log_exists = MaEventLog.objects.filter(user__id=user_id, ma_event__ma_event_id=ma_event_obj["ma_event_id"]).exists()
+            logger.info("@@@ check_event_log_exists @@@")
+            if ma_event_log_exists:
+                logger.info("l'evento (" + str(ma_code) + ") è già stato inviato almeno una volta all'utente (user_id=" + str(user_id) + ")")
+                return_var = True
+            else:
+                logger.info("l'evento (" + str(ma_code) + ") NON è mai stato inviato all'utente (user_id=" + str(user_id) + ")")
+
+        return return_var
+
+    # TODO
+    def get_event_generic_prize_str(self, ma_code):
+        """Function to retrieve event generic prize string"""
+        return_var = ""
+        ma_event_obj = self.get_by_ma_code(ma_code=ma_code)
+
+        if ma_event_obj:
+            return_var = MkautoStrings.get_string(key="generic_event." + str(ma_event_obj["prize_type"]) + ".text", values_dictionary={ "prize_val" : ma_event_obj["prize_value"] })
+
+        return return_var
 
     # XXX: solo per uso interno di debug
     def delete_all_data(self):

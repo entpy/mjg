@@ -48,8 +48,64 @@ class Account(models.Model):
 
     def save(self, *args, **kwargs):
         # setto il campo account_code
-        self.account_code = self.__generate_account_code(email=self.user.email)
+        if not self.account_code:
+            self.account_code = self.__generate_account_code(email=self.user.email)
         super(Account, self).save(*args, **kwargs) # Call the "real" save() method.
+
+    def update_account(self, save_data, user_obj):
+        """Function to update User and Account data"""
+        return_var = False
+
+        # se ho passato la mail e il telefono e sono diversi da quelli già
+        # presenti, controllo che non siano già utilizzati
+        if (save_data.get("email") and save_data.get("email") != user_obj.email):
+            if self.check_if_email_exists(email_to_check=save_data.get("email")):
+                # email modificata ma già presente
+                raise UserAlreadyExistsError
+
+        if (save_data.get("mobile_number") and save_data.get("mobile_number") != user_obj.account.mobile_number):
+            if self.check_mobile_number_exists(number_to_check=save_data.get("mobile_number")):
+                # telefono modificato ma già presente
+                raise UserAlreadyExistsError
+
+        if save_data and user_obj:
+            # save User model addictional informations
+            if "first_name" in save_data:
+                user_obj.first_name = save_data["first_name"]
+            if "last_name" in save_data:
+                user_obj.last_name = save_data["last_name"]
+            if "email" in save_data:
+                user_obj.email = save_data["email"]
+            # save Account model addictional informations
+            if "status" in save_data:
+                user_obj.account.status = save_data["status"]
+            # if "birthday_date" in save_data:
+            #    user_obj.account.birthday_date = save_data["birthday_date"]
+            if "mobile_number" in save_data:
+                user_obj.account.mobile_number = save_data["mobile_number"]
+            if "notify_bitmask" in save_data:
+                user_obj.account.notify_bitmask = save_data["notify_bitmask"]
+            if "get_feedback_event_done" in save_data:
+                user_obj.account.get_feedback_event_done = save_data["get_feedback_event_done"]
+            if "get_review_event_done" in save_data:
+                user_obj.account.get_review_event_done = save_data["get_review_event_done"]
+
+
+            # se presente gg mm aaaa salvo anche la data di nascita
+            birthday_date = self.create_date(date_dictionary=save_data, get_isoformat=True)
+            if "birthday_day" in save_data and "birthday_month" in save_data and "birthday_year" in save_data:
+                user_obj.account.birthday_date = birthday_date
+
+            # save addictiona models data
+            user_obj.save()
+            user_obj.account.save()
+            return_var = user_obj
+
+        if not return_var:
+            logger.errro("Errore in update_account nel salvataggio dei dati: " + str(save_data))
+            raise UpdateUserDataError
+
+        return return_var
 
     def __generate_account_code(self, email):
         """
@@ -156,9 +212,9 @@ class Account(models.Model):
             # building birthday date
             if (day and month and year):
                 if get_isoformat:
-                    return_var = date(year=int(year), month=int(month), day=int(day)).isoformat()
+                    return_var = datetime.date(year=int(year), month=int(month), day=int(day)).isoformat()
                 else:
-                    return_var = date(year=int(year), month=int(month), day=int(day))
+                    return_var = datetime.date(year=int(year), month=int(month), day=int(day))
 
         return return_var
 

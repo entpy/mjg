@@ -13,9 +13,6 @@
 	.coupon_image_container { margin-top: 40px; margin-bottom: 20px; }
 </style>
 {% endblock %}
-{# Custom page script block #}
-{% block custom_js %}
-{% endblock %}
 
 {# container content #}
 {% block www_main_content %}
@@ -31,8 +28,8 @@
 				{% if messages %}
 					{% for message in messages %}
 						{% if message.tags == "success" %}
-							<div class="alert alert-success">
-								<h4>Le tue preferenze sono state salvate con successo</h4>
+							<div class="alert alert-success" data-auto-dismiss="5000">
+								Le tue preferenze sono state salvate con successo
 							</div>
 						{% endif %}
 					{% endfor %}
@@ -43,7 +40,7 @@
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
 			<div class="col-md-4 padding-xs-only padding-sm-only">
-				<h4>Scegli cosa ricevere</h4>
+				<h4>Scegli cosa ricevere:</h4>
 				{% if unsubscribe_type == "mkauto" %}
 					<p>Scegli se ricevere oppure no le promozioni e gli sconti mensili.</p>
 				{% elif unsubscribe_type == "promotions" %}
@@ -107,7 +104,4 @@
 		</div>
 	</div>
 </div>
-{% endblock %}
-
-{% block extra_js %}
 {% endblock %}

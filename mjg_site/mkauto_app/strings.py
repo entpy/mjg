@@ -210,6 +210,11 @@ class MkautoStrings(object):
         str("tip_" + mkauto_consts.random_code["tip2"]) + ".coupon_code_extra_text": "Presentaci questo coupon in sede per ottenere il bonus",
         # tip_tip2 }}}
 
+
+        "generic_event.discount.text": "uno sconto del {prize_val}%",
+        "generic_event.bonus.text": "un bonus di €{prize_val}",
+        "generic_event.text.text": "{prize_val}",
+
         # TODO
         # inserire qui i testi aggiuntivi per gli altri eventi
     }
