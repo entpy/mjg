@@ -94,7 +94,7 @@
 																		<tr>
 																			<td style="padding-top:25px;padding-bottom:25px;" class="emailLogo" valign="middle" align="center">
 																				<!-- Logo and Link // -->
-																				<img class="emailMainLogo" src="https://gallery.mailchimp.com/d093bd7793e86368f8e67967e/images/d83d21bf-22da-4342-95cf-7136cb43b540.png" alt="" style="width:100%; max-width:180px;height:auto; display:block;" border="0" width="150">
+																				<img class="emailMainLogo" src="{{base_url}}/static/website/img/email_logo.png" alt="MotorJab Garage" style="width:100%; max-width:180px;height:auto; display:block;" border="0" width="180">
 																			</td>
 																		</tr>
 																	</tbody>
@@ -138,6 +138,7 @@
 																		<tr>
 																			<td style="font-size:1px;line-height:1px;" height="20"> </td>
 																		</tr>
+																		{{call_to_action_block}}
 																	</tbody>
 																</table>
 																<!-- Table Card Close// -->
@@ -165,22 +166,14 @@
 																		<tr>
 																			<td style="padding:10px 10px 5px;" class="brandInfo" valign="top" align="center">
 																				<!-- Brand Information // -->
-																				<p class="text fallback-text" style="color:#777777;font-family:Helvetica, Arial, sans-serif;font-size:12px;font-weight:400;font-style:normal;letter-spacing:normal;line-height:20px;text-transform:none;text-align:center;padding:0;margin:0;">© *|LIST:ADDRESS|*</p>
-																			</td>
-																		</tr>
-																		<tr>
-																			<td style="padding:10px 10px 5px;" class="brandInfo" valign="top" align="center">
-																				<!-- Brand Information // -->
-																				<p class="text fallback-text" style="color:#777777;font-family:Helvetica, Arial, sans-serif;font-size:12px;font-weight:400;font-style:normal;letter-spacing:normal;line-height:20px;text-transform:none;text-align:center;padding:0;margin:0;"><a href="mailto:info@motorjab.it" style="color:#777777;text-decoration:underline;">info@motorjab.it</a> | <span style="color:#777777;font-family:Helvetica, Arial, sans-serif;font-size:12px;font-weight:400;font-style:normal;letter-spacing:normal;">011-546928</span>
-																				</p>
+																				<p class="text fallback-text" style="color:#777777;font-family:Helvetica, Arial, sans-serif;font-size:12px;font-weight:400;font-style:normal;letter-spacing:normal;line-height:20px;text-transform:none;text-align:center;padding:0;margin:0;"><a href="mailto:info@motorjab.it" style="color:#777777;text-decoration:underline;">info@motorjab.it</a> | <span style="color:#777777;font-family:Helvetica, Arial, sans-serif;font-size:12px;font-weight:400;font-style:normal;letter-spacing:normal;">011-546928</span></p>
 																			</td>
 																		</tr>
 																		<tr>
 																			<td style="padding:0px 10px 10px;" class="footerEmailInfo" valign="top" align="center">
 																				<!-- Information of NewsLetter (Subscribe Info)// -->
 																				<p class="text fallback-text" style="color:#777777;font-family:Helvetica, Arial, sans-serif;font-size:12px;font-weight:400;font-style:normal;letter-spacing:normal;line-height:20px;text-transform:none;text-align:center;padding:0;margin:0;">
-																					<br>*|LIST:DESCRIPTION|*<br>
-																					Puoi disiscriverti o modificare le tue preferenze in qualsiasi momento cliccando i link sotto.<br><a style="color:#777777;font-family:Helvetica, Arial, sans-serif;font-size:12px;font-weight:400;font-style:normal;letter-spacing:normal;line-height:20px;text-decoration:underline;" href="*|UPDATE_PROFILE|*">modifica preferenze</a> o <a style="color:#777777;font-family:Helvetica, Arial, sans-serif;font-size:12px;font-weight:400;font-style:normal;letter-spacing:normal;line-height:20px;text-decoration:underline;" href="*|UNSUB|*">disiscriviti</a>.
+																					Puoi disiscriverti o modificare le tue preferenze in qualsiasi momento cliccando i link sotto.<br><a style="color:#777777;font-family:Helvetica, Arial, sans-serif;font-size:12px;font-weight:400;font-style:normal;letter-spacing:normal;line-height:20px;text-decoration:underline;" href="{{user_profile_url}}">modifica preferenze</a> o <a style="color:#777777;font-family:Helvetica, Arial, sans-serif;font-size:12px;font-weight:400;font-style:normal;letter-spacing:normal;line-height:20px;text-decoration:underline;" href="{{email_unsubscribe_url}}">disiscriviti</a>.
 																				</p>
 																			</td>
 																		</tr>
@@ -196,9 +189,6 @@
 														<!-- Space -->
 														<tr>
 															<td style="font-size:1px;line-height:1px;" height="30"></td>
-														</tr>
-														<tr>
-															<td align="center" style="color:#777777;font-family:Helvetica, Arial, sans-serif;font-size:12px;font-weight:400;font-style:normal;letter-spacing:normal;line-height:20px;">*|REWARDS|*</td>
 														</tr>
 													</tbody>
 												</table>

@@ -6,6 +6,7 @@ from django.contrib.postgres.fields import JSONField
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.dateparse import parse_date
+from django.conf import settings
 from mjg_site.consts import project_constants
 from mjg_site.exceptions import *
 from mkauto_app.strings import MkautoStrings
@@ -135,9 +136,10 @@ class MaEvent(models.Model):
             "subject" : self.create_first_name_string(string=MkautoStrings.get_string(key=str_key + ".subject", values_dictionary=values_dictionary), separator=', ', first_name=values_dictionary.get("first_name")),
             "title" : self.create_first_name_string(string=MkautoStrings.get_string(key=str_key + ".title", values_dictionary=values_dictionary), separator=',<br />', first_name=values_dictionary.get("first_name")),
             "content" : MkautoStrings.get_string(key=str_key + ".content", values_dictionary=values_dictionary),
-            "call_to_action_title" : MkautoStrings.get_string(key=strings_ma_code + ".prize_call_to_action.title"),
-            "call_to_action_label" : MkautoStrings.get_string(key=strings_ma_code + ".prize_call_to_action.label"),
-            "coupon_code_extra_text" : MkautoStrings.get_string(key=strings_ma_code + ".prize_call_to_action.label"),
+            "call_to_action_title" : MkautoStrings.get_string(key=strings_ma_code + ".call_to_action.title", values_dictionary=values_dictionary),
+            "call_to_action_label" : MkautoStrings.get_string(key=strings_ma_code + ".call_to_action.label", values_dictionary=values_dictionary),
+            "call_to_action_url" : MkautoStrings.get_string(key=strings_ma_code + ".call_to_action.url", values_dictionary=values_dictionary),
+            "coupon_code_extra_text" : MkautoStrings.get_string(key=strings_ma_code + ".coupon_code_extra_text", values_dictionary=values_dictionary),
             "image_code" : strings_ma_code,
         }
 
@@ -166,7 +168,7 @@ class MaEvent(models.Model):
         # create first name string
         return self.ucfirst(first_name + separator + string)
 
-    def make_event(self, user_id, ma_code=None, strings_ma_code=None, ma_code_dictionary=None, force_prize=False):
+    def make_event(self, user_id, ma_code=None, strings_ma_code=None, ma_code_dictionary=None, force_prize=False, skip_log_check=False):
         """
         Function to send a prize
             - ma_code lo utilizzo solo se non ho già tutti i dati in ma_code_dictionary per fare una get by code,
@@ -202,15 +204,16 @@ class MaEvent(models.Model):
 
         # 1)
         # Controllo se l'evento può essere inviato
-        if not self.event_can_be_performed(ma_event_id=ma_code_dictionary["ma_event_id"], repeat_delay=ma_code_dictionary["repeat_delay"], user_id=user_id):
-            # l'evento non può essere inviato (perchè non ancora oltre il repeat_delay)
-            return False
+        if not skip_log_check: # alcuni eventi (quelli a seguito della call to action di un tickle) non devono fare il check dei log, altrimenti non verrebbero mai inviati
+            if not self.event_can_be_performed(ma_event_id=ma_code_dictionary["ma_event_id"], repeat_delay=ma_code_dictionary["repeat_delay"], user_id=user_id):
+                # l'evento non può essere inviato (perchè non ancora oltre il repeat_delay)
+                return False
 
         # 2)
         # TODO
         # aggiungere una riga anche se l'evento è disabilitato per evitare che la scaletta temporale degli eventi si modifichi
         # L'evento può essere inviato, inserisco una riga in ma_event_log
-        ma_event_log_obj = self.add_event_log(user_id=user_id, ma_event_id=ma_code_dictionary["ma_event_id"], ma_code=ma_code_dictionary["ma_code"])
+        ma_event_log_obj = self.add_event_log(user_id=user_id, ma_event_id=ma_code_dictionary["ma_event_id"], ma_code=strings_ma_code)
 
         # prelevo le info dell'account
         account_obj = Account()
@@ -226,17 +229,22 @@ class MaEvent(models.Model):
         # Genero i testi per la mail (oggetto, titolo e testo) in base al tipo di premio e all'evento
         # creo il dizionario con le chiavi e i valori da sostituire nella mail, all'interno
         # della funzione "create_event_strings" se l'evento è "tickle" appendo al codice "_tickle"
+
+        # inizio a generare le variabili da sostituire nelle stringhe
         values_dictionary = {
             "first_name" : account_info_dictionary["first_name"],
             "prize_val" : ma_code_dictionary["prize_value"],
             "coupon_limitations" : ma_code_dictionary["extra_text"],
+            "account_code" : account_info_dictionary["account__account_code"],
+            "user_id" : account_info_dictionary["id"],
+            "account_code" : account_info_dictionary["account__account_code"],
         }
 
         event_strings = self.create_event_strings(
             ma_code_dictionary=ma_code_dictionary,
             prize_type=ma_code_dictionary["prize_type"],
             strings_ma_code=strings_ma_code,
-            values_dictionary=values_dictionary
+            values_dictionary=values_dictionary # chiavi con valori da sostituire nei testi
         )
 
         # 6) Creo la mail con i testi definitivi e invio la mail
@@ -244,9 +252,14 @@ class MaEvent(models.Model):
             "subject" : event_strings["subject"],
             "title" : event_strings["title"],
             "content" : event_strings["content"],
-            "image_code" : event_strings["image_code"],
+            "image_url" : settings.SITE_URL + "/static/website/img/mkauto_images/" + event_strings["image_code"] + ".png",
             "coupon_code" : coupon_code,
-            "coupon_code_extra_text" : event_strings["coupon_code_extra_text"],
+            "coupon_code_extra_text" : '<p class="text fallback-text" style="color:#333;font-family:\'sans-serif\', Helvetica, Arial;font-size:16px;font-weight:300;font-style:normal;letter-spacing:normal;line-height:35px;text-transform:none;text-align:left;padding:0;margin:0;">' + str("Questo coupon non è cumulabile con altre offerte." if coupon_code else "") + ("<br />" + event_strings["coupon_code_extra_text"] if event_strings["coupon_code_extra_text"] else "") + "</p>",
+            "call_to_action_title" : event_strings["call_to_action_title"],
+            "call_to_action_label" : event_strings["call_to_action_label"],
+            "call_to_action_url" : event_strings["call_to_action_url"],
+            "user_profile_url" : settings.SITE_URL + "/profilo/" + str(account_info_dictionary["id"]) + "/" + str(account_info_dictionary["account__account_code"]),
+            "email_unsubscribe_url" : settings.SITE_URL + "/disiscriviti/" + str(account_info_dictionary["id"]) + "/" + str(account_info_dictionary["account__account_code"] + "/mkauto/"),
         }
         CustomEmailTemplate(email_name="mkauto_email", email_context=email_context, recipient_list=[account_info_dictionary["email"],])
 
@@ -289,21 +302,19 @@ class MaEvent(models.Model):
 
         # creo gli ma_codes
         if mkauto_consts.mkauto_default_values:
-            for mkauto_row in mkauto_consts.mkauto_default_values:
+            for event_name in mkauto_consts.mkauto_default_values:
                 ma_event_obj = MaEvent()
-                ma_event_obj.ma_code = mkauto_row.get("ma_code")
-                ma_event_obj.description = mkauto_row.get("description")
-                ma_event_obj.prize_type = mkauto_row.get("prize_type")
-                ma_event_obj.prize_value = mkauto_row.get("prize_value")
-                ma_event_obj.start_delay = mkauto_row.get("start_delay")
-                ma_event_obj.repeat_delay = mkauto_row.get("repeat_delay")
-                ma_event_obj.extra_text = mkauto_row.get("extra_text")
-                ma_event_obj.ma_event_type = mkauto_row.get("ma_event_type")
-                ma_event_obj.prize_call_to_action = mkauto_row.get("prize_call_to_action")
-                ma_event_obj.tickle_call_to_action = mkauto_row.get("tickle_call_to_action")
-                ma_event_obj.status = mkauto_row.get("status")
-                # if mkauto_row.get("ma_event_type") == "tip" or mkauto_row.get("ma_event_type") == "monthly_prize":
-                    # ma_event_obj.json_params = {"random_code" : {"order" : -1, "expiring_date" : timezone.now()+datetime.timedelta(days=mkauto_row.get("repeat_delay"))}
+                ma_event_obj.ma_code = mkauto_consts.mkauto_default_values[event_name].get("ma_code")
+                ma_event_obj.description = mkauto_consts.mkauto_default_values[event_name].get("description")
+                ma_event_obj.prize_type = mkauto_consts.mkauto_default_values[event_name].get("prize_type")
+                ma_event_obj.prize_value = mkauto_consts.mkauto_default_values[event_name].get("prize_value")
+                ma_event_obj.start_delay = mkauto_consts.mkauto_default_values[event_name].get("start_delay")
+                ma_event_obj.repeat_delay = mkauto_consts.mkauto_default_values[event_name].get("repeat_delay")
+                ma_event_obj.extra_text = mkauto_consts.mkauto_default_values[event_name].get("extra_text")
+                ma_event_obj.ma_event_type = mkauto_consts.mkauto_default_values[event_name].get("ma_event_type")
+                ma_event_obj.prize_call_to_action = mkauto_consts.mkauto_default_values[event_name].get("prize_call_to_action")
+                ma_event_obj.tickle_call_to_action = mkauto_consts.mkauto_default_values[event_name].get("tickle_call_to_action")
+                ma_event_obj.status = mkauto_consts.mkauto_default_values[event_name].get("status")
                 ma_event_obj.save(force_insert=True)
 
         # creo i codici random

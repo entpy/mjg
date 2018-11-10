@@ -52,8 +52,8 @@ def run():
     """
 
     # OK
-    """
     ##### Bonus al compleanno #####
+    """
     current_ma_event = "happy_birthday_prize"
     if event_dictionary.get(current_ma_event, {}).get("status"):
         logger.info("@@@ " + current_ma_event + " ATTIVO @@@")
@@ -68,15 +68,12 @@ def run():
                 ma_event_obj.make_event(user_id=single_account["id"], ma_code=current_ma_event, strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
-
-    return True
     """
 
     # TODO
     # invio anche la mail stagionale
 
     # OK
-    """
     current_ma_event = "get_birthday_date"
     if event_dictionary.get(current_ma_event, {}).get("status"):
         logger.info("@@@ " + current_ma_event + " ATTIVO @@@")
@@ -92,6 +89,7 @@ def run():
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
 
+    """
     ##### Chiedo all'utente di lasciare un feedback (informazioni interne) #####
     current_ma_event = "get_feedback"
     if event_dictionary.get(current_ma_event, {}).get("status"):
@@ -162,6 +160,7 @@ def run():
 
     # OK
     ##### Tip o info random #####
+    """
     current_ma_event = "random_tip"
     if event_dictionary.get(current_ma_event, {}).get("status"):
         logger.info("@@@ " + current_ma_event + " ATTIVO @@@")
@@ -177,3 +176,4 @@ def run():
                 ma_event_obj.make_event(user_id=single_account["id"], ma_code=current_ma_event, strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
+    """

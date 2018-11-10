@@ -44,13 +44,17 @@ def www_get_offers(request):
         if form.is_valid():
             try:
                 account_obj = Account()
-                account_obj.create_account(form.cleaned_data)
+                user_obj = account_obj.create_account(form.cleaned_data)
             except UserAlreadyExistsError:
                 # creo messaggio di errore
                 messages.add_message(request, messages.ERROR, True)
             else:
+                # invio l'evento (non controllo se l'evento è già stato inviato perchè qui finisco solo in caso di nuovo account)
+                ma_event_obj = MaEvent()
+                ma_event_obj.make_event(user_id=user_obj.id, ma_code=mkauto_consts.event_code["welcome_prize"], strings_ma_code=mkauto_consts.event_code["welcome_prize"])
                 # creo messaggio di successo
-                messages.add_message(request, messages.SUCCESS, True)
+                success_msg_mkauto_prize = "Il coupon con " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["welcome_prize"]) + " ti è stato inviato via email"
+                messages.add_message(request, messages.SUCCESS, "<h4>Grazie per esserti registrato</h4><strong>" + str(success_msg_mkauto_prize) + "</strong>.")
                 # redirect to a new URL:
                 return HttpResponseRedirect(reverse('www_get_offers'))
     # if a GET (or any other method) we'll create a blank form
@@ -220,12 +224,19 @@ def www_profile(request, user_id, account_code, show_only_section):
             else:
                 # creo messaggio di successo
                 if show_only_section and show_only_section == "bd" and user_obj.account.birthday_date:
+                    # TODO
+                    # il check farlo sul nuovo campo "get_birthday_date_event_done"
                     # se il premio non è ancora stato inviato, lo invio
                     # altrimenti non invio niente mostro il messaggio di successo normale, senza più bonus
-                    if not ma_event_obj.check_event_log_exists(user_id=user_id, ma_code=mkauto_consts.event_code["get_birthday_date"]):
-                        # TODO
+                    # if not ma_event_obj.check_event_log_exists(user_id=user_id, ma_code=mkauto_consts.event_code["get_birthday_date"]):
+                    if not user_obj.account.get_birthday_date_event_done:
                         # invio l'evento
-                        ma_event_obj.make_event(user_id=user_id, ma_code=mkauto_consts.event_code["get_birthday_date"], strings_ma_code=mkauto_consts.event_code["get_birthday_date"], ma_code_dictionary=None, force_prize=True)
+                        ma_event_obj.make_event(user_id=user_id, ma_code=mkauto_consts.event_code["get_birthday_date"], strings_ma_code=mkauto_consts.event_code["get_birthday_date"], ma_code_dictionary=None, force_prize=True, skip_log_check=True)
+
+                        # TODO
+                        # setto il campo 'get_birthday_date_event_done' dell'account a '1'
+                        new_save_data = { "get_birthday_date_event_done" : "1" }
+                        user_obj.account.update_account(save_data=new_save_data, user_obj=user_obj)
 
                         # creo messaggio di successo
                         success_msg_mkauto_prize = "Il coupon con " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["get_birthday_date"]) + " ti è stato inviato via email"

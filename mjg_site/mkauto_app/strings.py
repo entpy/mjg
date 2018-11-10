@@ -21,9 +21,10 @@ class MkautoStrings(object):
         str(mkauto_consts.event_code["welcome_prize"]) + ".discount.content": "Testo per lo sconto {coupon_limitations}",
         str(mkauto_consts.event_code["welcome_prize"]) + ".bonus.content": "Testo per il bonus {coupon_limitations}",
         str(mkauto_consts.event_code["welcome_prize"]) + ".text.content": "Testo per il premio libero {coupon_limitations}",
-        str(mkauto_consts.event_code["welcome_prize"]) + ".call_to_action.title": "Per vedere le tue informazioni clicca sul pulsante sotto",
-        str(mkauto_consts.event_code["welcome_prize"]) + ".call_to_action.label": "Visualizza informazioni",
-        str(mkauto_consts.event_code["welcome_prize"]) + ".coupon_code_extra_text": "Presentaci questo coupon in sede per ottenere il bonus",
+        str(mkauto_consts.event_code["welcome_prize"]) + ".call_to_action.title": "Per vedere il tuo profilo clicca sul pulsante sotto",
+        str(mkauto_consts.event_code["welcome_prize"]) + ".call_to_action.label": "Visualizza profilo",
+        str(mkauto_consts.event_code["welcome_prize"]) + ".call_to_action.url": mkauto_consts.mkauto_default_values["welcome_prize"].get("prize_call_to_action", ""), # l'url contiene le variabili {user_id} e {account_code}
+        str(mkauto_consts.event_code["welcome_prize"]) + ".coupon_code_extra_text": "",
         # welcome_prize }}}
         # get_birthday_date {{{
         # tickle
@@ -36,9 +37,10 @@ class MkautoStrings(object):
         str("tickle_" + mkauto_consts.event_code["get_birthday_date"]) + ".discount.content": "[tickle_get_birthday_date] Testo per lo sconto {coupon_limitations}",
         str("tickle_" + mkauto_consts.event_code["get_birthday_date"]) + ".bonus.content": "[tickle_get_birthday_date] Testo per il bonus {coupon_limitations}",
         str("tickle_" + mkauto_consts.event_code["get_birthday_date"]) + ".text.content": "[tickle_get_birthday_date] Testo per il premio libero {coupon_limitations}",
-        str("tickle_" + mkauto_consts.event_code["get_birthday_date"]) + ".call_to_action.title": "Clicca sul pulsante sotto per lasciarci la tua data di nascita",
-        str("tickle_" + mkauto_consts.event_code["get_birthday_date"]) + ".call_to_action.label": "Lascia data di nascita",
-        str("tickle_" + mkauto_consts.event_code["get_birthday_date"]) + ".coupon_code_extra_text": "Presentaci questo coupon in sede per ottenere il bonus",
+        str("tickle_" + mkauto_consts.event_code["get_birthday_date"]) + ".call_to_action.title": "Clicca sul pulsante sotto per inserire la tua data di nascita",
+        str("tickle_" + mkauto_consts.event_code["get_birthday_date"]) + ".call_to_action.label": "Inserisci data di nascita",
+        str("tickle_" + mkauto_consts.event_code["get_birthday_date"]) + ".call_to_action.url": mkauto_consts.mkauto_default_values["get_birthday_date"].get("tickle_call_to_action", ""), # l'url contiene le variabili {user_id} e {account_code}
+        str("tickle_" + mkauto_consts.event_code["get_birthday_date"]) + ".coupon_code_extra_text": "",
         # evento
         str(mkauto_consts.event_code["get_birthday_date"]) + ".discount.subject": "grazie per aver lasciato la tua data di nascita, ecco uno sconto del {prize_val}%",
         str(mkauto_consts.event_code["get_birthday_date"]) + ".bonus.subject": "grazie per aver lasciato la tua data di nascita, ecco un bonus di €{prize_val}",
@@ -51,7 +53,7 @@ class MkautoStrings(object):
         str(mkauto_consts.event_code["get_birthday_date"]) + ".text.content": "[get_birthday_date] Testo per il premio libero {coupon_limitations}",
         str(mkauto_consts.event_code["get_birthday_date"]) + ".call_to_action.title": "",
         str(mkauto_consts.event_code["get_birthday_date"]) + ".call_to_action.label": "",
-        str(mkauto_consts.event_code["get_birthday_date"]) + ".coupon_code_extra_text": "Presentaci questo coupon in sede per ottenere il bonus",
+        str(mkauto_consts.event_code["get_birthday_date"]) + ".coupon_code_extra_text": "",
         # get_birthday_date }}}
         # get_feedback {{{
         # tickle
@@ -66,7 +68,7 @@ class MkautoStrings(object):
         str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".text.content": "[tickle_get_feedback] Testo per il premio libero {coupon_limitations}",
         str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".call_to_action.title": "Per vedere le tue informazioni clicca sul pulsante sotto",
         str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".call_to_action.label": "Visualizza informazioni",
-        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".coupon_code_extra_text": "Presentaci questo coupon in sede per ottenere il bonus",
+        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".coupon_code_extra_text": "",
         # evento
         str(mkauto_consts.event_code["get_feedback"]) + ".discount.subject": "[get_feedback] grazie per la tua registrazione, ecco uno sconto del {prize_val}%",
         str(mkauto_consts.event_code["get_feedback"]) + ".bonus.subject": "[get_feedback] grazie per la tua registrazione, ecco un bonus di €{prize_val}",
@@ -79,7 +81,7 @@ class MkautoStrings(object):
         str(mkauto_consts.event_code["get_feedback"]) + ".text.content": "[get_feedback] Testo per il premio libero {coupon_limitations}",
         str(mkauto_consts.event_code["get_feedback"]) + ".call_to_action.title": "Per vedere le tue informazioni clicca sul pulsante sotto",
         str(mkauto_consts.event_code["get_feedback"]) + ".call_to_action.label": "Visualizza informazioni",
-        str(mkauto_consts.event_code["get_feedback"]) + ".coupon_code_extra_text": "Presentaci questo coupon in sede per ottenere il bonus",
+        str(mkauto_consts.event_code["get_feedback"]) + ".coupon_code_extra_text": "",
         # get_feedback }}}
         # refer_friend {{{
         # tickle
@@ -94,7 +96,7 @@ class MkautoStrings(object):
         str("tickle_" + mkauto_consts.event_code["refer_friend"]) + ".text.content": "[tickle_refer_friend] Testo per il premio libero {coupon_limitations}",
         str("tickle_" + mkauto_consts.event_code["refer_friend"]) + ".call_to_action.title": "Per vedere le tue informazioni clicca sul pulsante sotto",
         str("tickle_" + mkauto_consts.event_code["refer_friend"]) + ".call_to_action.label": "Visualizza informazioni",
-        str("tickle_" + mkauto_consts.event_code["refer_friend"]) + ".coupon_code_extra_text": "Presentaci questo coupon in sede per ottenere il bonus",
+        str("tickle_" + mkauto_consts.event_code["refer_friend"]) + ".coupon_code_extra_text": "",
         # evento
         str(mkauto_consts.event_code["refer_friend"]) + ".discount.subject": "[refer_friend] grazie per la tua registrazione, ecco uno sconto del {prize_val}%",
         str(mkauto_consts.event_code["refer_friend"]) + ".bonus.subject": "[refer_friend] grazie per la tua registrazione, ecco un bonus di €{prize_val}",
@@ -107,7 +109,7 @@ class MkautoStrings(object):
         str(mkauto_consts.event_code["refer_friend"]) + ".text.content": "[refer_friend] Testo per il premio libero {coupon_limitations}",
         str(mkauto_consts.event_code["refer_friend"]) + ".call_to_action.title": "Per vedere le tue informazioni clicca sul pulsante sotto",
         str(mkauto_consts.event_code["refer_friend"]) + ".call_to_action.label": "Visualizza informazioni",
-        str(mkauto_consts.event_code["refer_friend"]) + ".coupon_code_extra_text": "Presentaci questo coupon in sede per ottenere il bonus",
+        str(mkauto_consts.event_code["refer_friend"]) + ".coupon_code_extra_text": "",
         # refer_friend }}}
         # get_review {{{
         str("tickle_" + mkauto_consts.event_code["get_review"]) + ".discount.subject": "[tickle_get_review] grazie per la tua registrazione, ecco uno sconto del {prize_val}%",
@@ -121,7 +123,7 @@ class MkautoStrings(object):
         str("tickle_" + mkauto_consts.event_code["get_review"]) + ".text.content": "[tickle_get_review] Testo per il premio libero {coupon_limitations}",
         str("tickle_" + mkauto_consts.event_code["get_review"]) + ".call_to_action.title": "Per vedere le tue informazioni clicca sul pulsante sotto",
         str("tickle_" + mkauto_consts.event_code["get_review"]) + ".call_to_action.label": "Visualizza informazioni",
-        str("tickle_" + mkauto_consts.event_code["get_review"]) + ".coupon_code_extra_text": "Presentaci questo coupon in sede per ottenere il bonus",
+        str("tickle_" + mkauto_consts.event_code["get_review"]) + ".coupon_code_extra_text": "",
         # get_review }}}
         # happy_birthday_prize {{{
         str(mkauto_consts.event_code["happy_birthday_prize"]) + ".discount.subject": "[happy_birthday_prize] grazie per la tua registrazione, ecco uno sconto del {prize_val}%",
@@ -135,7 +137,7 @@ class MkautoStrings(object):
         str(mkauto_consts.event_code["happy_birthday_prize"]) + ".text.content": "[happy_birthday_prize] Testo per il premio libero {coupon_limitations}",
         str(mkauto_consts.event_code["happy_birthday_prize"]) + ".call_to_action.title": "Per vedere le tue informazioni clicca sul pulsante sotto",
         str(mkauto_consts.event_code["happy_birthday_prize"]) + ".call_to_action.label": "Visualizza informazioni",
-        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".coupon_code_extra_text": "Presentaci questo coupon in sede per ottenere il bonus",
+        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".coupon_code_extra_text": "",
         # happy_birthday_prize }}}
         # monthly_prize_warning_light_prize {{{
         str("monthly_prize_" + mkauto_consts.random_code["warning_light_prize"]) + ".discount.subject": "[monthly_prize_warning_light_prize] grazie per la tua registrazione, ecco uno sconto del {prize_val}%",
@@ -149,7 +151,7 @@ class MkautoStrings(object):
         str("monthly_prize_" + mkauto_consts.random_code["warning_light_prize"]) + ".text.content": "[monthly_prize_warning_light_prize] Testo per il premio libero {coupon_limitations}",
         str("monthly_prize_" + mkauto_consts.random_code["warning_light_prize"]) + ".call_to_action.title": "Per vedere le tue informazioni clicca sul pulsante sotto",
         str("monthly_prize_" + mkauto_consts.random_code["warning_light_prize"]) + ".call_to_action.label": "Visualizza informazioni",
-        str("monthly_prize_" + mkauto_consts.random_code["warning_light_prize"]) + ".coupon_code_extra_text": "Presentaci questo coupon in sede per ottenere il bonus",
+        str("monthly_prize_" + mkauto_consts.random_code["warning_light_prize"]) + ".coupon_code_extra_text": "",
         # monthly_prize_warning_light_prize }}}
         # monthly_prize_light_burned_prize {{{
         str("monthly_prize_" + mkauto_consts.random_code["light_burned_prize"]) + ".discount.subject": "[monthly_prize_light_burned_prize] grazie per la tua registrazione, ecco uno sconto del {prize_val}%",
@@ -163,7 +165,7 @@ class MkautoStrings(object):
         str("monthly_prize_" + mkauto_consts.random_code["light_burned_prize"]) + ".text.content": "[monthly_prize_light_burned_prize] Testo per il premio libero {coupon_limitations}",
         str("monthly_prize_" + mkauto_consts.random_code["light_burned_prize"]) + ".call_to_action.title": "Per vedere le tue informazioni clicca sul pulsante sotto",
         str("monthly_prize_" + mkauto_consts.random_code["light_burned_prize"]) + ".call_to_action.label": "Visualizza informazioni",
-        str("monthly_prize_" + mkauto_consts.random_code["light_burned_prize"]) + ".coupon_code_extra_text": "Presentaci questo coupon in sede per ottenere il bonus",
+        str("monthly_prize_" + mkauto_consts.random_code["light_burned_prize"]) + ".coupon_code_extra_text": "",
         # monthly_prize_light_burned_prize }}}
         # monthly_prize_noises_prize {{{
         str("monthly_prize_" + mkauto_consts.random_code["noises_prize"]) + ".discount.subject": "[monthly_prize_noises_prize] grazie per la tua registrazione, ecco uno sconto del {prize_val}%",
@@ -177,7 +179,7 @@ class MkautoStrings(object):
         str("monthly_prize_" + mkauto_consts.random_code["noises_prize"]) + ".text.content": "[monthly_prize_noises_prize] Testo per il premio libero {coupon_limitations}",
         str("monthly_prize_" + mkauto_consts.random_code["noises_prize"]) + ".call_to_action.title": "Per vedere le tue informazioni clicca sul pulsante sotto",
         str("monthly_prize_" + mkauto_consts.random_code["noises_prize"]) + ".call_to_action.label": "Visualizza informazioni",
-        str("monthly_prize_" + mkauto_consts.random_code["noises_prize"]) + ".coupon_code_extra_text": "Presentaci questo coupon in sede per ottenere il bonus",
+        str("monthly_prize_" + mkauto_consts.random_code["noises_prize"]) + ".coupon_code_extra_text": "",
         # monthly_prize_noises_prize }}}
         # monthly_prize_bad_start_prize {{{
         str("monthly_prize_" + mkauto_consts.random_code["bad_start_prize"]) + ".discount.subject": "[monthly_prize_bad_start_prize] grazie per la tua registrazione, ecco uno sconto del {prize_val}%",
@@ -191,7 +193,7 @@ class MkautoStrings(object):
         str("monthly_prize_" + mkauto_consts.random_code["bad_start_prize"]) + ".text.content": "[monthly_prize_bad_start_prize] Testo per il premio libero {coupon_limitations}",
         str("monthly_prize_" + mkauto_consts.random_code["bad_start_prize"]) + ".call_to_action.title": "Per vedere le tue informazioni clicca sul pulsante sotto",
         str("monthly_prize_" + mkauto_consts.random_code["bad_start_prize"]) + ".call_to_action.label": "Visualizza informazioni",
-        str("monthly_prize_" + mkauto_consts.random_code["bad_start_prize"]) + ".coupon_code_extra_text": "Presentaci questo coupon in sede per ottenere il bonus",
+        str("monthly_prize_" + mkauto_consts.random_code["bad_start_prize"]) + ".coupon_code_extra_text": "",
         # monthly_prize_bad_start_prize }}}
         # tip_tip1 {{{
         str("tip_" + mkauto_consts.random_code["tip1"]) + ".subject": "[tip_tip1] grazie per la tua registrazione, ecco uno sconto del {prize_val}%",
@@ -199,7 +201,7 @@ class MkautoStrings(object):
         str("tip_" + mkauto_consts.random_code["tip1"]) + ".content": "[tip_tip1] Testo per lo sconto {coupon_limitations}",
         str("tip_" + mkauto_consts.random_code["tip1"]) + ".call_to_action.title": "Per vedere le tue informazioni clicca sul pulsante sotto",
         str("tip_" + mkauto_consts.random_code["tip1"]) + ".call_to_action.label": "Visualizza informazioni",
-        str("tip_" + mkauto_consts.random_code["tip1"]) + ".coupon_code_extra_text": "Presentaci questo coupon in sede per ottenere il bonus",
+        str("tip_" + mkauto_consts.random_code["tip1"]) + ".coupon_code_extra_text": "",
         # tip_tip1 }}}
         # tip_tip2 {{{
         str("tip_" + mkauto_consts.random_code["tip2"]) + ".subject": "[tip_tip2] grazie per la tua registrazione, ecco uno sconto del {prize_val}%",
@@ -207,7 +209,7 @@ class MkautoStrings(object):
         str("tip_" + mkauto_consts.random_code["tip2"]) + ".content": "[tip_tip2] Testo per lo sconto {coupon_limitations}",
         str("tip_" + mkauto_consts.random_code["tip2"]) + ".call_to_action.title": "Per vedere le tue informazioni clicca sul pulsante sotto",
         str("tip_" + mkauto_consts.random_code["tip2"]) + ".call_to_action.label": "Visualizza informazioni",
-        str("tip_" + mkauto_consts.random_code["tip2"]) + ".coupon_code_extra_text": "Presentaci questo coupon in sede per ottenere il bonus",
+        str("tip_" + mkauto_consts.random_code["tip2"]) + ".coupon_code_extra_text": "",
         # tip_tip2 }}}
 
 

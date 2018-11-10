@@ -52,8 +52,7 @@
 					{% for message in messages %}
 						{% if message.tags == "success" %}
 							<div class="alert alert-success">
-								<h4>Grazie per esserti registrato</h4>
-								<strong>Il tuo bonus ti è stato inviato via email</strong>.
+								{{ message|safe }}
 							</div>
 						{% elif message.tags == "error" %}
 							<div class="alert alert-danger">

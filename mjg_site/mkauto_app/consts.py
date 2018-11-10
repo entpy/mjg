@@ -96,8 +96,8 @@ class mkauto_consts(object):
         },
     ]
 
-    mkauto_default_values = [
-        {
+    mkauto_default_values = {
+        event_code["welcome_prize"] : {
             "ma_code" : event_code["welcome_prize"],
             "description" : "Bonus alla registrazione di un utente",
             "prize_type" : "discount",
@@ -106,11 +106,11 @@ class mkauto_consts(object):
             "repeat_delay" : "0",
             "extra_text" : "",
             "ma_event_type" : ma_event_type["prize"],
-            "prize_call_to_action" : "",
+            "prize_call_to_action" : "/profilo/{user_id}/{account_code}/",
             "tickle_call_to_action" : "",
             "status" : "1",
         },
-        {
+        event_code["get_birthday_date"] : {
             "ma_code" : event_code["get_birthday_date"],
             "description" : "Lasciaci la data di nascita per ricevere un bonus",
             "prize_type" : "discount",
@@ -120,10 +120,10 @@ class mkauto_consts(object):
             "extra_text" : "",
             "ma_event_type" : ma_event_type["prize_tickle"],
             "prize_call_to_action" : "",
-            "tickle_call_to_action" : "",
+            "tickle_call_to_action" : "/profilo/{user_id}/{account_code}/bd/",
             "status" : "1",
         },
-        {
+        event_code["get_feedback"] : {
             "ma_code" : event_code["get_feedback"],
             "description" : "Chiedo all'utente di lasciare un feedback (informazioni interne)",
             "prize_type" : "discount",
@@ -136,7 +136,7 @@ class mkauto_consts(object):
             "tickle_call_to_action" : "",
             "status" : "1",
         },
-        {
+        event_code["refer_friend"] : {
             "ma_code" : event_code["refer_friend"],
             "description" : "Chiedo all'utente di presentare degli amici",
             "prize_type" : "discount",
@@ -149,7 +149,7 @@ class mkauto_consts(object):
             "tickle_call_to_action" : "",
             "status" : "1",
         },
-        {
+        event_code["get_review"] : {
             "ma_code" : event_code["get_review"],
             "description" : "Chiedo all'utente di lasciare una recensione (informazioni pubbliche)",
             "prize_type" : "discount",
@@ -162,7 +162,7 @@ class mkauto_consts(object):
             "tickle_call_to_action" : "",
             "status" : "1",
         },
-        {
+        event_code["happy_birthday_prize"] : {
             "ma_code" : event_code["happy_birthday_prize"],
             "description" : "Bonus al compleanno",
             "prize_type" : "discount",
@@ -175,7 +175,7 @@ class mkauto_consts(object):
             "tickle_call_to_action" : "",
             "status" : "1",
         },
-        {
+        event_code["random_promo"] : {
             "ma_code" : event_code["random_promo"],
             "description" : "Premio con un testo random",
             "prize_type" : "discount",
@@ -190,7 +190,7 @@ class mkauto_consts(object):
             "status" : "1",
         },
         # tip mensili (mail senza codice)
-        {
+        event_code["random_tip"] : {
             "ma_code" : event_code["random_tip"],
             "description" : "Mail di tip o info, non contiene codici sconto",
             "prize_type" : None,
@@ -205,4 +205,4 @@ class mkauto_consts(object):
             "status" : "1",
         },
         # TODO: mancano le promozioni basate sul tempo
-    ]
+    }

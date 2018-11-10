@@ -26,6 +26,7 @@ class Account(models.Model):
     birthday_date = models.DateField(null=True, blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
+    get_birthday_date_event_done = models.IntegerField(null=True, blank=True, default=0)
     get_feedback_event_done = models.IntegerField(null=True, blank=True, default=0)
     get_review_event_done = models.IntegerField(null=True, blank=True, default=0)
     account_code = models.CharField(max_length=20, null=False, blank=False)
@@ -85,6 +86,8 @@ class Account(models.Model):
                 user_obj.account.mobile_number = save_data["mobile_number"]
             if "notify_bitmask" in save_data:
                 user_obj.account.notify_bitmask = save_data["notify_bitmask"]
+            if "get_birthday_date_event_done" in save_data:
+                user_obj.account.get_birthday_date_event_done = save_data["get_birthday_date_event_done"]
             if "get_feedback_event_done" in save_data:
                 user_obj.account.get_feedback_event_done = save_data["get_feedback_event_done"]
             if "get_review_event_done" in save_data:
@@ -266,7 +269,7 @@ class Account(models.Model):
         return_var = None
 
         try:
-            return_var = User.objects.values().get(pk=user_id)
+            return_var = User.objects.values('id', 'first_name', 'last_name', 'email', 'account__account_code').get(pk=user_id)
         except User.DoesNotExist:
             # TODO
             # la riga non esiste, mando una mail al developer

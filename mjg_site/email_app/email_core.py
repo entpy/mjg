@@ -43,9 +43,16 @@ class CustomEmailTemplate():
                 "main_content_block" : "",
                 "main_image_block" : "",
                 "coupon_code_block" : "",
+                "call_to_action_block" : "",
                 "plain_main_title_block" : "",
                 "plain_main_content_block" : "",
                 "plain_coupon_code_block" : "",
+                "call_to_action_block" : "",
+                "plain_call_to_action_label" : "",
+                "plain_call_to_action_url" : "",
+                "user_profile_url" : "",
+                "email_unsubscribe_url" : "",
+                "base_url" : settings.SITE_URL,
             }
 	},
 	'system_manage_email' : { # email di sistema
@@ -132,18 +139,43 @@ class CustomEmailTemplate():
 
 	return return_var
 
-    def get_call_to_action_template(self, href=None, label=None):
+    # TODO
+    def get_call_to_action_template(self, href, label, title=None):
 	"""Function to retrieve call to action template"""
-	return_var = False
+        title_html_block = ""
+        cta_html_block = ""
 
-	if href and label:
-	    return_var = '<a style="display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;mso-hide: all;text-align: center;font-family: Verdana,Geneva,sans-serif;-webkit-border-radius: 4px;-moz-border-radius: 4px;border-radius: 4px;border-top: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-left: 0px solid transparent;color: #ffffff !important;padding: 5px 20px 5px 20px;vertical-align: middle" href="' + str(href) + '" target="_blank">'
-	    return_var += '<!--[if gte mso 9]>&nbsp;<![endif]-->'
-	    return_var += '<div style="text-align: center;font-family: inherit;font-size: 16px;line-height: 32px;color: #ffffff;min-width: 220px">' + str(label) + '</div>'
-	    return_var += '<!--[if gte mso 9]>&nbsp;<![endif]-->'
-	    return_var += '</a>'
+        # se presente creo il blocco con il titolo della call to action
+        if title:
+            title_html_block = """
+                <tr>
+                    <td style="padding-bottom:10px;padding-left:15px;padding-right:15px;" class="callToActionTitle" valign="top" align="center">
+                        <p class="text fallback-text" style="color:#333;font-family:'sans-serif', Helvetica, Arial;font-size:18px;font-weight:bold;font-style:normal;letter-spacing:normal;line-height:35px;text-transform:none;text-align:center;padding:0;margin:0;">""" + str(title) + """</p>
+                    </td>
+                </tr>
+            """
 
-	return return_var
+        if href and label:
+            cta_html_block = """
+                <tr>
+                    <td style="padding-bottom:50px;padding-left:15px;padding-right:15px;" class="callToActionButton" valign="top" align="center">
+                        <div>
+                            <!--[if mso]>
+                                <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href='""" +  str(href) + """' style="height:40px;v-text-anchor:middle;width:200px;" arcsize="10%" stroke="f" fillcolor="#22c34b">
+                                <w:anchorlock/>
+                                <center>
+                            <![endif]-->
+                            <a href='""" +  str(href) + """' style="background-color:#22c34b;border-radius:4px;color:#ffffff;display:inline-block;font-family:'sans-serif', Helvetica, Arial;font-size:13px;font-weight:bold;line-height:40px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;">""" + str(label) + """</a>
+                            <!--[if mso]>
+                                </center>
+                                </v:roundrect>
+                            <![endif]-->
+                        </div>
+                    </td>
+                </tr>
+            """
+
+	return title_html_block + cta_html_block
 
     """
     def set_template_name(self, template_type=None):
@@ -187,20 +219,17 @@ class CustomEmailTemplate():
 
         return return_var
 
-    def get_coupon_code_block(self, coupon_code, email_name="mkauto_email", coupon_code_extra_text=None):
+    def get_coupon_code_block(self, coupon_code, email_name="mkauto_email"):
         """Function to create email coupon code block"""
         return_var = ""
         if email_name == "mkauto_email":
-            if coupon_code_extra_text:
-                return_var += """
-                    <tr>
-                            <td style="padding-bottom:25px;padding-left:20px;padding-right:20px;" class="subTitle" valign="top" align="center">
-                                    <!-- Sub Title Text // -->
-                                    <h4 class="text emailCouponInfo fallback-text" style="color:#999999;font-family:'sans-serif', Helvetica, Arial;font-size:16px;font-weight:400;font-style:normal;letter-spacing:normal;line-height:24px;text-transform:none;text-align:center;padding:0;margin:0;">""" + str(coupon_code_extra_text) + """</h4>
-                            </td>
-                    </tr>
-                """
             return_var += """
+                <tr>
+                        <td style="padding-bottom:25px;padding-left:20px;padding-right:20px;" class="subTitle" valign="top" align="center">
+                                <!-- Sub Title Text // -->
+                                <h4 class="text emailCouponInfo fallback-text" style="color:#999999;font-family:'sans-serif', Helvetica, Arial;font-size:16px;font-weight:400;font-style:normal;letter-spacing:normal;line-height:24px;text-transform:none;text-align:center;padding:0;margin:0;">Presentaci questo coupon in sede per ottenere il bonus</h4>
+                        </td>
+                </tr>
                 <tr>
                         <td style="padding-left:20px;padding-right:20px;" class="containtTable ui-sortable" valign="top" align="center">
                                 <table class="tableMediumTitle" cellspacing="0" cellpadding="0" border="0" width="100%">
@@ -233,6 +262,11 @@ class CustomEmailTemplate():
             "plain_main_title_block": "",
             "plain_main_content_block": "",
             "plain_coupon_code_block": "",
+            "call_to_action_block" : "",
+            "plain_call_to_action_label" : "",
+            "plain_call_to_action_url" : "",
+            "user_profile_url" : "",
+            "email_unsubscribe_url" : "",
         }
         """
 	if self.email_name in chain(self.available_email_name):
@@ -240,7 +274,15 @@ class CustomEmailTemplate():
                 """
                 costruisco la mail per la mkauto
                 Context vars (* required):
-                ->    ['title *', 'content *', 'image_code', 'coupon_code', 'coupon_code_extra_text',]
+                ->    ['title *',
+                       'content *',
+                       'image_url',
+                       'coupon_code',
+                       'coupon_code_extra_text',
+                       'call_to_action_title',
+                       'call_to_action_label',
+                       'call_to_action_url',
+                      ]
 		come prelevare una variabile -> str(self.email_context.get("email"))
 
                 1) inizializzo i blocchi della mail
@@ -254,18 +296,24 @@ class CustomEmailTemplate():
                 self.email_html_blocks["main_title_block"] = mark_safe(self.email_context.get("title"))
                 self.email_html_blocks["main_content_block"] = mark_safe(self.email_context.get("content"))
 
+                if self.email_context.get("coupon_code_extra_text"):
+                    self.email_html_blocks["main_content_block"] += mark_safe(self.email_context.get("coupon_code_extra_text"))
+
                 # se presente il codice di un'immagine inserisco il blocco con l'immagine
-                if self.email_context.get("image_code"):
-                    self.email_html_blocks["main_image_block"] = mark_safe(self.get_image_block(image_url=self.base_url + "/static/website/img/mkauto_images/" + self.email_context.get("image_code") + ".png"))
+                if self.email_context.get("image_url"):
+                    self.email_html_blocks["main_image_block"] = mark_safe(self.get_image_block(image_url=self.email_context.get("image_url")))
 
                 # se presente il codice coupon inserisco il blocco con il codice coupon, con l'eventuale testo aggiuntivo
                 if self.email_context.get("coupon_code"):
-                    self.email_html_blocks["coupon_code_block"] = mark_safe(self.get_coupon_code_block(coupon_code=self.email_context.get("coupon_code"), coupon_code_extra_text=self.email_context.get("coupon_code_extra_text")))
+                    self.email_html_blocks["coupon_code_block"] = mark_safe(self.get_coupon_code_block(coupon_code=self.email_context.get("coupon_code")))
                 # html version }}}
 
                 # 3) plain text version {{{
                 self.email_html_blocks["plain_main_title_block"] = mark_safe(self.email_context.get("title"))
                 self.email_html_blocks["plain_main_content_block"] = mark_safe("\n" + self.email_context.get("content") + "\n")
+
+                if self.email_context.get("coupon_code_extra_text"):
+                    self.email_html_blocks["plain_main_content_block"] += mark_safe("\n" + self.email_context.get("coupon_code_extra_text"))
 
                 # se presente il codice coupon inserisco il blocco con il codice coupon, con l'eventuale testo aggiuntivo
                 self.email_html_blocks["plain_coupon_code_block"] = ""
@@ -276,10 +324,19 @@ class CustomEmailTemplate():
                     self.email_html_blocks["plain_coupon_code_block"] += mark_safe(self.email_context.get("coupon_code"))
                 # plain text version }}}
 
-                # TODO
-                # prevedere una call to action al fondo del template
-                # self.email_html_blocks["html_call_to_action_block"] = self.get_call_to_action_template(href=self.base_url + "/profilo/zona-proibita/", label="Accedi ora")
+                # se presente una call to action, inseirsco un pulsante nella versione html e il link nella versione testuale
+                if self.email_context.get("call_to_action_label") and self.email_context.get("call_to_action_url"):
+                    call_to_action_url = self.base_url + str(self.email_context.get("call_to_action_url"))
+                    self.email_html_blocks["call_to_action_block"] = mark_safe(self.get_call_to_action_template(href=call_to_action_url, label=self.email_context.get("call_to_action_label"), title=self.email_context.get("call_to_action_title")))
+                    self.email_html_blocks["plain_call_to_action_label"] = mark_safe(self.email_context.get("call_to_action_label"))
+                    self.email_html_blocks["plain_call_to_action_url"] = mark_safe(call_to_action_url)
 
+                # TODO
+                # link per la disiscrizione
+                if self.email_context.get("user_profile_url"):
+                    self.email_html_blocks["user_profile_url"] = mark_safe(self.email_context.get("user_profile_url"))
+                if self.email_context.get("email_unsubscribe_url"):
+                    self.email_html_blocks["email_unsubscribe_url"] = mark_safe(self.email_context.get("email_unsubscribe_url"))
                 pass
 
             return_var = True
