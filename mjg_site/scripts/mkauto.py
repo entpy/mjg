@@ -53,7 +53,6 @@ def run():
 
     # OK
     ##### Bonus al compleanno #####
-    """
     current_ma_event = "happy_birthday_prize"
     if event_dictionary.get(current_ma_event, {}).get("status"):
         logger.info("@@@ " + current_ma_event + " ATTIVO @@@")
@@ -68,7 +67,6 @@ def run():
                 ma_event_obj.make_event(user_id=single_account["id"], ma_code=current_ma_event, strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
-    """
 
     # TODO
     # invio anche la mail stagionale

@@ -41,7 +41,7 @@ class MaEvent(models.Model):
     extra_prize_value = models.CharField(max_length=200, null=True, blank=True, verbose_name="E' un premio extra per alcuni eventi, per esempio nell'evento 'proponici un amico' è il premio che riceverà l'amico")
     start_delay = models.IntegerField(null=True, blank=True, verbose_name="L'evento viene spedito se l'utente è creato da almeno questi giorni")
     repeat_delay = models.IntegerField(null=True, blank=True, verbose_name="Dopo il primo invio, tutti i successivi sono ogni x giorni, indicati da questo numero")
-    extra_text = models.TextField(null=False, blank=True, verbose_name="Testo aggiuntivo, es. le limitazioni dei coupo per questo evento")
+    extra_text = models.TextField(null=False, blank=True, verbose_name="Testo aggiuntivo, es. le limitazioni dei coupon per questo evento")
     channels_bitmask = models.IntegerField(default=(project_constants.CHANNEL_EMAIL), null=False, blank=False, verbose_name="Indica su quali canali inviare l'evento, per il momento esiste solo il channel email")
     prize_call_to_action = models.CharField(max_length=200, null=True, blank=True, verbose_name="Se settato il premio avrà una call to action")
     tickle_call_to_action = models.CharField(max_length=200, null=True, blank=True, verbose_name="Se settato il tickle avrà una call to action")
@@ -132,6 +132,12 @@ class MaEvent(models.Model):
         else:
             str_key = strings_ma_code
 
+        # TODO
+        # alcune eccezioni per il codice dell'immagine
+        image_code = strings_ma_code
+        if strings_ma_code == "tickle_get_birthday_date":
+            image_code = "get_birthday_date"
+
         return {
             "subject" : self.create_first_name_string(string=MkautoStrings.get_string(key=str_key + ".subject", values_dictionary=values_dictionary), separator=', ', first_name=values_dictionary.get("first_name")),
             "title" : self.create_first_name_string(string=MkautoStrings.get_string(key=str_key + ".title", values_dictionary=values_dictionary), separator=',<br />', first_name=values_dictionary.get("first_name")),
@@ -139,8 +145,7 @@ class MaEvent(models.Model):
             "call_to_action_title" : MkautoStrings.get_string(key=strings_ma_code + ".call_to_action.title", values_dictionary=values_dictionary),
             "call_to_action_label" : MkautoStrings.get_string(key=strings_ma_code + ".call_to_action.label", values_dictionary=values_dictionary),
             "call_to_action_url" : MkautoStrings.get_string(key=strings_ma_code + ".call_to_action.url", values_dictionary=values_dictionary),
-            "coupon_code_extra_text" : MkautoStrings.get_string(key=strings_ma_code + ".coupon_code_extra_text", values_dictionary=values_dictionary),
-            "image_code" : strings_ma_code,
+            "image_code" : image_code,
         }
 
     def get_strings_ma_code(self, event_dictionary):
@@ -234,7 +239,6 @@ class MaEvent(models.Model):
         values_dictionary = {
             "first_name" : account_info_dictionary["first_name"],
             "prize_val" : ma_code_dictionary["prize_value"],
-            "coupon_limitations" : ma_code_dictionary["extra_text"],
             "account_code" : account_info_dictionary["account__account_code"],
             "user_id" : account_info_dictionary["id"],
             "account_code" : account_info_dictionary["account__account_code"],
@@ -254,7 +258,7 @@ class MaEvent(models.Model):
             "content" : event_strings["content"],
             "image_url" : settings.SITE_URL + "/static/website/img/mkauto_images/" + event_strings["image_code"] + ".png",
             "coupon_code" : coupon_code,
-            "coupon_code_extra_text" : '<p class="text fallback-text" style="color:#333;font-family:\'sans-serif\', Helvetica, Arial;font-size:16px;font-weight:300;font-style:normal;letter-spacing:normal;line-height:35px;text-transform:none;text-align:left;padding:0;margin:0;">' + str("Questo coupon non è cumulabile con altre offerte." if coupon_code else "") + ("<br />" + event_strings["coupon_code_extra_text"] if event_strings["coupon_code_extra_text"] else "") + "</p>",
+            "coupon_code_extra_text" : '<p class="text fallback-text" style="color:#333;font-family:\'sans-serif\', Helvetica, Arial;font-size:16px;font-weight:300;font-style:normal;letter-spacing:normal;line-height:35px;text-transform:none;text-align:left;padding:0;margin:0;">' + str("Questo coupon non è cumulabile con altre offerte." if coupon_code else "") + ("<br />" + ma_code_dictionary["extra_text"] if ma_code_dictionary["extra_text"] else "") + "</p>",
             "call_to_action_title" : event_strings["call_to_action_title"],
             "call_to_action_label" : event_strings["call_to_action_label"],
             "call_to_action_url" : event_strings["call_to_action_url"],
