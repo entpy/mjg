@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.urls import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from mjg_site.exceptions import *
-from website.forms import AccountForm, AccountNotifyForm
+from website.forms import AccountForm, AccountNotifyForm, FeedbackForm
 from account_app.models import Account
 from mkauto_app.models import MaEvent
 from mkauto_app.strings import MkautoStrings
@@ -164,7 +164,6 @@ def www_unsubscribe(request, user_id, account_code, unsubscribe_type):
 
     return render(request, 'website/www/www_unsubscribe.html', context)
 
-# TODO
 @ensure_csrf_cookie
 def www_profile(request, user_id, account_code, show_only_section):
     """View to show profile"""
@@ -270,6 +269,46 @@ def www_profile(request, user_id, account_code, show_only_section):
 
     return render(request, 'website/www/www_profile.html', context)
 
+@ensure_csrf_cookie
+def www_feedback(request, user_id, account_code):
+    """View to show feedback page"""
+
+    ma_event_obj = MaEvent()
+    account_obj = Account()
+    user_obj = account_obj.get_user_by_id_account_code(user_id=user_id, account_code=account_code)
+
+    if not user_obj:
+        # se non sono riuscito a tirare fuori l'utente mostro un 404
+        raise Http404()
+
+    if request.method == "POST":
+        # create a form instance and populate it with data from the request:
+        form = FeedbackForm(request.POST)
+
+        # check whether it's valid:
+        if form.is_valid():
+            # TODO
+            # salvo i dati validi
+            # se l'utente non ha ancora ricevuto il bonus lo invio
+            # redirect to a new URL:
+            return HttpResponseRedirect("/feedback/" + str(user_id) + "/" + str(account_code) + "/")
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = FeedbackForm()
+
+    # account_obj = Account()
+    # account_obj.get_mkauto_accounts(days_from_creation=0)
+    # prelevo la stringa del premio
+    mkauto_prize = "cosa pensi del nostro servizio?<br />Dacci qualche consiglio, suggerimento o eventuali critiche e riceverai " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["get_feedback"]) + "."
+
+    context = {
+        "post" : request.POST,
+        "form": form,
+        "user_info_dict" : user_obj,
+        "mkauto_prize" : ma_event_obj.create_first_name_string(string=mkauto_prize, separator=', ', first_name=user_obj.first_name),
+    }
+
+    return render(request, 'website/www/www_feedback.html', context)
 
 
 

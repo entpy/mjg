@@ -3,6 +3,7 @@
 from django import forms
 from datetime import date
 from django.conf import settings
+from mkauto_app.consts import mkauto_consts
 import calendar, locale, sys
 
 # force utf8 read data
@@ -64,3 +65,18 @@ class AccountNotifyForm(forms.Form):
     mkauto_input = forms.IntegerField(required=False)
     promotions_input = forms.IntegerField(required=False)
     newsletters_input = forms.IntegerField(required=False)
+
+class FeedbackForm(forms.Form):
+    QUALITY_LEVEL = (
+        (mkauto_consts.feedback_quality_code["excellent"]["quality_level"], mkauto_consts.feedback_quality_code["excellent"]["quality_label"]),
+        (mkauto_consts.feedback_quality_code["very_good"]["quality_level"], mkauto_consts.feedback_quality_code["very_good"]["quality_label"]),
+        (mkauto_consts.feedback_quality_code["average"]["quality_level"], mkauto_consts.feedback_quality_code["average"]["quality_label"]),
+        (mkauto_consts.feedback_quality_code["low"]["quality_level"], mkauto_consts.feedback_quality_code["low"]["quality_label"]),
+        (mkauto_consts.feedback_quality_code["very_bad"]["quality_level"], mkauto_consts.feedback_quality_code["very_bad"]["quality_label"]),
+    )
+    feedback_text = forms.CharField(label='Cosa pensi del nostro servizio?', widget=forms.Textarea)
+    quality_level = forms.ChoiceField(label='Qualità del servizio', choices=QUALITY_LEVEL, required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(FeedbackForm, self).__init__(*args, **kwargs)
+        self.fields['feedback_text'].widget.attrs.update({'placeholder': 'Scrivi qui consigli, suggerimenti o eventuali critiche...'})

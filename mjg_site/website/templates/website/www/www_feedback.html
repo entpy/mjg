@@ -1,0 +1,134 @@
+{% extends "website/inc/www_base.html" %}
+{% load staticfiles %}
+
+{# page title #}
+{% block title %}MotorJab Garage | Cosa ne pensi del nostro servizio?{% endblock %}
+
+{# page description #}
+{% block description %}{% endblock %}
+
+{# custom page css block #}
+{% block custom_css %}
+<style>
+	.coupon_image_container { margin-top: 40px; margin-bottom: 20px; }
+	.feedback_textarea { min-height: 150px; resize: none; }
+</style>
+{% endblock %}
+{# Custom page script block #}
+{% block custom_js %}
+{# howto: https://validatejs.org #}
+<script src="{% static "website/js/vendor/validate.min.js" %}"></script>
+{% endblock %}
+
+{# container content #}
+{% block www_main_content %}
+<div class="page_header_block contacts_header_block">
+	<div><h1>Feedback</h1></div>
+	<div><h4>Cosa ne pensi del nostro servizio?</h4></div>
+</div>
+<div class="container-fluid info_block info_block_color1">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="col-xs-12 padding-xs-only padding-sm-only">
+				{# messages block #}
+				<div class="error_container"></div>
+				{% if form.errors %}
+					<div class="alert alert-danger">
+						<h4>Controlla questi errori</h4>
+						<ul>
+							{% for field in form %}
+								{% for error in field.errors %}
+									<li>{{ field.label|escape }}: {{ error|escape }}</li>
+								{% endfor %}
+							{% endfor %}
+							{% for form_error in form.non_field_errors %}
+								<li>{{ form_error }}</li>
+							{% endfor %}
+						</ul>
+					</div>
+				{% elif messages %}
+					{% for message in messages %}
+						{% if message.tags == "success" %}
+							<div class="alert alert-success" data-auto-dismiss="10000">
+								{{ message|safe }}
+							</div>
+						{% elif message.tags == "error" %}
+							<div class="alert alert-danger">
+								<h4>Ops...</h4>
+								<strong>{{ message }}</strong>.
+							</div>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="col-md-4 padding-xs-only padding-sm-only">
+				<h4>Feedback:</h4>
+				<p>{{ mkauto_prize | safe }}<br />Utilizzeremo le tue informazioni per migliorarci ed offrirti un servizione ancora migliore!</p>
+				<div class="coupon_image_container text-sm-center text-xs-center"><img class="img-responsive" alt="Sconto del 30%" src="{% static "website/img/coupon.png" %}"></div>
+			</div>
+			<div class="col-md-offset-1 col-md-7">
+				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
+					<div class="well bs-component">
+						<form class="form-horizontal validateFormAction" name="feedback_form" method="POST" action="">
+							{% csrf_token %}
+							<input type="hidden" name="feedback_form_sent" value="1">
+							<fieldset>
+								<div class="form-group formGroupAction quality_levelGroup">
+									<label for="select" class="col-lg-12 control-label force-left">{{ form.quality_level.label }}&nbsp;*</label>
+									<div class="col-sm-12">
+										<select id="quality_level" class="form-control" name="quality_level">
+											<option value="" selected="selected">Seleziona</option>
+											{% for key,value in form.fields.quality_level.choices %}
+												<option value="{{ key }}" {% if quality_level == key %}selected="selected"{% endif %}>{{ value }}</option>
+											{% endfor %}
+										</select>
+									</div>
+								</div>
+								<div class="form-group formGroupAction feedback_textGroup">
+									<label for="feedback_text" class="col-lg-12 control-label force-left">{{ form.feedback_text.label }}&nbsp;*</label>
+									<div class="col-lg-12">
+										<textarea id="feedback_text" name="feedback_text" class="form-control feedback_textarea" placeholder="{{ form.feedback_text.field.widget.attrs.placeholder }}" type="text" value="{{ post.feedback_text }}" required></textarea>
+									</div>
+								</div>
+								<div class="form-group text-md-right">
+									<div class="col-lg-10 col-lg-offset-2">
+										<button type="submit" class="btn btn-primary btn-lg formSendButtonClickAction">Salva</button>
+									</div>
+								</div>
+							</fieldset>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function(){
+	$(document).on("click", ".formSendButtonClickAction", function(){
+
+		var returnVar = false;
+		// lavora sui "name" NON sugli "id"
+		var constraints = {
+			feedback_text: {
+				presence: true,
+			},
+			quality_level: {
+				presence: true,
+			},
+		};
+
+		returnVar = validateForm(constraints);
+
+		return returnVar;
+	});
+});
+</script>
+{% endblock %}

@@ -505,3 +505,23 @@ class MaRandomCode(models.Model):
 
     def __unicode__(self):
         return self.ma_random_code_id
+
+class Feedback(models.Model):
+    QUALITY_LEVEL = (
+        (mkauto_consts.feedback_quality_code["excellent"]["quality_level"], mkauto_consts.feedback_quality_code["excellent"]["quality_code"]),
+        (mkauto_consts.feedback_quality_code["very_good"]["quality_level"], mkauto_consts.feedback_quality_code["very_good"]["quality_code"]),
+        (mkauto_consts.feedback_quality_code["average"]["quality_level"], mkauto_consts.feedback_quality_code["average"]["quality_code"]),
+        (mkauto_consts.feedback_quality_code["low"]["quality_level"], mkauto_consts.feedback_quality_code["low"]["quality_code"]),
+        (mkauto_consts.feedback_quality_code["very_bad"]["quality_level"], mkauto_consts.feedback_quality_code["very_bad"]["quality_code"]),
+    )
+    feedback_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    feedback_text = models.TextField(null=False, blank=False, verbose_name="Testo del feedback")
+    quality_level = models.IntegerField(null=False, blank=False, choices=QUALITY_LEVEL, verbose_name="Qualità, es. 1,2,3,...")
+    creation_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        app_label = 'mkauto_app'
+
+    def __unicode__(self):
+        return self.feedback_id

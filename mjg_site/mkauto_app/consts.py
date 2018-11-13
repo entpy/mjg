@@ -206,3 +206,31 @@ class mkauto_consts(object):
         },
         # TODO: mancano le promozioni basate sul tempo
     }
+
+    feedback_quality_code = {
+        "excellent" : {
+            "quality_code" : "excellent",
+            "quality_level" : "5",
+            "quality_label" : "Eccellente",
+        },
+        "very_good" : {
+            "quality_code" : "very_good",
+            "quality_level" : "4",
+            "quality_label" : "Molto buono",
+        },
+        "average" : {
+            "quality_code" : "average",
+            "quality_level" : "3",
+            "quality_label" : "Nella media",
+        },
+        "low" : {
+            "quality_code" : "low",
+            "quality_level" : "2",
+            "quality_label" : "Scarso",
+        },
+        "very_bad" : {
+            "quality_code" : "very_bad",
+            "quality_level" : "1",
+            "quality_label" : "Pessimo",
+        },
+    }

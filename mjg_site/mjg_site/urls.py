@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'^cookie-policy/?$', website.views.www_cookie_law, name='www_cookie_law'),
     url(r'^disiscriviti/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/(?:(?P<unsubscribe_type>\w+)/)?$', website.views.www_unsubscribe, name='www_unsubscribe'),
     url(r'^profilo/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/(?:(?P<show_only_section>\w+)/)?$', website.views.www_profile, name='www_profile'),
+    url(r'^feedback/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/?$', website.views.www_feedback, name='www_feedback'),
 
     url(r'^test-page/?$', website.views.www_test_page, name='www_test_page'),
 ]
