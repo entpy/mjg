@@ -133,7 +133,7 @@ class mkauto_consts(object):
             "extra_text" : "",
             "ma_event_type" : ma_event_type["prize_tickle"],
             "prize_call_to_action" : "",
-            "tickle_call_to_action" : "",
+            "tickle_call_to_action" : "/feedback/{user_id}/{account_code}/",
             "status" : "1",
         },
         event_code["refer_friend"] : {
@@ -171,7 +171,7 @@ class mkauto_consts(object):
             "repeat_delay" : "0",
             "extra_text" : "",
             "ma_event_type" : ma_event_type["prize"],
-            "prize_call_to_action" : "",
+            "prize_call_to_action" : "/servizi/",
             "tickle_call_to_action" : "",
             "status" : "1",
         },

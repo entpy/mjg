@@ -15,3 +15,8 @@ class UpdateUserDataError(Exception):
     """Error in update user data"""
     get_error_code = "003"
     pass
+
+class MasterAccountCodeDoesNotExistsError(Exception):
+    """Error in get master account code"""
+    get_error_code = "004"
+    pass

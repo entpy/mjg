@@ -9,7 +9,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from mjg_site.exceptions import *
 from website.forms import AccountForm, AccountNotifyForm, FeedbackForm
 from account_app.models import Account
-from mkauto_app.models import MaEvent
+from mkauto_app.models import MaEvent, Feedback
 from mkauto_app.strings import MkautoStrings
 from mkauto_app.consts import mkauto_consts
 from mjg_site.consts import project_constants
@@ -287,9 +287,23 @@ def www_feedback(request, user_id, account_code):
 
         # check whether it's valid:
         if form.is_valid():
-            # TODO
-            # salvo i dati validi
+            # salvo il feedback
+            feedback_obj = Feedback()
+            feedback_obj.add_feedback(user_id=user_id, quality_level=form.cleaned_data["quality_level"], feedback_text=form.cleaned_data["feedback_text"])
             # se l'utente non ha ancora ricevuto il bonus lo invio
+            if not user_obj.account.get_feedback_event_done:
+                # invio l'evento
+                ma_event_obj.make_event(user_id=user_id, ma_code=mkauto_consts.event_code["get_feedback"], strings_ma_code=mkauto_consts.event_code["get_feedback"], ma_code_dictionary=None, force_prize=True, skip_log_check=True)
+
+                # setto il flag utente 'get_feedback_event_done' a 1
+                new_save_data = { "get_feedback_event_done" : "1" }
+                user_obj.account.update_account(save_data=new_save_data, user_obj=user_obj)
+
+                # creo messaggio di successo
+                success_msg_mkauto_prize = "Il coupon con " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["get_feedback"]) + " ti è stato inviato via email"
+                messages.add_message(request, messages.SUCCESS, "<h4>Grazie per i tuoi preziosi consigli</h4><strong>" + str(success_msg_mkauto_prize) + "</strong>.")
+            else:
+                messages.add_message(request, messages.SUCCESS, "Le informazioni sono state salvate con successo")
             # redirect to a new URL:
             return HttpResponseRedirect("/feedback/" + str(user_id) + "/" + str(account_code) + "/")
     # if a GET (or any other method) we'll create a blank form
@@ -306,13 +320,70 @@ def www_feedback(request, user_id, account_code):
         "form": form,
         "user_info_dict" : user_obj,
         "mkauto_prize" : ma_event_obj.create_first_name_string(string=mkauto_prize, separator=', ', first_name=user_obj.first_name),
+        "no_prize_string" : ma_event_obj.create_first_name_string(string="cosa pensi del nostro servizio?<br />Dacci qualche consiglio, suggerimento o eventuali critiche.", separator=', ', first_name=user_obj.first_name),
+        "get_feedback_event_done" : user_obj.account.get_feedback_event_done,
     }
 
     return render(request, 'website/www/www_feedback.html', context)
 
+@ensure_csrf_cookie
+def www_refer_friends(request, user_id, account_code):
+    """View to refer friends"""
 
+    """
+    user_obj = account_obj.get_user_by_id_account_code(user_id=user_id, account_code=account_code)
 
+    if not user_obj:
+        # se non sono riuscito a tirare fuori l'utente mostro un 404
+        raise Http404()
 
+    if request.method == "POST":
+        # create a form instance and populate it with data from the request:
+        form = FeedbackForm(request.POST)
+
+        # check whether it's valid:
+        if form.is_valid():
+            # salvo il feedback
+            feedback_obj = Feedback()
+            feedback_obj.add_feedback(user_id=user_id, quality_level=form.cleaned_data["quality_level"], feedback_text=form.cleaned_data["feedback_text"])
+            # se l'utente non ha ancora ricevuto il bonus lo invio
+            if not user_obj.account.get_feedback_event_done:
+                # invio l'evento
+                ma_event_obj.make_event(user_id=user_id, ma_code=mkauto_consts.event_code["get_feedback"], strings_ma_code=mkauto_consts.event_code["get_feedback"], ma_code_dictionary=None, force_prize=True, skip_log_check=True)
+
+                # setto il flag utente 'get_feedback_event_done' a 1
+                new_save_data = { "get_feedback_event_done" : "1" }
+                user_obj.account.update_account(save_data=new_save_data, user_obj=user_obj)
+
+                # creo messaggio di successo
+                success_msg_mkauto_prize = "Il coupon con " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["get_feedback"]) + " ti è stato inviato via email"
+                messages.add_message(request, messages.SUCCESS, "<h4>Grazie per i tuoi preziosi consigli</h4><strong>" + str(success_msg_mkauto_prize) + "</strong>.")
+            else:
+                messages.add_message(request, messages.SUCCESS, "Le informazioni sono state salvate con successo")
+            # redirect to a new URL:
+            return HttpResponseRedirect("/invita-amici/" + str(user_id) + "/" + str(account_code) + "/")
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = FeedbackForm()
+
+    # account_obj = Account()
+    # account_obj.get_mkauto_accounts(days_from_creation=0)
+    # prelevo la stringa del premio
+    mkauto_prize = "cosa pensi del nostro servizio?<br />Dacci qualche consiglio, suggerimento o eventuali critiche e riceverai " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["get_feedback"]) + "."
+
+    context = {
+        "post" : request.POST,
+        "form": form,
+        "user_info_dict" : user_obj,
+        "mkauto_prize" : ma_event_obj.create_first_name_string(string=mkauto_prize, separator=', ', first_name=user_obj.first_name),
+        "no_prize_string" : ma_event_obj.create_first_name_string(string="cosa pensi del nostro servizio?<br />Dacci qualche consiglio, suggerimento o eventuali critiche.", separator=', ', first_name=user_obj.first_name),
+        "get_feedback_event_done" : user_obj.account.get_feedback_event_done,
+    }
+    """
+
+    context = {}
+
+    return render(request, 'website/www/www_refer_friends.html', context)
 
 
 

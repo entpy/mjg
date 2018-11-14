@@ -43,11 +43,11 @@ class MaEvent(models.Model):
     repeat_delay = models.IntegerField(null=True, blank=True, verbose_name="Dopo il primo invio, tutti i successivi sono ogni x giorni, indicati da questo numero")
     extra_text = models.TextField(null=False, blank=True, verbose_name="Testo aggiuntivo, es. le limitazioni dei coupon per questo evento")
     channels_bitmask = models.IntegerField(default=(project_constants.CHANNEL_EMAIL), null=False, blank=False, verbose_name="Indica su quali canali inviare l'evento, per il momento esiste solo il channel email")
-    prize_call_to_action = models.CharField(max_length=200, null=True, blank=True, verbose_name="Se settato il premio avrà una call to action")
-    tickle_call_to_action = models.CharField(max_length=200, null=True, blank=True, verbose_name="Se settato il tickle avrà una call to action")
+    # prize_call_to_action = models.CharField(max_length=200, null=True, blank=True, verbose_name="Se settato il premio avrà una call to action")
+    # tickle_call_to_action = models.CharField(max_length=200, null=True, blank=True, verbose_name="Se settato il tickle avrà una call to action")
     ma_event_type = models.CharField(max_length=30, null=False, blank=False, choices=MA_EVENT_TYPE, verbose_name="Il tipo di ma event, se solo premio, tickle+premio oppure schedulato nel tempo")
     json_params = JSONField(null=True, blank=True, verbose_name="Parametri aggiuntivi per l'evento in formato JSON")
-    status = models.NullBooleanField(null=True, blank=True, default=0, verbose_name="Indica se l'evento è attivo o no (1=attivo, 0=non attivo)")
+    status = models.BooleanField(default=0, verbose_name="Indica se l'evento è attivo o no (1=attivo, 0=non attivo)")
 
     class Meta:
         app_label = 'mkauto_app'
@@ -137,6 +137,8 @@ class MaEvent(models.Model):
         image_code = strings_ma_code
         if strings_ma_code == "tickle_get_birthday_date":
             image_code = "get_birthday_date"
+        if strings_ma_code == "tickle_get_feedback":
+            image_code = "get_feedback"
 
         return {
             "subject" : self.create_first_name_string(string=MkautoStrings.get_string(key=str_key + ".subject", values_dictionary=values_dictionary), separator=', ', first_name=values_dictionary.get("first_name")),
@@ -265,14 +267,15 @@ class MaEvent(models.Model):
             "user_profile_url" : settings.SITE_URL + "/profilo/" + str(account_info_dictionary["id"]) + "/" + str(account_info_dictionary["account__account_code"]),
             "email_unsubscribe_url" : settings.SITE_URL + "/disiscriviti/" + str(account_info_dictionary["id"]) + "/" + str(account_info_dictionary["account__account_code"] + "/mkauto/"),
         }
-        CustomEmailTemplate(email_name="mkauto_email", email_context=email_context, recipient_list=[account_info_dictionary["email"],])
 
-        logger.info("@@@ Stringhe finali @@@")
-        logger.info(event_strings)
+        logger.info("@@@ email context @@@")
+        logger.info(email_context)
+
+        CustomEmailTemplate(email_name="mkauto_email", email_context=email_context, recipient_list=[account_info_dictionary["email"],])
 
         return user_id
 
-    def generate_random_code(self, depth = 0):
+    def generate_random_code(self, depth=0):
         """
         Generating a random promo code, if the generated code already
         exists, than recursively call this function to generate a new ones.
@@ -316,8 +319,8 @@ class MaEvent(models.Model):
                 ma_event_obj.repeat_delay = mkauto_consts.mkauto_default_values[event_name].get("repeat_delay")
                 ma_event_obj.extra_text = mkauto_consts.mkauto_default_values[event_name].get("extra_text")
                 ma_event_obj.ma_event_type = mkauto_consts.mkauto_default_values[event_name].get("ma_event_type")
-                ma_event_obj.prize_call_to_action = mkauto_consts.mkauto_default_values[event_name].get("prize_call_to_action")
-                ma_event_obj.tickle_call_to_action = mkauto_consts.mkauto_default_values[event_name].get("tickle_call_to_action")
+                # ma_event_obj.prize_call_to_action = mkauto_consts.mkauto_default_values[event_name].get("prize_call_to_action")
+                # ma_event_obj.tickle_call_to_action = mkauto_consts.mkauto_default_values[event_name].get("tickle_call_to_action")
                 ma_event_obj.status = mkauto_consts.mkauto_default_values[event_name].get("status")
                 ma_event_obj.save(force_insert=True)
 
@@ -515,9 +518,9 @@ class Feedback(models.Model):
         (mkauto_consts.feedback_quality_code["very_bad"]["quality_level"], mkauto_consts.feedback_quality_code["very_bad"]["quality_code"]),
     )
     feedback_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    feedback_text = models.TextField(null=False, blank=False, verbose_name="Testo del feedback")
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     quality_level = models.IntegerField(null=False, blank=False, choices=QUALITY_LEVEL, verbose_name="Qualità, es. 1,2,3,...")
+    feedback_text = models.TextField(null=False, blank=False, verbose_name="Testo del feedback")
     creation_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -525,3 +528,98 @@ class Feedback(models.Model):
 
     def __unicode__(self):
         return self.feedback_id
+
+    def add_feedback(self, user_id, quality_level, feedback_text):
+        """Function to add a new feedback"""
+        new_feedback_obj = Feedback(
+            user_id=user_id,
+            quality_level=quality_level,
+            feedback_text=feedback_text,
+        )
+        new_feedback_obj.save(force_insert=True)
+
+        return new_feedback_obj
+
+# TODO
+class MasterAccountCode(models.Model):
+    master_account_code_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    code = models.CharField(max_length=30, null=False, blank=False, unique=True, verbose_name="Codice di riferimento utente che propone amico")
+    creation_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        app_label = 'mkauto_app'
+
+    def __unicode__(self):
+        return self.master_account_code_id
+
+    # TODO
+    def create_or_get_master_code(self, user_id):
+        """Function to create a master account code if not exists yet"""
+        # checking if code already exists
+        try:
+            master_account_code_obj = MasterAccountCode.objects.get(user_id=user_id)
+        except MasterAccountCode.DoesNotExist:
+            master_account_code_obj = MasterAccountCode.objects.create(user_id=user_id, code=self.generate_random_code())
+
+        return master_account_code_obj
+
+    def check_code_exists(self, code):
+        """Function to check if a master code exists"""
+        return MasterAccountCode.objects.filter(code=code).exists()
+
+    def generate_random_code(self, depth=0):
+        """
+        Generating a random promo code, if the generated code already
+        exists, than recursively call this function to generate a new ones.
+        Max recursion depth: 50
+        """
+
+        # generating a random code
+        random_code = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(15))
+
+        try:
+            # checking if code already exists
+            MasterAccountCode.objects.get(refer_code=random_code)
+
+            # than recall this function to generate a new ones
+            if depth < 50:
+                random_code = self.generate_random_code(self, depth+1)
+            else:
+                logger.error("ATTENZIONE: non sono riuscito a generare un nuovo codice | depth level: " + str(depth))
+                random_code = "PROMOCODE1"
+        except MasterAccountCode.DoesNotExist:
+            # il codice non esiste in db pertano può essere utilizzato
+            pass
+
+        return random_code
+
+    # TODO
+    def send_friend_invite(self):
+        """Function to send an invite"""
+
+        return True
+
+class FriendCode(models.Model):
+    friend_code_id = models.AutoField(primary_key=True)
+    master_account_code = models.ForeignKey(MasterAccountCode, on_delete=models.CASCADE)
+    ma_event_code = models.ForeignKey(MaEventCode, on_delete=models.CASCADE)
+    creation_date = models.DateTimeField(auto_now_add=True)
+    status = models.BooleanField(default=0, verbose_name="Indica se il codice è già stato utilizzato e quindi chi ha proposto l'amico ha ricevuto il premio (0=non utilizzato, 1=utilizzato)")
+
+    class Meta:
+        app_label = 'mkauto_app'
+
+    def __unicode__(self):
+        return self.friend_code_id
+
+    def generate_friend_code(self, master_account_code, ma_event_code):
+        """Function to generate a new friend code"""
+
+        master_account_code_obj = MasterAccountCode()
+        if master_account_code_obj.check_code_exists(code=master_account_code):
+            friend_code_obj = FriendCode.objects.create(master_account_code=master_account_code, ma_event_code=ma_event_code)
+        else:
+            raise MasterAccountCodeDoesNotExistsError
+
+        return friend_code_obj

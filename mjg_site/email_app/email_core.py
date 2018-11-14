@@ -6,7 +6,7 @@ from django.utils.safestring import mark_safe
 from django.conf import settings
 from mjg_site.consts import project_constants
 from itertools import chain
-import logging, json, sys
+import logging, json, sys, copy
 
 # force utf8 read data
 reload(sys);
@@ -17,21 +17,8 @@ logger = logging.getLogger(__name__)
 
 class CustomEmailTemplate():
 
-    # the email name, es. recover_password_email
-    email_name = None
-
-    # the email data, es. email and password in recover password email
-    email_context = {}
-
     # the email inner blocks
     base_url = settings.SITE_URL
-    email_html_blocks = {}
-
-    # email subject
-    email_subject = None
-
-    # email template name
-    template_name = None
 
     # available email name
     available_email_name = {
@@ -43,7 +30,6 @@ class CustomEmailTemplate():
                 "main_content_block" : "",
                 "main_image_block" : "",
                 "coupon_code_block" : "",
-                "call_to_action_block" : "",
                 "plain_main_title_block" : "",
                 "plain_main_content_block" : "",
                 "plain_coupon_code_block" : "",
@@ -71,11 +57,25 @@ class CustomEmailTemplate():
 	# "admin": "admin_template",
     }
 
-    email_from = False,
-
-    email_to = False,
-
     def __init__(self, email_name, email_context, recipient_list=[], email_from=False, template_type="default"):
+
+        # the email name, es. recover_password_email
+        self.email_name = None
+
+        # the email data, es. email and password in recover password email
+        self.email_context = {}
+
+        self.email_html_blocks = {}
+
+        # email subject
+        self.email_subject = None
+
+        # email template name
+        self.template_name = None
+
+        self.email_from = False,
+
+        self.email_to = False,
 
         if email_name in chain(self.available_email_name):
 	    # setting email from
@@ -290,7 +290,7 @@ class CustomEmailTemplate():
                 3) creo i blocchi per la versione plain text
                 """
                 # 1) inizializzo tutti i blocchi della mail
-                self.email_html_blocks = self.available_email_name[self.email_name]["email_fields"]
+                self.email_html_blocks = copy.deepcopy(self.available_email_name[self.email_name]["email_fields"])
 
                 # 2) html version {{{
                 self.email_html_blocks["main_title_block"] = mark_safe(self.email_context.get("title"))
@@ -331,8 +331,7 @@ class CustomEmailTemplate():
                     self.email_html_blocks["plain_call_to_action_label"] = mark_safe(self.email_context.get("call_to_action_label"))
                     self.email_html_blocks["plain_call_to_action_url"] = mark_safe(call_to_action_url)
 
-                # TODO
-                # link per la disiscrizione
+                # link di unsubscribe e profile editing
                 if self.email_context.get("user_profile_url"):
                     self.email_html_blocks["user_profile_url"] = mark_safe(self.email_context.get("user_profile_url"))
                 if self.email_context.get("email_unsubscribe_url"):

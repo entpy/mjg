@@ -22,7 +22,7 @@ class MkautoStrings(object):
         str(mkauto_consts.event_code["welcome_prize"]) + ".discount.content": "Complimenti, grazie alla tua registrazione su {website_name} riceverai sconti, promozioni e consigli per la tua auto.<br />Ti aspettiamo in officina ({business_address}).",
         str(mkauto_consts.event_code["welcome_prize"]) + ".bonus.content": "Complimenti, grazie alla tua registrazione su {website_name} riceverai sconti, promozioni e consigli per la tua auto.<br />Ti aspettiamo in officina ({business_address}).",
         str(mkauto_consts.event_code["welcome_prize"]) + ".text.content": "Complimenti, grazie alla tua registrazione su {website_name} riceverai sconti, promozioni e consigli per la tua auto.<br />Ti aspettiamo in officina ({business_address}).",
-        str(mkauto_consts.event_code["welcome_prize"]) + ".call_to_action.title": "Per vedere il tuo profilo clicca sul pulsante sotto",
+        str(mkauto_consts.event_code["welcome_prize"]) + ".call_to_action.title": "Per vedere il tuo profilo<br />clicca sul pulsante sotto",
         str(mkauto_consts.event_code["welcome_prize"]) + ".call_to_action.label": "Visualizza profilo",
         str(mkauto_consts.event_code["welcome_prize"]) + ".call_to_action.url": mkauto_consts.mkauto_default_values["welcome_prize"].get("prize_call_to_action", ""), # l'url contiene le variabili {user_id} e {account_code}
         # welcome_prize }}}
@@ -37,7 +37,7 @@ class MkautoStrings(object):
         str("tickle_" + mkauto_consts.event_code["get_birthday_date"]) + ".discount.content": "Lasciaci la tua data di nascita, così potremo mandarti gli auguri e un regalo per il tuo compleanno e...per non farti aspettare fino al tuo compleanno, ti daremo subito uno sconto del {prize_val}%.",
         str("tickle_" + mkauto_consts.event_code["get_birthday_date"]) + ".bonus.content": "Lasciaci la tua data di nascita, così potremo mandarti gli auguri e un regalo per il tuo compleanno e...per non farti aspettare fino al tuo compleanno, ti daremo subito un bonus di €{prize_val}.",
         str("tickle_" + mkauto_consts.event_code["get_birthday_date"]) + ".text.content": "Lasciaci la tua data di nascita, così potremo mandarti gli auguri e un regalo per il tuo compleanno e...per non farti aspettare fino al tuo compleanno, ti daremo subito {prize_val}.",
-        str("tickle_" + mkauto_consts.event_code["get_birthday_date"]) + ".call_to_action.title": "Clicca sul pulsante sotto per inserire la tua data di nascita",
+        str("tickle_" + mkauto_consts.event_code["get_birthday_date"]) + ".call_to_action.title": "Clicca sul pulsante sotto<br />per inserire la tua data di nascita",
         str("tickle_" + mkauto_consts.event_code["get_birthday_date"]) + ".call_to_action.label": "Inserisci data di nascita",
         str("tickle_" + mkauto_consts.event_code["get_birthday_date"]) + ".call_to_action.url": mkauto_consts.mkauto_default_values["get_birthday_date"].get("tickle_call_to_action", ""), # l'url contiene le variabili {user_id} e {account_code}
         # evento
@@ -55,29 +55,28 @@ class MkautoStrings(object):
         # get_birthday_date }}}
         # get_feedback {{{
         # tickle
-        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".discount.subject": "[tickle_get_feedback] grazie per la tua registrazione, ecco uno sconto del {prize_val}%",
-        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".bonus.subject": "[tickle_get_feedback] grazie per la tua registrazione, ecco un bonus di €{prize_val}",
-        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".text.subject": "[tickle_get_feedback] grazie per la tua registrazione, ecco {prize_val}",
-        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".discount.title": "[tickle_get_feedback] grazie per la tua registrazione,<br />ecco uno sconto del {prize_val}%",
-        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".bonus.title": "[tickle_get_feedback] grazie per la tua registrazione,<br />ecco un bonus di €{prize_val}",
-        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".text.title": "[tickle_get_feedback] grazie per la tua registrazione, ecco<br />{prize_val}",
-        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".discount.content": "[tickle_get_feedback] Testo per lo sconto {coupon_limitations}",
-        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".bonus.content": "[tickle_get_feedback] Testo per il bonus {coupon_limitations}",
-        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".text.content": "[tickle_get_feedback] Testo per il premio libero {coupon_limitations}",
-        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".call_to_action.title": "Per vedere le tue informazioni clicca sul pulsante sotto",
-        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".call_to_action.label": "Visualizza informazioni",
+        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".discount.subject": "dai un parere al nostro servizio e riceverai uno sconto del {prize_val}%",
+        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".bonus.subject": "dai un parere al nostro servizio e riceverai un bonus di €{prize_val}",
+        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".text.subject": "dai un parere al nostro servizio e riceverai {prize_val}",
+        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".discount.title": "dai un parere al nostro servizio,<br />riceverai uno sconto del {prize_val}%",
+        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".bonus.title": "dai un parere al nostro servizio,<br />riceverai un bonus di €{prize_val}",
+        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".text.title": "dai un parere al nostro servizio e riceverai<br />{prize_val}",
+        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".discount.content": "Cosa pensi del nostro servizio?<br />Proponi qualche consiglio, suggerimento o eventuali critiche e riceverai uno sconto del {prize_val}%.<br />Utilizzeremo le tue informazioni per offrirti un servizio ancora migliore.",
+        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".bonus.content": "Cosa pensi del nostro servizio?<br />Proponi qualche consiglio, suggerimento o eventuali critiche e riceverai un bonus di €{prize_val}.<br />Utilizzeremo le tue informazioni per offrirti un servizio ancora migliore.",
+        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".text.content": "Cosa pensi del nostro servizio?<br />Proponi qualche consiglio, suggerimento o eventuali critiche e riceverai {prize_val}.<br />Utilizzeremo le tue informazioni per offrirti un servizio ancora migliore.",
+        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".call_to_action.title": "Per dare un parere al nostro servizio<br />clicca sul pulsante sotto",
+        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".call_to_action.label": "Dai un parere al servizio",
+        str("tickle_" + mkauto_consts.event_code["get_feedback"]) + ".call_to_action.url": mkauto_consts.mkauto_default_values["get_feedback"].get("tickle_call_to_action", ""), # l'url contiene le variabili {user_id} e {account_code}
         # evento
-        str(mkauto_consts.event_code["get_feedback"]) + ".discount.subject": "[get_feedback] grazie per la tua registrazione, ecco uno sconto del {prize_val}%",
-        str(mkauto_consts.event_code["get_feedback"]) + ".bonus.subject": "[get_feedback] grazie per la tua registrazione, ecco un bonus di €{prize_val}",
-        str(mkauto_consts.event_code["get_feedback"]) + ".text.subject": "[get_feedback] grazie per la tua registrazione, ecco {prize_val}",
-        str(mkauto_consts.event_code["get_feedback"]) + ".discount.title": "[get_feedback] grazie per la tua registrazione,<br />ecco uno sconto del {prize_val}%",
-        str(mkauto_consts.event_code["get_feedback"]) + ".bonus.title": "[get_feedback] grazie per la tua registrazione,<br />ecco un bonus di €{prize_val}",
-        str(mkauto_consts.event_code["get_feedback"]) + ".text.title": "[get_feedback] grazie per la tua registrazione, ecco<br />{prize_val}",
-        str(mkauto_consts.event_code["get_feedback"]) + ".discount.content": "[get_feedback] Testo per lo sconto {coupon_limitations}",
-        str(mkauto_consts.event_code["get_feedback"]) + ".bonus.content": "[get_feedback] Testo per il bonus {coupon_limitations}",
-        str(mkauto_consts.event_code["get_feedback"]) + ".text.content": "[get_feedback] Testo per il premio libero {coupon_limitations}",
-        str(mkauto_consts.event_code["get_feedback"]) + ".call_to_action.title": "Per vedere le tue informazioni clicca sul pulsante sotto",
-        str(mkauto_consts.event_code["get_feedback"]) + ".call_to_action.label": "Visualizza informazioni",
+        str(mkauto_consts.event_code["get_feedback"]) + ".discount.subject": "grazie per aver lasciato un parere sul nostro servizio, ecco uno sconto del {prize_val}%",
+        str(mkauto_consts.event_code["get_feedback"]) + ".bonus.subject": "grazie per aver lasciato un parere sul nostro servizio, ecco un bonus di €{prize_val}",
+        str(mkauto_consts.event_code["get_feedback"]) + ".text.subject": "grazie per aver lasciato un parere sul nostro servizio, ecco {prize_val}",
+        str(mkauto_consts.event_code["get_feedback"]) + ".discount.title": "grazie per aver lasciato un parere sul nostro servizio,<br />ecco uno sconto del {prize_val}%",
+        str(mkauto_consts.event_code["get_feedback"]) + ".bonus.title": "grazie per aver lasciato un parere sul nostro servizio,<br />ecco un bonus di €{prize_val}",
+        str(mkauto_consts.event_code["get_feedback"]) + ".text.title": "grazie per aver lasciato un parere sul nostro servizio, ecco<br />{prize_val}",
+        str(mkauto_consts.event_code["get_feedback"]) + ".discount.content": "Grazie per aver lasciato un parere sul nostro servizio, speriamo tu sia soddisfatto/a, in cambio ti offriamo questo sconto per le tue informazioni, passa a trovarci presto.",
+        str(mkauto_consts.event_code["get_feedback"]) + ".bonus.content": "Grazie per aver lasciato un parere sul nostro servizio, speriamo tu sia soddisfatto/a, in cambio ti offriamo questo bonus per le tue informazioni, passa a trovarci presto.",
+        str(mkauto_consts.event_code["get_feedback"]) + ".text.content": "Grazie per aver lasciato un parere sul nostro servizio, speriamo tu sia soddisfatto/a, in cambio ti offriamo questo regalo per le tue informazioni, passa a trovarci presto.",
         # get_feedback }}}
         # refer_friend {{{
         # tickle
@@ -90,7 +89,7 @@ class MkautoStrings(object):
         str("tickle_" + mkauto_consts.event_code["refer_friend"]) + ".discount.content": "[tickle_refer_friend] Testo per lo sconto {coupon_limitations}",
         str("tickle_" + mkauto_consts.event_code["refer_friend"]) + ".bonus.content": "[tickle_refer_friend] Testo per il bonus {coupon_limitations}",
         str("tickle_" + mkauto_consts.event_code["refer_friend"]) + ".text.content": "[tickle_refer_friend] Testo per il premio libero {coupon_limitations}",
-        str("tickle_" + mkauto_consts.event_code["refer_friend"]) + ".call_to_action.title": "Per vedere le tue informazioni clicca sul pulsante sotto",
+        str("tickle_" + mkauto_consts.event_code["refer_friend"]) + ".call_to_action.title": "Per vedere le tue informazioni<br />clicca sul pulsante sotto",
         str("tickle_" + mkauto_consts.event_code["refer_friend"]) + ".call_to_action.label": "Visualizza informazioni",
         # evento
         str(mkauto_consts.event_code["refer_friend"]) + ".discount.subject": "[refer_friend] grazie per la tua registrazione, ecco uno sconto del {prize_val}%",
@@ -102,7 +101,7 @@ class MkautoStrings(object):
         str(mkauto_consts.event_code["refer_friend"]) + ".discount.content": "[refer_friend] Testo per lo sconto {coupon_limitations}",
         str(mkauto_consts.event_code["refer_friend"]) + ".bonus.content": "[refer_friend] Testo per il bonus {coupon_limitations}",
         str(mkauto_consts.event_code["refer_friend"]) + ".text.content": "[refer_friend] Testo per il premio libero {coupon_limitations}",
-        str(mkauto_consts.event_code["refer_friend"]) + ".call_to_action.title": "Per vedere le tue informazioni clicca sul pulsante sotto",
+        str(mkauto_consts.event_code["refer_friend"]) + ".call_to_action.title": "Per vedere le tue informazioni<br />clicca sul pulsante sotto",
         str(mkauto_consts.event_code["refer_friend"]) + ".call_to_action.label": "Visualizza informazioni",
         # refer_friend }}}
         # get_review {{{
@@ -115,21 +114,22 @@ class MkautoStrings(object):
         str("tickle_" + mkauto_consts.event_code["get_review"]) + ".discount.content": "[tickle_get_review] Testo per lo sconto {coupon_limitations}",
         str("tickle_" + mkauto_consts.event_code["get_review"]) + ".bonus.content": "[tickle_get_review] Testo per il bonus {coupon_limitations}",
         str("tickle_" + mkauto_consts.event_code["get_review"]) + ".text.content": "[tickle_get_review] Testo per il premio libero {coupon_limitations}",
-        str("tickle_" + mkauto_consts.event_code["get_review"]) + ".call_to_action.title": "Per vedere le tue informazioni clicca sul pulsante sotto",
+        str("tickle_" + mkauto_consts.event_code["get_review"]) + ".call_to_action.title": "Per vedere le tue informazioni<br />clicca sul pulsante sotto",
         str("tickle_" + mkauto_consts.event_code["get_review"]) + ".call_to_action.label": "Visualizza informazioni",
         # get_review }}}
         # happy_birthday_prize {{{
-        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".discount.subject": "[happy_birthday_prize] grazie per la tua registrazione, ecco uno sconto del {prize_val}%",
-        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".bonus.subject": "[happy_birthday_prize] grazie per la tua registrazione, ecco un bonus di €{prize_val}",
-        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".text.subject": "[happy_birthday_prize] grazie per la tua registrazione, ecco {prize_val}",
-        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".discount.title": "[happy_birthday_prize] grazie per la tua registrazione,<br />ecco uno sconto del {prize_val}%",
-        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".bonus.title": "[happy_birthday_prize] grazie per la tua registrazione,<br />ecco un bonus di €{prize_val}",
-        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".text.title": "[happy_birthday_prize] grazie per la tua registrazione, ecco<br />{prize_val}",
-        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".discount.content": "[happy_birthday_prize] Testo per lo sconto {coupon_limitations}",
-        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".bonus.content": "[happy_birthday_prize] Testo per il bonus {coupon_limitations}",
-        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".text.content": "[happy_birthday_prize] Testo per il premio libero {coupon_limitations}",
-        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".call_to_action.title": "Per vedere le tue informazioni clicca sul pulsante sotto",
-        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".call_to_action.label": "Visualizza informazioni",
+        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".discount.subject": "buon compleanno, ecco il tuo regalo per questo giorno speciale",
+        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".bonus.subject": "buon compleanno, ecco il tuo regalo per questo giorno speciale",
+        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".text.subject": "buon compleanno, ecco il tuo regalo per questo giorno speciale",
+        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".discount.title": "buon compleanno, per festeggiare,<br />ecco uno sconto del {prize_val}%",
+        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".bonus.title": "buon compleanno, per festeggiare,<br />ecco uno bonus di €{prize_val}",
+        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".text.title": "buon compleanno, per festeggiare,<br />ecco {prize_val}",
+        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".discount.content": "Buon compleanno, per questa giornata speciale vogliamo farti un regalo dedicato solo a te. Ecco sconto del {prize_val}%, passa a trovarci in officina",
+        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".bonus.content": "Buon compleanno, per questa giornata speciale vogliamo farti un regalo dedicato solo a te. Ecco un bonus di €{prize_val}, passa a trovarci in officina",
+        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".text.content": "Buon compleanno, per questa giornata speciale vogliamo farti un regalo dedicato solo a te. Ecco {prize_val}, passa a trovarci in officina",
+        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".call_to_action.title": "Scopri i nostri servizi,<br />clicca sul pulsante sotto",
+        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".call_to_action.label": "I nostri servizi",
+        str(mkauto_consts.event_code["happy_birthday_prize"]) + ".call_to_action.url": mkauto_consts.mkauto_default_values["happy_birthday_prize"].get("prize_call_to_action", ""),
         # happy_birthday_prize }}}
         # monthly_prize_warning_light_prize {{{
         str("monthly_prize_" + mkauto_consts.random_code["warning_light_prize"]) + ".discount.subject": "[monthly_prize_warning_light_prize] grazie per la tua registrazione, ecco uno sconto del {prize_val}%",

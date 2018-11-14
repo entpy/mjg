@@ -80,3 +80,16 @@ class FeedbackForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(FeedbackForm, self).__init__(*args, **kwargs)
         self.fields['feedback_text'].widget.attrs.update({'placeholder': 'Scrivi qui consigli, suggerimenti o eventuali critiche...'})
+
+class ReferFriendForm(forms.Form):
+    account_first_name = forms.CharField(label='Il tuo nome', max_length=30, required=True)
+    account_last_name = forms.CharField(label='Il tuo cognome', max_length=30, required=True)
+    friend_first_name = forms.CharField(label='Il nome del tuo amico', max_length=30, required=True)
+    friend_email = forms.EmailField(label="L'email del tuo amico", max_length=50, required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(ReferFriendForm, self).__init__(*args, **kwargs)
+        self.fields['account_first_name'].widget.attrs.update({'placeholder': 'Inserisci qui il tuo nome'})
+        self.fields['account_last_name'].widget.attrs.update({'placeholder': 'Inserisci qui il tuo cognome'})
+        self.fields['friend_first_name'].widget.attrs.update({'placeholder': 'Inserisci qui il nome del tuo amico'})
+        self.fields['friend_email'].widget.attrs.update({'placeholder': "Inserisci qui l'email del tuo amico"})

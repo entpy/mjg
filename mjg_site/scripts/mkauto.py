@@ -87,7 +87,6 @@ def run():
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
 
-    """
     ##### Chiedo all'utente di lasciare un feedback (informazioni interne) #####
     current_ma_event = "get_feedback"
     if event_dictionary.get(current_ma_event, {}).get("status"):
@@ -104,6 +103,7 @@ def run():
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
 
+    """
     ##### Chiedo all'utente di presentare degli amici #####
     current_ma_event = "refer_friend"
     if event_dictionary.get(current_ma_event, {}).get("status"):

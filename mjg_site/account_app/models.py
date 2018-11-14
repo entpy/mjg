@@ -238,10 +238,12 @@ class Account(models.Model):
         return_var = return_var.filter(account__status=1)
         # return_var = return_var.filter(account__notify_bitmask__gte=F('account__notify_bitmask').bitand(project_constants.RECEIVE_MKAUTO_BITMASK))
 
+        logger.info("get account with code: " + str(event_code))
+
         # filtri dedicati agli eventi
         if event_code == "get_birthday_date":
             # solo se l'utente non ha la data di nascita
-            return_var = return_var.filter(account__birthday_date__isnull=True)
+            return_var = return_var.filter(account__birthday_date__isnull=True, account__get_birthday_date_event_done=0)
 
         if event_code == "happy_birthday_prize":
             # solo se il compleanno dell'utente è oggi
@@ -249,11 +251,11 @@ class Account(models.Model):
 
         if event_code == "get_feedback":
             # solo se l'utente non ha ancora lasciato feedback (info interne)
-            return_var = return_var.filter(account__get_feedback_event_done__isnull=True)
+            return_var = return_var.filter(account__get_feedback_event_done=0)
 
         if event_code == "get_review":
             # solo se l'utente non ha ancora lasciato recensioni (info pubbliche)
-            return_var = return_var.filter(account__get_review_event_done__isnull=True)
+            return_var = return_var.filter(account__get_review_event_done=0)
 
 	# performing query
         return_var = list(return_var)
