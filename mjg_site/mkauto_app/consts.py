@@ -38,6 +38,7 @@ class mkauto_consts(object):
             "get_feedback" : "get_feedback", # tickle -> per lasciare un feedback
             "get_review" : "get_review", # tickle -> per lasciare una recensione
             "refer_friend" : "refer_friend", # tickle -> per proporre un amico
+            "friend_prize" : "friend_prize", # tickle -> per proporre un amico
         # promozioni automatiche basate sul tempo
             #"tires_promotion_for_summer" : "tires_promotion_for_summer", # cambio gomme per l'estate
             #"tires_promotion_for_winter" : "tires_promotion_for_winter", # cambio gomme per l'inverno
@@ -140,13 +141,29 @@ class mkauto_consts(object):
             "ma_code" : event_code["refer_friend"],
             "description" : "Chiedo all'utente di presentare degli amici",
             "prize_type" : "discount",
-            "prize_value" : "15",
+            "prize_value" : "20",
+            "extra_prize_value" : "uno sconto del 15%", # l'unione del premio e del titolo dell'evento indicato in json_params['slave_event']
             "start_delay" : "70",
             "repeat_delay" : "168",
             "extra_text" : "",
             "ma_event_type" : ma_event_type["prize_tickle"],
             "prize_call_to_action" : "",
             "tickle_call_to_action" : "",
+            "json_params" : '{"slave_event": "friend_prize"}',
+            "status" : "1",
+        },
+        event_code["friend_prize"] : {
+            "ma_code" : event_code["friend_prize"],
+            "description" : "Il bonus da mandare all'amico presentato",
+            "prize_type" : "discount",
+            "prize_value" : "15",
+            "start_delay" : "0",
+            "repeat_delay" : "0",
+            "extra_text" : "",
+            "ma_event_type" : ma_event_type["prize"],
+            "prize_call_to_action" : "/servizi/",
+            "tickle_call_to_action" : "",
+            "json_params" : '{"master_event": "refer_friend"}',
             "status" : "1",
         },
         event_code["get_review"] : {

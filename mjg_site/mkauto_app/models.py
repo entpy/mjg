@@ -244,6 +244,7 @@ class MaEvent(models.Model):
             "account_code" : account_info_dictionary["account__account_code"],
             "user_id" : account_info_dictionary["id"],
             "account_code" : account_info_dictionary["account__account_code"],
+            "extra_prize_value" : ma_code_dictionary["extra_prize_value"],
         }
 
         event_strings = self.create_event_strings(
@@ -319,8 +320,9 @@ class MaEvent(models.Model):
                 ma_event_obj.repeat_delay = mkauto_consts.mkauto_default_values[event_name].get("repeat_delay")
                 ma_event_obj.extra_text = mkauto_consts.mkauto_default_values[event_name].get("extra_text")
                 ma_event_obj.ma_event_type = mkauto_consts.mkauto_default_values[event_name].get("ma_event_type")
-                # ma_event_obj.prize_call_to_action = mkauto_consts.mkauto_default_values[event_name].get("prize_call_to_action")
-                # ma_event_obj.tickle_call_to_action = mkauto_consts.mkauto_default_values[event_name].get("tickle_call_to_action")
+                # se presenti, inserisco l'extra prize
+                if mkauto_consts.mkauto_default_values[event_name].get("extra_prize_value"):
+                    ma_event_obj.ma_event_type = mkauto_consts.mkauto_default_values[event_name].get("extra_prize_value")
                 ma_event_obj.status = mkauto_consts.mkauto_default_values[event_name].get("status")
                 ma_event_obj.save(force_insert=True)
 
@@ -595,8 +597,29 @@ class MasterAccountCode(models.Model):
         return random_code
 
     # TODO
-    def send_friend_invite(self):
-        """Function to send an invite"""
+    def send_friend_invite(self, user_first_name, user_last_name, friend_first_name, friend_email):
+        """Function to send an invite to a user's friend"""
+
+        ma_event_obj = MaEvent()
+
+        email_subject = ma_event_obj.ucfirst(string=user_first_name + ", " + user_first_name + " " + user_last_name + " ti invita in " + settings.SITE_NAME)
+        email_title = ma_event_obj.ucfirst(string=user_first_name + ", " + user_first_name + " " + user_last_name + " ti invita a provare i servizi di " + settings.SITE_NAME)
+        email_content = "Caro " + ma_event_obj.ucfirst(string=user_first_name) + ", " + user_first_name + " " + user_last_name + " ti ha proposto per provare i servizi offerti da " + settings.SITE_NAME + " con uno sconto speciale del 15%.<br />I nostri principali servizi sono:<br /><ul><li>Servizio1</li><li>Servizio2</li></ul>Clicca sul pulsante sotto per ricevere il coupon con lo sconto."
+
+        email_context = {
+            "subject" : email_subject,
+            "title" : event_strings["title"],
+            "content" : event_strings["content"],
+            "image_url" : settings.SITE_URL + "/static/website/img/mkauto_images/" + event_strings["image_code"] + ".png",
+            "call_to_action_title" : "Clicca sul pulsante sotto<br />per ricevere il coupon con lo sconto",
+            "call_to_action_label" : "Ricevi lo sconto",
+            "call_to_action_url" : event_strings["call_to_action_url"],
+        }
+
+        logger.info("@@@ send_friend_invite email context @@@")
+        logger.info(email_context)
+
+        CustomEmailTemplate(email_name="mkauto_email", email_context=email_context, recipient_list=[friend_email,])
 
         return True
 
