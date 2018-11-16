@@ -274,7 +274,7 @@ class MaEvent(models.Model):
 
         CustomEmailTemplate(email_name="mkauto_email", email_context=email_context, recipient_list=[account_info_dictionary["email"],])
 
-        return user_id
+        return { "user_id" : user_id, "coupon_code" : coupon_code, }
 
     def generate_random_code(self, depth=0):
         """
