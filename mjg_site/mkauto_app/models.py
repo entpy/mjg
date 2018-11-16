@@ -610,7 +610,7 @@ class MasterAccountCode(models.Model):
             "subject" : email_subject,
             "title" : event_strings["title"],
             "content" : event_strings["content"],
-            "image_url" : settings.SITE_URL + "/static/website/img/mkauto_images/" + event_strings["image_code"] + ".png",
+            "image_url" : settings.SITE_URL + "/static/website/img/mkauto_images/new_friend.png",
             "call_to_action_title" : "Clicca sul pulsante sotto<br />per ricevere il coupon con lo sconto",
             "call_to_action_label" : "Ricevi lo sconto",
             "call_to_action_url" : event_strings["call_to_action_url"],
