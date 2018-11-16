@@ -51,13 +51,16 @@ def www_get_offers(request, master_code):
             else:
                 # invio l'evento (non controllo se l'evento è già stato inviato perchè qui finisco solo in caso di nuovo account)
                 ma_event_obj = MaEvent()
-                
                 # TODO
                 # se presente un master_code, sono nella registrazione di un amico del cliente, mando quindi il relativo bonus
                 if master_code:
-                    ma_event_obj.make_event(user_id=user_obj.id, ma_code=mkauto_consts.event_code["refer_friend"], strings_ma_code=mkauto_consts.event_code["refer_friend"])
+                    # TODO
+                    ma_event_return = ma_event_obj.make_event(user_id=user_obj.id, ma_code=mkauto_consts.event_code["friend_prize"], strings_ma_code=mkauto_consts.event_code["friend_prize"])
+                    # l'utente proviene da un amico, aggiungo riga nella tabella 
+                    friend_code_obj = FriendCode()
+                    friend_code_obj.generate_friend_code(master_account_code=master_code, ma_event_code=ma_event_return["coupon_code"])
                     # creo messaggio di successo
-                    success_msg_mkauto_prize = "Il coupon con " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["refer_friend"]) + " ti è stato inviato via email"
+                    success_msg_mkauto_prize = "Il coupon con " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["friend_prize"]) + " ti è stato inviato via email"
                     messages.add_message(request, messages.SUCCESS, "<h4>Grazie per esserti registrato</h4><strong>" + str(success_msg_mkauto_prize) + "</strong>.")
                 else:
                     ma_event_obj.make_event(user_id=user_obj.id, ma_code=mkauto_consts.event_code["welcome_prize"], strings_ma_code=mkauto_consts.event_code["welcome_prize"])
@@ -73,10 +76,18 @@ def www_get_offers(request, master_code):
     # account_obj = Account()
     # account_obj.get_mkauto_accounts(days_from_creation=0)
 
+    if master_code:
+            # prelevo la stringa del premio in caso di amico
+            mkauto_prize = "Se ti registri, riceverai subito " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["friend_prize"]) + "da utilizzare presso di noi."
+    else:
+            # prelevo la stringa del premio in caso di welcome_bonus
+            mkauto_prize = "Se ti registri, riceverai subito " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["welcome_prize"]) + "da utilizzare presso di noi."
+    
     context = {
         "post" : request.POST,
         "form" : form,
         "master_code" : master_code,
+        "mkauto_prize" : mkauto_prize,
     }
 
     return render(request, 'website/www/www_get_offers.html', context)
