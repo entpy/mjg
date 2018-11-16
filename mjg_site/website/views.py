@@ -35,7 +35,7 @@ def www_service_booking(request):
     return render(request, 'website/www/www_service_booking.html')
 
 @ensure_csrf_cookie
-def www_get_offers(request, unsubscribe_type):
+def www_get_offers(request, master_code):
     """View to show get offers page"""
     if request.method == "POST":
         # create a form instance and populate it with data from the request:
@@ -51,10 +51,19 @@ def www_get_offers(request, unsubscribe_type):
             else:
                 # invio l'evento (non controllo se l'evento è già stato inviato perchè qui finisco solo in caso di nuovo account)
                 ma_event_obj = MaEvent()
-                ma_event_obj.make_event(user_id=user_obj.id, ma_code=mkauto_consts.event_code["welcome_prize"], strings_ma_code=mkauto_consts.event_code["welcome_prize"])
-                # creo messaggio di successo
-                success_msg_mkauto_prize = "Il coupon con " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["welcome_prize"]) + " ti è stato inviato via email"
-                messages.add_message(request, messages.SUCCESS, "<h4>Grazie per esserti registrato</h4><strong>" + str(success_msg_mkauto_prize) + "</strong>.")
+                
+                # TODO
+                # se presente un master_code, sono nella registrazione di un amico del cliente, mando quindi il relativo bonus
+                if master_code:
+                    ma_event_obj.make_event(user_id=user_obj.id, ma_code=mkauto_consts.event_code["refer_friend"], strings_ma_code=mkauto_consts.event_code["refer_friend"])
+                    # creo messaggio di successo
+                    success_msg_mkauto_prize = "Il coupon con " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["refer_friend"]) + " ti è stato inviato via email"
+                    messages.add_message(request, messages.SUCCESS, "<h4>Grazie per esserti registrato</h4><strong>" + str(success_msg_mkauto_prize) + "</strong>.")
+                else:
+                    ma_event_obj.make_event(user_id=user_obj.id, ma_code=mkauto_consts.event_code["welcome_prize"], strings_ma_code=mkauto_consts.event_code["welcome_prize"])
+                    # creo messaggio di successo
+                    success_msg_mkauto_prize = "Il coupon con " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["welcome_prize"]) + " ti è stato inviato via email"
+                    messages.add_message(request, messages.SUCCESS, "<h4>Grazie per esserti registrato</h4><strong>" + str(success_msg_mkauto_prize) + "</strong>.")
                 # redirect to a new URL:
                 return HttpResponseRedirect(reverse('www_get_offers'))
     # if a GET (or any other method) we'll create a blank form
@@ -66,7 +75,8 @@ def www_get_offers(request, unsubscribe_type):
 
     context = {
         "post" : request.POST,
-        "form": form,
+        "form" : form,
+        "master_code" : master_code,
     }
 
     return render(request, 'website/www/www_get_offers.html', context)
