@@ -141,8 +141,8 @@ class mkauto_consts(object):
             "ma_code" : event_code["refer_friend"],
             "description" : "Chiedo all'utente di presentare degli amici",
             "prize_type" : "discount",
-            "prize_value" : "20",
-            "extra_prize_value" : "uno sconto del 15%", # l'unione del premio e del titolo dell'evento indicato in json_params['slave_event']
+            "prize_value" : "25",
+            "extra_prize_value" : "uno sconto del 20%", # l'unione del premio e del titolo dell'evento indicato in json_params['slave_event']
             "start_delay" : "70",
             "repeat_delay" : "168",
             "extra_text" : "",
@@ -156,7 +156,7 @@ class mkauto_consts(object):
             "ma_code" : event_code["friend_prize"],
             "description" : "Il bonus da mandare all'amico presentato",
             "prize_type" : "discount",
-            "prize_value" : "15",
+            "prize_value" : "20",
             "start_delay" : "0",
             "repeat_delay" : "0",
             "extra_text" : "",
