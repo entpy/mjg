@@ -597,7 +597,7 @@ class MasterAccountCode(models.Model):
         return random_code
 
     # TODO
-    def send_friend_invite(self, user_first_name, user_last_name, friend_first_name, friend_email):
+    def send_friend_invite(self, user_first_name, user_last_name, friend_first_name, friend_email, account_code):
         """Function to send an invite to a user's friend"""
 
         ma_event_obj = MaEvent()
@@ -608,12 +608,12 @@ class MasterAccountCode(models.Model):
 
         email_context = {
             "subject" : email_subject,
-            "title" : event_strings["title"],
-            "content" : event_strings["content"],
+            "title" : email_title,
+            "content" : email_content,
             "image_url" : settings.SITE_URL + "/static/website/img/mkauto_images/new_friend.png",
             "call_to_action_title" : "Clicca sul pulsante sotto<br />per ricevere il coupon con lo sconto",
             "call_to_action_label" : "Ricevi lo sconto",
-            "call_to_action_url" : event_strings["call_to_action_url"],
+            "call_to_action_url" : "/ricevi-offerte/" + str(account_code) + "/",
         }
 
         logger.info("@@@ send_friend_invite email context @@@")
