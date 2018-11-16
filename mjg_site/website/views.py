@@ -62,13 +62,15 @@ def www_get_offers(request, master_code):
                     # creo messaggio di successo
                     success_msg_mkauto_prize = "Il coupon con " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["friend_prize"]) + " ti è stato inviato via email"
                     messages.add_message(request, messages.SUCCESS, "<h4>Grazie per esserti registrato</h4><strong>" + str(success_msg_mkauto_prize) + "</strong>.")
+                    return HttpResponseRedirect("/ricevi-offerte/" + str(master_code))
                 else:
                     ma_event_obj.make_event(user_id=user_obj.id, ma_code=mkauto_consts.event_code["welcome_prize"], strings_ma_code=mkauto_consts.event_code["welcome_prize"])
                     # creo messaggio di successo
                     success_msg_mkauto_prize = "Il coupon con " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["welcome_prize"]) + " ti è stato inviato via email"
                     messages.add_message(request, messages.SUCCESS, "<h4>Grazie per esserti registrato</h4><strong>" + str(success_msg_mkauto_prize) + "</strong>.")
-                # redirect to a new URL:
-                return HttpResponseRedirect(reverse('www_get_offers'))
+                    # redirect to a new URL:
+                    return HttpResponseRedirect("/ricevi-offerte/")
+
     # if a GET (or any other method) we'll create a blank form
     else:
         form = AccountForm()
