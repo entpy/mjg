@@ -35,7 +35,7 @@ def www_service_booking(request):
     return render(request, 'website/www/www_service_booking.html')
 
 @ensure_csrf_cookie
-def www_get_offers(request):
+def www_get_offers(request, unsubscribe_type):
     """View to show get offers page"""
     if request.method == "POST":
         # create a form instance and populate it with data from the request:
@@ -350,7 +350,7 @@ def www_refer_friends(request, user_id, account_code):
             # TODO
             # mando una mail all'amico, con scritto di registrarai per ottenere il bonus
             master_account_code_obj = MasterAccountCode()
-            master_account_code_obj.send_friend_invite(user_first_name=form.cleaned_data["account_first_name"], user_last_name=form.cleaned_data["account_last_name"], friend_first_name=form.cleaned_data["friend_first_name"], friend_email=form.cleaned_data["friend_email"])
+            master_account_code_obj.send_friend_invite(user_first_name=form.cleaned_data["account_first_name"], user_last_name=form.cleaned_data["account_last_name"], friend_first_name=form.cleaned_data["friend_first_name"], friend_email=form.cleaned_data["friend_email"], account_code=account_code)
             # TODO
             # creo messaggio di successo
 
