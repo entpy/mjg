@@ -16,7 +16,7 @@ class UpdateUserDataError(Exception):
     get_error_code = "003"
     pass
 
-class MasterAccountCodeDoesNotExistsError(Exception):
-    """Error in get master account code"""
+class GenerateFriendCodeError(Exception):
+    """Error in get generate_friend_code"""
     get_error_code = "004"
     pass

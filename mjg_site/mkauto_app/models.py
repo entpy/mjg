@@ -139,6 +139,10 @@ class MaEvent(models.Model):
             image_code = "get_birthday_date"
         if strings_ma_code == "tickle_get_feedback":
             image_code = "get_feedback"
+        if strings_ma_code == "tickle_refer_friend":
+            image_code = "refer_friend"
+        if strings_ma_code == "friend_prize":
+            image_code = "welcome_prize"
 
         return {
             "subject" : self.create_first_name_string(string=MkautoStrings.get_string(key=str_key + ".subject", values_dictionary=values_dictionary), separator=', ', first_name=values_dictionary.get("first_name")),
@@ -286,17 +290,15 @@ class MaEvent(models.Model):
         # generating a random code
         random_code = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
 
-        try:
-            # checking if code already exists
-            MaEventCode.objects.get(code=random_code)
-
+        # TODO
+        if MaEventCode.objects.filter(code=random_code).exists():
             # than recall this function to generate a new ones
             if depth < 50:
-                random_code = self.generate_random_code(self, depth+1)
+                random_code = self.generate_random_code(depth+1)
             else:
                 logger.error("ATTENZIONE: non sono riuscito a generare un nuovo codice | depth level: " + str(depth))
                 random_code = "PROMOCODE1"
-        except MaEventCode.DoesNotExist:
+        else:
             # il codice non esiste in db pertano può essere utilizzato
             pass
 
@@ -322,7 +324,7 @@ class MaEvent(models.Model):
                 ma_event_obj.ma_event_type = mkauto_consts.mkauto_default_values[event_name].get("ma_event_type")
                 # se presenti, inserisco l'extra prize
                 if mkauto_consts.mkauto_default_values[event_name].get("extra_prize_value"):
-                    ma_event_obj.ma_event_type = mkauto_consts.mkauto_default_values[event_name].get("extra_prize_value")
+                    ma_event_obj.extra_prize_value = mkauto_consts.mkauto_default_values[event_name].get("extra_prize_value")
                 ma_event_obj.status = mkauto_consts.mkauto_default_values[event_name].get("status")
                 ma_event_obj.save(force_insert=True)
 
@@ -494,6 +496,21 @@ class MaEventCode(models.Model):
     def __unicode__(self):
         return self.ma_event_code_id
 
+    def get_by_code(self, code):
+        """Function to retrieve MaEventCode instance by code"""
+        try:
+            # checking if code already exists
+            ma_event_code_obj = MaEventCode.objects.get(code=code)
+        except MaEventCode.DoesNotExist:
+            # il codice non esiste in db
+            raise
+
+        return ma_event_code_obj
+
+    def check_event_code_exists(self, code):
+        """Function to check if a ma_event_code exists"""
+        return MaEventCode.objects.filter(code=code).exists()
+
 class MaRandomCode(models.Model):
     CODE_TYPE = (
         (mkauto_consts.random_code_type["tip"], mkauto_consts.random_code_type["tip"]),
@@ -555,7 +572,6 @@ class MasterAccountCode(models.Model):
     def __unicode__(self):
         return self.master_account_code_id
 
-    # TODO
     def create_or_get_master_code(self, user_id):
         """Function to create a master account code if not exists yet"""
         # checking if code already exists
@@ -564,7 +580,18 @@ class MasterAccountCode(models.Model):
         except MasterAccountCode.DoesNotExist:
             master_account_code_obj = MasterAccountCode.objects.create(user_id=user_id, code=self.generate_random_code())
 
-        return master_account_code_obj
+        return master_account_code_obj.code
+
+    def get_by_code(self, code):
+        """Function to retrieve MasterAccountCode instance by code"""
+        try:
+            # checking if code already exists
+            ma_event_code_obj = MasterAccountCode.objects.get(code=code)
+        except MasterAccountCode.DoesNotExist:
+            # il codice non esiste in db
+            raise
+
+        return ma_event_code_obj
 
     def check_code_exists(self, code):
         """Function to check if a master code exists"""
@@ -582,7 +609,7 @@ class MasterAccountCode(models.Model):
 
         try:
             # checking if code already exists
-            MasterAccountCode.objects.get(refer_code=random_code)
+            MasterAccountCode.objects.get(code=random_code)
 
             # than recall this function to generate a new ones
             if depth < 50:
@@ -597,23 +624,30 @@ class MasterAccountCode(models.Model):
         return random_code
 
     # TODO
-    def send_friend_invite(self, user_first_name, user_last_name, friend_first_name, friend_email, account_code):
+    def send_friend_invite(self, user_first_name, user_last_name, friend_first_name, friend_email, user_id):
         """Function to send an invite to a user's friend"""
 
+        master_account_code_obj = MasterAccountCode()
         ma_event_obj = MaEvent()
 
-        email_subject = ma_event_obj.ucfirst(string=user_first_name + ", " + user_first_name + " " + user_last_name + " ti invita in " + settings.SITE_NAME)
-        email_title = ma_event_obj.ucfirst(string=user_first_name + ", " + user_first_name + " " + user_last_name + " ti invita a provare i servizi di " + settings.SITE_NAME)
-        email_content = "Caro " + ma_event_obj.ucfirst(string=user_first_name) + ", " + user_first_name + " " + user_last_name + " ti ha proposto per provare i servizi offerti da " + settings.SITE_NAME + " con uno sconto speciale del 15%.<br />I nostri principali servizi sono:<br /><ul><li>Servizio1</li><li>Servizio2</li></ul>Clicca sul pulsante sotto per ricevere il coupon con lo sconto."
+        # creo la stringa del premio
+        event_prize_str = ma_event_obj.get_event_generic_prize_str(ma_code="friend_prize")
+
+        # creo o prelevo il codice affiliazione dell'account master
+        aff_code = master_account_code_obj.create_or_get_master_code(user_id=user_id)
+
+        email_subject = ma_event_obj.ucfirst(string=friend_first_name + ", " + user_first_name + " " + user_last_name + " ti invita a provare " + settings.SITE_NAME + ", ecco "  + str(event_prize_str))
+        email_title = ma_event_obj.ucfirst(string=friend_first_name + ", " + user_first_name + " " + user_last_name + " ti invita a provare i servizi di " + settings.SITE_NAME + ",<br />ecco "  + str(event_prize_str))
+        email_content = "Caro " + ma_event_obj.ucfirst(string=friend_first_name) + ", <b>" + user_first_name + " " + user_last_name + "</b> ti ha proposto di provare i servizi offerti da " + settings.SITE_NAME + ", ecco " + str(event_prize_str) + " per incentivarti.<br />Questi sono alcuni dei nostri servizi:<br />- Cambio olio e tagliando completo<br />- Manutenzione sistema frenante<br />- Sostituzione frizione<br />- Diagnosi elettronica<br />- Sostituzione / Riparazione gomme<br />...e tanto altro, visita il nostro sito per scoprirli tutti.<br /><br /><b>Come fare per ricevere " + str(event_prize_str) + "?</b><br />Clicca sul pulsante sotto e registrati per ottenere subito il tuo bonus."
 
         email_context = {
             "subject" : email_subject,
             "title" : email_title,
             "content" : email_content,
             "image_url" : settings.SITE_URL + "/static/website/img/mkauto_images/new_friend.png",
-            "call_to_action_title" : "Clicca sul pulsante sotto<br />per ricevere il coupon con lo sconto",
-            "call_to_action_label" : "Ricevi lo sconto",
-            "call_to_action_url" : "/ricevi-offerte/" + str(account_code) + "/",
+            "call_to_action_title" : "Clicca sul pulsante sotto<br />per ricevere subito il tuo bonus",
+            "call_to_action_label" : "Ricevi il bonus",
+            "call_to_action_url" : "/ricevi-offerte/" + str(aff_code) + "/",
         }
 
         logger.info("@@@ send_friend_invite email context @@@")
@@ -640,8 +674,14 @@ class FriendCode(models.Model):
         """Function to generate a new friend code"""
 
         master_account_code_obj = MasterAccountCode()
-        if master_account_code_obj.check_code_exists(code=master_account_code):
-            friend_code_obj = FriendCode.objects.create(master_account_code=master_account_code, ma_event_code=ma_event_code)
+        ma_event_code_obj = MaEventCode()
+        if master_account_code_obj.check_code_exists(code=master_account_code) and ma_event_code_obj.check_event_code_exists(code=ma_event_code):
+            # retrieve MaEventCode instance
+            ma_event_code_instance = ma_event_code_obj.get_by_code(code=ma_event_code)
+            # retrieve MasterAccountCode instance
+            master_account_code_instance = master_account_code_obj.get_by_code(code=master_account_code)
+            # creo la riga con match tra master_account_code e ma_event_code
+            friend_code_obj = FriendCode.objects.create(master_account_code=master_account_code_instance, ma_event_code=ma_event_code_instance)
         else:
             raise MasterAccountCodeDoesNotExistsError
 

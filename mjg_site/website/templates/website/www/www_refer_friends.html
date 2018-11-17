@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {# page title #}
-{% block title %}MotorJab Garage | Presentaci un tuo amico, tutti e due riceverete un premio{% endblock %}
+{% block title %}MotorJab Garage | Presentaci un tuo amico, riceverete un premio entrambi{% endblock %}
 
 {# page description #}
 {% block description %}{% endblock %}
@@ -15,7 +15,6 @@
 	.numbers-sections div.number-box { position: relative; display: table; height: 120px; width: 100%; }
 	.numbers-sections .number { z-index: -1; font-size: 200px; color: #aaa; height: auto; line-height: 0.6; width: 100%; text-align: center; }
 	.numbers-sections h4 { background-color:#ffffff; color: #383838; font-size: 12px !important; font-weight: bold; z-index: 10; top: 21%; line-height: 2; width: 100%; text-align: center; text-transform: uppercase; display: table-cell; vertical-align: middle; position: absolute; }
-
 	.counter { text-align: center; }
 	.counter .number { display: inline; position: relative; line-height: 1; font-weight: 700; }
 	.counter .text { margin-top: 5px; }
@@ -87,21 +86,21 @@
 				<h2 class="h2_prize">VANTAGGI PER TE</h2>
 				<div class="counter ">
 					<div class="number" data-animate="1" data-animationstart="0" data-animationduration="2600" data-animationstep="1" style="color: #fab000;font-size:150px;">
-						20<span class="percent animate animated fadeInDown" style="color: rgb(102, 102, 102); visibility: visible;">%</span>
+						{{ master_prize_val }}<span class="percent animate animated fadeInDown" style="color: rgb(102, 102, 102); visibility: visible;">%</span>
 					</div>
 					<div class="text animate animated fadeInUp percent_prize_text">Sconto sui nostri servizi</div>
 				</div>
-				<p class="prize_hint">Ti riserviamo un coupon, contenente a scelta, un buono sconto del <strong><span class="shortcode-highlight" style="color:#666666; background-color:#fab000;">20%</span></strong> oppure un <strong><span class="shortcode-highlight" style="color:#666666; background-color:#fab000;">checkup gratuito</span></strong>, da utilizzare presso di noi.<br>
+				<p class="prize_hint">Ti riserviamo un coupon contenente un buono sconto del <strong><span class="shortcode-highlight" style="color:#666666; background-color:#fab000;">{{ master_prize_val }}%</span></strong>, da utilizzare presso di noi.<br>
 			</div>
 			<div class="col-sm-6">
-				<h2 class="h2_prize">VANTAGGI PER IL TUO TUO AMICO</h2>
+				<h2 class="h2_prize">VANTAGGI PER IL TUO AMICO</h2>
 				<div class="counter ">
 					<div class="number" data-animate="1" data-animationstart="0" data-animationduration="2600" data-animationstep="1" style="color: #fab000;font-size:150px;">
-						15<span class="percent animate animated fadeInDown" style="color: rgb(102, 102, 102); visibility: visible;">%</span>
+						{{ friend_prize_val }}<span class="percent animate animated fadeInDown" style="color: rgb(102, 102, 102); visibility: visible;">%</span>
 					</div>
 					<div class="text animate animated fadeInUp percent_prize_text">Sconto sui nostri servizi</div>
 				</div>
-				<p class="prize_hint">Il tuo amico riceverà istantaneamente un buono sconto del <strong><span class="shortcode-highlight" style="color:#666666; background-color:#fab000;">15%</span></strong> da utilizzare presso di noi.<br>
+				<p class="prize_hint">Il tuo amico riceverà istantaneamente un buono sconto del <strong><span class="shortcode-highlight" style="color:#666666; background-color:#fab000;">{{ friend_prize_val }}%</span></strong> da utilizzare presso di noi.<br>
 			</div>
 		</div>
 	</div>
@@ -129,7 +128,7 @@
 							<h4>IL TUO AMICO RICEVE LO SCONTO</h4>
 						</div>
 						<div class="clearfix"></div>
-						<p class="how_to_text">Il tuo amico riceverà istantaneamente lo sconto del 15% da utilizzare presso di noi.</p>
+						<p class="how_to_text">Il tuo amico riceverà lo sconto del {{ friend_prize_val }}% da utilizzare presso di noi.</p>
 					</div>
 				</div>
 				<div class="col-sm-3 col-xs-6">
@@ -161,7 +160,7 @@
 		<div class="col-md-10 col-md-offset-1">
 			<h2 class="text-center">Presentaci il tuo amico</h2>
 			<div class="col-md-12 padding-xs-only padding-sm-only">
-				<p>Compila il modulo sottostante per proporci un tuo amico.<br /><b>Piccolo consiglio</b>: per aumentarne l'efficacia avverti il tuo amico che verrà contattato tramite email da noi!</p>
+				<p>Compila il modulo sottostante per proporci un tuo amico.<br /><b>Piccolo consiglio</b>: per aumentarne l'efficacia avvisa il tuo amico che verrà contattato tramite email da noi!</p>
 			</div>
 			<div class="col-md-12">
 				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
@@ -199,7 +198,7 @@
 								</div>
 								<div class="form-group text-md-right">
 									<div class="col-lg-10 col-lg-offset-2">
-										<button type="submit" class="btn btn-primary btn-lg formSendButtonClickAction">Proponi amico</button>
+										<button type="submit" class="btn btn-primary btn-lg formSendButtonClickAction">Presenta amico</button>
 									</div>
 								</div>
 							</fieldset>

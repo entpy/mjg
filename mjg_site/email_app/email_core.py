@@ -38,6 +38,7 @@ class CustomEmailTemplate():
                 "plain_call_to_action_url" : "",
                 "user_profile_url" : "",
                 "email_unsubscribe_url" : "",
+                "unsubscribe_block" : "",
                 "base_url" : settings.SITE_URL,
             }
 	},
@@ -139,7 +140,6 @@ class CustomEmailTemplate():
 
 	return return_var
 
-    # TODO
     def get_call_to_action_template(self, href, label, title=None):
 	"""Function to retrieve call to action template"""
         title_html_block = ""
@@ -219,6 +219,23 @@ class CustomEmailTemplate():
 
         return return_var
 
+    def get_unsubscribe_block(self, user_profile_url, email_unsubscribe_url):
+        """Function to create email unsubscribe block"""
+        return_var = ""
+        if user_profile_url and email_unsubscribe_url:
+            return_var = """
+                <tr>
+                        <td style="padding:0px 10px 10px;" class="footerEmailInfo" valign="top" align="center">
+                                <!-- Information of NewsLetter (Subscribe Info)// -->
+                                <p class="text fallback-text" style="color:#777777;font-family:Helvetica, Arial, sans-serif;font-size:12px;font-weight:400;font-style:normal;letter-spacing:normal;line-height:20px;text-transform:none;text-align:center;padding:0;margin:0;">
+                                        Puoi disiscriverti o modificare le tue preferenze in qualsiasi momento cliccando i link sotto.<br><a style="color:#777777;font-family:Helvetica, Arial, sans-serif;font-size:12px;font-weight:400;font-style:normal;letter-spacing:normal;line-height:20px;text-decoration:underline;" href='""" + str(user_profile_url) + """'>modifica preferenze</a> o <a style="color:#777777;font-family:Helvetica, Arial, sans-serif;font-size:12px;font-weight:400;font-style:normal;letter-spacing:normal;line-height:20px;text-decoration:underline;" href='""" + str(email_unsubscribe_url) + """'>disiscriviti</a>.
+                                </p>
+                        </td>
+                </tr>
+            """
+
+        return return_var
+
     def get_coupon_code_block(self, coupon_code, email_name="mkauto_email"):
         """Function to create email coupon code block"""
         return_var = ""
@@ -251,24 +268,6 @@ class CustomEmailTemplate():
     def build_email_template(self):
         """Function to create the email template before sending"""
         return_var = False
-        # reset di tutti i campi da sostituire
-        # XXX: potrebbe essere superfluo
-        """
-        self.email_html_blocks = {
-            "main_title_block": "",
-            "main_content_block": "",
-            "main_image_block": "",
-            "coupon_code_block": "",
-            "plain_main_title_block": "",
-            "plain_main_content_block": "",
-            "plain_coupon_code_block": "",
-            "call_to_action_block" : "",
-            "plain_call_to_action_label" : "",
-            "plain_call_to_action_url" : "",
-            "user_profile_url" : "",
-            "email_unsubscribe_url" : "",
-        }
-        """
 	if self.email_name in chain(self.available_email_name):
             if self.email_name == "mkauto_email":
                 """
@@ -289,7 +288,7 @@ class CustomEmailTemplate():
                 2) creo i blocchi per la versione html
                 3) creo i blocchi per la versione plain text
                 """
-                # 1) inizializzo tutti i blocchi della mail
+                # 1) inizializzo tutti i blocchi della mail (è fondamentale l'utilizzo di deepcopy)
                 self.email_html_blocks = copy.deepcopy(self.available_email_name[self.email_name]["email_fields"])
 
                 # 2) html version {{{
@@ -332,10 +331,12 @@ class CustomEmailTemplate():
                     self.email_html_blocks["plain_call_to_action_url"] = mark_safe(call_to_action_url)
 
                 # link di unsubscribe e profile editing
-                if self.email_context.get("user_profile_url"):
-                    self.email_html_blocks["user_profile_url"] = mark_safe(self.email_context.get("user_profile_url"))
                 if self.email_context.get("email_unsubscribe_url"):
                     self.email_html_blocks["email_unsubscribe_url"] = mark_safe(self.email_context.get("email_unsubscribe_url"))
+
+                # creo il blocco di unsubscribe
+                if self.email_context.get("user_profile_url") and self.email_context.get("email_unsubscribe_url"):
+                    self.email_html_blocks["unsubscribe_block"] = mark_safe(self.get_unsubscribe_block(user_profile_url=self.email_context.get("user_profile_url"), email_unsubscribe_url=self.email_context.get("email_unsubscribe_url")))
                 pass
 
             return_var = True

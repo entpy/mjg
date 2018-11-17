@@ -9,7 +9,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from mjg_site.exceptions import *
 from website.forms import AccountForm, AccountNotifyForm, FeedbackForm, ReferFriendForm
 from account_app.models import Account
-from mkauto_app.models import MaEvent, Feedback
+from mkauto_app.models import MaEvent, Feedback, MasterAccountCode, FriendCode
 from mkauto_app.strings import MkautoStrings
 from mkauto_app.consts import mkauto_consts
 from mjg_site.consts import project_constants
@@ -37,6 +37,9 @@ def www_service_booking(request):
 @ensure_csrf_cookie
 def www_get_offers(request, master_code):
     """View to show get offers page"""
+
+    ma_event_obj = MaEvent()
+
     if request.method == "POST":
         # create a form instance and populate it with data from the request:
         form = AccountForm(request.POST)
@@ -50,7 +53,6 @@ def www_get_offers(request, master_code):
                 messages.add_message(request, messages.ERROR, True)
             else:
                 # invio l'evento (non controllo se l'evento è già stato inviato perchè qui finisco solo in caso di nuovo account)
-                ma_event_obj = MaEvent()
                 # TODO
                 # se presente un master_code, sono nella registrazione di un amico del cliente, mando quindi il relativo bonus
                 if master_code:
@@ -75,21 +77,21 @@ def www_get_offers(request, master_code):
     else:
         form = AccountForm()
 
-    # account_obj = Account()
-    # account_obj.get_mkauto_accounts(days_from_creation=0)
-
     if master_code:
             # prelevo la stringa del premio in caso di amico
-            mkauto_prize = "Se ti registri, riceverai subito " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["friend_prize"]) + "da utilizzare presso di noi."
+            title_mkauto_prize_str = ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["friend_prize"])
+            mkauto_prize = "Se ti registri, riceverai subito " + str(title_mkauto_prize_str) + " da utilizzare presso di noi."
     else:
             # prelevo la stringa del premio in caso di welcome_bonus
-            mkauto_prize = "Se ti registri, riceverai subito " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["welcome_prize"]) + "da utilizzare presso di noi."
-    
+            title_mkauto_prize_str = ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["welcome_prize"])
+            mkauto_prize = "Se ti registri, riceverai subito " + str(title_mkauto_prize_str) + " da utilizzare presso di noi."
+
     context = {
         "post" : request.POST,
         "form" : form,
         "master_code" : master_code,
         "mkauto_prize" : mkauto_prize,
+        "title_mkauto_prize_str" : "Ottieni " + title_mkauto_prize_str,
     }
 
     return render(request, 'website/www/www_get_offers.html', context)
@@ -353,8 +355,14 @@ def www_feedback(request, user_id, account_code):
 def www_refer_friends(request, user_id, account_code):
     """View to refer friends"""
 
+    ma_event_obj = MaEvent()
     account_obj = Account()
     user_obj = account_obj.get_user_by_id_account_code(user_id=user_id, account_code=account_code)
+
+    event_dictionary = ma_event_obj.get_ma_events()
+    # prelevo i dati del codice della mkauto
+    master_prize_dict = event_dictionary.get("refer_friend", {})
+    friend_prize_dict = event_dictionary.get("friend_prize", {})
 
     if not user_obj:
         # se non sono riuscito a tirare fuori l'utente mostro un 404
@@ -367,15 +375,22 @@ def www_refer_friends(request, user_id, account_code):
         # check whether it's valid:
         if form.is_valid():
             # TODO
-            # ora che ho anche il cognome, lo salvo nella riga dell'utente
-            new_save_data = { "first_name" : form.cleaned_data["account_first_name"] }
-            user_obj.account.update_account(save_data=new_save_data, user_obj=user_obj)
-            # TODO
-            # mando una mail all'amico, con scritto di registrarai per ottenere il bonus
-            master_account_code_obj = MasterAccountCode()
-            master_account_code_obj.send_friend_invite(user_first_name=form.cleaned_data["account_first_name"], user_last_name=form.cleaned_data["account_last_name"], friend_first_name=form.cleaned_data["friend_first_name"], friend_email=form.cleaned_data["friend_email"], account_code=account_code)
-            # TODO
-            # creo messaggio di successo
+            # se la mail inserita come amico è già presente in db blocco il processo
+            if not account_obj.check_if_email_exists(email_to_check=form.cleaned_data["friend_email"]):
+                # ora che ho anche il cognome, lo salvo nella riga dell'utente
+                new_save_data = {
+                    "first_name" : form.cleaned_data["account_first_name"],
+                    "last_name" : form.cleaned_data["account_last_name"],
+                    }
+                user_obj.account.update_account(save_data=new_save_data, user_obj=user_obj)
+                # mando una mail all'amico, con scritto di registrarsi per ottenere il bonus
+                master_account_code_obj = MasterAccountCode()
+                master_account_code_obj.send_friend_invite(user_first_name=form.cleaned_data["account_first_name"], user_last_name=form.cleaned_data["account_last_name"], friend_first_name=form.cleaned_data["friend_first_name"], friend_email=form.cleaned_data["friend_email"], user_id=user_id)
+                # creo messaggio di successo
+                messages.add_message(request, messages.SUCCESS, "<h4>Grazie per aver proposto un tuo amico</h4><strong>PS: avvisa il tuo amico che riceverà a breve una nostra email con le istruzioni per ricevere il bonus.</strong>")
+            else:
+                # creo messaggio di errore
+                messages.add_message(request, messages.ERROR, "<h4>Ops...</h4><strong>L'email inserita è già registrata, utilizza una email diversa.</strong>")
 
             # redirect to a new URL:
             return HttpResponseRedirect("/invita-amici/" + str(user_id) + "/" + str(account_code) + "/")
@@ -387,6 +402,8 @@ def www_refer_friends(request, user_id, account_code):
         "post" : request.POST,
         "form": form,
         "user_info_dict" : user_obj,
+        "master_prize_val" : master_prize_dict.get("prize_value"),
+        "friend_prize_val" : friend_prize_dict.get("prize_value"),
     }
 
     return render(request, 'website/www/www_refer_friends.html', context)
