@@ -15,6 +15,21 @@
 		<!-- Bootstrap -->
 		<!--<link rel="stylesheet" href="{% static "website/css/bootstrap.css" %}">-->
 
+		<!-- JavaScript -->
+		<script src="{% static "website/js/vendor/modernizr-3.6.0.min.js" %}"></script>
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+		<script>window.jQuery || document.write('<script src="{% static "website/js/vendor/jquery-3.3.1.min.js" %}"><\/script>')</script>
+		<script src="{% static "website/js/plugins.js" %}"></script>
+		<script src="{% static "website/js/bootstrap.js" %}"></script>
+		<!-- load extra plugin here -->
+		{# Custom page script block #}
+		{% block custom_js %}
+		{% endblock custom_js %}
+		<script src="{% static "website/js/main.js" %}"></script>
+		{# Custom page extra script block #}
+		{% block extra_js %}
+		{% endblock extra_js %}
+
 		{# info tema: https://bootswatch.com/3/paper/?optionsRadios=option1 #}
 		<link rel="stylesheet" href="{% static "website/css/bootstrap-material-design.css" %}">
 		<!-- <link rel="stylesheet" href="{% static "website/css/bootstrap-theme.css" %}"> -->
@@ -39,43 +54,8 @@
 		<div class="bg-boxed">
 			<div class="boxed boxed_max_width">
 				<header>
-					<div class="navbar-wrapper">
-						<nav class="navbar navbar-main boxed_max_width">
-							<div class="container-fluid">
-								<!-- Brand and toggle get grouped for better mobile display -->
-								<div class="navbar-header">
-									<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse-1" aria-expanded="false">
-									<span class="sr-only">Toggle navigation</span>
-									<span class="icon-bar"></span>
-									<span class="icon-bar"></span>
-									<span class="icon-bar"></span>
-									</button>
-									<a class="navbar-brand" href="/">
-										<img class="main-logo" src="{% static "website/img/logo_white.png" %}" alt="MotorJab Garage">
-									</a>
-								</div>
-								<!-- Collect the nav links, forms, and other content for toggling -->
-								<div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
-									<ul class="nav navbar-nav navbar-right">
-										<li><a class="{% block navigation_active_home %}{% endblock %}" href="/">HOME</a></li>
-										<li class="dropdown">
-											<a href="/servizi" class="dropdown-toggle {% block navigation_active_services %}{% endblock %}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SERVIZI <span class="caret"></span></a>
-											<ul class="dropdown-menu">
-												<li><a class="serviceNavigationClick" data-navigation-anchor="meccanica" href="/servizi?#meccanica">MECCANICA</a></li>
-												<li><a class="serviceNavigationClick" data-navigation-anchor="elettronica"  href="/servizi?#elettronica">ELETTRONICA</a></li>
-												<li><a class="serviceNavigationClick" data-navigation-anchor="gommista"  href="/servizi?#gommista">GOMMISTA</a></li>
-											</ul>
-										</li>
-										<li><a class="{% block navigation_active_contacts %}{% endblock %}" href="/contattaci">CONTATTACI</a></li>
-										<!--<li><a class="{% block navigation_active_booking_services %}{% endblock %}" href="/prenota-servizio">PRENOTA SERVIZIO</a></li>-->
-										<li><a class="{% block navigation_active_get_offers %}{% endblock %}" href="/ricevi-offerte">RICEVI OFFERTE</a></li>
-									</ul>
-								</div>
-								<!-- /.navbar-collapse -->
-							</div>
-							<!-- /.container-fluid -->
-						</nav>
-					</div>
+					{% block header_block %}
+					{% endblock header_block %}
 				</header>
 				<div class="main-container">
 					<section>
@@ -85,80 +65,13 @@
 						{# www content }}} #}
 					</section>
 					<footer id="footer">
-						<!-- Footer Top Start -->
-						<div class="footer-top">
-							<div class="container">
-								<div class="row">
-									<section class="col-lg-3 col-md-3 col-xs-12 col-sm-3 footer-one">
-										<h4>Chi Siamo</h4>
-										<p> 
-											Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. 
-										</p>
-									</section>
-									<section class="col-lg-3 col-md-3 col-xs-12 col-sm-3 footer-two">
-										<h4>Link rapidi</h4>
-										<ul>
-											<li><a href="/servizi">Servizi</a></li>
-											<li><a href="/contattaci">Contattaci</a></li>
-											<li><a href="/ricevi-offerte">Ricevi offerte</a></li>
-											<li><a href="/privacy">Privacy &amp; GDPR</a></li>
-											<li><a href="/cookie-policy">Cookie Policy</a></li>
-										</ul>
-									</section>
-									<section class="col-lg-3 col-md-3 col-xs-12 col-sm-3 padding-xs-only footer-three">
-										<h4>Contatti</h4>
-										<ul class="contact-us">
-											<li>
-												<i class="ion-ios-pin"></i>
-												<p> 
-													<strong class="contact-pad">Indirizzo:</strong>Via Bellini, 7,<br />10121 Torino TO
-												</p>
-											</li>
-											<li>
-												<i class="ion-ios-call"></i>
-												<p><strong>Telefono:</strong> 011-546928</p>
-											</li>
-											<li>
-												<i class="ion-ios-at"></i>
-												<p><strong>Email:</strong><a href="mailto:info@motorjab.it">info@motorjab.it</a></p>
-											</li>
-										</ul>
-									</section>
-									<section class="col-lg-3 col-md-3 col-xs-12 col-sm-3 text-xs-center text-md-left footer-four">
-										<img class="img-responsive" alt="MotorJab Garage" src="{% static "website/img/footer-image.png" %}">
-									</section>
-								</div>
-							</div>
-						</div>
-						<!-- Footer Top End --> 
-						<!-- Footer Bottom Start -->
-						<div class="footer-bottom">
-							<div class="container">
-								<div class="row">
-									<div class="col-xs-12 text-xs-center text-sm-left"> &copy; Copyright {% now 'Y' %} | Proudly made by <a href="http://www.entpy.com" target="_blank">Entpy Software</a>. All Rights Reserved.</div>
-								</div>
-							</div>
-						</div>
-						<!-- Footer Bottom End --> 
+						{% block footer_block %}
+						{% endblock footer_block %}
 					</footer>
 				</div>
 				<!-- main content end -->
 			</div>
 			<!-- box width end -->
 		</div>
-		<!-- JavaScript -->
-		<script src="{% static "website/js/vendor/modernizr-3.6.0.min.js" %}"></script>
-		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-		<script>window.jQuery || document.write('<script src="{% static "website/js/vendor/jquery-3.3.1.min.js" %}"><\/script>')</script>
-		<script src="{% static "website/js/plugins.js" %}"></script>
-		<script src="{% static "website/js/bootstrap.js" %}"></script>
-		<!-- load extra plugin here -->
-		{# Custom page script block #}
-		{% block custom_js %}
-		{% endblock custom_js %}
-		<script src="{% static "website/js/main.js" %}"></script>
-		{# Custom page extra script block #}
-		{% block extra_js %}
-		{% endblock extra_js %}
 	</body>
 </html>

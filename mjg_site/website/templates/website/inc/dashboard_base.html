@@ -1,0 +1,64 @@
+{% extends "website/inc/base.html" %}
+{% load staticfiles %}
+
+{# page title #}
+{% block title %}{% endblock %}
+
+{# page description #}
+{% block description %}{% endblock %}
+
+{# custom page css block #}
+{% block custom_css %}
+<link rel="stylesheet" href="{% static "website/css/dashboard-style.css" %}">
+{% endblock %}
+{# Custom page script block #}
+{% block custom_js %}{% endblock %}
+{# Custom page extra script block #}
+{% block extra_js %}{% endblock %}
+
+{% block header_block %}
+<div class="navbar-wrapper">
+	<nav class="navbar navbar-main boxed_max_width">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse-1" aria-expanded="false">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/dashboard/">
+				<img class="main-logo" src="{% static "website/img/logo.png" %}" alt="MotorJab Garage">
+			</a>
+		</div>
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a class="{% block navigation_active_home %}{% endblock %}" href="/dashboard/">HOME</a></li>
+				<li><a class="{% block navigation_active_customers %}{% endblock %}" href="/dashboard/customers/">CLIENTI</a></li>
+			</ul>
+		</div>
+		<!-- /.navbar-collapse -->
+	</nav>
+</div>
+{% endblock header_block %}
+
+{% block footer_block %}
+<!-- Footer Bottom Start -->
+<div class="footer-bottom">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 text-xs-center text-sm-left"><a href="/" target="_blank">Visualizza sito</a></div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 text-xs-center text-sm-left"> &copy; Copyright {% now 'Y' %} | Proudly made by <a href="http://www.entpy.com" target="_blank">Entpy Software</a>. All Rights Reserved.</div>
+		</div>
+	</div>
+</div>
+<!-- Footer Bottom End --> 
+{% endblock footer_block %}
+
+{# container content #}
+{% block www_main_content %}{% endblock %}

@@ -5,6 +5,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db.models import F
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from mjg_site.consts import project_constants
 from mjg_site.exceptions import *
 import datetime, sys, logging, base64, hashlib
@@ -46,6 +48,12 @@ class Account(models.Model):
 
     def __unicode__(self):
         return self.user.email
+
+    @receiver(post_save, sender=User)
+    def create_or_update_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Account.objects.create(user=instance)
+        instance.account.save()
 
     def save(self, *args, **kwargs):
         # setto il campo account_code

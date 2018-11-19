@@ -1,0 +1,29 @@
+{% extends "website/inc/dashboard_base.html" %}
+{% load staticfiles %}
+
+{# page title #}
+{% block title %}MotorJab Garage | Dashboard{% endblock %}
+
+{# page description #}
+{% block description %}{% endblock %}
+
+{# custom page css block #}
+{% block custom_css %}{{ block.super }}{% endblock %}
+{# Custom page script block #}
+{% block custom_js %}{% endblock %}
+
+{# menu active element #}
+{% block navigation_active_customers %}active{% endblock %}
+
+{# container content #}
+{% block www_main_content %}
+<!-- three elements block -->
+<div class="row elements_container no_gutter">
+	<div class="col-sm-12 text-center no_gutter">
+		<a class="simple_link hvr-grow" href="/dashboard/validate-coupon/">
+			<img class="img-responsive" src="{% static "website/img/meccatronica.png" %}" alt="Valida coupon">
+			<div class="block-label">Valida coupon</div>
+		</a>
+	</div>
+</div>
+{% endblock %}

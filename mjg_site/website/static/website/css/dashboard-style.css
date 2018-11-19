@@ -1,0 +1,5 @@
+.navbar.navbar-main { background-color: white; }
+.navbar.navbar-main ul.nav a { color: black; }
+.nav.navbar-nav a.active { background-color: #ededed !important; }
+
+.dasboard_action_block .dashboard_action_button { margin-top: 15px; }

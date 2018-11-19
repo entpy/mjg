@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.contrib import messages
 from django.urls import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.contrib.auth.decorators import login_required
 from mjg_site.exceptions import *
 from website.forms import AccountForm, AccountNotifyForm, FeedbackForm, ReferFriendForm
 from account_app.models import Account
@@ -408,8 +409,20 @@ def www_refer_friends(request, user_id, account_code):
 
     return render(request, 'website/www/www_refer_friends.html', context)
 
+@login_required
+def dashboard_index(request):
+    """View to show dashboard index"""
+    return render(request, 'website/dashboard/dashboard_index.html')
 
+@login_required
+def dashboard_customers(request):
+    """View to show dashboard customers page"""
+    return render(request, 'website/dashboard/dashboard_customers.html')
 
+@login_required
+def dashboard_validate_coupon(request):
+    """View to show dashboard validate coupons page"""
+    return render(request, 'website/dashboard/dashboard_validate_coupon.html')
 
 def www_test_page(request):
     ma_event_obj = MaEvent()

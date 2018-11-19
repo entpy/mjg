@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 import website.views
 
@@ -34,6 +34,12 @@ urlpatterns = [
     url(r'^profilo/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/(?:(?P<show_only_section>\w+)/)?$', website.views.www_profile, name='www_profile'),
     url(r'^feedback/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/?$', website.views.www_feedback, name='www_feedback'),
     url(r'^invita-amici/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/?$', website.views.www_refer_friends, name='www_refer_friends'),
+
+    # dashboard {{{
+    url(r'^dashboard/?$', website.views.dashboard_index, name='dashboard_index'),
+    url(r'^dashboard/customers/?$', website.views.dashboard_customers, name='dashboard_customers'),
+    url(r'^dashboard/validate-coupon/?$', website.views.dashboard_validate_coupon, name='dashboard_validate_coupon'),
+    # dashboard }}*
 
     url(r'^test-page/?$', website.views.www_test_page, name='www_test_page'),
 ]

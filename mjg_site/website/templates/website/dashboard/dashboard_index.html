@@ -1,0 +1,36 @@
+{% extends "website/inc/dashboard_base.html" %}
+{% load staticfiles %}
+
+{# page title #}
+{% block title %}MotorJab Garage | Dashboard{% endblock %}
+
+{# page description #}
+{% block description %}{% endblock %}
+
+{# custom page css block #}
+{% block custom_css %}{{ block.super }}{% endblock %}
+{# Custom page script block #}
+{% block custom_js %}{% endblock %}
+
+{# menu active element #}
+{% block navigation_active_home %}active{% endblock %}
+
+{# container content #}
+{% block www_main_content %}
+<!-- three elements block -->
+<div class="row elements_container no_gutter">
+	<div class="col-sm-12">
+		<div class="col-sm-12 text-center no_gutter">
+			<div class="col-sm-4 dasboard_action_block">
+				<div class="block-label">Verifica coupon</div>
+				<div class="text-center">
+					In questa sezione potrai<br />verificare e convalidare i coupon
+				</div>
+				<div class="text-center dashboard_action_button">
+					<a href="/dashboard/validate-coupon/" class="btn btn-warning">Valida coupon</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
