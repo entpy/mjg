@@ -19,6 +19,11 @@
 {% block www_main_content %}
 <!-- three elements block -->
 <div class="row elements_container no_gutter">
+	<div class="col-sm-12 text-center dashboard_welcome_block">
+		<b>{% if user.first_name %}{{ user.first_name | title }}{% else %}{{ user.username | title }}{% endif %}</b>, benvenuto!
+	</div>
+</div>
+<div class="row elements_container no_gutter">
 	<div class="col-sm-12">
 		<div class="col-sm-12 text-center no_gutter">
 			<div class="col-sm-4 dasboard_action_block">
@@ -27,7 +32,16 @@
 					In questa sezione potrai<br />verificare e convalidare i coupon
 				</div>
 				<div class="text-center dashboard_action_button">
-					<a href="/dashboard/validate-coupon/" class="btn btn-warning">Valida coupon</a>
+					<a href="/dashboard/validate-coupon/" class="btn btn-warning">Verifica coupon</a>
+				</div>
+			</div>
+			<div class="col-sm-4 dasboard_action_block">
+				<div class="block-label">Aggiungi cliente</div>
+				<div class="text-center">
+					In questa sezione potrai<br />aggiungere un nuovo cliente
+				</div>
+				<div class="text-center dashboard_action_button">
+					<a href="/dashboard/add-customer/" class="btn btn-warning">Aggiungi cliente</a>
 				</div>
 			</div>
 		</div>

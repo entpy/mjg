@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {# page title #}
-{% block title %}MotorJab Garage | Dashboard{% endblock %}
+{% block title %}MotorJab Garage | Verifica coupon{% endblock %}
 
 {# page description #}
 {% block description %}{% endblock %}
@@ -10,20 +10,105 @@
 {# custom page css block #}
 {% block custom_css %}{{ block.super }}{% endblock %}
 {# Custom page script block #}
-{% block custom_js %}{% endblock %}
+{% block custom_js %}
+{# howto: https://validatejs.org #}
+<script src="{% static "website/js/vendor/validate.min.js" %}"></script>
+{% endblock %}
 
 {# menu active element #}
 {% block navigation_active_home %}active{% endblock %}
 
 {# container content #}
 {% block www_main_content %}
-<!-- three elements block -->
-<div class="row elements_container no_gutter">
-	<div class="col-sm-12 text-center no_gutter">
-		<a class="simple_link hvr-grow" href="/dashboard/validate-coupon/">
-			<img class="img-responsive" src="{% static "website/img/meccatronica.png" %}" alt="Valida coupon">
-			<div class="block-label">Valida coupon</div>
-		</a>
+	{# title block {{{ #}
+	<div class="row no_gutter">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="dashboard_page_title_block">
+				<div class="dashboard_page_title">Aggiungi un nuovo cliente</div>
+				<div class="dashboard_page_description">In questa sezione puoi inserire un nuovo cliente, è anche possibile assegnargli un bonus di benvenuto.</div>
+			</div>
+		</div>
+	</div>
+	{# title block }}} #}
+
+	<div class="row no_gutter">
+		<div class="col-md-10 col-md-offset-1 padding-xs-only padding-sm-only">
+			{# messages block #}
+			<div class="error_container"></div>
+			{% if form.errors %}
+				<div class="alert alert-danger">
+					<h4>Controlla questi errori</h4>
+					<ul>
+						{% for field in form %}
+							{% for error in field.errors %}
+								<li>{{ field.label|escape }}: {{ error|escape }}</li>
+							{% endfor %}
+						{% endfor %}
+						{% for form_error in form.non_field_errors %}
+							<li>{{ form_error }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% elif messages %}
+				{% for message in messages %}
+					{% if message.tags == "success" %}
+						<div class="alert alert-success">
+							{{ message|safe }}
+						</div>
+					{% elif message.tags == "error" %}
+						<div class="alert alert-danger">
+							{{ message|safe }}
+						</div>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+
+<div class="row no_gutter">
+	<div class="col-sm-12">
+		<div class="col-md-offset-2 col-md-8">
+			<div class="well bs-component">
+				<form class="form-horizontal validateFormAction" name="validate_code_form" method="POST" action="">
+					{% csrf_token %}
+					<input type="hidden" name="validate_code_form_sent" value="1">
+					<fieldset>
+						<div class="form-group formGroupAction coupon_codeGroup">
+							<label for="coupon_code" class="col-lg-3 control-label">{{ form.coupon_code.label }}</label>
+							<div class="col-lg-9">
+								<input id="coupon_code" name="coupon_code" class="form-control" placeholder="{{ form.coupon_code.field.widget.attrs.placeholder }}" type="text" value="{{ post.coupon_code }}" required>
+							</div>
+						</div>
+						<div class="form-group text-md-right">
+							<div class="col-lg-10 col-lg-offset-2">
+								<button type="submit" class="btn btn-primary btn-lg formSendButtonClickAction">Controlla...</button>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+		</div>
 	</div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function(){
+	$(document).on("click", ".formSendButtonClickAction", function(){
+
+		var returnVar = false;
+		// lavora sui "name" NON sugli "id"
+		var constraints = {
+			coupon_code: {
+				presence: true,
+			},
+		};
+
+		returnVar = validateForm(constraints);
+
+		return returnVar;
+	});
+});
+</script>
 {% endblock %}

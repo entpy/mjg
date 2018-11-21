@@ -1,5 +1,11 @@
 .navbar.navbar-main { background-color: white; }
 .navbar.navbar-main ul.nav a { color: black; }
 .nav.navbar-nav a.active { background-color: #ededed !important; }
+.elements_container { padding-top: 40px !important; }
+.dashboard_page_title_block { margin-bottom: 50px; margin-top: 20px; }
+.navbar.navbar-main { position: relative; }
 
 .dasboard_action_block .dashboard_action_button { margin-top: 15px; }
+.dashboard_welcome_block { font-size: 24px; }
+.dashboard_page_title { font-size: 29px; }
+.dashboard_page_description { font-size: 16px; }

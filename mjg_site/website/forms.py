@@ -33,7 +33,7 @@ class AccountForm(forms.Form):
     for i in range(1960, (date.today().year - 10)):
         select_years_choices.append((i, i))
 
-    first_name = forms.CharField(label='Nome', max_length=30, required=True)
+    first_name = forms.CharField(label='Nome', max_length=30, required=False)
     last_name = forms.CharField(label='Cognome', max_length=30, required=False)
     email = forms.EmailField(label='Email', max_length=50, required=True)
     mobile_number = forms.CharField(label='Telefono', max_length=50, required=False)
@@ -93,3 +93,10 @@ class ReferFriendForm(forms.Form):
         self.fields['account_last_name'].widget.attrs.update({'placeholder': 'Inserisci qui il tuo cognome'})
         self.fields['friend_first_name'].widget.attrs.update({'placeholder': 'Inserisci qui il nome del tuo amico'})
         self.fields['friend_email'].widget.attrs.update({'placeholder': "Inserisci qui l'email del tuo amico"})
+
+class ValidateCouponForm(forms.Form):
+    coupon_code = forms.CharField(label='Codice coupon', max_length=30, required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(ValidateCouponForm, self).__init__(*args, **kwargs)
+        self.fields['coupon_code'].widget.attrs.update({'placeholder': 'Inserisci qui il codice coupon ES: S4J9KH12'})

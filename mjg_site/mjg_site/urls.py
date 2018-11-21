@@ -39,6 +39,7 @@ urlpatterns = [
     url(r'^dashboard/?$', website.views.dashboard_index, name='dashboard_index'),
     url(r'^dashboard/customers/?$', website.views.dashboard_customers, name='dashboard_customers'),
     url(r'^dashboard/validate-coupon/?$', website.views.dashboard_validate_coupon, name='dashboard_validate_coupon'),
+    url(r'^dashboard/add-customer/?$', website.views.dashboard_add_customer, name='dashboard_add_customer'),
     # dashboard }}*
 
     url(r'^test-page/?$', website.views.www_test_page, name='www_test_page'),

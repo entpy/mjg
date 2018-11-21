@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.decorators import login_required
 from mjg_site.exceptions import *
-from website.forms import AccountForm, AccountNotifyForm, FeedbackForm, ReferFriendForm
+from website.forms import AccountForm, AccountNotifyForm, FeedbackForm, ReferFriendForm, ValidateCouponForm
 from account_app.models import Account
 from mkauto_app.models import MaEvent, Feedback, MasterAccountCode, FriendCode
 from mkauto_app.strings import MkautoStrings
@@ -422,7 +422,71 @@ def dashboard_customers(request):
 @login_required
 def dashboard_validate_coupon(request):
     """View to show dashboard validate coupons page"""
-    return render(request, 'website/dashboard/dashboard_validate_coupon.html')
+
+    if request.method == "POST":
+        # create a form instance and populate it with data from the request:
+        form = ValidateCouponForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # TODO
+            # analizzare il coupon e mostrare eventuali errori (non esiste, già utilizzato)
+            # se non sono presenti errori mostrare il contenuto del codice
+            # se la variabile POST validate_code = 1 valido il codice
+            messages.add_message(request, messages.SUCCESS, "<h4>Successo</h4>Il coupon è stato validato con successo.")
+            return HttpResponseRedirect("/dashboard/validate-coupon/")
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = ValidateCouponForm()
+
+    context = {
+        "post" : request.POST,
+        "form" : form,
+    }
+    return render(request, 'website/dashboard/dashboard_validate_coupon.html', context)
+
+@login_required
+def dashboard_add_customer(request):
+    """View to show dashboard add customer page"""
+
+    ma_event_obj = MaEvent()
+
+    if request.method == "POST":
+        # create a form instance and populate it with data from the request:
+        form = AccountForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            try:
+                account_obj = Account()
+                user_obj = account_obj.create_account(form.cleaned_data)
+            except UserAlreadyExistsError:
+                # creo messaggio di errore
+                messages.add_message(request, messages.ERROR, "<h4>Controlla questi errori</h4>I dati inseriti (email e/o telefono) sono già presenti.")
+            else:
+                # check se inviare anche il manual welcome bonus
+                if request.POST.get("inputWelcomeBonus"):
+                    # TODO: inviare il manual welcome bonus
+                    ma_event_obj.make_event(user_id=user_obj.id, ma_code=mkauto_consts.event_code["welcome_prize"], strings_ma_code=mkauto_consts.event_code["welcome_prize"])
+                    # creo messaggio di successo
+                    messages.add_message(request, messages.SUCCESS, "<h4>Cliente salvato</h4>I dati del cliente sono stati correttamente salvati<br />Gli è stato anche inviato il bonus di benvenuto.")
+                else:
+                    messages.add_message(request, messages.SUCCESS, "<h4>Cliente salvato</h4>I dati del cliente sono stati correttamente salvati.")
+                # redirect alla lista clienti
+                return HttpResponseRedirect("/customers/")
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = AccountForm()
+
+    # prelevo la stringa del premio in caso di welcome_bonus
+    input_mkauto_label = "Invia all'utente anche: " + str(ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["welcome_prize"]))
+
+    context = {
+        "post" : request.POST,
+        "form" : form,
+        "input_mkauto_label" : input_mkauto_label,
+    }
+    return render(request, 'website/dashboard/dashboard_add_customer.html', context)
 
 def www_test_page(request):
     ma_event_obj = MaEvent()

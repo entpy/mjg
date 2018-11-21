@@ -1,0 +1,201 @@
+{% extends "website/inc/dashboard_base.html" %}
+{% load staticfiles %}
+
+{# page title #}
+{% block title %}MotorJab Garage | Aggiungi cliente{% endblock %}
+
+{# page description #}
+{% block description %}{% endblock %}
+
+{# custom page css block #}
+{% block custom_css %}{{ block.super }}{% endblock %}
+{# Custom page script block #}
+{% block custom_js %}
+{# howto: https://validatejs.org #}
+<script src="{% static "website/js/vendor/validate.min.js" %}"></script>
+{% endblock %}
+
+{# menu active element #}
+{% block navigation_active_home %}active{% endblock %}
+
+{# container content #}
+{% block www_main_content %}
+	{# title block {{{ #}
+	<div class="row no_gutter">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="dashboard_page_title_block">
+				<div class="dashboard_page_title">Aggiungi un nuovo cliente</div>
+				<div class="dashboard_page_description">In questa sezione puoi inserire un nuovo cliente, è anche possibile assegnargli un bonus di benvenuto.</div>
+			</div>
+		</div>
+	</div>
+	{# title block }}} #}
+
+	<div class="row no_gutter">
+		<div class="col-xs-12 padding-xs-only padding-sm-only">
+			{# messages block #}
+			<div class="error_container"></div>
+			{% if form.errors %}
+				<div class="alert alert-danger">
+					<h4>Controlla questi errori</h4>
+					<ul>
+						{% for field in form %}
+							{% for error in field.errors %}
+								<li>{{ field.label|escape }}: {{ error|escape }}</li>
+							{% endfor %}
+						{% endfor %}
+						{% for form_error in form.non_field_errors %}
+							<li>{{ form_error }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% elif messages %}
+				{% for message in messages %}
+					{% if message.tags == "success" %}
+						<div class="alert alert-success">
+							{{ message|safe }}
+						</div>
+					{% elif message.tags == "error" %}
+						<div class="alert alert-danger">
+							{{ message|safe }}
+						</div>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+
+<div class="row no_gutter">
+	<div class="col-sm-12">
+		<div class="col-md-offset-2 col-md-8">
+			<div class="well bs-component">
+				<form class="form-horizontal validateFormAction" name="contact_form" method="POST" action="">
+					{% csrf_token %}
+					<input type="hidden" name="contact_form_sent" value="1">
+					<fieldset>
+						<div class="form-group formGroupAction first_nameGroup">
+							<label for="first_name" class="col-lg-3 control-label">{{ form.first_name.label }}</label>
+							<div class="col-lg-9">
+								<input id="first_name" name="first_name" class="form-control" placeholder="{{ form.first_name.field.widget.attrs.placeholder }}" type="text" value="{{ post.first_name }}" required>
+							</div>
+						</div>
+						<div class="form-group formGroupAction last_nameGroup">
+							<label for="last_name" class="col-lg-3 control-label">Cognome</label>
+							<div class="col-lg-9">
+								<input id="last_name" name="last_name" class="form-control" placeholder="{{ form.last_name.field.widget.attrs.placeholder }}" value="{{ post.last_name }}" type="text">
+							</div>
+						</div>
+						<div class="form-group formGroupAction emailGroup">
+							<label for="email" class="col-lg-3 control-label">Email&nbsp;*</label>
+							<div class="col-lg-9">
+								<input id="email" name="email" class="form-control" placeholder="{{ form.email.field.widget.attrs.placeholder }}" type="email" value="{{ post.email }}" required>
+							</div>
+						</div>
+						<div class="form-group formGroupAction mobile_numberGroup">
+							<label for="mobile_number" class="col-lg-3 control-label">Telefono</label>
+							<div class="col-lg-9">
+								<input id="mobile_number" name="mobile_number" class="form-control no-spinners" placeholder="{{ form.mobile_number.field.widget.attrs.placeholder }}" value="{{ post.mobile_number }}" type="number">
+							</div>
+						</div>
+						<div class="form-group formGroupAction inputBirthdayGroup">
+							<label for="select" class="col-lg-3 control-label">Data di nascita</label>
+							<div class="col-lg-9">
+								<div class="col-sm-4">
+									<select id="birthday_date" class="form-control" name="birthday_day">
+										<option value="" selected="selected">Giorno</option>
+										{% for key,value in form.fields.birthday_day.choices %}
+											<option value="{{ key }}" {% if post.birthday_day == key|slugify %}selected="selected"{% endif %}>{{ value }}</option>
+										{% endfor %}
+									</select>
+								</div>
+								<div class="col-sm-4">
+									<select id="birthday_month" class="form-control" name="birthday_month">
+										<option value="" selected="selected">Mese</option>
+										{% for key,value in form.fields.birthday_month.choices %}
+											<option value="{{ key }}" {% if post.birthday_month == key|slugify %}selected="selected"{% endif %}>{{ value }}</option>
+										{% endfor %}
+									</select>
+								</div>
+								<div class="col-sm-4">
+									<select id="birthday_year" class="form-control" name="birthday_year">
+										<option value="" selected="selected">Anno</option>
+										{% for key,value in form.fields.birthday_year.choices %}
+											<option value="{{ key }}" {% if post.birthday_year == key|slugify %}selected="selected"{% endif %}>{{ value }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="form-group formGroupAction inputPrivacyGroup">
+							<label class="col-lg-3 control-label" for="inputWelcomeBonus">Bonus di benvenuto</label>
+							<div class="col-lg-9">
+								<div class="checkbox">
+									<label>
+										<input name="inputWelcomeBonus" id="inputWelcomeBonus" value="1" type="checkbox" checked>{{ input_mkauto_label }}
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group text-md-right">
+							<div class="col-lg-10 col-lg-offset-2">
+								<button type="submit" class="btn btn-primary btn-lg formSendButtonClickAction">Registrati</button>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function(){
+	$(document).on("click", ".formSendButtonClickAction", function(){
+
+		var mobile_number = document.getElementById('mobile_number');
+
+		var returnVar = false;
+		// lavora sui "name" NON sugli "id"
+		var constraints = {
+			last_name: {
+				presence: false,
+			},
+			email: {
+				presence: true,
+				email: true,
+			},
+			mobile_number: {
+				// trick per validare un campo di tipo number senza attributo required
+				presence: (!mobile_number.validity.valid),
+				numericality: {
+					onlyInteger: true,
+				},
+			},
+		};
+
+		returnVar = validateForm(constraints);
+
+		// TODO
+		// se presente un campo compleanno controllare che tutti e tre siano
+		// inseriti, se nessun campo compleanno selezionato si può proseguire
+		/*birthday_date
+		birthday_month
+		birthday_year*/
+		var birthday_dateVal = $("#birthday_date").val();
+		var birthday_monthVal = $("#birthday_month").val();
+		var birthday_yearVal = $("#birthday_year").val();
+		if (birthday_dateVal || birthday_monthVal || birthday_yearVal) {
+			// almeno uno con valore, se dei tre non ha valore aggiungo classe di errore
+			if (!birthday_dateVal || !birthday_monthVal || !birthday_yearVal) {
+				returnVar = false;
+				$(".inputBirthdayGroup").addClass("has-error");
+			}
+		}
+
+		return returnVar;
+	});
+});
+</script>
+{% endblock %}
