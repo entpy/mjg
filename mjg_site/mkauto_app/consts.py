@@ -23,6 +23,7 @@ class mkauto_consts(object):
         # promozioni automatiche su flusso dell'utente
         # prize
             "welcome_prize" : "welcome_prize", # prize -> premio alla registrazione
+            "manual_welcome_prize" : "manual_welcome_prize", # prize -> premio alla registrazione manuale
             "happy_birthday_prize" : "happy_birthday_prize", # prize -> premio al compleanno
             "random_promo" : "random_promo", # prize -> premio al compleanno
             # random prize {{{
@@ -103,6 +104,19 @@ class mkauto_consts(object):
             "description" : "Bonus alla registrazione di un utente",
             "prize_type" : "discount",
             "prize_value" : "30",
+            "start_delay" : "0",
+            "repeat_delay" : "0",
+            "extra_text" : "",
+            "ma_event_type" : ma_event_type["prize"],
+            "prize_call_to_action" : "/profilo/{user_id}/{account_code}/",
+            "tickle_call_to_action" : "",
+            "status" : "1",
+        },
+        event_code["manual_welcome_prize"] : {
+            "ma_code" : event_code["manual_welcome_prize"],
+            "description" : "Bonus alla registrazione manuale di un utente",
+            "prize_type" : "discount",
+            "prize_value" : "15",
             "start_delay" : "0",
             "repeat_delay" : "0",
             "extra_text" : "",

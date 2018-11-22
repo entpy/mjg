@@ -5,7 +5,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db.models import F
-from django.db.models.signals import post_save
+# from django.db.models.signals import post_save
 from django.dispatch import receiver
 from mjg_site.consts import project_constants
 from mjg_site.exceptions import *
@@ -49,11 +49,13 @@ class Account(models.Model):
     def __unicode__(self):
         return self.user.email
 
+    """
     @receiver(post_save, sender=User)
     def create_or_update_user_profile(sender, instance, created, **kwargs):
         if created:
             Account.objects.create(user=instance)
         instance.account.save()
+    """
 
     def save(self, *args, **kwargs):
         # setto il campo account_code
@@ -100,7 +102,6 @@ class Account(models.Model):
                 user_obj.account.get_feedback_event_done = save_data["get_feedback_event_done"]
             if "get_review_event_done" in save_data:
                 user_obj.account.get_review_event_done = save_data["get_review_event_done"]
-
 
             # se presente gg mm aaaa salvo anche la data di nascita
             birthday_date = self.create_date(date_dictionary=save_data, get_isoformat=True)
@@ -244,6 +245,7 @@ class Account(models.Model):
         return_var = return_var.filter(bitmask_annotated_field__gt=0)
         # solo gli utenti attivi (status=1)
         return_var = return_var.filter(account__status=1)
+        return_var = return_var.filter(is_staff=False)
         # return_var = return_var.filter(account__notify_bitmask__gte=F('account__notify_bitmask').bitand(project_constants.RECEIVE_MKAUTO_BITMASK))
 
         logger.info("get account with code: " + str(event_code))

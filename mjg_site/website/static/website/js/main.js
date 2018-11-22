@@ -195,170 +195,326 @@ var lawCookieCompliance = {
 	},
 };
 
-
-/* Object to manage bootstrap modals */
-var bootstrapModalsObect = {
-
-	// popup message tags
-	success_message_tags : "success",
-	alert_message_tags : "alert",
-	error_message_tags : "error",
-
-	/* Function to write bootstrap modal inside body tag, only if not already exists */
-	writeModalInsideBodyTag: function() {
-		if (!$(".bootstrap_modal").length) {
-			var bootstrapModal = '';
-			bootstrapModal += '<div class="bootstrap_modal modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">';
-			bootstrapModal += this.getBootstrapModalHtmlTemplate();
-			bootstrapModal += '</div>';
-			$("body").prepend(bootstrapModal);
-		}
-
-		return true;
-	},
-
-	/* Function to retrieve bootstrap modal html template */
-	getBootstrapModalHtmlTemplate: function() {
-		var bootstrapModal = '';
-		bootstrapModal += '<div class="modal-dialog">';
-		bootstrapModal += '<div class="modal-content">';
-		bootstrapModal += '<div class="modal-header">';
-		bootstrapModal += '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
-		bootstrapModal += '<h4 class="modal-title">&nbsp;</h4>';
-		bootstrapModal += '</div>';
-		bootstrapModal += '<div class="modal-body">';
-		bootstrapModal += '</div>';
-		bootstrapModal += '<div class="modal-footer"></div>';
-		bootstrapModal += '</div><!-- /.modal-content -->';
-		bootstrapModal += '</div><!-- /.modal-dialog -->';
-
-		return bootstrapModal;
-	},
-
-	/* Function to reset bootstrap modal */
-	resetBootstrapModal: function() {
-		// questo è un layer che non scompare se vengono aperte
-		// modal in modo consecutivo, quindi lo nascondo io forzatamente
-		$('.modal-backdrop').remove();
-		$('body').attr("style", "padding-right: 0px;");
-		$(".bootstrap_modal").removeData();
-		$(".bootstrap_modal").remove();
-		this.writeModalInsideBodyTag();
-
-		return true;
-	},
-
-	/* Function to show bootstrap modal */
-	showBootstrapModal: function() {
-		$(".bootstrap_modal").modal('show');
-
-		return true;
-	},
-
-	/* Function to show popup message with bootstrap modal */
-	showPopupMessage : function(message, message_tags){
-		if (message_tags == this.success_message_tags) {
-			// show a success modal popup
-			this.showSuccessModal(message);
-		} else if (message_tags == this.alert_message_tags) {
-			// show an alert modal popup
-			this.showAlertModal(message);
-		} else if (message_tags == this.error_message_tags) {
-			// show an error modal popup
-			this.showErrorModal(message);
-		} else if (message_tags == this.simple_message_tags) {
-			// show a simple message popup without style
-			this.showMessageModal(message);
-		}
-	},
-
-	/* Function to build and show a success bootstrap modal */
-	showSuccessModal: function(message, popup_title) {
-		if (message) {
-			this.resetBootstrapModal();
-			var messageBlockTemplate = '';
-			messageBlockTemplate += '<div class="row">';
-			messageBlockTemplate += '<div class="col-md-12 margin_top_30">';
-			messageBlockTemplate += '<div class="alert alert-success">';
-			messageBlockTemplate += message;
-			messageBlockTemplate += '</div>';
-			messageBlockTemplate += '</div>';
-			messageBlockTemplate += '</div>';
-			$(".bootstrap_modal").find('.modal-title').html("Ottimo");
-			if (popup_title) {
-				$(".bootstrap_modal").find('.modal-title').html(popup_title);
-			}
-			$(".bootstrap_modal").find('.modal-footer').html('<button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>');
-			$(".bootstrap_modal").find('.modal-body').html(messageBlockTemplate);
-			this.showBootstrapModal();
-		}
-
-		return false;
-	},
-
-	/* Function to build and show a message bootstrap modal */
-	showMessageModal: function(message, popup_title) {
-		if (message) {
-			this.resetBootstrapModal();
-			var messageBlockTemplate = '';
-			messageBlockTemplate += '<div class="row">';
-			messageBlockTemplate += '<div class="col-md-12 margin_top_30">';
-			messageBlockTemplate += '<div class="alert">';
-			messageBlockTemplate += message;
-			messageBlockTemplate += '</div>';
-			messageBlockTemplate += '</div>';
-			messageBlockTemplate += '</div>';
-			$(".bootstrap_modal").find('.modal-title').html("Ottimo");
-			if (popup_title) {
-				$(".bootstrap_modal").find('.modal-title').html(popup_title);
-			}
-			$(".bootstrap_modal").find('.modal-footer').html('<button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>');
-			$(".bootstrap_modal").find('.modal-body').html(messageBlockTemplate);
-			this.showBootstrapModal();
-		}
-
-		return false;
-	},
-
-	/* Function to build and show an alert bootstrap modal */
-	showAlertModal: function(message) {
-		if (message) {
-			this.resetBootstrapModal();
-			var messageBlockTemplate = '';
-			messageBlockTemplate += '<div class="row">';
-			messageBlockTemplate += '<div class="col-md-12 margin_top_30">';
-			messageBlockTemplate += '<div class="alert alert-warning">';
-			messageBlockTemplate += message;
-			messageBlockTemplate += '</div>';
-			messageBlockTemplate += '</div>';
-			messageBlockTemplate += '</div>';
-			$(".bootstrap_modal").find('.modal-title').html("Gulp!");
-			$(".bootstrap_modal").find('.modal-footer').html('<button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>');
-			$(".bootstrap_modal").find('.modal-body').html(messageBlockTemplate);
-			this.showBootstrapModal();
-		}
-
-		return false;
-	},
-
-	/* Function to build and show an error bootstrap modal */
-	showErrorModal: function(message) {
-		if (message) {
-			this.resetBootstrapModal();
-			var messageBlockTemplate = '';
-			messageBlockTemplate += '<div class="row">';
-			messageBlockTemplate += '<div class="col-md-12 margin_top_30">';
-			messageBlockTemplate += '<div class="alert alert-danger">';
-			messageBlockTemplate += message;
-			messageBlockTemplate += '</div>';
-			messageBlockTemplate += '</div>';
-			messageBlockTemplate += '</div>';
-			$(".bootstrap_modal").find('.modal-title').html("Ops...");
-			$(".bootstrap_modal").find('.modal-footer').html('<button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>');
-			$(".bootstrap_modal").find('.modal-body').html(messageBlockTemplate);
-			this.showBootstrapModal();
-		}
-
-		return false;
+/*!
+ * jQuery Cookie Plugin v1.4.1
+ * https://github.com/carhartl/jquery-cookie
+ *
+ * Copyright 2013 Klaus Hartl
+ * Released under the MIT license
+ */
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD
+		define(['jquery'], factory);
+	} else if (typeof exports === 'object') {
+		// CommonJS
+		factory(require('jquery'));
+	} else {
+		// Browser globals
+		factory(jQuery);
 	}
-}
+}(function ($) {
+
+	var pluses = /\+/g;
+
+	function encode(s) {
+		return config.raw ? s : encodeURIComponent(s);
+	}
+
+	function decode(s) {
+		return config.raw ? s : decodeURIComponent(s);
+	}
+
+	function stringifyCookieValue(value) {
+		return encode(config.json ? JSON.stringify(value) : String(value));
+	}
+
+	function parseCookieValue(s) {
+		if (s.indexOf('"') === 0) {
+			// This is a quoted cookie as according to RFC2068, unescape...
+			s = s.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+		}
+
+		try {
+			// Replace server-side written pluses with spaces.
+			// If we can't decode the cookie, ignore it, it's unusable.
+			// If we can't parse the cookie, ignore it, it's unusable.
+			s = decodeURIComponent(s.replace(pluses, ' '));
+			return config.json ? JSON.parse(s) : s;
+		} catch(e) {}
+	}
+
+	function read(s, converter) {
+		var value = config.raw ? s : parseCookieValue(s);
+		return $.isFunction(converter) ? converter(value) : value;
+	}
+
+	var config = $.cookie = function (key, value, options) {
+
+		// Write
+
+		if (value !== undefined && !$.isFunction(value)) {
+			options = $.extend({}, config.defaults, options);
+
+			if (typeof options.expires === 'number') {
+				var days = options.expires, t = options.expires = new Date();
+				t.setTime(+t + days * 864e+5);
+			}
+
+			return (document.cookie = [
+				encode(key), '=', stringifyCookieValue(value),
+				options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+				options.path    ? '; path=' + options.path : '',
+				options.domain  ? '; domain=' + options.domain : '',
+				options.secure  ? '; secure' : ''
+			].join(''));
+		}
+
+		// Read
+
+		var result = key ? undefined : {};
+
+		// To prevent the for loop in the first place assign an empty array
+		// in case there are no cookies at all. Also prevents odd result when
+		// calling $.cookie().
+		var cookies = document.cookie ? document.cookie.split('; ') : [];
+
+		for (var i = 0, l = cookies.length; i < l; i++) {
+			var parts = cookies[i].split('=');
+			var name = decode(parts.shift());
+			var cookie = parts.join('=');
+
+			if (key && key === name) {
+				// If second argument (value) is a function it's a converter...
+				result = read(cookie, value);
+				break;
+			}
+
+			// Prevent storing a cookie that we couldn't decode.
+			if (!key && (cookie = read(cookie)) !== undefined) {
+				result[name] = cookie;
+			}
+		}
+
+		return result;
+	};
+
+	config.defaults = {};
+
+	$.removeCookie = function (key, options) {
+		if ($.cookie(key) === undefined) {
+			return false;
+		}
+
+		// Must not alter options, thus extending a fresh object...
+		$.cookie(key, '', $.extend({}, options, { expires: -1 }));
+		return !$.cookie(key);
+	};
+
+}));
+
+var ajaxCallObj = {
+	__url : "",
+	__type : "",
+	__data : "",
+	__cache : "",
+	__success : "",
+	__error : "",
+	__async: "",
+	__headers: "",
+
+	// common wrappers params
+	setAjaxDataEasy : function(){
+		this.__type = "POST";
+		this.__cache = false;
+		this.__async = true;
+
+		return true;
+	},
+
+	// setting ajax call params
+	setAjaxData : function(dataToSet){
+		// loading common wrappers params
+		this.setAjaxDataEasy();
+
+		if(dataToSet.url){
+			this.__url = dataToSet.url;
+		}
+
+		if(dataToSet.type){
+			this.__type = dataToSet.type;
+		}
+
+		if(dataToSet.data){
+			this.__data = dataToSet.data;
+		}
+
+		if(dataToSet.cache){
+			this.__cache = dataToSet.cache;
+		}
+
+		if(dataToSet.async === true || dataToSet.async === false){
+			this.__async = dataToSet.async;
+		}
+
+		if(dataToSet.success){
+			this.__success = dataToSet.success;
+		}
+
+		if(dataToSet.error){
+			this.__error = dataToSet.error;
+		}
+
+		if(dataToSet.headers){
+			this.__headers = dataToSet.headers;
+		}
+
+		return true;
+	},
+
+	// loading ajax call params
+	getAjaxData : function(){
+		return {
+			"url" : this.__url,
+			"type" : this.__type,
+			"async" : this.__async,
+			"data" : this.__data,
+			"cache" : this.__cache,
+			"success" : this.__success,
+			"error" : this.__error,
+			"headers" : this.__headers
+		};
+	},
+
+	// performing ajax call with previously data
+	doAjaxCall : function(){
+		$.ajax({
+			url: this.getAjaxData().url,
+			type: this.getAjaxData().type,
+			data: this.getAjaxData().data,
+			async: this.getAjaxData().async,
+			cache: this.getAjaxData().cache,
+			success: this.getAjaxData().success,
+			error: this.getAjaxData().error,
+			headers: this.getAjaxData().headers
+		});
+	}
+};
+
+/*!
+ * jQuery Cookie Plugin v1.4.1
+ * https://github.com/carhartl/jquery-cookie
+ *
+ * Copyright 2013 Klaus Hartl
+ * Released under the MIT license
+ */
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD
+		define(['jquery'], factory);
+	} else if (typeof exports === 'object') {
+		// CommonJS
+		factory(require('jquery'));
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
+
+	var pluses = /\+/g;
+
+	function encode(s) {
+		return config.raw ? s : encodeURIComponent(s);
+	}
+
+	function decode(s) {
+		return config.raw ? s : decodeURIComponent(s);
+	}
+
+	function stringifyCookieValue(value) {
+		return encode(config.json ? JSON.stringify(value) : String(value));
+	}
+
+	function parseCookieValue(s) {
+		if (s.indexOf('"') === 0) {
+			// This is a quoted cookie as according to RFC2068, unescape...
+			s = s.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+		}
+
+		try {
+			// Replace server-side written pluses with spaces.
+			// If we can't decode the cookie, ignore it, it's unusable.
+			// If we can't parse the cookie, ignore it, it's unusable.
+			s = decodeURIComponent(s.replace(pluses, ' '));
+			return config.json ? JSON.parse(s) : s;
+		} catch(e) {}
+	}
+
+	function read(s, converter) {
+		var value = config.raw ? s : parseCookieValue(s);
+		return $.isFunction(converter) ? converter(value) : value;
+	}
+
+	var config = $.cookie = function (key, value, options) {
+
+		// Write
+
+		if (value !== undefined && !$.isFunction(value)) {
+			options = $.extend({}, config.defaults, options);
+
+			if (typeof options.expires === 'number') {
+				var days = options.expires, t = options.expires = new Date();
+				t.setTime(+t + days * 864e+5);
+			}
+
+			return (document.cookie = [
+				encode(key), '=', stringifyCookieValue(value),
+				options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+				options.path    ? '; path=' + options.path : '',
+				options.domain  ? '; domain=' + options.domain : '',
+				options.secure  ? '; secure' : ''
+			].join(''));
+		}
+
+		// Read
+
+		var result = key ? undefined : {};
+
+		// To prevent the for loop in the first place assign an empty array
+		// in case there are no cookies at all. Also prevents odd result when
+		// calling $.cookie().
+		var cookies = document.cookie ? document.cookie.split('; ') : [];
+
+		for (var i = 0, l = cookies.length; i < l; i++) {
+			var parts = cookies[i].split('=');
+			var name = decode(parts.shift());
+			var cookie = parts.join('=');
+
+			if (key && key === name) {
+				// If second argument (value) is a function it's a converter...
+				result = read(cookie, value);
+				break;
+			}
+
+			// Prevent storing a cookie that we couldn't decode.
+			if (!key && (cookie = read(cookie)) !== undefined) {
+				result[name] = cookie;
+			}
+		}
+
+		return result;
+	};
+
+	config.defaults = {};
+
+	$.removeCookie = function (key, options) {
+		if ($.cookie(key) === undefined) {
+			return false;
+		}
+
+		// Must not alter options, thus extending a fresh object...
+		$.cookie(key, '', $.extend({}, options, { expires: -1 }));
+		return !$.cookie(key);
+	};
+
+}));

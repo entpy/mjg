@@ -7,7 +7,9 @@ from django.contrib import messages
 from django.urls import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from mjg_site.exceptions import *
+from mjg_site.common_utils import CommonUtils
 from website.forms import AccountForm, AccountNotifyForm, FeedbackForm, ReferFriendForm, ValidateCouponForm
 from account_app.models import Account
 from mkauto_app.models import MaEvent, Feedback, MasterAccountCode, FriendCode
@@ -15,6 +17,8 @@ from mkauto_app.strings import MkautoStrings
 from mkauto_app.consts import mkauto_consts
 from mjg_site.consts import project_constants
 import logging
+
+from django.contrib.auth.models import User
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -414,26 +418,56 @@ def dashboard_index(request):
     """View to show dashboard index"""
     return render(request, 'website/dashboard/dashboard_index.html')
 
+# TODO
 @login_required
 def dashboard_customers(request):
     """View to show dashboard customers page"""
-    return render(request, 'website/dashboard/dashboard_customers.html')
+
+    contact_list = User.objects.filter(is_staff=False).all()
+    paginator = Paginator(contact_list, 2) # Show 25 contacts per page
+
+    page = request.GET.get('page')
+    try:
+        contacts = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        contacts = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        contacts = paginator.page(paginator.num_pages)
+
+    return render(request, 'website/dashboard/dashboard_customers.html', {'contacts': contacts})
 
 @login_required
 def dashboard_validate_coupon(request):
     """View to show dashboard validate coupons page"""
 
+    common_utils_obj = CommonUtils()
+    code_info_dict = {}
+
     if request.method == "POST":
-        # create a form instance and populate it with data from the request:
-        form = ValidateCouponForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # TODO
-            # analizzare il coupon e mostrare eventuali errori (non esiste, già utilizzato)
-            # se non sono presenti errori mostrare il contenuto del codice
-            # se la variabile POST validate_code = 1 valido il codice
+        if request.POST.get("validate_code"):
+            # valido il codice
+            common_utils_obj.mark_code_as_used(code=request.POST.get("coupon_code"))
             messages.add_message(request, messages.SUCCESS, "<h4>Successo</h4>Il coupon è stato validato con successo.")
             return HttpResponseRedirect("/dashboard/validate-coupon/")
+        else:
+            # create a form instance and populate it with data from the request:
+            form = ValidateCouponForm(request.POST)
+            # check whether it's valid:
+            if form.is_valid():
+                # check dell'esistenza del codice
+                if common_utils_obj.check_code_exists(code=form.cleaned_data.get("coupon_code")):
+                    # codice esistente, controllo se già utilizzato o no
+                    if not common_utils_obj.check_code_used(code=form.cleaned_data.get("coupon_code")):
+                        # codice non utilizzato, prelevo il contenuto del codice
+                        code_info_dict = common_utils_obj.get_code_info(code=form.cleaned_data.get("coupon_code"))
+                    else:
+                        # codice già utilizzato
+                        messages.add_message(request, messages.ERROR, "<h4>Errore</h4>Il coupon è già stato utilizzato.")
+                else:
+                    # codice non esistente
+                    messages.add_message(request, messages.ERROR, "<h4>Errore</h4>Il coupon non esiste oppure è più vecchio di 12 mesi (quindi eliminato automaticamente).")
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -442,6 +476,7 @@ def dashboard_validate_coupon(request):
     context = {
         "post" : request.POST,
         "form" : form,
+        "code_info_dict" : code_info_dict,
     }
     return render(request, 'website/dashboard/dashboard_validate_coupon.html', context)
 
@@ -466,20 +501,20 @@ def dashboard_add_customer(request):
                 # check se inviare anche il manual welcome bonus
                 if request.POST.get("inputWelcomeBonus"):
                     # TODO: inviare il manual welcome bonus
-                    ma_event_obj.make_event(user_id=user_obj.id, ma_code=mkauto_consts.event_code["welcome_prize"], strings_ma_code=mkauto_consts.event_code["welcome_prize"])
+                    ma_event_obj.make_event(user_id=user_obj.id, ma_code=mkauto_consts.event_code["manual_welcome_prize"], strings_ma_code=mkauto_consts.event_code["manual_welcome_prize"])
                     # creo messaggio di successo
                     messages.add_message(request, messages.SUCCESS, "<h4>Cliente salvato</h4>I dati del cliente sono stati correttamente salvati<br />Gli è stato anche inviato il bonus di benvenuto.")
                 else:
                     messages.add_message(request, messages.SUCCESS, "<h4>Cliente salvato</h4>I dati del cliente sono stati correttamente salvati.")
                 # redirect alla lista clienti
-                return HttpResponseRedirect("/customers/")
+                return HttpResponseRedirect("/dashboard/add-customer/")
 
     # if a GET (or any other method) we'll create a blank form
     else:
         form = AccountForm()
 
     # prelevo la stringa del premio in caso di welcome_bonus
-    input_mkauto_label = "Invia all'utente anche: " + str(ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["welcome_prize"]))
+    input_mkauto_label = "Invia al cliente anche: " + str(ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["manual_welcome_prize"]))
 
     context = {
         "post" : request.POST,

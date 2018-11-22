@@ -670,6 +670,17 @@ class FriendCode(models.Model):
     def __unicode__(self):
         return self.friend_code_id
 
+    def get_by_ma_event_code(self, ma_event_code_instance):
+        """Function to retrieve FriendCode instance by ma_event_code_instance"""
+        try:
+            # checking if code already exists
+            friend_code_obj = FriendCode.objects.get(ma_event_code=ma_event_code_instance)
+        except FriendCode.DoesNotExist:
+            # il codice non esiste in db
+            raise
+
+        return friend_code_obj
+
     def generate_friend_code(self, master_account_code, ma_event_code):
         """Function to generate a new friend code"""
 

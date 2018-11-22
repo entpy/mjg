@@ -8,22 +8,72 @@
 {% block description %}{% endblock %}
 
 {# custom page css block #}
-{% block custom_css %}{{ block.super }}{% endblock %}
+{% block custom_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static "website/css/footable.bootstrap.min.css" %}">
+{% endblock %}
 {# Custom page script block #}
-{% block custom_js %}{% endblock %}
+{% block custom_js %}
+{{ block.super }}
+<script src="{% static "website/js/vendor/footable.min.js" %}"></script>
+{% endblock %}
 
 {# menu active element #}
 {% block navigation_active_customers %}active{% endblock %}
 
 {# container content #}
 {% block www_main_content %}
-<!-- three elements block -->
-<div class="row elements_container no_gutter">
-	<div class="col-sm-12 text-center no_gutter">
-		<a class="simple_link hvr-grow" href="/dashboard/validate-coupon/">
-			<img class="img-responsive" src="{% static "website/img/meccatronica.png" %}" alt="Valida coupon">
-			<div class="block-label">Valida coupon</div>
-		</a>
+{# title block {{{ #}
+<div class="row no_gutter">
+	<div class="col-md-10 col-md-offset-1">
+		<div class="dashboard_page_title_block">
+			<div class="dashboard_page_title">Verifica coupon</div>
+			<div class="dashboard_page_description">Inserisci il codice di un coupon da verificare. Vedrai il contenuto del codice e potrai decidere di validarlo.</div>
+		</div>
 	</div>
 </div>
+{# title block }}} #}
+
+<div class="row no_gutter">
+	<div class="col-sm-12">
+{% for contact in contacts %}
+    {# Each "contact" is a Contact model object. #}
+    {{ contact.email|upper }}<br />
+{% endfor %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if contacts.has_previous %}
+            <a href="?page={{ contacts.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ contacts.number }} of {{ contacts.paginator.num_pages }}.
+        </span>
+
+    {% for i in contacts.paginator.page_range %}
+      {% if contacts.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+
+
+
+        {% if contacts.has_next %}
+            <a href="?page={{ contacts.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function(){
+	$('.table').footable();
+});
+</script>
 {% endblock %}
