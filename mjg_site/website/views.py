@@ -8,6 +8,10 @@ from django.urls import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+from django.shortcuts import render
+from django_ajax.decorators import ajax
+
 from mjg_site.exceptions import *
 from mjg_site.common_utils import CommonUtils
 from website.forms import AccountForm, AccountNotifyForm, FeedbackForm, ReferFriendForm, ValidateCouponForm
@@ -522,6 +526,17 @@ def dashboard_add_customer(request):
         "input_mkauto_label" : input_mkauto_label,
     }
     return render(request, 'website/dashboard/dashboard_add_customer.html', context)
+
+# ajax view {{{
+# https://github.com/yceruto/django-ajax
+# TODO
+@ajax
+@login_required
+def ajax_customers_list(request):
+    c = 2 + 3
+    return {'result': c}
+
+# ajax view }}}
 
 def www_test_page(request):
     ma_event_obj = MaEvent()
