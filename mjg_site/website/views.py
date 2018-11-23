@@ -533,9 +533,39 @@ def dashboard_add_customer(request):
 @ajax
 @login_required
 def ajax_customers_list(request):
-    c = 2 + 3
-    return {'result': c}
+    return_var = None
+    account_obj = Account()
 
+    # debug only
+    logger.debug("### ajax_customers_list " + str(request.GET))
+
+    # TODO
+    # prelevare il limite minimo e l'offset per la query (li ottengo dai parametri in GET)
+    limit = 10
+    offset = 0
+
+    account_queryset = account_obj.get_accounts(limit=limit, offset=offset)
+    count_total_accounts = account_obj.count_total_account()
+    
+    for row in account_queryset:
+    row['id']
+    row['first_name']
+    row['last_name']
+    row['email']
+    row['account__mobile_number']
+    row['account__notify_bitmask']
+
+        json_queryset = {}
+
+    return_var = {
+        "records": [
+            account_queryset
+        ],
+        "queryRecordCount": len(account_queryset),
+        "totalRecordCount": count_total_accounts
+    }
+    
+    return return_var
 # ajax view }}}
 
 def www_test_page(request):
