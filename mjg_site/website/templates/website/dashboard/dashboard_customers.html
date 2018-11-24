@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {# page title #}
-{% block title %}MotorJab Garage | Dashboard{% endblock %}
+{% block title %}MotorJab Garage | Clienti{% endblock %}
 
 {# page description #}
 {% block description %}{% endblock %}
@@ -10,12 +10,12 @@
 {# custom page css block #}
 {% block custom_css %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static "website/css/footable.bootstrap.min.css" %}">
+<link rel="stylesheet" href="{% static "website/css/jquery.dynatable.css" %}">
 {% endblock %}
 {# Custom page script block #}
 {% block custom_js %}
 {{ block.super }}
-<script src="{% static "website/js/vendor/footable.min.js" %}"></script>
+<script src="{% static "website/js/vendor/jquery.dynatable.js" %}"></script>
 {% endblock %}
 
 {# menu active element #}
@@ -27,53 +27,41 @@
 <div class="row no_gutter">
 	<div class="col-md-10 col-md-offset-1">
 		<div class="dashboard_page_title_block">
-			<div class="dashboard_page_title">Verifica coupon</div>
-			<div class="dashboard_page_description">Inserisci il codice di un coupon da verificare. Vedrai il contenuto del codice e potrai decidere di validarlo.</div>
+			<div class="dashboard_page_title">Clienti</div>
+			<div class="dashboard_page_description">In questa sezione è presente la lista dei tuoi clienti, è possibile modificarli o eliminarli.</div>
 		</div>
 	</div>
 </div>
 {# title block }}} #}
 
 <div class="row no_gutter">
-	<div class="col-sm-12">
-{% for contact in contacts %}
-    {# Each "contact" is a Contact model object. #}
-    {{ contact.email|upper }}<br />
-{% endfor %}
-
-<div class="pagination">
-    <span class="step-links">
-        {% if contacts.has_previous %}
-            <a href="?page={{ contacts.previous_page_number }}">previous</a>
-        {% endif %}
-
-        <span class="current">
-            Page {{ contacts.number }} of {{ contacts.paginator.num_pages }}.
-        </span>
-
-    {% for i in contacts.paginator.page_range %}
-      {% if contacts.number == i %}
-        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-      {% else %}
-        <li><a href="?page={{ i }}">{{ i }}</a></li>
-      {% endif %}
-    {% endfor %}
-
-
-
-        {% if contacts.has_next %}
-            <a href="?page={{ contacts.next_page_number }}">next</a>
-        {% endif %}
-    </span>
-</div>
+	<div class="col-xs-12">
+		<table id="my-ajax-table">
+			<thead>
+				<th>Nome</th>
+				<th>Cognome</th>
+				<th>Email</th>
+				<th>Telefono</th>
+				<th>Azioni</th>
+			</thead>
+			<tbody></tbody>
+		</table>
 	</div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-$(document).ready(function(){
-	$('.table').footable();
-});
+	$(document).ready(function(){
+		// https://www.dynatable.com/#json-from-ajax
+		$('#my-ajax-table').dynatable({
+			dataset: {
+				ajax: true,
+				ajaxUrl: '/ajax/customers-list/',
+				ajaxOnLoad: true,
+				records: []
+			}
+		});
+	});
 </script>
 {% endblock %}

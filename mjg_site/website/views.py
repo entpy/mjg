@@ -8,6 +8,10 @@ from django.urls import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+from django.shortcuts import render
+from django_ajax.decorators import ajax
+
 from mjg_site.exceptions import *
 from mjg_site.common_utils import CommonUtils
 from website.forms import AccountForm, AccountNotifyForm, FeedbackForm, ReferFriendForm, ValidateCouponForm
@@ -522,6 +526,47 @@ def dashboard_add_customer(request):
         "input_mkauto_label" : input_mkauto_label,
     }
     return render(request, 'website/dashboard/dashboard_add_customer.html', context)
+
+# ajax view {{{
+# https://github.com/yceruto/django-ajax
+# TODO
+@ajax
+@login_required
+def ajax_customers_list(request):
+    return_var = None
+    account_obj = Account()
+
+    # debug only
+    logger.debug("### ajax_customers_list " + str(request.GET))
+
+    # TODO
+    # prelevare il limite minimo e l'offset per la query (li ottengo dai parametri in GET)
+    limit = 10
+    offset = 0
+
+    account_queryset = account_obj.get_accounts(limit=limit, offset=offset)
+    count_total_accounts = account_obj.count_total_account()
+    
+    for row in account_queryset:
+    row['id']
+    row['first_name']
+    row['last_name']
+    row['email']
+    row['account__mobile_number']
+    row['account__notify_bitmask']
+
+        json_queryset = {}
+
+    return_var = {
+        "records": [
+            account_queryset
+        ],
+        "queryRecordCount": len(account_queryset),
+        "totalRecordCount": count_total_accounts
+    }
+    
+    return return_var
+# ajax view }}}
 
 def www_test_page(request):
     ma_event_obj = MaEvent()

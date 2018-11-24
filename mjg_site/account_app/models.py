@@ -301,3 +301,40 @@ class Account(models.Model):
             pass
 
         return return_var
+
+    # TODO
+    def get_accounts(self, limit = None, offset = None):
+        """Function to retrieve an active users list"""
+        return_var = None
+
+        # solo gli utenti attivi (status=1) e che non siano staff (is_staff=False)
+        return_var = User.objects.values('id', 'first_name', 'last_name', 'email', 'account__mobile_number', 'account__notify_bitmask').filter(account__status=1, is_staff=False)
+
+	# TODO
+	# se presenti imposto l'offset e il limite della query
+	# Es. -> [5:10]
+	# 	 [offset:limit]
+	if offset and limit:
+		return_var = return_var[offset:limit]
+	else if limit:
+		return_var = return_var[limit]
+
+	# performing query
+        return_var = list(return_var)
+
+        logger.info("elenco utenti: " + str(return_var))
+
+        return return_var
+
+    # TODO
+    def count_total_account(self):
+	"""Function to count all active accounts"""
+	return_var = 0
+
+	# conteggio solo gli utenti attivi (status=1) e che non siano staff (is_staff=False)
+        return_var = User.objects.filter(account__status=1, is_staff=False).count()
+
+	return return_var
+		
+		
+		
