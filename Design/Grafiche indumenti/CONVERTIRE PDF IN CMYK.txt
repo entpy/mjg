@@ -1,0 +1,6 @@
+gs -dSAFER -dBATCH \
+    -dNOPAUSE -dNOCACHE -sDEVICE=pdfwrite \
+    -sColorConversionStrategy=CMYK \
+    -dProcessColorModel=/DeviceCMYK \
+    -sOutputFile=document_cmyk.pdf \
+    document_rgb.pdf
