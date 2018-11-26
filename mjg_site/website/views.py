@@ -522,16 +522,13 @@ def ajax_customers_list(request):
     return_var = None
     account_obj = Account()
 
-
+    # esempio di variabili passate via GET
     # search%5D=moto&sorts%5Blast_name%5D=1&page=1&perPage=10&offset=0
     # sorts[last_name]=-1
     # queries[search]=sdds
     # page=1
     # perPage=10
     # offset=0
-
-    # debug only
-    # logger.info("### ajax_customers_list " + str(request.GET))
 
     # prelevare il limite minimo e l'offset per la query (li ottengo dai parametri in GET)
     limit = int(request.GET.get("perPage"))
@@ -540,16 +537,17 @@ def ajax_customers_list(request):
     logger.info("### ajax_customers_list LIMIT: " + str(limit))
     logger.info("### ajax_customers_list OFFSET: " + str(offset))
     logger.info("### ajax_customers_list SORTS: " + str(request.GET.get("sorts[first_name]")))
+    logger.info("### ajax_customers_list SEARCH: " + str(request.GET.get("queries[search]")))
 
     # identifico eventuali ordinamenti
     sort_field = account_obj.sort_field_wrapper(request=request)
 
-    # TODO
     # identifico eventuali ricerce del testo
+    search_text = None
+    if request.GET.get("queries[search]"):
+        search_text = request.GET.get("queries[search]")
 
-    logger.info("sort field: " + str(sort_field))
-
-    account_queryset = account_obj.get_accounts(limit=limit, offset=offset, sort_field=sort_field)
+    account_queryset = account_obj.get_accounts(limit=limit, offset=offset, sort_field=sort_field, search_text=search_text)
     count_total_accounts = account_obj.count_total_account()
 
     return_var = {
