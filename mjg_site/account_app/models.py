@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-from django.db.models import Func, F
+from django.db.models import Func, F, Q
 
 # from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -323,7 +323,7 @@ class Account(models.Model):
 
         return return_var
 
-    def get_accounts(self, limit = None, offset = None, sort_field = None):
+    def get_accounts(self, limit = None, offset = None, sort_field = None, search_text = None):
         """Function to retrieve an active users list"""
         return_var = None
 
@@ -339,6 +339,8 @@ class Account(models.Model):
 
         # TODO
         # implementare qui la ricerca
+	if search_text:
+	    return_var = return_var.filter(Q(first_name__icontains=search_text) | Q(last_name__icontains=search_text) | Q(email__icontains=search_text))
 
 	# se presenti imposto l'offset e il limite della query
 	# Es. -> [5:10]
