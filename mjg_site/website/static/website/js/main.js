@@ -53,9 +53,6 @@ $(document).ready(function () {
 	// popup to show cookie policy
 	lawCookieCompliance.createDivOnLoad();
 
-	// write bootstrap modal inside body tag
-	bootstrapModalsObect.writeModalInsideBodyTag();
-
 	/* services pie */
 	$(document).on("click mouseover", ".servicePieAction", function(){
 		var pieName = $(this).data("pieName");	

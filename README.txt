@@ -6,3 +6,7 @@ pip install django-anymail[sparkpost]
 # https://django-extensions.readthedocs.io/en/latest/runscript.html
 pip install django-extensions
 
+# per le chiamate ajax
+# https://github.com/yceruto/django-ajax
+pip install djangoajax
+pip install https://github.com/yceruto/django-ajax/archive/2.x.zip

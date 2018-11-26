@@ -1041,6 +1041,7 @@ blockquote {
 .no-spinners::-webkit-outer-spin-button, .no-spinners::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .modal { z-index: 999999!important; }
 legend { font-size: 17.5px; }
+.styled_table thead th { background-color: #565656; }
 
 /* cookie law {{{ */
 #cookie-law { background: #000 none repeat scroll 0 0; margin: 0 auto; width: 100%; z-index: 9999; position: fixed; bottom: 0px; opacity: 0.8; }

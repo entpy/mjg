@@ -36,13 +36,14 @@
 
 <div class="row no_gutter">
 	<div class="col-xs-12">
-		<table id="my-ajax-table">
+		<table id="customers_list_table" class="table table-bordered styled_table">
 			<thead>
-				<th>Nome</th>
-				<th>Cognome</th>
-				<th>Email</th>
-				<th>Telefono</th>
-				<th>Azioni</th>
+				<th data-dynatable-column="first_name" class="dynatable-head"><a class="dynatable-sort-header" href="#">Nome</a></th>
+				<th data-dynatable-column="last_name" class="dynatable-head"><a class="dynatable-sort-header" href="#">Cognome</a></th>
+				<th data-dynatable-column="email" class="dynatable-head"><a class="dynatable-sort-header" href="#">Email</a></th>
+				<th data-dynatable-column="account__mobile_number" class="dynatable-head"><a class="dynatable-sort-header" href="#">Telefono</a></th>
+				<th data-dynatable-column="account__birthday_date_str" class="dynatable-head"><a class="dynatable-sort-header" href="#">Data di nascita</a></th>
+				<th data-dynatable-column="account__creation_date_str" class="dynatable-head"><a class="dynatable-sort-header" href="#">Data di creazione</a></th>
 			</thead>
 			<tbody></tbody>
 		</table>
@@ -54,13 +55,64 @@
 <script>
 	$(document).ready(function(){
 		// https://www.dynatable.com/#json-from-ajax
-		$('#my-ajax-table').dynatable({
+
+		// copiata dal file dynatable.js e poi modificata
+		function customRowWriter(rowIndex, record, columns, cellWriter) {
+			var tr = '';
+
+			// grab the record's attribute for each column
+			for (var i = 0, len = columns.length; i < len; i++) {
+				tr += customCellWriter(columns[i], record);
+			}
+
+			return '<tr>' + tr + '</tr>';
+		};
+
+		// copiata dal file dynatable.js e poi modificata
+		function customCellWriter(column, record) {
+			var html = column.attributeWriter(record),
+			td = '<td';
+
+			if (column.id == "account__birthday_date_str" && (html == null || html == undefined)) {
+				html = "";
+			}
+
+			if (column.hidden || column.textAlign) {
+				td += ' style="';
+
+				// keep cells for hidden column headers hidden
+				if (column.hidden) {
+					td += 'display: none;';
+				}
+
+				// keep cells aligned as their column headers are aligned
+				if (column.textAlign) {
+					td += 'text-align: ' + column.textAlign + ';';
+				}
+
+				td += '"';
+			}
+
+			// se un valore è vuoto imposto un default
+			if (html == "") {
+				html = "-";
+			}
+
+
+			return td + '>' + html + '</td>';
+		};
+
+		$("#customers_list_table").dynatable({
 			dataset: {
 				ajax: true,
 				ajaxUrl: '/ajax/customers-list/',
 				ajaxOnLoad: true,
-				records: []
-			}
+				records: [],
+			},
+			writers: {
+				_rowWriter: customRowWriter,
+				_cellWriter: customCellWriter,
+			},
 		});
 	});
 </script>

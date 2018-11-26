@@ -4,7 +4,8 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-from django.db.models import F
+from django.db.models import Func, F
+
 # from django.db.models.signals import post_save
 from django.dispatch import receiver
 from mjg_site.consts import project_constants
@@ -302,22 +303,50 @@ class Account(models.Model):
 
         return return_var
 
-    # TODO
-    def get_accounts(self, limit = None, offset = None):
+    def sort_field_wrapper(self, request):
+        """Function to map table order with db order"""
+
+        return_var = None
+
+        if request.GET.get("sorts[first_name]"):
+            return_var = str("-" if int(request.GET.get("sorts[first_name]")) == -1 else "") + "first_name"
+        if request.GET.get("sorts[last_name]"):
+            return_var = str("-" if int(request.GET.get("sorts[last_name]")) == -1 else "") + "last_name"
+        if request.GET.get("sorts[email]"):
+            return_var = str("-" if int(request.GET.get("sorts[email]")) == -1 else "") + "email"
+        if request.GET.get("sorts[account__mobile_number]"):
+            return_var = str("-" if int(request.GET.get("sorts[account__mobile_number]")) == -1 else "") + "account__mobile_number"
+        if request.GET.get("sorts[account__birthday_date_str]"):
+            return_var = str("-" if int(request.GET.get("sorts[account__birthday_date_str]")) == -1 else "") + "account__birthday_date"
+        if request.GET.get("sorts[account__creation_date_str]"):
+            return_var = str("-" if int(request.GET.get("sorts[account__creation_date_str]")) == -1 else "") + "account__creation_date"
+
+        return return_var
+
+    def get_accounts(self, limit = None, offset = None, sort_field = None):
         """Function to retrieve an active users list"""
         return_var = None
 
         # solo gli utenti attivi (status=1) e che non siano staff (is_staff=False)
-        return_var = User.objects.values('id', 'first_name', 'last_name', 'email', 'account__mobile_number', 'account__notify_bitmask').filter(account__status=1, is_staff=False)
+        return_var = User.objects.values('id', 'first_name', 'last_name', 'email', 'account__mobile_number', 'account__notify_bitmask', 'account__creation_date', 'account__birthday_date').filter(account__status=1, is_staff=False)
+        return_var = return_var.annotate(account__creation_date_str=Func(F('account__creation_date'), function="DATE"))
+        return_var = return_var.annotate(account__birthday_date_str=Func(F('account__birthday_date'), function="DATE"))
+        # return_var = return_var.extra(select={'datestr':"to_char(mjg_sandbox_account.creation_date, 'YYYY-MM-DD')"}).values_list('datestr', flat='true')
 
-	# TODO
+        # eventuali ordinamenti
+        if sort_field:
+            return_var = return_var.order_by(sort_field)
+
+        # TODO
+        # implementare qui la ricerca
+
 	# se presenti imposto l'offset e il limite della query
 	# Es. -> [5:10]
 	# 	 [offset:limit]
 	if offset and limit:
-		return_var = return_var[offset:limit]
-	else if limit:
-		return_var = return_var[limit]
+            return_var = return_var[limit:offset]
+	elif limit:
+            return_var = return_var[:limit]
 
 	# performing query
         return_var = list(return_var)
@@ -326,7 +355,6 @@ class Account(models.Model):
 
         return return_var
 
-    # TODO
     def count_total_account(self):
 	"""Function to count all active accounts"""
 	return_var = 0
@@ -335,6 +363,3 @@ class Account(models.Model):
         return_var = User.objects.filter(account__status=1, is_staff=False).count()
 
 	return return_var
-		
-		
-		

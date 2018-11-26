@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.contrib import messages
 from django.urls import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -10,7 +10,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django.shortcuts import render
-from django_ajax.decorators import ajax
+# from django_ajax.decorators import ajax
+from django.core.serializers.json import DjangoJSONEncoder
 
 from mjg_site.exceptions import *
 from mjg_site.common_utils import CommonUtils
@@ -20,7 +21,7 @@ from mkauto_app.models import MaEvent, Feedback, MasterAccountCode, FriendCode
 from mkauto_app.strings import MkautoStrings
 from mkauto_app.consts import mkauto_consts
 from mjg_site.consts import project_constants
-import logging
+import logging, json
 
 from django.contrib.auth.models import User
 
@@ -427,20 +428,7 @@ def dashboard_index(request):
 def dashboard_customers(request):
     """View to show dashboard customers page"""
 
-    contact_list = User.objects.filter(is_staff=False).all()
-    paginator = Paginator(contact_list, 2) # Show 25 contacts per page
-
-    page = request.GET.get('page')
-    try:
-        contacts = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        contacts = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        contacts = paginator.page(paginator.num_pages)
-
-    return render(request, 'website/dashboard/dashboard_customers.html', {'contacts': contacts})
+    return render(request, 'website/dashboard/dashboard_customers.html')
 
 @login_required
 def dashboard_validate_coupon(request):
@@ -529,42 +517,55 @@ def dashboard_add_customer(request):
 
 # ajax view {{{
 # https://github.com/yceruto/django-ajax
-# TODO
-@ajax
 @login_required
 def ajax_customers_list(request):
     return_var = None
     account_obj = Account()
 
+
+    # search%5D=moto&sorts%5Blast_name%5D=1&page=1&perPage=10&offset=0
+    # sorts[last_name]=-1
+    # queries[search]=sdds
+    # page=1
+    # perPage=10
+    # offset=0
+
     # debug only
-    logger.debug("### ajax_customers_list " + str(request.GET))
+    # logger.info("### ajax_customers_list " + str(request.GET))
+
+    # prelevare il limite minimo e l'offset per la query (li ottengo dai parametri in GET)
+    limit = int(request.GET.get("perPage"))
+    offset = int(request.GET.get("offset")) * int(request.GET.get("perPage"))
+
+    logger.info("### ajax_customers_list LIMIT: " + str(limit))
+    logger.info("### ajax_customers_list OFFSET: " + str(offset))
+    logger.info("### ajax_customers_list SORTS: " + str(request.GET.get("sorts[first_name]")))
+
+    # identifico eventuali ordinamenti
+    sort_field = account_obj.sort_field_wrapper(request=request)
 
     # TODO
-    # prelevare il limite minimo e l'offset per la query (li ottengo dai parametri in GET)
-    limit = 10
-    offset = 0
+    # identifico eventuali ricerce del testo
 
-    account_queryset = account_obj.get_accounts(limit=limit, offset=offset)
+    logger.info("sort field: " + str(sort_field))
+
+    account_queryset = account_obj.get_accounts(limit=limit, offset=offset, sort_field=sort_field)
     count_total_accounts = account_obj.count_total_account()
-    
-    for row in account_queryset:
-    row['id']
-    row['first_name']
-    row['last_name']
-    row['email']
-    row['account__mobile_number']
-    row['account__notify_bitmask']
-
-        json_queryset = {}
 
     return_var = {
-        "records": [
-            account_queryset
-        ],
-        "queryRecordCount": len(account_queryset),
-        "totalRecordCount": count_total_accounts
+        "records": account_queryset,
+        "queryRecordCount": count_total_accounts,
+        "totalRecordCount": count_total_accounts - 1 if count_total_accounts > 0 else 0
     }
-    
+
+    return_var = json.dumps(return_var, cls=DjangoJSONEncoder)
+
+    logger.info("### ajax_customers_list JSON " + str(return_var))
+
+    # create http response (also attach a cookie if exists)
+    return_var = HttpResponse(return_var, content_type="application/json")
+
+    # return a JSON response
     return return_var
 # ajax view }}}
 
