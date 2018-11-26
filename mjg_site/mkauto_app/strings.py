@@ -26,6 +26,20 @@ class MkautoStrings(object):
         str(mkauto_consts.event_code["welcome_prize"]) + ".call_to_action.label": "Visualizza profilo",
         str(mkauto_consts.event_code["welcome_prize"]) + ".call_to_action.url": mkauto_consts.mkauto_default_values["welcome_prize"].get("prize_call_to_action", ""), # l'url contiene le variabili {user_id} e {account_code}
         # welcome_prize }}}
+        # manual_welcome_prize {{{
+        str(mkauto_consts.event_code["manual_welcome_prize"]) + ".discount.subject": "grazie per averci lasciato la tua email, ecco uno sconto del {prize_val}%",
+        str(mkauto_consts.event_code["manual_welcome_prize"]) + ".bonus.subject": "grazie per averci lasciato la tua email, ecco un bonus di €{prize_val}",
+        str(mkauto_consts.event_code["manual_welcome_prize"]) + ".text.subject": "grazie per averci lasciato la tua email, ecco {prize_val}",
+        str(mkauto_consts.event_code["manual_welcome_prize"]) + ".discount.title": "grazie per averci lasciato la tua email,<br />ecco uno sconto del {prize_val}%",
+        str(mkauto_consts.event_code["manual_welcome_prize"]) + ".bonus.title": "grazie per averci lasciato la tua email,<br />ecco un bonus di €{prize_val}",
+        str(mkauto_consts.event_code["manual_welcome_prize"]) + ".text.title": "grazie per averci lasciato la tua email, ecco<br />{prize_val}",
+        str(mkauto_consts.event_code["manual_welcome_prize"]) + ".discount.content": "Complimenti e grazie per averci lasciato il tuo indirizzo email, ora che fai parte della nostra lista clienti privilegiata, potrai ricevere sconti, promozioni e consigli per la tua auto.<br />Subito per te ecco uno sconto del {prize_val}%.<br />Ti aspettiamo in officina ({business_address}).",
+        str(mkauto_consts.event_code["manual_welcome_prize"]) + ".bonus.content": "Complimenti e grazie per averci lasciato il tuo indirizzo email, ora che fai parte della nostra lista clienti privilegiata, potrai ricevere sconti, promozioni e consigli per la tua auto.<br />Subito per te ecco un bonus di €{prize_val}.<br />Ti aspettiamo in officina ({business_address}).",
+        str(mkauto_consts.event_code["manual_welcome_prize"]) + ".text.content": "Complimenti e grazie per averci lasciato il tuo indirizzo email, ora che fai parte della nostra lista clienti privilegiata, potrai ricevere sconti, promozioni e consigli per la tua auto.<br />Subito per te ecco {prize_val}.<br />Ti aspettiamo in officina ({business_address}).",
+        str(mkauto_consts.event_code["manual_welcome_prize"]) + ".call_to_action.title": "Scopri i nostri servizi,<br />clicca sul pulsante sotto",
+        str(mkauto_consts.event_code["manual_welcome_prize"]) + ".call_to_action.label": "I nostri servizi",
+        str(mkauto_consts.event_code["manual_welcome_prize"]) + ".call_to_action.url": mkauto_consts.mkauto_default_values["manual_welcome_prize"].get("prize_call_to_action", ""),
+        # manual_welcome_prize }}}
         # get_birthday_date {{{
         # tickle
         str("tickle_" + mkauto_consts.event_code["get_birthday_date"]) + ".discount.subject": "lasciaci la tua data di nascita, riceverai uno sconto del {prize_val}%",
