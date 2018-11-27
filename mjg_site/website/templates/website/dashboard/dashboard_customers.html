@@ -51,13 +51,25 @@
 		</table>
 	</div>
 </div>
+<div class="deleteFormContainerAction" style="dispaly: none;">
+	
+</div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
 	$(document).ready(function(){
-		// https://www.dynatable.com/#json-from-ajax
+		$(document).on(".deleteCustomerClickAction", click, function(){
+			// creo e submitto il form per eliminare il cliente
+			if (confirm("Stai per eliminare il cliente, proseguire?")){
+				var customerId = $(this).data("customerId");
+				write_delete_form(customerId);
+			}
 
+			return false;
+		});
+		
+		/*** https://www.dynatable.com/#json-from-ajax ***/
 		// copiata dal file dynatable.js e poi modificata
 		function customRowWriter(rowIndex, record, columns, cellWriter) {
 			var tr = '';
@@ -83,7 +95,7 @@
 				// TODO
 				// aggiungo azioni extra (modifica ed elimina)
 				// fare due form con una POST
-				html = '<a href="/modifica/' + customer_id + '/">Modifica</a>&nbsp;|&nbsp;<a href="/elimina/' + customer_id + '/">Elimina</a>';
+				html = '<a href="/modifica/' + customer_id + '/">Modifica</a>&nbsp;|&nbsp;<a class="deleteCustomerClickAction" href="#" data-customer-id="' + customer_id + '">Elimina</a>';
 			}
 
 			if (column.hidden || column.textAlign) {
@@ -107,7 +119,6 @@
 				html = "-";
 			}
 
-
 			return td + '>' + html + '</td>';
 		};
 
@@ -124,5 +135,18 @@
 			},
 		});
 	});
+
+	function write_delete_form(customer_id) {
+		if (customer_id) {
+			return_var = '<form class="deleteFormAction" name="delete_customer_form" method="POST" action="">{% csrf_token %}<input type="hidden" name="delete_customer_form_sent" value="1"><input type="hidden" name="customer_id" value="' + customer_id + '"></form>';
+			// scrittura del form
+			$(".deleteFormContainerAction").html(return_var);
+			 
+			// submit del form
+			$(".deleteFormAction").submit();
+		}
+
+		return false;
+	}
 </script>
 {% endblock %}
