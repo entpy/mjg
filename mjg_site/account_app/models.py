@@ -378,3 +378,13 @@ class Account(models.Model):
         return_var = User.objects.filter(account__status=1, is_staff=False).count()
 
 	return return_var
+
+    # TODO
+    def user_lite_deletion(self):
+	"""Function to count all active accounts"""
+	return_var = 0
+
+	# conteggio solo gli utenti attivi (status=1) e che non siano staff (is_staff=False)
+        return_var = User.objects.filter(account__status=1, is_staff=False).count()
+
+	return return_var
