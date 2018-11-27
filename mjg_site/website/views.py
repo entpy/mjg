@@ -428,6 +428,25 @@ def dashboard_index(request):
 def dashboard_customers(request):
     """View to show dashboard customers page"""
 
+    if request.method == "POST" and request.POST.get("delete_customer_form_sent"):
+        # elimino l'utente request.POST.get("customer_id")
+        account_obj = Account()
+        user_obj = account_obj.get_user_by_id(user_id=request.POST.get("customer_id"))
+
+        if user_obj:
+            save_data = {}
+            save_data["status"] = 0
+
+            account_obj.update_account(save_data=save_data, user_obj=user_obj):
+            # creo messaggio di successo
+            messages.add_message(request, messages.SUCCESS, "<h4>Eliminazione completata</h4>Il cliente è stato eliminato con successo")
+        else:
+            # creo messaggio di errore
+            messages.add_message(request, messages.ERROR, "<h4>Errore</h4>Errore durante l'eliminazione, cliente non trovato")
+
+        # redirect to a new URL:
+        return HttpResponseRedirect("/dashboard/customers/")
+
     return render(request, 'website/dashboard/dashboard_customers.html')
 
 @login_required
