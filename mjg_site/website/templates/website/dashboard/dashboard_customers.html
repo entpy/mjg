@@ -25,7 +25,7 @@
 {% block www_main_content %}
 {# title block {{{ #}
 <div class="row no_gutter">
-	<div class="col-md-10 col-md-offset-1">
+	<div class="col-sm-12">
 		<div class="dashboard_page_title_block">
 			<div class="dashboard_page_title">Clienti</div>
 			<div class="dashboard_page_description">In questa sezione è presente la lista dei tuoi clienti, è possibile modificarli o eliminarli.</div>
@@ -38,12 +38,14 @@
 	<div class="col-xs-12">
 		<table id="customers_list_table" class="table table-bordered styled_table">
 			<thead>
+				<th style="display: none;" data-dynatable-column="id" class="dynatable-head"></th>
 				<th data-dynatable-column="first_name" class="dynatable-head"><a class="dynatable-sort-header" href="#">Nome</a></th>
 				<th data-dynatable-column="last_name" class="dynatable-head"><a class="dynatable-sort-header" href="#">Cognome</a></th>
 				<th data-dynatable-column="email" class="dynatable-head"><a class="dynatable-sort-header" href="#">Email</a></th>
 				<th data-dynatable-column="account__mobile_number" class="dynatable-head"><a class="dynatable-sort-header" href="#">Telefono</a></th>
 				<th data-dynatable-column="account__birthday_date_str" class="dynatable-head"><a class="dynatable-sort-header" href="#">Data di nascita</a></th>
 				<th data-dynatable-column="account__creation_date_str" class="dynatable-head"><a class="dynatable-sort-header" href="#">Data di creazione</a></th>
+				<th data-dynatable-column="actions" class="dynatable-head">Azioni</th>
 			</thead>
 			<tbody></tbody>
 		</table>
@@ -62,19 +64,26 @@
 
 			// grab the record's attribute for each column
 			for (var i = 0, len = columns.length; i < len; i++) {
-				tr += customCellWriter(columns[i], record);
+				tr += customCellWriter(columns[i], record, columns[0].attributeWriter(record));
 			}
 
 			return '<tr>' + tr + '</tr>';
 		};
 
 		// copiata dal file dynatable.js e poi modificata
-		function customCellWriter(column, record) {
+		function customCellWriter(column, record, customer_id) {
 			var html = column.attributeWriter(record),
 			td = '<td';
 
 			if (column.id == "account__birthday_date_str" && (html == null || html == undefined)) {
 				html = "";
+			}
+
+			if (column.id == "actions") {
+				// TODO
+				// aggiungo azioni extra (modifica ed elimina)
+				// fare due form con una POST
+				html = '<a href="/modifica/' + customer_id + '/">Modifica</a>&nbsp;|&nbsp;<a href="/elimina/' + customer_id + '/">Elimina</a>';
 			}
 
 			if (column.hidden || column.textAlign) {

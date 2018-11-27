@@ -340,7 +340,7 @@ class Account(models.Model):
         # TODO
         # implementare qui la ricerca
 	if search_text:
-	    return_var = return_var.filter(Q(first_name__icontains=search_text) | Q(last_name__icontains=search_text) | Q(email__icontains=search_text))
+	    return_var = return_var.filter(Q(first_name__icontains=search_text) | Q(last_name__icontains=search_text) | Q(email__icontains=search_text) | Q(account__mobile_number__icontains=search_text))
 
 	# se presenti imposto l'offset e il limite della query
 	# Es. -> [5:10]

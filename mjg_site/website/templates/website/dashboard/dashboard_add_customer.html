@@ -20,19 +20,20 @@
 
 {# container content #}
 {% block www_main_content %}
-	{# title block {{{ #}
-	<div class="row no_gutter">
-		<div class="col-md-10 col-md-offset-1">
-			<div class="dashboard_page_title_block">
-				<div class="dashboard_page_title">Aggiungi un nuovo cliente</div>
-				<div class="dashboard_page_description">In questa sezione puoi inserire un nuovo cliente, è anche possibile assegnargli un bonus di benvenuto.</div>
-			</div>
+{# title block {{{ #}
+<div class="row no_gutter">
+	<div class="col-sm-12">
+		<div class="dashboard_page_title_block">
+			<div class="dashboard_page_title">Aggiungi un nuovo cliente</div>
+			<div class="dashboard_page_description">In questa sezione puoi inserire un nuovo cliente, è anche possibile assegnargli un bonus di benvenuto.</div>
 		</div>
 	</div>
-	{# title block }}} #}
+</div>
+{# title block }}} #}
 
-	<div class="row no_gutter">
-		<div class="col-xs-12 padding-xs-only padding-sm-only">
+<div class="row no_gutter">
+	<div class="col-sm-12">
+		<div class="col-md-offset-2 col-md-8 padding-xs-only padding-sm-only">
 			{# messages block #}
 			<div class="error_container"></div>
 			{% if form.errors %}
@@ -64,6 +65,7 @@
 			{% endif %}
 		</div>
 	</div>
+</div>
 
 <div class="row no_gutter">
 	<div class="col-sm-12">

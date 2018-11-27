@@ -6,6 +6,12 @@
 .navbar.navbar-main { position: relative; }
 
 .dasboard_action_block .dashboard_action_button { margin-top: 15px; }
-.dashboard_welcome_block { font-size: 24px; }
+.dasboard_action_block .dashboard_action_button { margin-top: 15px; }
+.dashboard_welcome_block { font-size: 24px; margin-top: 50px; margin-bottom: 50px; }
 .dashboard_page_title { font-size: 29px; }
 .dashboard_page_description { font-size: 16px; }
+
+.dasboard_stats_block_container { margin-top: 11.5px; background-color: #efefef; border-radius: 6px; border: 3px solid #e3e3e3; }
+.stats_block .title { text-align: center; font-size: 17px; min-height: 45px; }
+.stats_block .title .subtitle { font-size: 11px; text-align: center; width: 100%; display: inline-block; float: left; margin-top: -9px; }
+.stats_block .content { text-align: center; color: #d20000; font-weight: bold; font-size: 18px; }
