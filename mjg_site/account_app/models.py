@@ -291,13 +291,26 @@ class Account(models.Model):
         return return_var
 
     def get_user_by_id_account_code(self, user_id, account_code):
-        """Function to retrieve an account by user_id and account_code"""
+        """Function to retrieve an User instance by user_id and account_code"""
         return_var = None
 
         try:
             return_var = User.objects.get(pk=user_id, account__account_code=account_code)
         except User.DoesNotExist:
-            # TODO
+            # XXX
+            # la riga non esiste, mando una mail al developer
+            pass
+
+        return return_var
+
+    def get_user_by_id(self, user_id):
+        """Function to retrieve an User instance by user_id"""
+        return_var = None
+
+        try:
+            return_var = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            # XXX
             # la riga non esiste, mando una mail al developer
             pass
 
