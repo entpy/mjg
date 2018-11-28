@@ -39,7 +39,7 @@ urlpatterns = [
     url(r'^dashboard/?$', website.views.dashboard_index, name='dashboard_index'),
     url(r'^dashboard/customers/?$', website.views.dashboard_customers, name='dashboard_customers'),
     url(r'^dashboard/validate-coupon/?$', website.views.dashboard_validate_coupon, name='dashboard_validate_coupon'),
-    url(r'^dashboard/add-customer/?$', website.views.dashboard_add_customer, name='dashboard_add_customer'),
+    url(r'^dashboard/set-customer/(?:(?P<user_id>\d+)/)?$', website.views.dashboard_set_customer, name='dashboard_set_customer'),
     # dashboard }}}
     
     # ajax {{{
