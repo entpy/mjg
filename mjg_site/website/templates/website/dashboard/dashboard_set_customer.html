@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {# page title #}
-{% block title %}MotorJab Garage | Aggiungi cliente{% endblock %}
+{% block title %}MotorJab Garage | {% if user_id %}Modifica cliente{% else %}Aggiungi cliente{% endif %}{% endblock %}
 
 {# page description #}
 {% block description %}{% endblock %}
@@ -24,8 +24,8 @@
 <div class="row no_gutter">
 	<div class="col-sm-12">
 		<div class="dashboard_page_title_block">
-			<div class="dashboard_page_title">Aggiungi un nuovo cliente</div>
-			<div class="dashboard_page_description">In questa sezione puoi inserire un nuovo cliente, è anche possibile assegnargli un bonus di benvenuto.</div>
+			<div class="dashboard_page_title">{% if user_id %}Modifica dati cliente{% else %}Aggiungi un nuovo cliente{% endif %}</div>
+			<div class="dashboard_page_description">In questa sezione puoi inserire/modificare un cliente, è anche possibile assegnargli un bonus di benvenuto.</div>
 		</div>
 	</div>
 </div>
@@ -128,16 +128,18 @@
 								</div>
 							</div>
 						</div>
-						<div class="form-group formGroupAction inputPrivacyGroup">
-							<label class="col-lg-3 control-label" for="inputWelcomeBonus">Bonus di benvenuto</label>
-							<div class="col-lg-9">
-								<div class="checkbox">
-									<label>
-										<input name="inputWelcomeBonus" id="inputWelcomeBonus" value="1" type="checkbox" checked>{{ input_mkauto_label }}
-									</label>
+						{% if not user_id %}
+							<div class="form-group formGroupAction inputPrivacyGroup">
+								<label class="col-lg-3 control-label" for="inputWelcomeBonus">Bonus di benvenuto</label>
+								<div class="col-lg-9">
+									<div class="checkbox">
+										<label>
+											<input name="inputWelcomeBonus" id="inputWelcomeBonus" value="1" type="checkbox" checked>{{ input_mkauto_label }}
+										</label>
+									</div>
 								</div>
 							</div>
-						</div>
+						{% endif %}
 						<div class="form-group text-md-right">
 							<div class="col-lg-10 col-lg-offset-2">
 								<button type="submit" class="btn btn-primary btn-lg formSendButtonClickAction">Salva</button>
