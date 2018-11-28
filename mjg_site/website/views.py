@@ -554,6 +554,7 @@ def dashboard_set_customer(request, user_id):
         "form" : form,
         "input_mkauto_label" : input_mkauto_label,
         "user_info_dict" : user_obj,
+        "user_id" : user_id,
     }
     return render(request, 'website/dashboard/dashboard_set_customer.html', context)
 
