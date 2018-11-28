@@ -492,10 +492,14 @@ def dashboard_validate_coupon(request):
     return render(request, 'website/dashboard/dashboard_validate_coupon.html', context)
 
 @login_required
-def dashboard_add_customer(request):
-    """View to show dashboard add customer page"""
+def dashboard_set_customer(request, user_id):
+    """View to show dashboard add/edit customer page"""
 
     ma_event_obj = MaEvent()
+    account_obj = Account()
+
+    if user_id:
+        user_obj = account_obj.get_user_by_id(user_id=user_id)
 
     if request.method == "POST":
         # create a form instance and populate it with data from the request:
@@ -503,8 +507,23 @@ def dashboard_add_customer(request):
         # check whether it's valid:
         if form.is_valid():
             try:
-                account_obj = Account()
-                user_obj = account_obj.create_account(form.cleaned_data)
+                # TODO
+                # se presente un id modifico i dati
+                if user_id:
+                    # modifico l'intero profilo
+                    save_data = {}
+                    save_data["first_name"] = form.cleaned_data["first_name"]
+                    save_data["last_name"] = form.cleaned_data["last_name"]
+                    save_data["email"] = form.cleaned_data["email"]
+                    save_data["mobile_number"] = form.cleaned_data["mobile_number"]
+                    save_data["birthday_day"] = form.cleaned_data["birthday_day"]
+                    save_data["birthday_month"] = form.cleaned_data["birthday_month"]
+                    save_data["birthday_year"] = form.cleaned_data["birthday_year"]
+
+                    account_obj.update_account(save_data, user_obj=user_obj)
+                else:
+                    # creo un nuovo utente (verifico che email e/o telefono non siano già presenti)
+                    user_obj = account_obj.create_account(form.cleaned_data)
             except UserAlreadyExistsError:
                 # creo messaggio di errore
                 messages.add_message(request, messages.ERROR, "<h4>Controlla questi errori</h4>I dati inseriti (email e/o telefono) sono già presenti.")
@@ -516,7 +535,10 @@ def dashboard_add_customer(request):
                     # creo messaggio di successo
                     messages.add_message(request, messages.SUCCESS, "<h4>Cliente salvato</h4>I dati del cliente sono stati correttamente salvati<br />Gli è stato anche inviato il bonus di benvenuto.")
                 else:
-                    messages.add_message(request, messages.SUCCESS, "<h4>Cliente salvato</h4>I dati del cliente sono stati correttamente salvati.")
+                    if user_id:
+                        messages.add_message(request, messages.SUCCESS, "<h4>Cliente modificato</h4>I dati del cliente sono stati modificati correttamente.")
+                    else:
+                        messages.add_message(request, messages.SUCCESS, "<h4>Cliente salvato</h4>I dati del cliente sono stati salvati correttamente.")
                 # redirect alla lista clienti
                 return HttpResponseRedirect("/dashboard/add-customer/")
 
@@ -531,6 +553,7 @@ def dashboard_add_customer(request):
         "post" : request.POST,
         "form" : form,
         "input_mkauto_label" : input_mkauto_label,
+        "user_info_dict" : user_obj,
     }
     return render(request, 'website/dashboard/dashboard_add_customer.html', context)
 
