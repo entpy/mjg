@@ -540,7 +540,7 @@ def dashboard_set_customer(request, user_id):
                     else:
                         messages.add_message(request, messages.SUCCESS, "<h4>Cliente salvato</h4>I dati del cliente sono stati salvati correttamente.")
                 # redirect alla lista clienti
-                return HttpResponseRedirect("/dashboard/add-customer/")
+                return HttpResponseRedirect("/dashboard/set-customer/")
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -555,7 +555,7 @@ def dashboard_set_customer(request, user_id):
         "input_mkauto_label" : input_mkauto_label,
         "user_info_dict" : user_obj,
     }
-    return render(request, 'website/dashboard/dashboard_add_customer.html', context)
+    return render(request, 'website/dashboard/dashboard_set_customer.html', context)
 
 # ajax view {{{
 # https://github.com/yceruto/django-ajax
