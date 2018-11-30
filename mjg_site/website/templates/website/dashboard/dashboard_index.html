@@ -18,15 +18,15 @@
 {# container content #}
 {% block www_main_content %}
 <!-- three elements block -->
-<div class="row no_gutter">
+<div class="row no_gutter page_main_title_block">
 	<div class="col-sm-12 text-center dashboard_welcome_block">
 		<b>{% if user.first_name %}{{ user.first_name | title }}{% else %}{{ user.username | title }}{% endif %}</b>, benvenuto!
 	</div>
 </div>
 <div class="row no_gutter">
 	<div class="col-sm-12">
-		<div class="col-sm-9 text-center">
-			<div class="col-sm-6 dasboard_action_block">
+		<div class="col-sm-9 text-center padding-xs-only-60 padding-sm-only-60">
+			<div class="col-sm-6 dasboard_action_block padding-xs-only padding-sm-only">
 				<div class="block-label"><h4>Verifica coupon</h4></div>
 				<div class="text-center">
 					In questa sezione potrai<br />verificare e convalidare i coupon
@@ -41,18 +41,26 @@
 					In questa sezione potrai<br />aggiungere un nuovo cliente
 				</div>
 				<div class="text-center dashboard_action_button">
-					<a href="/dashboard/add-customer/" class="btn btn-warning">Aggiungi cliente</a>
+					<a href="/dashboard/set-customer/" class="btn btn-warning">Aggiungi cliente</a>
 				</div>
 			</div>
 		</div>
 		<div class="col-sm-3 dasboard_stats_block_container">
 			<div class="col-sm-6 stats_block no_gutter">
-				<div class="title">Clienti</div>
-				<div class="content">23</div>
+				<div class="title"><span>Clienti</span><div class="subtitle">totali</div></div>
+				<div class="content">{{ total_customers }}</div>
 			</div>
 			<div class="col-sm-6 stats_block no_gutter">
-				<div class="title">Clienti<div class="subtitle">ultimi 30 giorni</div></div>
-				<div class="content">3</div>
+				<div class="title"><span>Clienti</span><div class="subtitle">ultimi 30 giorni</div></div>
+				<div class="content">{{ total_customers_last_30_days }}</div>
+			</div>
+			<div class="col-sm-6 stats_block no_gutter">
+				<div class="title"><span>Coupon utilizzati</span><div class="subtitle">totali</div></div>
+				<div class="content">{{ total_codes }}</div>
+			</div>
+			<div class="col-sm-6 stats_block no_gutter">
+				<div class="title"><span>Coupon utilizzati</span><div class="subtitle">ultimi 30 giorni</div></div>
+				<div class="content">{{ total_codes_last_30_days }}</div>
 			</div>
 		</div>
 	</div>

@@ -180,7 +180,7 @@ class Account(models.Model):
         """Function to check if an email already exists"""
         return_var = None
         try:
-            User.objects.get(email=email_to_check)
+            User.objects.get(email=email_to_check, account__status=1)
             return_var = True
         except User.DoesNotExist:
             return_var = False
@@ -191,7 +191,7 @@ class Account(models.Model):
         """Function to check if a mobile number already exists"""
         return_var = None
         try:
-            User.objects.get(account__mobile_number=number_to_check)
+            User.objects.get(account__mobile_number=number_to_check, account__status=1)
             return_var = True
         except User.DoesNotExist:
             return_var = False
@@ -336,7 +336,7 @@ class Account(models.Model):
 
         return return_var
 
-    def get_accounts(self, limit = None, offset = None, sort_field = None, search_text = None):
+    def get_accounts(self, limit = None, offset = None, sort_field = None, search_text = None, only_count=False):
         """Function to retrieve an active users list"""
         return_var = None
 
@@ -349,6 +349,9 @@ class Account(models.Model):
         # eventuali ordinamenti
         if sort_field:
             return_var = return_var.order_by(sort_field)
+        else:
+            # ordinamento di default: ordino per id DESC
+            return_var = return_var.order_by("-id")
 
         # TODO
         # implementare qui la ricerca
@@ -356,35 +359,55 @@ class Account(models.Model):
 	    return_var = return_var.filter(Q(first_name__icontains=search_text) | Q(last_name__icontains=search_text) | Q(email__icontains=search_text) | Q(account__mobile_number__icontains=search_text))
 
 	# se presenti imposto l'offset e il limite della query
-	# Es. -> [5:10]
+	# Es. -> [5:5] dal 6 al 10 oggetto
 	# 	 [offset:limit]
-	if offset and limit:
-            return_var = return_var[limit:offset]
-	elif limit:
-            return_var = return_var[:limit]
+        if not only_count:
+            if offset or limit:
+                return_var = return_var[offset:limit]
 
-	# performing query
-        return_var = list(return_var)
+            # performing query
+            return_var = list(return_var)
 
-        logger.info("elenco utenti: " + str(return_var))
+            logger.info("elenco utenti: " + str(return_var))
+        else:
+            return_var = return_var.count()
+
 
         return return_var
 
-    def count_total_account(self):
+    def count_total_account(self, last_x_days=False):
 	"""Function to count all active accounts"""
 	return_var = 0
 
 	# conteggio solo gli utenti attivi (status=1) e che non siano staff (is_staff=False)
-        return_var = User.objects.filter(account__status=1, is_staff=False).count()
+        return_var = User.objects.filter(account__status=1, is_staff=False)
+
+        if last_x_days:
+            # eventualmente solo degli ultimi x giorni
+            return_var = return_var.filter(account__creation_date__date__gte=(timezone.now()-datetime.timedelta(days=last_x_days)).date())
+
+        return_var = return_var.count()
 
 	return return_var
 
     # TODO
-    def user_lite_deletion(self):
-	"""Function to count all active accounts"""
-	return_var = 0
+    def user_soft_deletion(self, user_obj):
+	"""Function to delete user (only status)"""
+	return_var = False
 
-	# conteggio solo gli utenti attivi (status=1) e che non siano staff (is_staff=False)
-        return_var = User.objects.filter(account__status=1, is_staff=False).count()
+        save_data = {}
+        save_data["status"] = 0
+
+        try:
+            return_var = user_obj.account.update_account(save_data=save_data, user_obj=user_obj)
+        except UpdateUserDataError:
+            raise UpdateUserDataError
 
 	return return_var
+
+    def user_hard_deletion(self, user_obj):
+        """Function to delete user WARNING: database deletion"""
+
+        user_obj.delete()
+
+	return True

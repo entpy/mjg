@@ -511,6 +511,22 @@ class MaEventCode(models.Model):
         """Function to check if a ma_event_code exists"""
         return MaEventCode.objects.filter(code=code).exists()
 
+    # TODO
+    def count_code_used(self, last_x_days=False):
+	"""Function to count code used"""
+	return_var = 0
+
+	# conteggio solo gli utenti attivi (status=1) e che non siano staff (is_staff=False)
+        return_var = MaEventCode.objects.filter(status=2)
+
+        if last_x_days:
+            # eventualmente solo degli ultimi x giorni
+            return_var = return_var.filter(update_date__date__gte=(timezone.now()-datetime.timedelta(days=last_x_days)).date())
+
+        return_var = return_var.count()
+
+	return return_var
+
 class MaRandomCode(models.Model):
     CODE_TYPE = (
         (mkauto_consts.random_code_type["tip"], mkauto_consts.random_code_type["tip"]),

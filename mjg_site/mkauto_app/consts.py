@@ -189,8 +189,8 @@ class mkauto_consts(object):
             "repeat_delay" : "168",
             "extra_text" : "",
             "ma_event_type" : ma_event_type["prize_tickle"],
-            "prize_call_to_action" : "",
-            "tickle_call_to_action" : "",
+            "prize_call_to_action" : "/servizi/",
+            "tickle_call_to_action" : "/lascia-una-recensione/{user_id}/",
             "status" : "1",
         },
         event_code["happy_birthday_prize"] : {

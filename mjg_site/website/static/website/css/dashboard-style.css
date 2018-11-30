@@ -1,10 +1,13 @@
-.navbar.navbar-main { background-color: white; }
+.navbar.navbar-main { background-color: #0497d2; }
 .navbar.navbar-main ul.nav a { color: black; }
-.nav.navbar-nav a.active { background-color: #ededed !important; }
+.navbar.navbar-main ul.nav a:hover, .nav.navbar-nav a.active { color: white!important; background-color: #01719e !important; }
 .elements_container { padding-top: 40px !important; }
-.dashboard_page_title_block { margin-bottom: 50px; margin-top: 20px; }
+.dashboard_page_title_block { margin-bottom: 20px; margin-top: 20px; }
 .navbar.navbar-main { position: relative; }
 
+.page_main_title_block { background-color: #002f42; margin-bottom: 40px; }
+.page_main_title_block * { color: white; }
+.action_button { margin-bottom: 10px; }
 .dasboard_action_block .dashboard_action_button { margin-top: 15px; }
 .dasboard_action_block .dashboard_action_button { margin-top: 15px; }
 .dashboard_welcome_block { font-size: 24px; margin-top: 50px; margin-bottom: 50px; }
@@ -13,5 +16,6 @@
 
 .dasboard_stats_block_container { margin-top: 11.5px; background-color: #efefef; border-radius: 6px; border: 3px solid #e3e3e3; }
 .stats_block .title { text-align: center; font-size: 17px; min-height: 45px; }
+.stats_block .title > span { line-height: 18px; display: inline-block; margin-bottom: 10px; margin-top: 10px; }
 .stats_block .title .subtitle { font-size: 11px; text-align: center; width: 100%; display: inline-block; float: left; margin-top: -9px; }
 .stats_block .content { text-align: center; color: #d20000; font-weight: bold; font-size: 18px; }

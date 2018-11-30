@@ -35,6 +35,9 @@ urlpatterns = [
     url(r'^feedback/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/?$', website.views.www_feedback, name='www_feedback'),
     url(r'^invita-amici/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/?$', website.views.www_refer_friends, name='www_refer_friends'),
 
+    # TODO
+    # fare pagina /lascia-una-recensione/{user_id}/
+
     # dashboard {{{
     url(r'^dashboard/?$', website.views.dashboard_index, name='dashboard_index'),
     url(r'^dashboard/customers/?$', website.views.dashboard_customers, name='dashboard_customers'),

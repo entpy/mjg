@@ -105,6 +105,7 @@ def run():
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
     """
 
+    """
     ##### Chiedo all'utente di presentare degli amici #####
     current_ma_event = "refer_friend"
     if event_dictionary.get(current_ma_event, {}).get("status"):
@@ -120,8 +121,8 @@ def run():
                 ma_event_obj.make_event(user_id=single_account["id"], ma_code=current_ma_event, strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
-
     """
+
     ##### Chiedo all'utente di lasciare una recensione (informazioni pubbliche) #####
     current_ma_event = "get_review"
     if event_dictionary.get(current_ma_event, {}).get("status"):
@@ -137,7 +138,6 @@ def run():
                 ma_event_obj.make_event(user_id=single_account["id"], ma_code=current_ma_event, strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     else:
         logger.info("@@@ " + current_ma_event + " NON ATTIVO @@@")
-    """
 
     # OK
     """

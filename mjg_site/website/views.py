@@ -17,7 +17,7 @@ from mjg_site.exceptions import *
 from mjg_site.common_utils import CommonUtils
 from website.forms import AccountForm, AccountNotifyForm, FeedbackForm, ReferFriendForm, ValidateCouponForm
 from account_app.models import Account
-from mkauto_app.models import MaEvent, Feedback, MasterAccountCode, FriendCode
+from mkauto_app.models import MaEvent, Feedback, MasterAccountCode, FriendCode, MaEventCode
 from mkauto_app.strings import MkautoStrings
 from mkauto_app.consts import mkauto_consts
 from mjg_site.consts import project_constants
@@ -421,31 +421,41 @@ def www_refer_friends(request, user_id, account_code):
 @login_required
 def dashboard_index(request):
     """View to show dashboard index"""
-    return render(request, 'website/dashboard/dashboard_index.html')
+
+    account_obj = Account()
+    ma_event_code_obj = MaEventCode()
+
+    context = {
+        "total_customers" : account_obj.count_total_account(),
+        "total_customers_last_30_days" : account_obj.count_total_account(last_x_days=30),
+        "total_codes" : ma_event_code_obj.count_code_used(),
+        "total_codes_last_30_days" : ma_event_code_obj.count_code_used(last_x_days=30),
+    }
+
+    return render(request, 'website/dashboard/dashboard_index.html', context)
 
 # TODO
 @login_required
 def dashboard_customers(request):
     """View to show dashboard customers page"""
 
-    if request.method == "POST" and request.POST.get("delete_customer_form_sent"):
-        # elimino l'utente request.POST.get("customer_id")
-        account_obj = Account()
-        user_obj = account_obj.get_user_by_id(user_id=request.POST.get("customer_id"))
+    if request.method == "POST":
+        if request.POST.get("delete_customer_form_sent"):
+            # elimino l'utente request.POST.get("customer_id")
+            account_obj = Account()
+            user_obj = account_obj.get_user_by_id(user_id=request.POST.get("customer_id"))
 
-        if user_obj:
-            save_data = {}
-            save_data["status"] = 0
+            if user_obj:
+                # eliminazione soft (setto solo status=0)
+                account_obj.user_hard_deletion(user_obj=user_obj)
+                # creo messaggio di successo
+                messages.add_message(request, messages.SUCCESS, "<h4>Eliminazione completata</h4>Il cliente è stato eliminato con successo")
+            else:
+                # creo messaggio di errore
+                messages.add_message(request, messages.ERROR, "<h4>Errore</h4>Errore durante l'eliminazione, cliente non trovato")
 
-            account_obj.update_account(save_data=save_data, user_obj=user_obj):
-            # creo messaggio di successo
-            messages.add_message(request, messages.SUCCESS, "<h4>Eliminazione completata</h4>Il cliente è stato eliminato con successo")
-        else:
-            # creo messaggio di errore
-            messages.add_message(request, messages.ERROR, "<h4>Errore</h4>Errore durante l'eliminazione, cliente non trovato")
-
-        # redirect to a new URL:
-        return HttpResponseRedirect("/dashboard/customers/")
+            # redirect to a new URL:
+            return HttpResponseRedirect("/dashboard/customers/")
 
     return render(request, 'website/dashboard/dashboard_customers.html')
 
@@ -498,6 +508,10 @@ def dashboard_set_customer(request, user_id):
     ma_event_obj = MaEvent()
     account_obj = Account()
 
+    user_obj = None
+    birthday_day = 0
+    birthday_month = 0
+    birthday_year = 0
     if user_id:
         user_obj = account_obj.get_user_by_id(user_id=user_id)
 
@@ -527,20 +541,23 @@ def dashboard_set_customer(request, user_id):
             except UserAlreadyExistsError:
                 # creo messaggio di errore
                 messages.add_message(request, messages.ERROR, "<h4>Controlla questi errori</h4>I dati inseriti (email e/o telefono) sono già presenti.")
+                # redirect nella pagina del cliente
+                # return HttpResponseRedirect("/dashboard/set-customer/")
             else:
                 # check se inviare anche il manual welcome bonus
-                if request.POST.get("inputWelcomeBonus"):
-                    # TODO: inviare il manual welcome bonus
-                    ma_event_obj.make_event(user_id=user_obj.id, ma_code=mkauto_consts.event_code["manual_welcome_prize"], strings_ma_code=mkauto_consts.event_code["manual_welcome_prize"])
-                    # creo messaggio di successo
-                    messages.add_message(request, messages.SUCCESS, "<h4>Cliente salvato</h4>I dati del cliente sono stati correttamente salvati<br />Gli è stato anche inviato il bonus di benvenuto.")
-                else:
-                    if user_id:
-                        messages.add_message(request, messages.SUCCESS, "<h4>Cliente modificato</h4>I dati del cliente sono stati modificati correttamente.")
+                if user_id:
+                    if request.POST.get("inputWelcomeBonus"):
+                        # TODO: inviare il manual welcome bonus
+                        ma_event_obj.make_event(user_id=user_obj.id, ma_code=mkauto_consts.event_code["manual_welcome_prize"], strings_ma_code=mkauto_consts.event_code["manual_welcome_prize"])
+                        # creo messaggio di successo
+                        messages.add_message(request, messages.SUCCESS, "<h4>Cliente salvato</h4>I dati del cliente sono stati correttamente salvati<br />Gli è stato anche inviato il bonus di benvenuto.")
                     else:
-                        messages.add_message(request, messages.SUCCESS, "<h4>Cliente salvato</h4>I dati del cliente sono stati salvati correttamente.")
-                # redirect alla lista clienti
-                return HttpResponseRedirect("/dashboard/set-customer/")
+                        messages.add_message(request, messages.SUCCESS, "<h4>Cliente modificato</h4>I dati del cliente sono stati modificati correttamente.")
+                else:
+                    messages.add_message(request, messages.SUCCESS, "<h4>Cliente salvato</h4>I dati del cliente sono stati salvati correttamente.")
+
+                # redirect nella pagina del cliente
+                return HttpResponseRedirect("/dashboard/set-customer/" + str(user_obj.id) + "/")
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -549,12 +566,22 @@ def dashboard_set_customer(request, user_id):
     # prelevo la stringa del premio in caso di welcome_bonus
     input_mkauto_label = "Invia al cliente anche: " + str(ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["manual_welcome_prize"]))
 
+    if user_obj:
+        birthday_day = int(request.POST.get("birthday_day", user_obj.account.birthday_date.day if user_obj.account.birthday_date else 0))
+        birthday_month = int(request.POST.get("birthday_month", user_obj.account.birthday_date.month if user_obj.account.birthday_date else 0))
+        birthday_year = int(request.POST.get("birthday_year", user_obj.account.birthday_date.year if user_obj.account.birthday_date else 0))
+
+    logger.info("eccezione22?? " + str(user_obj))
+
     context = {
         "post" : request.POST,
         "form" : form,
         "input_mkauto_label" : input_mkauto_label,
         "user_info_dict" : user_obj,
         "user_id" : user_id,
+        "birthday_day" : birthday_day,
+        "birthday_month" : birthday_month,
+        "birthday_year" : birthday_year,
     }
     return render(request, 'website/dashboard/dashboard_set_customer.html', context)
 
@@ -574,10 +601,18 @@ def ajax_customers_list(request):
     # offset=0
 
     # prelevare il limite minimo e l'offset per la query (li ottengo dai parametri in GET)
-    limit = int(request.GET.get("perPage"))
-    offset = int(request.GET.get("offset")) * int(request.GET.get("perPage"))
+    default_per_page = int(request.GET.get("perPage"))
+    offset = int(request.GET.get("offset")) * 1
+    page = int(request.GET.get("page")) * 1
+    if offset == 0:
+        query_offset = 0
+        query_limit = default_per_page
+    else:
+        query_offset = offset
+        query_limit = offset * page
 
-    logger.info("### ajax_customers_list LIMIT: " + str(limit))
+    logger.info("### ajax_customers_list query_limit: " + str(query_limit))
+    logger.info("### ajax_customers_list query_offset: " + str(query_offset))
     logger.info("### ajax_customers_list OFFSET: " + str(offset))
     logger.info("### ajax_customers_list SORTS: " + str(request.GET.get("sorts[first_name]")))
     logger.info("### ajax_customers_list SEARCH: " + str(request.GET.get("queries[search]")))
@@ -590,13 +625,14 @@ def ajax_customers_list(request):
     if request.GET.get("queries[search]"):
         search_text = request.GET.get("queries[search]")
 
-    account_queryset = account_obj.get_accounts(limit=limit, offset=offset, sort_field=sort_field, search_text=search_text)
+    account_queryset = account_obj.get_accounts(limit=query_limit, offset=query_offset, sort_field=sort_field, search_text=search_text)
+    query_record_count = account_obj.get_accounts(limit=query_limit, offset=query_offset, sort_field=sort_field, search_text=search_text, only_count=True)
     count_total_accounts = account_obj.count_total_account()
 
     return_var = {
         "records": account_queryset,
-        "queryRecordCount": count_total_accounts,
-        "totalRecordCount": count_total_accounts - 1 if count_total_accounts > 0 else 0
+        "queryRecordCount": query_record_count,
+        "totalRecordCount": count_total_accounts if count_total_accounts > 0 else 0
     }
 
     return_var = json.dumps(return_var, cls=DjangoJSONEncoder)

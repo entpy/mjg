@@ -24,18 +24,57 @@
 {# container content #}
 {% block www_main_content %}
 {# title block {{{ #}
-<div class="row no_gutter">
+<div class="row no_gutter page_main_title_block">
 	<div class="col-sm-12">
 		<div class="dashboard_page_title_block">
 			<div class="dashboard_page_title">Clienti</div>
-			<div class="dashboard_page_description">In questa sezione è presente la lista dei tuoi clienti, è possibile modificarli o eliminarli.</div>
+			<div class="dashboard_page_description">In questa sezione è presente la lista dei tuoi clienti, è possibile modificarli, eliminarli o aggiungerne di nuovi.</div>
 		</div>
 	</div>
 </div>
 {# title block }}} #}
 
 <div class="row no_gutter">
+	<div class="col-sm-12">
+		<div class="col-md-offset-2 col-md-8 padding-xs-only padding-sm-only">
+			{# messages block #}
+			<div class="error_container"></div>
+			{% if form.errors %}
+				<div class="alert alert-danger">
+					<h4>Controlla questi errori</h4>
+					<ul>
+						{% for field in form %}
+							{% for error in field.errors %}
+								<li>{{ field.label|escape }}: {{ error|escape }}</li>
+							{% endfor %}
+						{% endfor %}
+						{% for form_error in form.non_field_errors %}
+							<li>{{ form_error }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% elif messages %}
+				{% for message in messages %}
+					{% if message.tags == "success" %}
+						<div class="alert alert-success">
+							{{ message|safe }}
+						</div>
+					{% elif message.tags == "error" %}
+						<div class="alert alert-danger">
+							{{ message|safe }}
+						</div>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+<div class="row no_gutter">
 	<div class="col-xs-12">
+		<div class="action_button">
+			<a href="/dashboard/set-customer/" class="btn btn-warning">Aggiungi nuovo cliente</a>
+		</div>
 		<table id="customers_list_table" class="table table-bordered styled_table">
 			<thead>
 				<th style="display: none;" data-dynatable-column="id" class="dynatable-head"></th>
@@ -59,9 +98,9 @@
 {% block extra_js %}
 <script>
 	$(document).ready(function(){
-		$(document).on(".deleteCustomerClickAction", click, function(){
+		$(document).on("click", ".deleteCustomerClickAction", function(){
 			// creo e submitto il form per eliminare il cliente
-			if (confirm("Stai per eliminare il cliente, proseguire?")){
+			if (confirm("Stai per eliminare il cliente " + $(this).data("customerEmail") + ", proseguire?")) {
 				var customerId = $(this).data("customerId");
 				write_delete_form(customerId);
 			}
@@ -76,14 +115,14 @@
 
 			// grab the record's attribute for each column
 			for (var i = 0, len = columns.length; i < len; i++) {
-				tr += customCellWriter(columns[i], record, columns[0].attributeWriter(record));
+				tr += customCellWriter(columns[i], record, columns[0].attributeWriter(record), columns[3].attributeWriter(record));
 			}
 
 			return '<tr>' + tr + '</tr>';
 		};
 
 		// copiata dal file dynatable.js e poi modificata
-		function customCellWriter(column, record, customer_id) {
+		function customCellWriter(column, record, customer_id, customer_email) {
 			var html = column.attributeWriter(record),
 			td = '<td';
 
@@ -95,7 +134,7 @@
 				// TODO
 				// aggiungo azioni extra (modifica ed elimina)
 				// fare due form con una POST
-				html = '<a href="/modifica/' + customer_id + '/">Modifica</a>&nbsp;|&nbsp;<a class="deleteCustomerClickAction" href="#" data-customer-id="' + customer_id + '">Elimina</a>';
+				html = '<a href="/dashboard/set-customer/' + customer_id + '/">Modifica</a>&nbsp;|&nbsp;<a class="deleteCustomerClickAction" href="#" data-customer-id="' + customer_id + '" data-customer-email="' + customer_email + '">Elimina</a>';
 			}
 
 			if (column.hidden || column.textAlign) {
@@ -136,9 +175,10 @@
 		});
 	});
 
+	/* Function to write customer deletion form */
 	function write_delete_form(customer_id) {
 		if (customer_id) {
-			return_var = '<form class="deleteFormAction" name="delete_customer_form" method="POST" action="">{% csrf_token %}<input type="hidden" name="delete_customer_form_sent" value="1"><input type="hidden" name="customer_id" value="' + customer_id + '"></form>';
+			var return_var = "<form class=\"deleteFormAction\" name=\"delete_customer_form\" method=\"POST\" action=\"\">{% csrf_token %}<input type=\"hidden\" name=\"delete_customer_form_sent\" value=\"1\"><input type=\"hidden\" name=\"customer_id\" value=\"" + customer_id + "\"></form>";
 			// scrittura del form
 			$(".deleteFormContainerAction").html(return_var);
 			 

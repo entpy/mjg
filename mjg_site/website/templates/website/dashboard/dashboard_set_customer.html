@@ -1,5 +1,5 @@
 {% extends "website/inc/dashboard_base.html" %}
-{% load staticfiles %}
+{% load staticfiles website_extras %}
 
 {# page title #}
 {% block title %}MotorJab Garage | {% if user_id %}Modifica cliente{% else %}Aggiungi cliente{% endif %}{% endblock %}
@@ -16,16 +16,16 @@
 {% endblock %}
 
 {# menu active element #}
-{% block navigation_active_home %}active{% endblock %}
+{% block navigation_active_customers %}active{% endblock %}
 
 {# container content #}
 {% block www_main_content %}
 {# title block {{{ #}
-<div class="row no_gutter">
+<div class="row no_gutter page_main_title_block">
 	<div class="col-sm-12">
 		<div class="dashboard_page_title_block">
 			<div class="dashboard_page_title">{% if user_id %}Modifica dati cliente{% else %}Aggiungi un nuovo cliente{% endif %}</div>
-			<div class="dashboard_page_description">In questa sezione puoi inserire/modificare un cliente, è anche possibile assegnargli un bonus di benvenuto.</div>
+			<div class="dashboard_page_description">{% if user_id %}In questa sezione puoi modificare i dati di un cliente.{% else %}In questa sezione puoi inserire un nuovo cliente, è anche possibile assegnargli un bonus di benvenuto.{% endif %}</div>
 		</div>
 	</div>
 </div>
@@ -78,25 +78,25 @@
 						<div class="form-group formGroupAction first_nameGroup">
 							<label for="first_name" class="col-lg-3 control-label">{{ form.first_name.label }}</label>
 							<div class="col-lg-9">
-								<input id="first_name" name="first_name" class="form-control" placeholder="{{ form.first_name.field.widget.attrs.placeholder }}" type="text" value="{{ post.first_name }}" required>
+								<input id="first_name" name="first_name" class="form-control" placeholder="{{ form.first_name.field.widget.attrs.placeholder }}" type="text" value="{% if post.first_name %}{{ post.first_name }}{% else %}{{ user_info_dict|get_item:"first_name" }}{% endif %}">
 							</div>
 						</div>
 						<div class="form-group formGroupAction last_nameGroup">
 							<label for="last_name" class="col-lg-3 control-label">Cognome</label>
 							<div class="col-lg-9">
-								<input id="last_name" name="last_name" class="form-control" placeholder="{{ form.last_name.field.widget.attrs.placeholder }}" value="{{ post.last_name }}" type="text">
+								<input id="last_name" name="last_name" class="form-control" placeholder="{{ form.last_name.field.widget.attrs.placeholder }}" value="{% if post.last_name %}{{ post.last_name }}{% else %}{{ user_info_dict|get_item:"last_name" }}{% endif %}" type="text">
 							</div>
 						</div>
 						<div class="form-group formGroupAction emailGroup">
 							<label for="email" class="col-lg-3 control-label">Email&nbsp;*</label>
 							<div class="col-lg-9">
-								<input id="email" name="email" class="form-control" placeholder="{{ form.email.field.widget.attrs.placeholder }}" type="email" value="{{ post.email }}" required>
+								<input id="email" name="email" class="form-control" placeholder="{{ form.email.field.widget.attrs.placeholder }}" type="email" value="{% if post.email %}{{ post.email }}{% else %}{{ user_info_dict|get_item:"email" }}{% endif %}" required>
 							</div>
 						</div>
 						<div class="form-group formGroupAction mobile_numberGroup">
 							<label for="mobile_number" class="col-lg-3 control-label">Telefono</label>
 							<div class="col-lg-9">
-								<input id="mobile_number" name="mobile_number" class="form-control no-spinners" placeholder="{{ form.mobile_number.field.widget.attrs.placeholder }}" value="{{ post.mobile_number }}" type="number">
+								<input id="mobile_number" name="mobile_number" class="form-control no-spinners" placeholder="{{ form.mobile_number.field.widget.attrs.placeholder }}" value="{% if post.mobile_number %}{{ post.mobile_number }}{% else %}{% if user_info_dict %}{{ user_info_dict.account|get_item:"mobile_number" }}{% endif %}{% endif %}" type="number">
 							</div>
 						</div>
 						<div class="form-group formGroupAction inputBirthdayGroup">
@@ -106,7 +106,7 @@
 									<select id="birthday_date" class="form-control" name="birthday_day">
 										<option value="" selected="selected">Giorno</option>
 										{% for key,value in form.fields.birthday_day.choices %}
-											<option value="{{ key }}" {% if post.birthday_day == key|slugify %}selected="selected"{% endif %}>{{ value }}</option>
+											<option value="{{ key }}" {% if birthday_day == key %}selected="selected"{% endif %}>{{ value }}</option>
 										{% endfor %}
 									</select>
 								</div>
@@ -114,7 +114,7 @@
 									<select id="birthday_month" class="form-control" name="birthday_month">
 										<option value="" selected="selected">Mese</option>
 										{% for key,value in form.fields.birthday_month.choices %}
-											<option value="{{ key }}" {% if post.birthday_month == key|slugify %}selected="selected"{% endif %}>{{ value }}</option>
+											<option value="{{ key }}" {% if birthday_month == key %}selected="selected"{% endif %}>{{ value }}</option>
 										{% endfor %}
 									</select>
 								</div>
@@ -122,7 +122,7 @@
 									<select id="birthday_year" class="form-control" name="birthday_year">
 										<option value="" selected="selected">Anno</option>
 										{% for key,value in form.fields.birthday_year.choices %}
-											<option value="{{ key }}" {% if post.birthday_year == key|slugify %}selected="selected"{% endif %}>{{ value }}</option>
+											<option value="{{ key }}" {% if birthday_year == key %}selected="selected"{% endif %}>{{ value }}</option>
 										{% endfor %}
 									</select>
 								</div>
@@ -142,7 +142,7 @@
 						{% endif %}
 						<div class="form-group text-md-right">
 							<div class="col-lg-10 col-lg-offset-2">
-								<button type="submit" class="btn btn-primary btn-lg formSendButtonClickAction">Salva</button>
+								<button type="submit" class="btn btn-primary formSendButtonClickAction">Salva</button>
 							</div>
 						</div>
 					</fieldset>
@@ -163,9 +163,6 @@ $(document).ready(function(){
 		var returnVar = false;
 		// lavora sui "name" NON sugli "id"
 		var constraints = {
-			last_name: {
-				presence: false,
-			},
 			email: {
 				presence: true,
 				email: true,
