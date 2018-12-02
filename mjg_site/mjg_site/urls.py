@@ -34,17 +34,18 @@ urlpatterns = [
     url(r'^profilo/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/(?:(?P<show_only_section>\w+)/)?$', website.views.www_profile, name='www_profile'),
     url(r'^feedback/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/?$', website.views.www_feedback, name='www_feedback'),
     url(r'^invita-amici/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/?$', website.views.www_refer_friends, name='www_refer_friends'),
-
-    # TODO
-    # fare pagina /lascia-una-recensione/{user_id}/
+    url(r'^lascia-una-recensione/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/?$', website.views.www_get_review, name='www_get_review'),
 
     # dashboard {{{
     url(r'^dashboard/?$', website.views.dashboard_index, name='dashboard_index'),
     url(r'^dashboard/customers/?$', website.views.dashboard_customers, name='dashboard_customers'),
     url(r'^dashboard/validate-coupon/?$', website.views.dashboard_validate_coupon, name='dashboard_validate_coupon'),
     url(r'^dashboard/set-customer/(?:(?P<user_id>\d+)/)?$', website.views.dashboard_set_customer, name='dashboard_set_customer'),
+    # TODO
+    # fare pagina nascosta per inviare il bonus della recensione (attivabile tramite pulsante nella mail)
+    url(r'^dashboard/review-prize/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/?$', website.views.dashboard_review_prize, name='dashboard_review_prize'),
     # dashboard }}}
-    
+
     # ajax {{{
     url(r'^ajax/customers-list/?$', website.views.ajax_customers_list, name='ajax_customers_list'),
     # ajax }}}

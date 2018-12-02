@@ -1,0 +1,113 @@
+{% extends "website/inc/dashboard_base.html" %}
+{% load staticfiles %}
+
+{# page title #}
+{% block title %}MotorJab Garage | Assegna premio dopo recensione{% endblock %}
+
+{# page description #}
+{% block description %}{% endblock %}
+
+{# custom page css block #}
+{% block custom_css %}{{ block.super }}{% endblock %}
+{# Custom page script block #}
+{% block custom_js %}
+{# howto: https://validatejs.org #}
+<script src="{% static "website/js/vendor/validate.min.js" %}"></script>
+{% endblock %}
+
+{# container content #}
+{% block www_main_content %}
+{# title block {{{ #}
+<div class="row no_gutter page_main_title_block">
+	<div class="col-sm-12">
+		<div class="dashboard_page_title_block">
+			<div class="dashboard_page_title">Assegna premio dopo recensione</div>
+			<div class="dashboard_page_description">Verifica che l'utente abbia inserito correttamente la recensione su Google, per assegnare il bonus al cliente premi il pulsante sotto.</div>
+		</div>
+	</div>
+</div>
+{# title block }}} #}
+
+{# success/error msg block {{{ #}
+<div class="row no_gutter">
+	<div class="col-sm-12">
+		<div class="col-md-offset-2 col-md-8 padding-xs-only padding-sm-only">
+		{# messages block #}
+			<div class="error_container"></div>
+			{% if form.errors %}
+				<div class="alert alert-danger">
+					<h4>Controlla questi errori</h4>
+					<ul>
+						{% for field in form %}
+							{% for error in field.errors %}
+								<li>{{ field.label|escape }}: {{ error|escape }}</li>
+							{% endfor %}
+						{% endfor %}
+						{% for form_error in form.non_field_errors %}
+							<li>{{ form_error }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% elif messages %}
+				{% for message in messages %}
+					{% if message.tags == "success" %}
+						<div class="alert alert-success">
+							{{ message|safe }}
+						</div>
+					{% elif message.tags == "error" %}
+						<div class="alert alert-danger">
+							{{ message|safe }}
+						</div>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+</div>
+{# success/error msg block }}} #}
+
+<div class="row no_gutter">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="panel panel-warning">
+				<div class="panel-heading">
+					<h3 class="panel-title">Dati utente</h3>
+				</div>
+				<div class="panel-body">
+					<div>Nome: <b>{{ user_info_dict.first_name|default:"-" }}</b></div>
+					<div>Cognome: <b>{{ user_info_dict.last_name|default:"-" }}</b></div>
+					<div>Email: <b>{{ user_info_dict.email|default:"-" }}</b> (<a href="/dashboard/set-customer/{{ user_id }}/" target="_blank">scheda cliente</a>)</div>
+					<div>Telefono: <b>{{ user_info_dict.account.mobile_number|default:"-" }}</b></div>
+					<div>Premio: <b>{{ mkauto_prize }}</b></div>
+					<div>Premio già assegnato? <b>{% if mkauto_assigned %}<span style="color: red;">Si</span>{% else %}<span style="color: green;">No</span>{% endif %}</b></div>
+				</div>
+			</div>
+			{% if not mkauto_assigned %}
+				<form class="form-horizontal assignReviewPrizeFormAction" name="assign_review_prize_form" method="POST" action="">
+					{% csrf_token %}
+					<input type="hidden" name="assign_review_prize_form_sent" value="1">
+					<fieldset>
+						<div class="form-group text-md-right">
+							<div class="col-lg-10 col-lg-offset-2">
+								<button type="submit" class="btn btn-primary assignReviewPrizeButtonClickAction">Assegna premio</button>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			{% endif %}
+		</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function(){
+	$(document).on("click", ".assignReviewPrizeButtonClickAction", function(){
+		if (confirm("Stai per assegnare il premio, confermi?")) {
+			$(".assignReviewPrizeFormAction").submit();
+		}
+
+		return false;
+	});
+});
+</script>
+{% endblock %}

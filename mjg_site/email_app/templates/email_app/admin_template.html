@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width">
+		<title>MotorJab Garage - admin email system</title>
+		<!--[if mso]>
+		<style>
+			.fallback-text {
+			font-family:Helvetica;
+			}
+		</style>
+		<![endif]-->
+		<style type="text/css">
+			html,body,div,span,aOpen Sanspplet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{
+				border:0;
+				vertical-align:baseline;
+			}
+			article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{
+				display:block;
+			}
+			body{
+				line-height:1;
+			}
+			ol,ul{
+				list-style:none;
+			}
+			blockquote,q{
+				quotes:none;
+			}
+				blockquote:before,blockquote:after,q:before,q:after{
+				content:none;
+			}
+			table{
+				border-collapse:collapse;
+				border-spacing:0;
+			}
+			@media all and (max-width: 600px){
+				.emailMainTitle{
+					font-size:22px !important;
+				}
+				.emailMainDescription{
+					font-size:16px !important;
+				}
+				.emailCouponInfo{
+					font-size:14px !important;
+				}
+				.emailCouponCode{
+					font-size:32px !important;
+				}
+				.emailMainLogo{
+					min-width:140px !important;
+					width:40% !important;
+				}
+				.emailMainImage{
+					width:75% !important;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<table class="body">
+			<tr>
+				<td class="float-center" align="center" valign="top">
+					<table style="table-layout:fixed;background-color:#fff;" id="bodyTable" cellspacing="0" cellpadding="0" border="0" width="100%">
+						<tbody>
+							<tr>
+								<td style="padding-right:10px;padding-left:10px;" id="bodyCell" valign="top" align="center">
+									<!--[if (gte mso 9)|(IE)]>
+									<table align="center" border="0" cellspacing="0" cellpadding="0" style="width:600px;" width="600">
+										<tr>
+											<td align="center" valign="top">
+												<![endif]-->
+												<!-- Email Wrapper Webview Open //-->
+												<table style="max-width:600px;" class="wrapperWebview" cellspacing="0" cellpadding="0" border="0" width="100%">
+													<tbody>
+														<tr>
+															<td valign="top" align="center">
+																<!-- Content Table Open // -->
+																<!-- Content Table Close // -->
+															</td>
+														</tr>
+													</tbody>
+												</table>
+												<!-- Email Wrapper Webview Close //-->
+												<!-- Email Wrapper Header Open //-->
+												<table style="max-width:600px;" class="wrapperWebview" cellspacing="0" cellpadding="0" border="0" width="100%">
+													<tbody>
+														<tr>
+															<td valign="top" align="center">
+																<!-- Content Table Open // -->
+																<table cellspacing="0" cellpadding="0" border="0" width="100%">
+																	<tbody>
+																		<tr>
+																			<td style="padding-top:25px;padding-bottom:25px;" class="emailLogo" valign="middle" align="center">
+																				<!-- Logo and Link // -->
+																				<img class="emailMainLogo" src="{{base_url}}/static/website/img/email_logo.png" alt="MotorJab Garage" style="width:100%; max-width:180px;height:auto; display:block;" border="0" width="180">
+																			</td>
+																		</tr>
+																	</tbody>
+																</table>
+																<!-- Content Table Close // -->
+															</td>
+														</tr>
+													</tbody>
+												</table>
+												<!-- Email Wrapper Header Close //-->
+												<!-- Email Wrapper Body Open // -->
+												<table style="max-width:600px;" class="wrapperBody" cellspacing="0" cellpadding="0" border="0" width="100%">
+													<tbody>
+														<tr>
+															<td valign="top" align="center">
+																<!-- Table Card Open // -->
+																<table style="background-color:#e3e3e3;" class="tableCard" cellspacing="0" cellpadding="0" border="0" width="100%">
+																	<tbody>
+																		<tr>
+																			<td style="padding-top:20px;padding-bottom:50px;padding-left:20px;padding-right:20px;" class="mainTitle" valign="top" align="center">
+																				<!-- Main Title Text // -->
+																				<h2 class="text emailMainTitle fallback-text" style="color:#333;font-family:'sans-serif', Helvetica, Arial;font-size:27px;font-weight:300;font-style:normal;letter-spacing:normal;line-height:36px;text-transform:none;text-align:center;padding:0;margin:0;">{{main_title_block}}</h2>
+																			</td>
+																		</tr>
+																		{{main_image_block}}
+																		<tr>
+																			<td style="padding-left:20px;padding-right:20px;" class="containtTable ui-sortable" valign="top" align="center">
+																				<table class="tableDescription" cellspacing="0" cellpadding="0" border="0" width="100%">
+																					<tbody>
+																						<tr>
+																							<td style="padding-bottom:50px;" class="description" valign="top" align="center">
+																								<!-- Description Text// -->
+																								<p class="text emailMainDescription fallback-text" style="color:#333;font-family:'sans-serif', Helvetica, Arial;font-size:18px;font-weight:300;font-style:normal;letter-spacing:normal;line-height:35px;text-transform:none;text-align:left;padding:0;margin:0;">{{main_content_block}}</p>
+																							</td>
+																						</tr>
+																					</tbody>
+																				</table>
+																			</td>
+																		</tr>
+																		<tr>
+																			<td style="font-size:1px;line-height:1px;" height="20"> </td>
+																		</tr>
+																	</tbody>
+																</table>
+																<!-- Table Card Close// -->
+																<!-- Space -->
+																<table class="space" cellspacing="0" cellpadding="0" border="0" width="100%">
+																	<tbody>
+																		<tr>
+																			<td style="font-size:1px;line-height:1px;" height="30"> </td>
+																		</tr>
+																	</tbody>
+																</table>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+												<!--[if (gte mso 9)|(IE)]>
+											</td>
+										</tr>
+									</table>
+									<![endif]-->
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

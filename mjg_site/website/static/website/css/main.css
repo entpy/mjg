@@ -1042,6 +1042,7 @@ blockquote {
 .modal { z-index: 999999!important; }
 legend { font-size: 17.5px; }
 .styled_table thead th { background-color: #565656; }
+.action_number_title { color: #9c9c9c; font-size: 75px; margin-right: 40px; display: inline-block; }
 
 /* cookie law {{{ */
 #cookie-law { background: #000 none repeat scroll 0 0; margin: 0 auto; width: 100%; z-index: 9999; position: fixed; bottom: 0px; opacity: 0.8; }

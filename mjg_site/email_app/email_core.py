@@ -45,6 +45,14 @@ class CustomEmailTemplate():
 	'system_manage_email' : { # email di sistema
 	    'email_from' : settings.DEVELOPER_EMAIL_ADDRESS,
 	    'email_to' : 'info_email',
+            'subject_prefix' : settings.SITE_NAME + " Admin - ",
+            'email_fields' : {
+                "main_title_block" : "",
+                "main_content_block" : "",
+                "plain_main_title_block" : "",
+                "plain_main_content_block" : "",
+                "base_url" : settings.SITE_URL,
+            }
 	},
    }
 
@@ -54,8 +62,8 @@ class CustomEmailTemplate():
     # list of email template available
     template_type = {
 	"default": "default_template",
+	"admin": "admin_template",
 	# "user": "user_template",
-	# "admin": "admin_template",
     }
 
     def __init__(self, email_name, email_context, recipient_list=[], email_from=False, template_type="default"):
@@ -97,6 +105,9 @@ class CustomEmailTemplate():
 
             # set email subject
             self.email_subject = self.email_context.get("subject")
+
+            if self.available_email_name.get(email_name, {}).get("subject_prefix", ""):
+                self.email_subject = str(self.available_email_name.get(email_name, {}).get("subject_prefix", "")) + self.email_subject
 
             # perform email sending
             self.send_mail()
@@ -337,6 +348,26 @@ class CustomEmailTemplate():
                 # creo il blocco di unsubscribe
                 if self.email_context.get("user_profile_url") and self.email_context.get("email_unsubscribe_url"):
                     self.email_html_blocks["unsubscribe_block"] = mark_safe(self.get_unsubscribe_block(user_profile_url=self.email_context.get("user_profile_url"), email_unsubscribe_url=self.email_context.get("email_unsubscribe_url")))
+                pass
+            elif self.email_name == "system_manage_email":
+                """
+                costruisco la mail per gli admin
+                Context vars (* required):
+                ->    ['title *',
+                       'content *',
+                      ]
+		come prelevare una variabile -> str(self.email_context.get("email"))
+                """
+                # 1) inizializzo tutti i blocchi della mail (è fondamentale l'utilizzo di deepcopy)
+                self.email_html_blocks = copy.deepcopy(self.available_email_name[self.email_name]["email_fields"])
+
+                # 2) html version {{{
+                self.email_html_blocks["main_title_block"] = mark_safe(self.email_context.get("title"))
+                self.email_html_blocks["main_content_block"] = mark_safe(self.email_context.get("content"))
+
+                # 3) plain text version {{{
+                self.email_html_blocks["plain_main_title_block"] = mark_safe(self.email_context.get("title"))
+                self.email_html_blocks["plain_main_content_block"] = mark_safe("\n" + self.email_context.get("content") + "\n")
                 pass
 
             return_var = True

@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.conf import settings
 
 from django.shortcuts import render
 # from django_ajax.decorators import ajax
@@ -21,6 +22,7 @@ from mkauto_app.models import MaEvent, Feedback, MasterAccountCode, FriendCode, 
 from mkauto_app.strings import MkautoStrings
 from mkauto_app.consts import mkauto_consts
 from mjg_site.consts import project_constants
+from email_app.email_core import CustomEmailTemplate
 import logging, json
 
 from django.contrib.auth.models import User
@@ -418,6 +420,53 @@ def www_refer_friends(request, user_id, account_code):
 
     return render(request, 'website/www/www_refer_friends.html', context)
 
+# TODO
+@ensure_csrf_cookie
+def www_get_review(request, user_id, account_code):
+    """View to write a review"""
+
+    ma_event_obj = MaEvent()
+    account_obj = Account()
+    user_obj = account_obj.get_user_by_id_account_code(user_id=user_id, account_code=account_code)
+
+    if not user_obj:
+        # se non sono riuscito a tirare fuori l'utente mostro un 404
+        raise Http404()
+
+    event_dictionary = ma_event_obj.get_ma_events()
+    prize_dict = event_dictionary.get("get_review", {})
+    mkauto_prize = "Riceverai " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["get_review"]) + "."
+
+    if request.method == "POST":
+        if request.POST.get("review_notify_form_sent"):
+            # TODO
+            # mando una mail ad admin e info con pulsante per inviare il bonus all'utente
+            # NB: la verifica della recensione andrà fatta manualmente
+
+            # creo e invio la mail
+            email_context = {
+                "subject" : "Un utente richiede il premio per aver lasciato la recensione su Google",
+                "title" : "Un utente richiede il premio per aver lasciato la recensione su Google",
+                "content" : "Clicca sul link al fondo di questa email per vedere le informazioni di chi ha lasciato la recensione e, dopo aver verificato che l'abbia fatto realmente, potrai assegnargli il bonus.<br /><a href='" + str(settings.SITE_URL) + "/dashboard/review-prize/" + str(user_id) + "/" + str(account_code) + "/'>Verifica recensione</a>",
+            }
+
+            CustomEmailTemplate(email_name="system_manage_email", email_context=email_context, recipient_list=[settings.INFO_EMAIL_ADDRESS,], email_from=False, template_type="admin")
+
+            # creo messaggio di successo
+            messages.add_message(request, messages.SUCCESS, "<h4>Grazie mille!</h4><strong>Grazie per averci scritto una recensione, ci aiuterà a crescere ed a rendere i nostri servizi ancora migliori.<br />Al termine della verifica invieremo il tuo bonus via email.</strong>")
+
+            # redirect to a new URL:
+            return HttpResponseRedirect("/lascia-una-recensione/" + str(user_id) + "/" + str(account_code) + "/")
+
+    context = {
+        "user_info_dict" : user_obj,
+        "mkauto_prize" : mkauto_prize,
+        "prize_val" : prize_dict.get("prize_value"),
+        "mkauto_assigned" : user_obj.account.get_review_event_done,
+    }
+
+    return render(request, 'website/www/www_get_review.html', context)
+
 @login_required
 def dashboard_index(request):
     """View to show dashboard index"""
@@ -501,6 +550,47 @@ def dashboard_validate_coupon(request):
     }
     return render(request, 'website/dashboard/dashboard_validate_coupon.html', context)
 
+# TODO
+@login_required
+def dashboard_review_prize(request, user_id, account_code):
+    """View to assign a prize after review"""
+
+    account_obj = Account()
+    ma_event_obj = MaEvent()
+    user_obj = account_obj.get_user_by_id_account_code(user_id=user_id, account_code=account_code)
+
+    if not user_obj:
+        # se non sono riuscito a tirare fuori l'utente mostro un 404
+        raise Http404()
+
+    event_dictionary = ma_event_obj.get_ma_events()
+    prize_dict = event_dictionary.get("get_review", {})
+    mkauto_prize = ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["get_review"])
+
+    # TODO
+    if request.method == "POST":
+        if request.POST.get("assign_review_prize_form_sent"):
+            if not user_obj.account.get_review_event_done:
+                # assegno il premio all'utente
+                ma_event_obj.make_event(user_id=user_id, ma_code=mkauto_consts.event_code["get_review"], strings_ma_code=mkauto_consts.event_code["get_review"], ma_code_dictionary=None, force_prize=True, skip_log_check=True)
+
+                # setto il flag utente 'get_review_event_done' a 1
+                new_save_data = { "get_review_event_done" : "1" }
+                user_obj.account.update_account(save_data=new_save_data, user_obj=user_obj)
+
+                # redirect con messaggio di successo
+                success_msg_mkauto_prize = "Il coupon con " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["get_review"]) + " è stato inviato all'utente via email"
+                messages.add_message(request, messages.SUCCESS, "<h4>Premio inviato</h4><strong>" + str(success_msg_mkauto_prize) + "</strong>.")
+
+    context = {
+        "user_info_dict" : user_obj,
+        "mkauto_prize" : mkauto_prize,
+        "mkauto_assigned" : user_obj.account.get_review_event_done,
+        "user_id" : user_id,
+    }
+
+    return render(request, 'website/dashboard/dashboard_review_prize.html', context)
+
 @login_required
 def dashboard_set_customer(request, user_id):
     """View to show dashboard add/edit customer page"""
@@ -541,20 +631,20 @@ def dashboard_set_customer(request, user_id):
             except UserAlreadyExistsError:
                 # creo messaggio di errore
                 messages.add_message(request, messages.ERROR, "<h4>Controlla questi errori</h4>I dati inseriti (email e/o telefono) sono già presenti.")
-                # redirect nella pagina del cliente
-                # return HttpResponseRedirect("/dashboard/set-customer/")
             else:
                 # check se inviare anche il manual welcome bonus
                 if user_id:
+                    # creo messaggio di successo
+                    messages.add_message(request, messages.SUCCESS, "<h4>Cliente modificato</h4>I dati del cliente sono stati modificati correttamente.")
+                else:
                     if request.POST.get("inputWelcomeBonus"):
-                        # TODO: inviare il manual welcome bonus
+                        # inviare il manual welcome bonus
                         ma_event_obj.make_event(user_id=user_obj.id, ma_code=mkauto_consts.event_code["manual_welcome_prize"], strings_ma_code=mkauto_consts.event_code["manual_welcome_prize"])
                         # creo messaggio di successo
                         messages.add_message(request, messages.SUCCESS, "<h4>Cliente salvato</h4>I dati del cliente sono stati correttamente salvati<br />Gli è stato anche inviato il bonus di benvenuto.")
                     else:
-                        messages.add_message(request, messages.SUCCESS, "<h4>Cliente modificato</h4>I dati del cliente sono stati modificati correttamente.")
-                else:
-                    messages.add_message(request, messages.SUCCESS, "<h4>Cliente salvato</h4>I dati del cliente sono stati salvati correttamente.")
+                        # creo messaggio di successo
+                        messages.add_message(request, messages.SUCCESS, "<h4>Cliente salvato</h4>I dati del cliente sono stati salvati correttamente.")
 
                 # redirect nella pagina del cliente
                 return HttpResponseRedirect("/dashboard/set-customer/" + str(user_obj.id) + "/")
@@ -570,8 +660,6 @@ def dashboard_set_customer(request, user_id):
         birthday_day = int(request.POST.get("birthday_day", user_obj.account.birthday_date.day if user_obj.account.birthday_date else 0))
         birthday_month = int(request.POST.get("birthday_month", user_obj.account.birthday_date.month if user_obj.account.birthday_date else 0))
         birthday_year = int(request.POST.get("birthday_year", user_obj.account.birthday_date.year if user_obj.account.birthday_date else 0))
-
-    logger.info("eccezione22?? " + str(user_obj))
 
     context = {
         "post" : request.POST,
