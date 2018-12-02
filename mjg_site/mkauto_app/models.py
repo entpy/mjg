@@ -43,8 +43,6 @@ class MaEvent(models.Model):
     repeat_delay = models.IntegerField(null=True, blank=True, verbose_name="Dopo il primo invio, tutti i successivi sono ogni x giorni, indicati da questo numero")
     extra_text = models.TextField(null=False, blank=True, verbose_name="Testo aggiuntivo, es. le limitazioni dei coupon per questo evento")
     channels_bitmask = models.IntegerField(default=(project_constants.CHANNEL_EMAIL), null=False, blank=False, verbose_name="Indica su quali canali inviare l'evento, per il momento esiste solo il channel email")
-    # prize_call_to_action = models.CharField(max_length=200, null=True, blank=True, verbose_name="Se settato il premio avrà una call to action")
-    # tickle_call_to_action = models.CharField(max_length=200, null=True, blank=True, verbose_name="Se settato il tickle avrà una call to action")
     ma_event_type = models.CharField(max_length=30, null=False, blank=False, choices=MA_EVENT_TYPE, verbose_name="Il tipo di ma event, se solo premio, tickle+premio oppure schedulato nel tempo")
     json_params = JSONField(null=True, blank=True, verbose_name="Parametri aggiuntivi per l'evento in formato JSON")
     status = models.BooleanField(default=0, verbose_name="Indica se l'evento è attivo o no (1=attivo, 0=non attivo)")
@@ -224,6 +222,8 @@ class MaEvent(models.Model):
         # TODO
         # aggiungere una riga anche se l'evento è disabilitato per evitare che la scaletta temporale degli eventi si modifichi
         # L'evento può essere inviato, inserisco una riga in ma_event_log
+        # quindi il check dello status va fatto dopo questa funzione e non esternamente nello script
+        # NB: effettuando questa modifica verranno inseriti molti ma_event_log inutili (per quanto riguarda gli eventi disabilitati)
         ma_event_log_obj = self.add_event_log(user_id=user_id, ma_event_id=ma_code_dictionary["ma_event_id"], ma_code=strings_ma_code)
 
         # prelevo le info dell'account
