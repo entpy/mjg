@@ -223,7 +223,8 @@ LOGIN_URL = "/admin/login/"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/static/'
+# STATIC_URL = '/static/'
+GIT_PROJECT_NAME = "mjg"
 
 # loading local settings
 try:
