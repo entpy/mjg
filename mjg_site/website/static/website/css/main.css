@@ -310,7 +310,7 @@ html * {
 }
 
 .navbar-toggle .icon-bar {
-	background-color: #8F8F8F;
+	background-color: #fff;
 	height: 1px;
 }
 
@@ -319,7 +319,7 @@ html * {
 }
 
 .navbar-toggle {
-	border: 1px solid #8F8F8F;
+	border: 1px solid #fff;
 	border-radius: 2px;
 	margin-top: 25px;
 }
@@ -359,7 +359,7 @@ html * {
 .navbar.navbar-main .dropdown-menu>li>a {
 	line-height: 2.66 !important;
 	border-bottom: 1px solid #f0f0f0;
-	padding: 2px 20px 2px 14px;
+	padding: 10px 20px 10px 14px;
 }
 
 .dropdown-arrow {
@@ -1026,7 +1026,6 @@ blockquote {
 .readable_text1 { letter-spacing: 0.02em; line-height: 1.8678; }
 .img-responsive { display: inline-block; }
 .page_header_block { display: inline-block; padding: 70px 0; text-align: center; width: 100%; }
-.page_header_block h1 { background-color: black; color: white; display: inline-block; font-size: 57px; font-weight: 100; padding: 10px 20px; text-transform: uppercase; }
 .page_header_block h4 { background-color: black; color: white; display: inline-block; font-size: 22px; font-weight: 100; padding: 5px 10px; }
 .service_header_block { background-image: url("../img/service_bg.png"); background-position: center center; background-size: initial; background-attachment: fixed; }
 .contacts_header_block { background-image: url("../img/contacts_bg.png"); background-position: center center; background-size: initial; background-attachment: fixed; }
@@ -1043,6 +1042,7 @@ blockquote {
 legend { font-size: 17.5px; }
 .styled_table thead th { background-color: #565656; }
 .action_number_title { color: #9c9c9c; font-size: 75px; margin-right: 40px; display: inline-block; }
+footer h4 { color: white; }
 
 /* cookie law {{{ */
 #cookie-law { background: #000 none repeat scroll 0 0; margin: 0 auto; width: 100%; z-index: 9999; position: fixed; bottom: 0px; opacity: 0.8; }
@@ -1070,11 +1070,13 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 	.padding-xs-only-60 { padding-bottom: 60px; }
 	.single_service_block .readable_text1 { padding-bottom: 80px; }
 	.single_service_block:last-child .readable_text1 { padding-bottom: 0px; }
+	.navbar-nav .open .dropdown-menu { background-color: #3e3c3c; }
 }
 /* xs sm only */
 @media (max-width: 992px) {
 	.coupon_image_container img { max-width: 60%; }
 	.info_block { margin-top: 40px; }
+	.page_header_block h1 { background-color: black; color: white; display: inline-block; font-size: 35px; font-weight: 100; padding: 10px 20px; text-transform: uppercase; }
 }
 /* sm only */
 @media (min-width: 768px) and (max-width: 992px) {
@@ -1083,6 +1085,7 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 	.padding-sm-only-60 { padding-bottom: 60px; }
 	.single_service_block .readable_text1 { padding-bottom: 80px; }
 	.single_service_block:last-child .readable_text1 { padding-bottom: 0px; }
+	.page_header_block h1 { background-color: black; color: white; display: inline-block; font-size: 35px; font-weight: 100; padding: 10px 20px; text-transform: uppercase; }
 }
 @media (min-width: 768px) {
 	.dropdown:hover .dropdown-menu { display: block; }
@@ -1090,6 +1093,7 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 	.text-sm-right { text-align: right; }
 	.text-sm-center { text-align: center; }
 	.text-sm-justify { text-align: justify; }
+	.page_header_block h1 { background-color: black; color: white; display: inline-block; font-size: 57px; font-weight: 100; padding: 10px 20px; text-transform: uppercase; }
 }
 
 @media (min-width: 992px) {
@@ -1097,10 +1101,12 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 	.text-md-right { text-align: right; }
 	.text-md-center { text-align: center; }
 	.text-md-justify { text-align: justify; }
+	.page_header_block h1 { background-color: black; color: white; display: inline-block; font-size: 57px; font-weight: 100; padding: 10px 20px; text-transform: uppercase; }
 }
 @media (min-width: 1200px) {
 	.text-lg-left { text-align: left; }
 	.text-lg-right { text-align: right; }
 	.text-lg-center { text-align: center; }
 	.text-lg-justify { text-align: justify; }
+	.page_header_block h1 { background-color: black; color: white; display: inline-block; font-size: 57px; font-weight: 100; padding: 10px 20px; text-transform: uppercase; }
 }

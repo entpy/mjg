@@ -85,7 +85,10 @@ function page_anchor(anchorName) {
 		var scrollToElement = anchorName;
 	}
 
-	$.scrollTo('#_' + scrollToElement, 2500, { offset:-80 });
+	var navMain = $("#bs-navbar-collapse-1");
+	navMain.collapse('hide');
+
+	$.scrollTo('#_' + scrollToElement);
 
 	return true;
 }

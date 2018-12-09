@@ -15,15 +15,23 @@
 {% endblock %}
 {% block extra_js %}
 <script>
-	page_anchor();
-	$(document).ready(function(){
+	/*$(document).ready(function(){
 		$(document).on("click", ".serviceNavigationClick", function(){
 			var anchorName = $(this).data("navigationAnchor");
 			if (anchorName) {
 				page_anchor(anchorName);
 			}
 		});
-	})
+
+		page_anchor();
+	});*/
+
+	$(document).ready(function(){
+		$(document).on("click", ".serviceNavigationClick", function(){
+			var navMain = $("#bs-navbar-collapse-1");
+			navMain.collapse('hide');
+		});
+	});
 </script>
 {% endblock %}
 
@@ -37,7 +45,8 @@
 	<div><h4>Scopri tutto quello che facciamo</h4></div>
 </div>
 <!-- three elements block -->
-<div id="_meccanica" class="row page_title_separator">
+<div id="_meccanica">&bnsp;</div>
+<div class="row page_title_separator">
 	<div class="col-sm-12">
 		<h2>Meccanica</h2>
 		<div class="readable_text1">
@@ -102,7 +111,8 @@
 		</div>
 	</div>
 </div>
-<div id="_elettronica" class="row page_title_separator">
+<div id="_elettronica">&bnsp;</div>
+<div class="row page_title_separator">
 	<div class="col-sm-12">
 		<h2>Elettronica</h2>
 		<div class="readable_text1">
@@ -144,7 +154,8 @@
 		</div>
 	</div>
 </div>
-<div id="_gommista" class="row page_title_separator">
+<div id="_gommista">&bnsp;</div>
+<div class="row page_title_separator">
 	<div class="col-sm-12">
 		<h2>Gommista</h2>
 		<div class="readable_text1">
