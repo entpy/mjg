@@ -12,6 +12,7 @@ from django.contrib.auth.forms import UserChangeForm
 # Come integrare il modello Account nell'admin
 # https://simpleisbetterthancomplex.com/tutorial/2016/11/23/how-to-add-user-profile-to-django-admin.html
 
+"""
 class ProfileInline(admin.StackedInline):
     model = Account
     can_delete = False
@@ -40,4 +41,5 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.unregister(User)
-admin.site.register(User, CustomUserAdmin)
+"""
+admin.site.register(Account)

@@ -51,7 +51,7 @@ class MaEvent(models.Model):
         app_label = 'mkauto_app'
 
     def __unicode__(self):
-        return self.ma_event_id
+        return str(self.ma_event_id)
 
     def get_by_ma_code(self, ma_code):
         """Funtion to retrieve ma_event by ma_code"""
@@ -474,7 +474,7 @@ class MaEventLog(models.Model):
         app_label = 'mkauto_app'
 
     def __unicode__(self):
-        return self.ma_event_log_id
+        return str(self.ma_event_log_id)
 
 class MaEventCode(models.Model):
     ma_event_code_id = models.AutoField(primary_key=True)
@@ -494,7 +494,7 @@ class MaEventCode(models.Model):
         ]
 
     def __unicode__(self):
-        return self.ma_event_code_id
+        return str(self.ma_event_code_id)
 
     def get_by_code(self, code):
         """Function to retrieve MaEventCode instance by code"""
@@ -542,7 +542,7 @@ class MaRandomCode(models.Model):
         unique_together = ("random_code", "order")
 
     def __unicode__(self):
-        return self.ma_random_code_id
+        return str(self.ma_random_code_id)
 
 class Feedback(models.Model):
     QUALITY_LEVEL = (
@@ -562,7 +562,7 @@ class Feedback(models.Model):
         app_label = 'mkauto_app'
 
     def __unicode__(self):
-        return self.feedback_id
+        return str(self.feedback_id)
 
     def add_feedback(self, user_id, quality_level, feedback_text):
         """Function to add a new feedback"""
@@ -586,7 +586,7 @@ class MasterAccountCode(models.Model):
         app_label = 'mkauto_app'
 
     def __unicode__(self):
-        return self.master_account_code_id
+        return str(self.master_account_code_id)
 
     def create_or_get_master_code(self, user_id):
         """Function to create a master account code if not exists yet"""
@@ -677,14 +677,14 @@ class FriendCode(models.Model):
     friend_code_id = models.AutoField(primary_key=True)
     master_account_code = models.ForeignKey(MasterAccountCode, on_delete=models.CASCADE)
     ma_event_code = models.ForeignKey(MaEventCode, on_delete=models.CASCADE)
-    creation_date = models.DateTimeField(auto_now_add=True)
     status = models.BooleanField(default=0, verbose_name="Indica se il codice è già stato utilizzato e quindi chi ha proposto l'amico ha ricevuto il premio (0=non utilizzato, 1=utilizzato)")
+    creation_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         app_label = 'mkauto_app'
 
     def __unicode__(self):
-        return self.friend_code_id
+        return str(self.friend_code_id)
 
     def get_by_ma_event_code(self, ma_event_code_instance):
         """Function to retrieve FriendCode instance by ma_event_code_instance"""
