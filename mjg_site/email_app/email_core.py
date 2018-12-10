@@ -338,7 +338,7 @@ class CustomEmailTemplate():
                 if self.email_context.get("call_to_action_label") and self.email_context.get("call_to_action_url"):
                     call_to_action_url = self.base_url + str(self.email_context.get("call_to_action_url"))
                     self.email_html_blocks["call_to_action_block"] = mark_safe(self.get_call_to_action_template(href=call_to_action_url, label=self.email_context.get("call_to_action_label"), title=self.email_context.get("call_to_action_title")))
-                    self.email_html_blocks["plain_call_to_action_label"] = mark_safe(self.email_context.get("call_to_action_label"))
+                    self.email_html_blocks["plain_call_to_action_label"] = "&nbsp;" + str(mark_safe(self.email_context.get("call_to_action_label"))) + "&nbsp;"
                     self.email_html_blocks["plain_call_to_action_url"] = mark_safe(call_to_action_url)
 
                 # link di unsubscribe e profile editing
