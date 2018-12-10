@@ -199,10 +199,6 @@ class MaEvent(models.Model):
             # problemi con il codice passato alla funzione
             raise MaEventsCodeDoesNotExistError
 
-        if not ma_code_dictionary["status"]:
-            # se l'evento non è attivo esco dalla funzione
-            return False
-
         logger.info("MaEvent info dict")
         logger.info(ma_code_dictionary)
 
@@ -225,6 +221,10 @@ class MaEvent(models.Model):
         # quindi il check dello status va fatto dopo questa funzione e non esternamente nello script
         # NB: effettuando questa modifica verranno inseriti molti ma_event_log inutili (per quanto riguarda gli eventi disabilitati)
         ma_event_log_obj = self.add_event_log(user_id=user_id, ma_event_id=ma_code_dictionary["ma_event_id"], ma_code=strings_ma_code)
+
+        if not ma_code_dictionary["status"]:
+            # se l'evento non è attivo esco dalla funzione
+            return False
 
         # prelevo le info dell'account
         account_obj = Account()

@@ -41,14 +41,14 @@ urlpatterns = [
     url(r'^dashboard/customers/?$', website.views.dashboard_customers, name='dashboard_customers'),
     url(r'^dashboard/validate-coupon/?$', website.views.dashboard_validate_coupon, name='dashboard_validate_coupon'),
     url(r'^dashboard/set-customer/(?:(?P<user_id>\d+)/)?$', website.views.dashboard_set_customer, name='dashboard_set_customer'),
-    # TODO
     # fare pagina nascosta per inviare il bonus della recensione (attivabile tramite pulsante nella mail)
     url(r'^dashboard/review-prize/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/?$', website.views.dashboard_review_prize, name='dashboard_review_prize'),
+    # pagina raggiungibile solo da URL per inizializzare la mkauto
+    url(r'^dashboard/create-mkauto-default/?$', website.views.dashboard_create_mkauto_default, name='dashboard_create_mkauto_default'),
     # dashboard }}}
 
     # ajax {{{
     url(r'^ajax/customers-list/?$', website.views.ajax_customers_list, name='ajax_customers_list'),
     # ajax }}}
 
-    url(r'^test-page/?$', website.views.www_test_page, name='www_test_page'),
 ]

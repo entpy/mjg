@@ -734,18 +734,18 @@ def ajax_customers_list(request):
     return return_var
 # ajax view }}}
 
-def www_test_page(request):
+@login_required
+def dashboard_create_mkauto_default(request):
     ma_event_obj = MaEvent()
 
-    # XXX: debug only
-    ma_event_obj.delete_all_data()
+    # per eliminare i dati già esistenti
+    # if request.GET.get("clear_data"):
+    #     ma_event_obj.delete_all_data()
 
     # creo i default della mkauto
-    ma_event_obj.create_mkauto_defaults()
-
-    # ma_event_obj.add_event_log(user_id=20, ma_event_id=38)
-
-    # provo ad eseguire un evento di test
-    # ma_event_obj.make_event(user_id=20, ma_code="welcome_prize")
-
-    # return HttpResponse("Test page!")
+    # solo se non ci sono ancora eventi salvati
+    if MaEvent.objects.count() == 0:
+        ma_event_obj.create_mkauto_defaults()
+        return HttpResponse("Mkauto inizializzata con successo")
+    else:
+        return HttpResponse("Esistono già degli eventi, non faccio nulla")
