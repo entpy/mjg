@@ -390,7 +390,14 @@ class CustomEmailTemplate():
             recipient_list=self.email_to,
             html_message=html_text,
         )
+
+	"""
+        logger.info("###START EMAIL HTML###")
+        logger.info(html_text)
+        logger.info("###END EMAIL HTML###")
+	"""
         logger.info("email inviata a " + str(self.email_to) + " | stato invio: " + str(return_var) + " (1=ok)")
+
         """
         send_debug_admin_email = True
 
