@@ -67,9 +67,9 @@
 		<div class="col-md-10 col-md-offset-1">
 			<div class="col-md-4 padding-xs-only padding-sm-only">
 				<h4>Feedback:</h4>
-				<p>{% if get_feedback_event_done %}{{ no_prize_string | safe }}{% else %}{{ mkauto_prize | safe }}{% endif %}<br />Utilizzeremo le tue informazioni per migliorarci ed offrirti un servizione ancora migliore!</p>
+				<p>{% if get_feedback_event_done %}{{ no_prize_string | safe }}{% else %}{{ mkauto_prize | safe }}{% endif %}<br />Utilizzeremo le tue informazioni per migliorarci ed offrirti un servizio ancora migliore!</p>
 				{% if not get_feedback_event_done %}
-					<div class="coupon_image_container text-sm-center text-xs-center"><img class="img-responsive" alt="Sconto del 30%" src="{% static "website/img/coupon.png" %}"></div>
+					<div class="coupon_image_container text-sm-center text-xs-center"><img class="img-responsive" alt="Sconto del 20%" src="{% static "website/img/coupon_20.png" %}"></div>
 				{% endif %}
 			</div>
 			<div class="col-md-offset-1 col-md-7">

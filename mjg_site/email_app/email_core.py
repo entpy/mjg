@@ -255,7 +255,7 @@ class CustomEmailTemplate():
                 <tr>
                         <td style="padding-bottom:25px;padding-left:20px;padding-right:20px;" class="subTitle" valign="top" align="center">
                                 <!-- Sub Title Text // -->
-                                <h4 class="text emailCouponInfo fallback-text" style="color:#999999;font-family:'sans-serif', Helvetica, Arial;font-size:16px;font-weight:400;font-style:normal;letter-spacing:normal;line-height:24px;text-transform:none;text-align:center;padding:0;margin:0;">Presentaci questo coupon in sede per ottenere il bonus</h4>
+                                <h4 class="text emailCouponInfo fallback-text" style="color:#999999;font-family:'sans-serif', Helvetica, Arial;font-size:16px;font-weight:400;font-style:normal;letter-spacing:normal;line-height:24px;text-transform:none;text-align:center;padding:0;margin:0;">Presentaci il codice sotto in sede per ottenere il bonus:</h4>
                         </td>
                 </tr>
                 <tr>

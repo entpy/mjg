@@ -265,7 +265,7 @@ class MaEvent(models.Model):
             "content" : event_strings["content"],
             "image_url" : settings.SITE_URL + "/static/website/img/mkauto_images/" + event_strings["image_code"] + ".png",
             "coupon_code" : coupon_code,
-            "coupon_code_extra_text" : '<p class="text fallback-text" style="color:#333;font-family:\'sans-serif\', Helvetica, Arial;font-size:16px;font-weight:300;font-style:normal;letter-spacing:normal;line-height:35px;text-transform:none;text-align:left;padding:0;margin:0;">' + str("Questo coupon non è cumulabile con altre offerte." if coupon_code else "") + ("<br />" + ma_code_dictionary["extra_text"] if ma_code_dictionary["extra_text"] else "") + "</p>",
+            "coupon_code_extra_text" : '<p class="text fallback-text" style="color:#333;font-family:\'sans-serif\', Helvetica, Arial;font-size:15px;font-weight:300;font-style:normal;letter-spacing:normal;line-height:35px;text-transform:none;text-align:left;padding:0;margin:0;">' + str("Questo coupon non è cumulabile con altre offerte e si applica al solo costo di manodopera." if coupon_code else "") + ("<br />" + ma_code_dictionary["extra_text"] if ma_code_dictionary["extra_text"] else "") + "</p>",
             "call_to_action_title" : event_strings["call_to_action_title"],
             "call_to_action_label" : event_strings["call_to_action_label"],
             "call_to_action_url" : event_strings["call_to_action_url"],
