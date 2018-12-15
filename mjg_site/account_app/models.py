@@ -64,7 +64,7 @@ class Account(models.Model):
             self.account_code = self.__generate_account_code(email=self.user.email)
         super(Account, self).save(*args, **kwargs) # Call the "real" save() method.
 
-    def update_account(self, save_data, user_obj):
+    def update_account(self, save_data, user_obj, set_birthday_date_flag=False):
         """Function to update User and Account data"""
         return_var = False
 
@@ -91,8 +91,6 @@ class Account(models.Model):
             # save Account model addictional informations
             if "status" in save_data:
                 user_obj.account.status = save_data["status"]
-            # if "birthday_date" in save_data:
-            #    user_obj.account.birthday_date = save_data["birthday_date"]
             if "mobile_number" in save_data:
                 user_obj.account.mobile_number = save_data["mobile_number"]
             if "notify_bitmask" in save_data:
@@ -108,6 +106,8 @@ class Account(models.Model):
             birthday_date = self.create_date(date_dictionary=save_data, get_isoformat=True)
             if "birthday_day" in save_data and "birthday_month" in save_data and "birthday_year" in save_data:
                 user_obj.account.birthday_date = birthday_date
+                if set_birthday_date_flag:
+                    user_obj.account.get_birthday_date_event_done = True
 
             # save addictiona models data
             user_obj.save()
@@ -166,11 +166,17 @@ class Account(models.Model):
         if self.check_if_user_exists(account_data["email"], account_data["mobile_number"]):
             raise UserAlreadyExistsError
 
+        get_birthday_date_event_done = False
+        bir_date = self.create_date(date_dictionary=account_data, get_isoformat=True)
+        if bir_date:
+            get_birthday_date_event_done = True
+
         # creo l'oggetto Account che estende l'oggetto User con una relazione 1-1
         new_account_obj = Account(
             user=User.objects.create_user(username=account_data["email"], first_name=account_data["first_name"], last_name=account_data.get("last_name"), email=account_data["email"]),
             mobile_number=account_data.get("mobile_number"),
-            birthday_date=self.create_date(date_dictionary=account_data, get_isoformat=True),
+            birthday_date=bir_date,
+            get_birthday_date_event_done=get_birthday_date_event_done,
         )
         new_account_obj.save(force_insert=True)
 

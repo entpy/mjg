@@ -104,6 +104,8 @@ def www_get_offers(request, master_code):
         "master_code" : master_code,
         "mkauto_prize" : mkauto_prize,
         "title_mkauto_prize_str" : "Ottieni " + title_mkauto_prize_str,
+        "friend_name" : request.GET.get("fn", ""),
+        "friend_email" : request.GET.get("fe", ""),
     }
 
     return render(request, 'website/www/www_get_offers.html', context)
@@ -428,6 +430,7 @@ def www_get_review(request, user_id, account_code):
     ma_event_obj = MaEvent()
     account_obj = Account()
     user_obj = account_obj.get_user_by_id_account_code(user_id=user_id, account_code=account_code)
+    mkauto_assigned = user_obj.account.get_review_event_done
 
     if not user_obj:
         # se non sono riuscito a tirare fuori l'utente mostro un 404
@@ -438,7 +441,7 @@ def www_get_review(request, user_id, account_code):
     mkauto_prize = "Riceverai " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["get_review"]) + "."
 
     if request.method == "POST":
-        if request.POST.get("review_notify_form_sent"):
+        if request.POST.get("review_notify_form_sent") and not mkauto_assigned:
             # TODO
             # mando una mail ad admin e info con pulsante per inviare il bonus all'utente
             # NB: la verifica della recensione andrà fatta manualmente
@@ -462,7 +465,7 @@ def www_get_review(request, user_id, account_code):
         "user_info_dict" : user_obj,
         "mkauto_prize" : mkauto_prize,
         "prize_val" : prize_dict.get("prize_value"),
-        "mkauto_assigned" : user_obj.account.get_review_event_done,
+        "mkauto_assigned" : mkauto_assigned,
     }
 
     return render(request, 'website/www/www_get_review.html', context)
@@ -624,7 +627,7 @@ def dashboard_set_customer(request, user_id):
                     save_data["birthday_month"] = form.cleaned_data["birthday_month"]
                     save_data["birthday_year"] = form.cleaned_data["birthday_year"]
 
-                    account_obj.update_account(save_data, user_obj=user_obj)
+                    account_obj.update_account(save_data, user_obj=user_obj, set_birthday_date_flag=True)
                 else:
                     # creo un nuovo utente (verifico che email e/o telefono non siano già presenti)
                     user_obj = account_obj.create_account(form.cleaned_data)

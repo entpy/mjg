@@ -53,6 +53,7 @@ def run():
 
     ##### Bonus al compleanno {{{ #####
     current_ma_event = "happy_birthday_prize"
+    account_list = None
     if event_dictionary.get(current_ma_event, {}).get("status"):
         logger.info("@@@ " + current_ma_event + " ATTIVO @@@")
     else:
@@ -70,6 +71,7 @@ def run():
 
     ##### Bonus dicci la tua data di nascita per ottenere il bonus {{{ #####
     current_ma_event = "get_birthday_date"
+    account_list = None
     if event_dictionary.get(current_ma_event, {}).get("status"):
         logger.info("@@@ " + current_ma_event + " ATTIVO @@@")
     else:
@@ -87,6 +89,7 @@ def run():
 
     ##### Chiedo all'utente di lasciare un feedback (informazioni interne) {{{ #####
     current_ma_event = "get_feedback"
+    account_list = None
     if event_dictionary.get(current_ma_event, {}).get("status"):
         logger.info("@@@ " + current_ma_event + " ATTIVO @@@")
     else:
@@ -104,6 +107,7 @@ def run():
 
     ##### Chiedo all'utente di presentare degli amici {{{ #####
     current_ma_event = "refer_friend"
+    account_list = None
     if event_dictionary.get(current_ma_event, {}).get("status"):
         logger.info("@@@ " + current_ma_event + " ATTIVO @@@")
     else:
@@ -121,6 +125,7 @@ def run():
 
     ##### Chiedo all'utente di lasciare una recensione (informazioni pubbliche) {{{ #####
     current_ma_event = "get_review"
+    account_list = None
     if event_dictionary.get(current_ma_event, {}).get("status"):
         logger.info("@@@ " + current_ma_event + " ATTIVO @@@")
     else:
@@ -140,6 +145,7 @@ def run():
     """
     ##### Premio con un testo random  {{{ #####
     current_ma_event = "random_promo"
+    account_list = None
     if event_dictionary.get(current_ma_event, {}).get("status"):
         logger.info("@@@ " + current_ma_event + " ATTIVO @@@")
     else:
@@ -160,6 +166,7 @@ def run():
     """
     ##### Tip o info random {{{ #####
     current_ma_event = "random_tip"
+    account_list = None
     if event_dictionary.get(current_ma_event, {}).get("status"):
         logger.info("@@@ " + current_ma_event + " ATTIVO @@@")
     else:

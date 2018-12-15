@@ -90,6 +90,9 @@ class CommonUtils(object):
                 # prelevo l'id dell'utente da premiare
                 master_account_id = friend_code_instance.master_account_code.user.id
 
+                friend_code_instance.status = True
+                friend_code_instance.save()
+
                 logger.debug("### mark_code_as_used")
                 logger.debug("master_account_id: " + str(master_account_id))
 

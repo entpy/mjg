@@ -66,7 +66,7 @@ class MaEvent(models.Model):
 
         return return_var
 
-    def event_can_be_performed(self, ma_event_id, repeat_delay, user_id):
+    def event_can_be_performed(self, ma_code, repeat_delay, user_id):
         """
         Se l'id dell'evento non è presente nella tabella ma_event_log posso inviare l'evento
         Se l'id dell'evento è presente nella tabella ma_event_log devo controllare che i giorni 
@@ -75,8 +75,8 @@ class MaEvent(models.Model):
         return_var = False
 
         # return_var = MaEventLog.objects.values('creation_date').filter(user__id=user_id, creation_date__gt=timezone.now()-datetime.timedelta(days=repeat_delay)).last()
-        ma_event_log_obj = MaEventLog.objects.values('ma_event_log_id', 'creation_date').filter(user__id=user_id, ma_event__ma_event_id=ma_event_id).order_by('-ma_event_log_id').first()
-        logger.info("@@@ check se inviare l'evento @@@")
+        ma_event_log_obj = MaEventLog.objects.values('ma_event_log_id', 'creation_date').filter(user__id=user_id, ma_code=ma_code).order_by('-ma_event_log_id').first()
+        logger.info("@@@ check se inviare l'evento (code=" + str(ma_code) + ") @@@")
         if ma_event_log_obj:
             logger.info("evento esistente, controllo le date, per lo user_id (" + str(user_id) + ")")
             logger.info(str(timezone.now().date()) + " >= " + str((ma_event_log_obj["creation_date"]+datetime.timedelta(days=repeat_delay)).date()))
@@ -210,7 +210,7 @@ class MaEvent(models.Model):
         # 1)
         # Controllo se l'evento può essere inviato
         if not skip_log_check: # alcuni eventi (quelli a seguito della call to action di un tickle) non devono fare il check dei log, altrimenti non verrebbero mai inviati
-            if not self.event_can_be_performed(ma_event_id=ma_code_dictionary["ma_event_id"], repeat_delay=ma_code_dictionary["repeat_delay"], user_id=user_id):
+            if not self.event_can_be_performed(ma_code=strings_ma_code, repeat_delay=ma_code_dictionary["repeat_delay"], user_id=user_id):
                 # l'evento non può essere inviato (perchè non ancora oltre il repeat_delay)
                 return False
 
@@ -472,6 +472,9 @@ class MaEventLog(models.Model):
 
     class Meta:
         app_label = 'mkauto_app'
+        indexes = [
+            models.Index(fields=['ma_code',]),
+        ]
 
     def __unicode__(self):
         return str(self.ma_event_log_id)
@@ -654,16 +657,16 @@ class MasterAccountCode(models.Model):
 
         email_subject = ma_event_obj.ucfirst(string=friend_first_name + ", " + user_first_name + " " + user_last_name + " ti invita a provare " + settings.SITE_NAME + ", ecco "  + str(event_prize_str))
         email_title = ma_event_obj.ucfirst(string=friend_first_name + ", " + user_first_name + " " + user_last_name + " ti invita a provare i servizi di " + settings.SITE_NAME + ",<br />ecco "  + str(event_prize_str))
-        email_content = "Caro " + ma_event_obj.ucfirst(string=friend_first_name) + ", <b>" + user_first_name + " " + user_last_name + "</b> ti ha proposto di provare i servizi offerti da " + settings.SITE_NAME + ", ecco " + str(event_prize_str) + " per incentivarti.<br />Questi sono alcuni dei nostri servizi:<br />- Cambio olio e tagliando completo<br />- Manutenzione sistema frenante<br />- Sostituzione frizione<br />- Diagnosi elettronica<br />- Sostituzione / Riparazione gomme<br />...e tanto altro, visita il nostro sito per scoprirli tutti.<br /><br /><b>Come fare per ricevere " + str(event_prize_str) + "?</b><br />Clicca sul pulsante sotto e registrati per ottenere subito il tuo bonus."
+        email_content = "Caro " + ma_event_obj.ucfirst(string=friend_first_name) + ", <b>" + user_first_name + " " + user_last_name + "</b> ti ha proposto di provare i servizi offerti da " + settings.SITE_NAME + ", ecco " + str(event_prize_str) + " per incentivarti.<br />Questi sono alcuni dei nostri servizi:<br />- Cambio olio e tagliando completo<br />- Manutenzione sistema frenante<br />- Sostituzione frizione<br />- Diagnosi elettronica<br />- Sostituzione / Riparazione gomme<br />...e tanto altro, visita il nostro sito per scoprirli tutti.<br /><br /><b>Come fare per ricevere " + str(event_prize_str) + "?</b><br />Clicca sul pulsante sotto e registrati per ottenere subito il tuo sconto."
 
         email_context = {
             "subject" : email_subject,
             "title" : email_title,
             "content" : email_content,
             "image_url" : settings.SITE_URL + "/static/website/img/mkauto_images/new_friend.png",
-            "call_to_action_title" : "Clicca sul pulsante sotto<br />per ricevere subito il tuo bonus",
-            "call_to_action_label" : "Ricevi il bonus",
-            "call_to_action_url" : "/ricevi-offerte/" + str(aff_code) + "/",
+            "call_to_action_title" : "Clicca sul pulsante sotto<br />per ricevere subito il tuo sconto",
+            "call_to_action_label" : "Ricevi lo sconto",
+            "call_to_action_url" : "/ricevi-offerte/" + str(aff_code) + "/?fn=" + str(friend_first_name) + "&fe=" + str(friend_email),
         }
 
         logger.info("@@@ send_friend_invite email context @@@")

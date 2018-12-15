@@ -210,7 +210,7 @@ class mkauto_consts(object):
             "ma_code" : event_code["random_promo"],
             "description" : "Premio con un testo random",
             "prize_type" : "discount",
-            "prize_value" : "10",
+            "prize_value" : "5",
             "start_delay" : "35",
             "repeat_delay" : "56",
             "extra_text" : "",
