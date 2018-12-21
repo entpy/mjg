@@ -294,6 +294,7 @@ def www_profile(request, user_id, account_code, show_only_section):
     # account_obj.get_mkauto_accounts(days_from_creation=0)
     # prelevo la stringa del premio
     mkauto_prize = "lasciaci la tua data di nascita, riceverai " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["get_birthday_date"]) + "."
+    title_mkauto_prize = "Ottieni " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["get_birthday_date"])
 
     context = {
         "post" : request.POST,
@@ -304,6 +305,7 @@ def www_profile(request, user_id, account_code, show_only_section):
         "birthday_month" : int(request.POST.get("birthday_month", user_obj.account.birthday_date.month if user_obj.account.birthday_date else 0)),
         "birthday_year" : int(request.POST.get("birthday_year", user_obj.account.birthday_date.year if user_obj.account.birthday_date else 0)),
         "mkauto_prize" : ma_event_obj.create_first_name_string(string=mkauto_prize, separator=', ', first_name=user_obj.first_name),
+        "title_mkauto_prize" : title_mkauto_prize,
     }
 
     return render(request, 'website/www/www_profile.html', context)
@@ -352,7 +354,7 @@ def www_feedback(request, user_id, account_code):
     # account_obj = Account()
     # account_obj.get_mkauto_accounts(days_from_creation=0)
     # prelevo la stringa del premio
-    mkauto_prize = "cosa pensi del nostro servizio?<br />Dacci qualche consiglio, suggerimento o eventuali critiche e riceverai " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["get_feedback"]) + "."
+    mkauto_prize = "cosa pensi del nostro servizio?<br />Dacci qualche consiglio, suggerimenti o eventuali critiche e riceverai " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["get_feedback"]) + "."
 
     context = {
         "post" : request.POST,

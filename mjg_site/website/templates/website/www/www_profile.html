@@ -11,6 +11,11 @@
 {% block custom_css %}
 <style>
 	.coupon_image_container { margin-top: 40px; margin-bottom: 20px; }
+	{% if show_only_section and show_only_section == "bd" %}
+		{% if user_info_dict.account.get_birthday_date_event_done %}
+			.pageContent { display: none!important; }
+		{% endif %}
+	{% endif %}
 </style>
 {% endblock %}
 {# Custom page script block #}
@@ -25,8 +30,17 @@
 {# container content #}
 {% block www_main_content %}
 <div class="page_header_block contacts_header_block">
-	<div><h1>Il mio profilo</h1></div>
-	<div><h4>Visualizza o modifica le tue informazioni</h4></div>
+	{% if show_only_section and show_only_section == "bd" %}
+		{% if not user_info_dict.account.get_birthday_date_event_done %}
+			<div><h1>{{ title_mkauto_prize }}</h1></div>
+			<div><h4>Lasciaci la tua data di nascita</h4></div>
+		{% else %}
+			<div><h1>Lasciaci la tua data di nascita</h1></div>
+		{% endif %}
+	{% else %}
+		<div><h1>Il mio profilo</h1></div>
+		<div><h4>Visualizza o modifica le tue informazioni</h4></div>
+	{% endif %}
 </div>
 <div class="container-fluid info_block info_block_color1">
 	<div class="row">
@@ -65,14 +79,17 @@
 			</div>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row pageContent">
 		<div class="col-md-10 col-md-offset-1">
 			<div class="col-md-4 padding-xs-only padding-sm-only">
-				<h4>Profilo:</h4>
-				<p>Da questa pagina puoi visualizzare e/o modificare le informazioni che hai inserito.</p>
 				{% if show_only_section and show_only_section == "bd" %}
+					<h4>Come fare</h4>
 					<p><b>{{ mkauto_prize }}</b></p>
+					<p>Compila il modulo presente in questa pagina e clicca sul pulsante "Salva", riceverai il tuo bonus direttamente via email.</p>
 					<div class="coupon_image_container text-sm-center text-xs-center"><img class="img-responsive" alt="Sconto del 20%" src="{% static "website/img/coupon_20.png" %}"></div>
+				{% else %}
+					<h4>Profilo</h4>
+					<p>Da questa pagina puoi visualizzare e/o modificare le informazioni che hai inserito.</p>
 				{% endif %}
 			</div>
 			<div class="col-md-offset-1 col-md-7">
@@ -110,7 +127,7 @@
 								{% endif %}
 								<div class="form-group formGroupAction inputBirthdayGroup">
 									<label for="select" class="col-lg-2 control-label">Data di nascita</label>
-									<div class="col-lg-10">
+									<div class="col-lg-10 no_gutter">
 										<div class="col-sm-4">
 											<select id="birthday_date" class="form-control" name="birthday_day">
 												<option value="" selected="selected">Giorno</option>
