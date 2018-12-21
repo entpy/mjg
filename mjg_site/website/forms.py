@@ -100,3 +100,10 @@ class ValidateCouponForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(ValidateCouponForm, self).__init__(*args, **kwargs)
         self.fields['coupon_code'].widget.attrs.update({'placeholder': 'Inserisci qui il codice coupon ES: S4J9KH12'})
+
+# TODO
+class ContactsForm(forms.Form):
+    first_name = forms.CharField(label='Nome', max_length=30, required=True)
+    email = forms.EmailField(label='Email', max_length=50, required=True)
+    mobile_number = forms.CharField(label='Telefono', max_length=50, required=True)
+    text = forms.CharField(label='Messaggio', widget=forms.Textarea, required=True)

@@ -16,7 +16,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 from mjg_site.exceptions import *
 from mjg_site.common_utils import CommonUtils
-from website.forms import AccountForm, AccountNotifyForm, FeedbackForm, ReferFriendForm, ValidateCouponForm
+from website.forms import AccountForm, AccountNotifyForm, FeedbackForm, ReferFriendForm, ValidateCouponForm, ContactsForm
 from account_app.models import Account
 from mkauto_app.models import MaEvent, Feedback, MasterAccountCode, FriendCode, MaEventCode
 from mkauto_app.strings import MkautoStrings
@@ -38,8 +38,29 @@ def www_services(request):
     """View to show services page"""
     return render(request, 'website/www/www_services.html')
 
+# TODO
 def www_contacts(request):
     """View to show contacts page"""
+
+    if request.method == "POST":
+        # create a form instance and populate it with data from the request:
+        form = ContactsForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # TODO
+            # invio una mail a info con la richiesta
+            email_context = {
+                "subject" : "Richiesta informazioni",
+                "content" : "Nome: " + str(request.POST.get("first_name")) + "<br />Email: " + str(request.POST.get("email")) + "<br />Telefono: " + str(request.POST.get("mobile_number")) + "<br />Messaggio: " + str(request.POST.get("text")) + "<br />",
+            }
+
+            CustomEmailTemplate(email_name="blank_email", email_context=email_context, recipient_list=[settings.INFO_EMAIL_ADDRESS,], email_from=False, template_type="blank", reply_to=request.POST.get("email"))
+            messages.add_message(request, messages.SUCCESS, "<h4>Richiesta inviata</h4><strong>La tua richiesta è stata correttamente inviata, ti risponderemo nel più breve tempo possibile<strong>.")
+            return HttpResponseRedirect("/contattaci/")
+        else:
+            messages.add_message(request, messages.ERROR, "<h4>Ops...</h4><strong>Si sono verificati dei problemi, prova a ricaricare la pagina prima di un nuovo tentativo.</strong>")
+            return HttpResponseRedirect("/contattaci/")
+
     return render(request, 'website/www/www_contacts.html')
 
 def www_service_booking(request):

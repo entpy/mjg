@@ -83,7 +83,6 @@
 						<div class="well bs-component">
 							<form class="form-horizontal validateFormAction" name="contact_form" method="POST" action="">
 								{% csrf_token %}
-								<input type="hidden" name="contact_form_sent" value="1">
 								<fieldset>
 									<div class="form-group formGroupAction first_nameGroup">
 										<label for="first_name" class="col-lg-2 control-label">{{ form.first_name.label }}&nbsp;*</label>

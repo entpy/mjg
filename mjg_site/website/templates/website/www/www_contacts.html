@@ -33,33 +33,64 @@
 <div class="container-fluid info_block info_block_color1">
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
+			<div class="col-xs-12 padding-xs-only padding-sm-only">
+				{# messages block #}
+				<div class="error_container"></div>
+				{% if form.errors %}
+					<div class="alert alert-danger">
+						<h4>Controlla questi errori</h4>
+						<ul>
+							{% for field in form %}
+								{% for error in field.errors %}
+									<li>{{ field.label|escape }}: {{ error|escape }}</li>
+								{% endfor %}
+							{% endfor %}
+							{% for form_error in form.non_field_errors %}
+								<li>{{ form_error }}</li>
+							{% endfor %}
+						</ul>
+					</div>
+				{% elif messages %}
+					{% for message in messages %}
+						{% if message.tags == "success" %}
+							<div class="alert alert-success">
+								{{ message|safe }}
+							</div>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
 			<div class="col-md-offset-1 col-md-7 col-md-push-4 padding-xs-only padding-sm-only">
 				<div class="well bs-component">
 					<form class="form-horizontal validateFormAction" name="contact_form" method="POST" action="">
-						<input type="hidden" name="contact_form_sent" value="1">
+						{% csrf_token %}
 						<fieldset>
 							<div class="form-group formGroupAction inputNameGroup">
-								<label for="inputName" class="col-lg-2 control-label">Nome&nbsp;*</label>
+								<label for="first_name" class="col-lg-2 control-label">Nome&nbsp;*</label>
 								<div class="col-lg-10">
-									<input id="inputName" name="inputName" class="form-control" placeholder="Inserisci il tuo nome" type="text" required>
+									<input id="first_name" name="first_name" class="form-control" placeholder="Inserisci il tuo nome" type="text" required>
 								</div>
 							</div>
 							<div class="form-group formGroupAction inputEmailGroup">
-								<label for="inputEmail" class="col-lg-2 control-label">Email&nbsp;*</label>
+								<label for="email" class="col-lg-2 control-label">Email&nbsp;*</label>
 								<div class="col-lg-10">
-									<input id="inputEmail" name="inputEmail" class="form-control" placeholder="Inserisci la tua email" type="email" required>
+									<input id="email" name="email" class="form-control" placeholder="Inserisci la tua email" type="email" required>
 								</div>
 							</div>
 							<div class="form-group formGroupAction inputPhoneGroup">
-								<label for="inputPhone" class="col-lg-2 control-label">Telefono&nbsp;*</label>
+								<label for="mobile_number" class="col-lg-2 control-label">Telefono&nbsp;*</label>
 								<div class="col-lg-10">
-									<input id="inputPhone" name="inputPhone" class="form-control no-spinners" placeholder="Inserisci il tuo numero di telefono" type="number" required>
+									<input id="mobile_number" name="mobile_number" class="form-control no-spinners" placeholder="Inserisci il tuo numero di telefono" type="number" required>
 								</div>
 							</div>
 							<div class="form-group formGroupAction inputTextGroup">
-								<label for="textArea" class="col-lg-2 control-label">Messaggio&nbsp;*</label>
+								<label for="text" class="col-lg-2 control-label">Messaggio&nbsp;*</label>
 								<div class="col-lg-10">
-									<textarea id="textArea" name="inputText"class="form-control contact_form_textarea" placeholder="Scrivi qui la tua richiesta..." rows="3" required></textarea>
+									<textarea id="text" name="text"class="form-control contact_form_textarea" placeholder="Scrivi qui la tua richiesta..." rows="3" required></textarea>
 								</div>
 							</div>
 							<div class="form-group text-md-right">
@@ -105,20 +136,20 @@ $(document).ready(function(){
 	$(document).on("click", ".formSendButtonClickAction", function(){
 		// lavora sui "name" NON sugli "id"
 		var constraints = {
-			inputName: {
+			first_name: {
 				presence: true,
 			},
-			inputEmail: {
+			email: {
 				presence: true,
 				email: true,
 			},
-			inputPhone: {
+			mobile_number: {
 				presence: true,
 				numericality: {
 					onlyInteger: true,
 				},
 			},
-			inputText: {
+			text: {
 				presence: true,
 			},
 		};

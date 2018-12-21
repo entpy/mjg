@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.conf import settings
@@ -54,6 +54,16 @@ class CustomEmailTemplate():
                 "base_url" : settings.SITE_URL,
             }
 	},
+	'blank_email' : { # blank email
+	    'email_from' : settings.ADMIN_EMAIL_ADDRESS,
+	    'email_to' : 'info_email',
+            'subject_prefix' : settings.SITE_NAME + " - ",
+            'email_fields' : {
+                "main_content_block" : "",
+                "plain_main_title_block" : "",
+                "base_url" : settings.SITE_URL,
+            }
+	},
    }
 
     # email template directory (app name)
@@ -63,10 +73,11 @@ class CustomEmailTemplate():
     template_type = {
 	"default": "default_template",
 	"admin": "admin_template",
+	"blank": "blank_template",
 	# "user": "user_template",
     }
 
-    def __init__(self, email_name, email_context, recipient_list=[], email_from=False, template_type="default"):
+    def __init__(self, email_name, email_context, recipient_list=[], email_from=False, template_type="default", reply_to=False):
 
         # the email name, es. recover_password_email
         self.email_name = None
@@ -82,9 +93,13 @@ class CustomEmailTemplate():
         # email template name
         self.template_name = None
 
-        self.email_from = False,
+        self.email_from = False
 
-        self.email_to = False,
+        self.email_to = False
+
+        self.reply_to = [settings.INFO_EMAIL_ADDRESS,]
+        if reply_to:
+            self.reply_to = [str(reply_to),]
 
         if email_name in chain(self.available_email_name):
 	    # setting email from
@@ -369,6 +384,24 @@ class CustomEmailTemplate():
                 self.email_html_blocks["plain_main_title_block"] = mark_safe(self.email_context.get("title"))
                 self.email_html_blocks["plain_main_content_block"] = mark_safe("\n" + self.email_context.get("content") + "\n")
                 pass
+            elif self.email_name == "blank_email":
+                """
+                costruisco la mail per gli admin
+                Context vars (* required):
+                ->    ['title *',
+                       'content *',
+                      ]
+		come prelevare una variabile -> str(self.email_context.get("email"))
+                """
+                # 1) inizializzo tutti i blocchi della mail (è fondamentale l'utilizzo di deepcopy)
+                self.email_html_blocks = copy.deepcopy(self.available_email_name[self.email_name]["email_fields"])
+
+                # 2) html version {{{
+                self.email_html_blocks["main_content_block"] = mark_safe(self.email_context.get("content"))
+
+                # 3) plain text version {{{
+                self.email_html_blocks["plain_main_content_block"] = mark_safe("\n" + self.email_context.get("content") + "\n")
+                pass
 
             return_var = True
         else:
@@ -383,36 +416,18 @@ class CustomEmailTemplate():
 	html_text = self.get_html_template()
 
         # send email
-        return_var = send_mail(
-            subject=self.email_subject,
-            message=plain_text,
-            from_email=self.email_from,
-            recipient_list=self.email_to,
-            html_message=html_text,
-        )
+        text_content = plain_text
+        html_content = html_text
+        msg = EmailMultiAlternatives(subject=self.email_subject, body=text_content, from_email=self.email_from, to=self.email_to, reply_to=self.reply_to)
+        msg.attach_alternative(html_content, "text/html")
+        return_var = msg.send()
 
 	"""
         logger.info("###START EMAIL HTML###")
         logger.info(html_text)
         logger.info("###END EMAIL HTML###")
 	"""
+
         logger.info("email inviata a " + str(self.email_to) + " | stato invio: " + str(return_var) + " (1=ok)")
-
-        """
-        send_debug_admin_email = True
-
-	# sending email to admin
-	# logger.info("@@@admin email: " + str(settings.ADMINS[0][1]))
-	if send_debug_admin_email:
-	    return_var = send_mail(
-		subject="<Django email system>" + self.email_subject,
-		message=plain_text,
-		from_email=self.email_from,
-		recipient_list=[settings.DEVELOPER_EMAIL_ADDRESS,],
-		html_message=html_text,
-	    )
-        """
-
-	#logger.info("###invio la mail all'admin:  " + str(mail_admins_status) + "###")
 
         return return_var
