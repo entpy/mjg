@@ -663,7 +663,7 @@ class MasterAccountCode(models.Model):
             "subject" : email_subject,
             "title" : email_title,
             "content" : email_content,
-            "image_url" : settings.SITE_URL + "/static/website/img/mkauto_images/new_friend.png",
+            "image_url" : settings.SITE_URL + "/static/website/img/mkauto_images/tickle_friend_prize.png",
             "call_to_action_title" : "Clicca sul pulsante sotto<br />per ricevere subito il tuo sconto",
             "call_to_action_label" : "Ricevi lo sconto",
             "call_to_action_url" : "/ricevi-offerte/" + str(aff_code) + "/?fn=" + str(friend_first_name) + "&fe=" + str(friend_email),

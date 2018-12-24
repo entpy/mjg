@@ -230,7 +230,7 @@ class mkauto_consts(object):
             "repeat_delay" : "28",
             "extra_text" : "",
             "ma_event_type" : ma_event_type["tip"],
-            "prize_call_to_action" : "",
+            "prize_call_to_action" : "/servizi/",
             "tickle_call_to_action" : "",
             #"json_params" : '{"current_random_tip_order": "-1"}',
             "status" : "1",
