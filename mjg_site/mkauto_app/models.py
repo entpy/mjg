@@ -468,7 +468,7 @@ class MaEventLog(models.Model):
     user = models.ForeignKey(User, related_name='user_maeventlog', on_delete=models.CASCADE)
     ma_event = models.ForeignKey(MaEvent, null=True, on_delete=models.SET_NULL)
     ma_code = models.CharField(max_length=50, null=False, blank=False, verbose_name="Codice identificativo dell'evento")
-    creation_date = models.DateTimeField(auto_now_add=True)
+    creation_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
         app_label = 'mkauto_app'
@@ -487,7 +487,7 @@ class MaEventCode(models.Model):
     ma_code = models.CharField(max_length=50, null=False, blank=False, verbose_name="Codice identificativo dell'evento, il campo è duplicato (è già presente una chiave esterna di MaEvent), viene utilizzato a solo scopo informativo")
     code = models.CharField(max_length=15, null=False, blank=False)
     status = models.IntegerField(null=False, blank=False, default=1, verbose_name="Indica se il codice è utilizzato o no (1=non utilizzato 2=utilizzato)")
-    creation_date = models.DateTimeField(auto_now_add=True)
+    creation_date = models.DateTimeField(default=timezone.now) # per poter modificare il campo anche nell'admin: https://docs.djangoproject.com/en/1.11/ref/models/fields/#django.db.models.DateField.auto_now_add
     update_date = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -559,7 +559,7 @@ class Feedback(models.Model):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     quality_level = models.IntegerField(null=False, blank=False, choices=QUALITY_LEVEL, verbose_name="Qualità, es. 1,2,3,...")
     feedback_text = models.TextField(null=False, blank=False, verbose_name="Testo del feedback")
-    creation_date = models.DateTimeField(auto_now_add=True)
+    creation_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
         app_label = 'mkauto_app'
@@ -583,7 +583,7 @@ class MasterAccountCode(models.Model):
     master_account_code_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     code = models.CharField(max_length=30, null=False, blank=False, unique=True, verbose_name="Codice di riferimento utente che propone amico")
-    creation_date = models.DateTimeField(auto_now_add=True)
+    creation_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
         app_label = 'mkauto_app'
@@ -657,7 +657,7 @@ class MasterAccountCode(models.Model):
 
         email_subject = ma_event_obj.ucfirst(string=friend_first_name + ", " + user_first_name + " " + user_last_name + " ti invita a provare " + settings.SITE_NAME + ", ecco "  + str(event_prize_str))
         email_title = ma_event_obj.ucfirst(string=friend_first_name + ", " + user_first_name + " " + user_last_name + " ti invita a provare i servizi di " + settings.SITE_NAME + ",<br />ecco "  + str(event_prize_str))
-        email_content = "Caro " + ma_event_obj.ucfirst(string=friend_first_name) + ", <b>" + user_first_name + " " + user_last_name + "</b> ti ha proposto di provare i servizi offerti da " + settings.SITE_NAME + ", ecco " + str(event_prize_str) + " per incentivarti.<br />Questi sono alcuni dei nostri servizi:<br />- Cambio olio e tagliando completo<br />- Manutenzione sistema frenante<br />- Sostituzione frizione<br />- Diagnosi elettronica<br />- Sostituzione / Riparazione gomme<br />...e tanto altro, visita il nostro sito per scoprirli tutti.<br /><br /><b>Come fare per ricevere " + str(event_prize_str) + "?</b><br />Clicca sul pulsante sotto e registrati per ottenere subito il tuo sconto."
+        email_content = "Caro " + ma_event_obj.ucfirst(string=friend_first_name) + ", <b>" + user_first_name + " " + user_last_name + "</b> ti ha proposto di provare i servizi offerti da " + settings.SITE_NAME + ", ecco " + str(event_prize_str) + " per incentivarti.<br />Questi sono alcuni dei nostri servizi:<br />- Cambio olio e tagliando completo<br />- Manutenzione sistema frenante<br />- Sostituzione frizione<br />- Diagnosi elettronica<br />- Sostituzione / Riparazione gomme<br />...e molto altro, visita il nostro sito per scoprirli tutti.<br /><br /><b>Come fare per ricevere " + str(event_prize_str) + "?</b><br />Clicca sul pulsante sotto e registrati per ottenere subito il tuo sconto."
 
         email_context = {
             "subject" : email_subject,
@@ -681,7 +681,7 @@ class FriendCode(models.Model):
     master_account_code = models.ForeignKey(MasterAccountCode, on_delete=models.CASCADE)
     ma_event_code = models.ForeignKey(MaEventCode, on_delete=models.CASCADE)
     status = models.BooleanField(default=0, verbose_name="Indica se il codice è già stato utilizzato e quindi chi ha proposto l'amico ha ricevuto il premio (0=non utilizzato, 1=utilizzato)")
-    creation_date = models.DateTimeField(auto_now_add=True)
+    creation_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
         app_label = 'mkauto_app'

@@ -4,14 +4,6 @@
 In this module will be defined all strings about mkauto (subject, title and text)
 """
 class mkauto_consts(object):
-    """
-    random_tips = {
-            1 : "warning_light_prize", # prize -> premio se hai una spia del cruscotto accesa
-            2 : "light_burned_prize", # prize -> premio se hai una lampadina bruciata
-            3 : "noises_prize", # prize -> premio se la tua auto fa dei rumori sospetti
-            4 : "bad_start_prize", # prize -> premio se la tua auto si avvia con difficoltà
-    }
-    """
     ma_event_type = {
         "prize" : "prize", # premi diretti
         "monthly_prize" : "monthly_prize", # premi diretti
@@ -25,15 +17,7 @@ class mkauto_consts(object):
             "welcome_prize" : "welcome_prize", # prize -> premio alla registrazione
             "manual_welcome_prize" : "manual_welcome_prize", # prize -> premio alla registrazione manuale
             "happy_birthday_prize" : "happy_birthday_prize", # prize -> premio al compleanno
-            "random_promo" : "random_promo", # prize -> premio al compleanno
-            # random prize {{{
-                #"""
-                #"warning_light_prize" : "warning_light_prize", # prize -> premio se hai una spia del cruscotto accesa
-                #"light_burned_prize" : "light_burned_prize", # prize -> premio se hai una lampadina bruciata
-                #"noises_prize" : "noises_prize", # prize -> premio se la tua auto fa dei rumori sospetti
-                #"bad_start_prize" : "bad_start_prize", # prize -> premio se la tua auto si avvia con difficoltà
-                #"""
-            # random prize }}}
+            "random_promo" : "random_promo", # prize -> premio random
         # tickle
             "get_birthday_date" : "get_birthday_date", # tickle -> premio per lasciare la data di nascita
             "get_feedback" : "get_feedback", # tickle -> per lasciare un feedback
@@ -45,9 +29,8 @@ class mkauto_consts(object):
             #"tires_promotion_for_winter" : "tires_promotion_for_winter", # cambio gomme per l'inverno
             #"services_promotion" : "services_promotion", # tagliando estivo stagionale
             #"air_conditioning_promotion" : "air_conditioning_promotion", # ricarica climatizzatore
-        # TODO
         # tips and tricks
-        "random_tip" : "random_tip", # prize -> premio al compleanno
+        "random_tip" : "random_tip", # prize -> tip random (senza premio)
     }
 
     random_code_type = {
@@ -56,45 +39,77 @@ class mkauto_consts(object):
     }
     random_code = {
         # monthly_prize
-        "warning_light_prize" : "warning_light_prize", # prize -> premio se hai una spia del cruscotto accesa
-        "light_burned_prize" : "light_burned_prize", # prize -> premio se hai una lampadina bruciata
-        "noises_prize" : "noises_prize", # prize -> premio se la tua auto fa dei rumori sospetti
-        "bad_start_prize" : "bad_start_prize", # prize -> premio se la tua auto si avvia con difficoltà
+        "generic_random_prize0" : "generic_random_prize0", # prize -> premio se hai una spia del cruscotto accesa
+        "generic_random_prize1" : "generic_random_prize1", # prize -> premio se hai una lampadina bruciata
+        "generic_random_prize2" : "generic_random_prize2", # prize -> premio se la tua auto fa dei rumori sospetti
+        "generic_random_prize3" : "generic_random_prize3", # prize -> premio se la tua auto si avvia con difficoltà
         # tip (tip mensili)
+        "tip0" : "tip0",
         "tip1" : "tip1",
         "tip2" : "tip2",
+        "tip3" : "tip3",
+        "tip4" : "tip4",
+        "tip5" : "tip5",
+        "tip6" : "tip6",
     }
 
     random_code_default_values = [
+        # random promo
         {
             "random_code_type" : random_code_type["monthly_prize"],
-            "random_code" : random_code["warning_light_prize"],
+            "random_code" : random_code["generic_random_prize0"],
             "order" : "0",
         },
         {
             "random_code_type" : random_code_type["monthly_prize"],
-            "random_code" : random_code["light_burned_prize"],
+            "random_code" : random_code["generic_random_prize1"],
             "order" : "1",
         },
         {
             "random_code_type" : random_code_type["monthly_prize"],
-            "random_code" : random_code["noises_prize"],
+            "random_code" : random_code["generic_random_prize2"],
             "order" : "2",
         },
         {
             "random_code_type" : random_code_type["monthly_prize"],
-            "random_code" : random_code["bad_start_prize"],
+            "random_code" : random_code["generic_random_prize3"],
             "order" : "3",
         },
+        # random tip
         {
             "random_code_type" : random_code_type["tip"],
-            "random_code" : random_code["tip1"],
+            "random_code" : random_code["tip0"],
             "order" : "0",
         },
         {
             "random_code_type" : random_code_type["tip"],
-            "random_code" : random_code["tip2"],
+            "random_code" : random_code["tip1"],
             "order" : "1",
+        },
+        {
+            "random_code_type" : random_code_type["tip"],
+            "random_code" : random_code["tip2"],
+            "order" : "2",
+        },
+        {
+            "random_code_type" : random_code_type["tip"],
+            "random_code" : random_code["tip3"],
+            "order" : "3",
+        },
+        {
+            "random_code_type" : random_code_type["tip"],
+            "random_code" : random_code["tip4"],
+            "order" : "4",
+        },
+        {
+            "random_code_type" : random_code_type["tip"],
+            "random_code" : random_code["tip5"],
+            "order" : "5",
+        },
+        {
+            "random_code_type" : random_code_type["tip"],
+            "random_code" : random_code["tip6"],
+            "order" : "6",
         },
     ]
 
@@ -215,7 +230,7 @@ class mkauto_consts(object):
             "repeat_delay" : "56",
             "extra_text" : "",
             "ma_event_type" : ma_event_type["monthly_prize"],
-            "prize_call_to_action" : "",
+            "prize_call_to_action" : "/servizi/",
             "tickle_call_to_action" : "",
             #"json_params" : '{"current_random_promo_order": "-1"}',
             "status" : "1",
@@ -235,7 +250,6 @@ class mkauto_consts(object):
             #"json_params" : '{"current_random_tip_order": "-1"}',
             "status" : "1",
         },
-        # TODO: mancano le promozioni basate sul tempo
     }
 
     feedback_quality_code = {

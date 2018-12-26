@@ -27,7 +27,7 @@ class Account(models.Model):
     mobile_number = models.CharField(max_length=30, null=True, blank=True)
     notify_bitmask = models.IntegerField(default=(project_constants.RECEIVE_MKAUTO_BITMASK + project_constants.RECEIVE_PROMOTIONS_BITMASK + project_constants.RECEIVE_NEWSLETTERS_BITMASK), null=True)
     birthday_date = models.DateField(null=True, blank=True)
-    creation_date = models.DateTimeField(auto_now_add=True)
+    creation_date = models.DateTimeField(default=timezone.now)
     update_date = models.DateTimeField(auto_now=True)
     get_birthday_date_event_done = models.IntegerField(null=True, blank=True, default=0)
     get_feedback_event_done = models.IntegerField(null=True, blank=True, default=0)
