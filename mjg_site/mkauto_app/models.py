@@ -140,6 +140,12 @@ class MaEvent(models.Model):
         if strings_ma_code == "manual_welcome_prize":
             image_code = "welcome_prize"
 
+        # immagini per promo e tip random
+        if ma_code_dictionary["ma_code"] == "random_promo":
+            image_code = "random_promo"
+        if ma_code_dictionary["ma_code"] == "random_tip":
+            image_code = "random_tip"
+
         return {
             "subject" : self.create_first_name_string(string=MkautoStrings.get_string(key=str_key + ".subject", values_dictionary=values_dictionary), separator=', ', first_name=values_dictionary.get("first_name")),
             "title" : self.create_first_name_string(string=MkautoStrings.get_string(key=str_key + ".title", values_dictionary=values_dictionary), separator=',<br />', first_name=values_dictionary.get("first_name")),
