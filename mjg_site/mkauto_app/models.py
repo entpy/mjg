@@ -133,13 +133,9 @@ class MaEvent(models.Model):
         # TODO
         # alcune eccezioni per il codice dell'immagine
         image_code = strings_ma_code
-        if strings_ma_code == "tickle_get_birthday_date":
-            image_code = "get_birthday_date"
-        if strings_ma_code == "tickle_get_feedback":
-            image_code = "get_feedback"
-        if strings_ma_code == "tickle_refer_friend":
-            image_code = "refer_friend"
         if strings_ma_code == "friend_prize":
+            image_code = "welcome_prize"
+        if strings_ma_code == "manual_welcome_prize":
             image_code = "welcome_prize"
 
         return {
