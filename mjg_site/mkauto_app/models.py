@@ -31,7 +31,9 @@ class MaEvent(models.Model):
     MA_EVENT_TYPE = (
         (mkauto_consts.ma_event_type["prize"], mkauto_consts.ma_event_type["prize"]),
         (mkauto_consts.ma_event_type["prize_tickle"], mkauto_consts.ma_event_type["prize_tickle"]),
-        (mkauto_consts.ma_event_type["scheduled"], mkauto_consts.ma_event_type["scheduled"]),
+        # (mkauto_consts.ma_event_type["scheduled"], mkauto_consts.ma_event_type["scheduled"]),
+        (mkauto_consts.ma_event_type["tip"], mkauto_consts.ma_event_type["tip"]),
+        (mkauto_consts.ma_event_type["monthly_prize"], mkauto_consts.ma_event_type["monthly_prize"]),
     )
     ma_event_id = models.AutoField(primary_key=True)
     description = models.CharField(max_length=200, null=True, blank=True, verbose_name="Una descrizione dell'evento")

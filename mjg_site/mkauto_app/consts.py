@@ -8,7 +8,7 @@ class mkauto_consts(object):
         "prize" : "prize", # premi diretti
         "monthly_prize" : "monthly_prize", # premi diretti
         "prize_tickle" : "prize_tickle", # mail di tickle e poi mail di premio se viene eseguito il tickle
-        "scheduled" : "scheduled", # mail schedulate nel tempo (es. cambio gomme stagionale)
+        # "scheduled" : "scheduled", # mail schedulate nel tempo (es. cambio gomme stagionale)
         "tip" : "tip", # email mensile di tip, non è una promozione ma un consiglio/curiosità sul mondo automobilistico
     }
     event_code = {
