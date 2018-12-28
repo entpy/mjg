@@ -264,7 +264,7 @@ class MaEvent(models.Model):
 
         # 6) Creo la mail con i testi definitivi e invio la mail
         cur_date = datetime.now()
-        formatted_cur_date = cur_date.strftime("%Y-%m-%d")
+        formatted_cur_date = cur_date.strftime("%d %B %Y")
         email_context = {
             "subject" : event_strings["subject"] + " (" + formatted_cur_date + ")",
             "title" : event_strings["title"],
