@@ -10,6 +10,7 @@ script giornaliero per inviare gli eventi/tickle della mkauto
 from django.utils import timezone
 from mkauto_app.models import MaEvent
 from account_app.models import Account
+from mjg_site.consts import project_constants
 import logging
 
 # Get an instance of a logger
@@ -169,7 +170,7 @@ def run():
     # 1) Prelevo le informazioni per l'evento
     single_event_dictionary = event_dictionary.get(current_ma_event, {})
     # 2) Ottengo la lista di account validi per l'evento
-    account_list = account_obj.get_mkauto_accounts(days_from_creation=single_event_dictionary.get("start_delay"))
+    account_list = account_obj.get_mkauto_accounts(days_from_creation=single_event_dictionary.get("start_delay"), event_code=None, bitmask_to_check=project_constants.RECEIVE_NEWSLETTERS_BITMASK)
     # 3) Ottengo il codice per le stringhe e le immagini
     strings_ma_code=ma_event_obj.get_strings_ma_code(event_dictionary=single_event_dictionary)
     # ottengo il codice per le stringhe e per le immagini

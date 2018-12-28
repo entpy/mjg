@@ -239,7 +239,7 @@ class Account(models.Model):
 
     # TODO
     # controllare le bitmask
-    def get_mkauto_accounts(self, days_from_creation, event_code=None):
+    def get_mkauto_accounts(self, days_from_creation, event_code=None, bitmask_to_check=project_constants.RECEIVE_MKAUTO_BITMASK):
         """Function to retrieve users list created 'days_from_creation' ago"""
         # -------NOW-80---CREAZIONE(NOW-40)---NOW-20----NOW-------
         # ----------|--------------|-------------|-------|--------
@@ -248,7 +248,7 @@ class Account(models.Model):
         # solo gli utenti registrati da almeno x giorni
         return_var = User.objects.values('id', 'first_name', 'last_name', 'email', 'account__mobile_number', 'account__notify_bitmask').filter(account__creation_date__date__lte=(timezone.now()-datetime.timedelta(days=days_from_creation)).date())
         # solo gli utenti che vogliono ricevere queste notifiche (controllo la bitmask)
-        return_var = return_var.annotate(bitmask_annotated_field=F('account__notify_bitmask').bitand(project_constants.RECEIVE_MKAUTO_BITMASK))
+        return_var = return_var.annotate(bitmask_annotated_field=F('account__notify_bitmask').bitand(bitmask_to_check))
         return_var = return_var.filter(bitmask_annotated_field__gt=0)
         # solo gli utenti attivi (status=1)
         return_var = return_var.filter(account__status=1)
