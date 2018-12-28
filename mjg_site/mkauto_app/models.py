@@ -265,6 +265,12 @@ class MaEvent(models.Model):
         # 6) Creo la mail con i testi definitivi e invio la mail
         cur_date = datetime.datetime.now()
         formatted_cur_date = cur_date.strftime("%d %B %Y")
+
+        # identifico il corretto unsubscribe (newsletters o mkauto)
+        unsubscribe_type = "mkauto"
+        if ma_code_dictionary["ma_code"] == "random_tip":
+            unsubscribe_type = "newsletters"
+
         email_context = {
             "subject" : event_strings["subject"] + " (" + formatted_cur_date + ")",
             "title" : event_strings["title"],
@@ -276,7 +282,7 @@ class MaEvent(models.Model):
             "call_to_action_label" : event_strings["call_to_action_label"],
             "call_to_action_url" : event_strings["call_to_action_url"],
             "user_profile_url" : settings.SITE_URL + "/profilo/" + str(account_info_dictionary["id"]) + "/" + str(account_info_dictionary["account__account_code"]),
-            "email_unsubscribe_url" : settings.SITE_URL + "/disiscriviti/" + str(account_info_dictionary["id"]) + "/" + str(account_info_dictionary["account__account_code"] + "/mkauto/"),
+            "email_unsubscribe_url" : settings.SITE_URL + "/disiscriviti/" + str(account_info_dictionary["id"]) + "/" + str(account_info_dictionary["account__account_code"] + "/" + str(unsubscribe_type) + "/"),
         }
 
         logger.info("@@@ email context @@@")
