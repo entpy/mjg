@@ -206,15 +206,22 @@ class MaEvent(models.Model):
         logger.info("MaEvent info dict")
         logger.info(ma_code_dictionary)
 
-        # TODO
         if not strings_ma_code:
             # se non è presente la stringa per i testi e le immagini la prelevo
             strings_ma_code=self.get_strings_ma_code(event_dictionary=ma_code_dictionary)
 
+        check_log_code = strings_ma_code
+        # per questo tipo di evento, il codice da inserire nei log deve essere fisso e non cambiare ogni volta,
+        # altrimenti per i tip mensili non riesco mai ad agganciare la precendente (visto che il codice cambia di mese in mese)
+        if ma_code_dictionary["ma_code"] == "random_tip":
+            check_log_code = "random_tip"
+        elif ma_code_dictionary["ma_code"] == "random_promo":
+            check_log_code = "random_promo"
+
         # 1)
         # Controllo se l'evento può essere inviato
         if not skip_log_check: # alcuni eventi (quelli a seguito della call to action di un tickle) non devono fare il check dei log, altrimenti non verrebbero mai inviati
-            if not self.event_can_be_performed(ma_code=strings_ma_code, repeat_delay=ma_code_dictionary["repeat_delay"], user_id=user_id):
+            if not self.event_can_be_performed(ma_code=check_log_code, repeat_delay=ma_code_dictionary["repeat_delay"], user_id=user_id):
                 # l'evento non può essere inviato (perchè non ancora oltre il repeat_delay)
                 return False
 
@@ -224,7 +231,7 @@ class MaEvent(models.Model):
         # L'evento può essere inviato, inserisco una riga in ma_event_log
         # quindi il check dello status va fatto dopo questa funzione e non esternamente nello script
         # NB: effettuando questa modifica verranno inseriti molti ma_event_log inutili (per quanto riguarda gli eventi disabilitati)
-        ma_event_log_obj = self.add_event_log(user_id=user_id, ma_event_id=ma_code_dictionary["ma_event_id"], ma_code=strings_ma_code)
+        ma_event_log_obj = self.add_event_log(user_id=user_id, ma_event_id=ma_code_dictionary["ma_event_id"], ma_code=check_log_code)
 
         if not ma_code_dictionary["status"]:
             # se l'evento non è attivo esco dalla funzione
