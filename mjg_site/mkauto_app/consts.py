@@ -51,6 +51,11 @@ class mkauto_consts(object):
         "tip4" : "tip4",
         "tip5" : "tip5",
         "tip6" : "tip6",
+        "tip7" : "tip7",
+        "tip8" : "tip8",
+        "tip9" : "tip9",
+        "tip10" : "tip10",
+        "tip11" : "tip11",
     }
 
     random_code_default_values = [
