@@ -116,6 +116,31 @@ class mkauto_consts(object):
             "random_code" : random_code["tip6"],
             "order" : "6",
         },
+        {
+            "random_code_type" : random_code_type["tip"],
+            "random_code" : random_code["tip7"],
+            "order" : "7",
+        },
+        {
+            "random_code_type" : random_code_type["tip"],
+            "random_code" : random_code["tip8"],
+            "order" : "8",
+        },
+        {
+            "random_code_type" : random_code_type["tip"],
+            "random_code" : random_code["tip9"],
+            "order" : "9",
+        },
+        {
+            "random_code_type" : random_code_type["tip"],
+            "random_code" : random_code["tip10"],
+            "order" : "10",
+        },
+        {
+            "random_code_type" : random_code_type["tip"],
+            "random_code" : random_code["tip11"],
+            "order" : "11",
+        },
     ]
 
     mkauto_default_values = {
