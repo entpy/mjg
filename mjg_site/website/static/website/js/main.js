@@ -70,6 +70,11 @@ $(document).ready(function () {
 
 		return false;
 	});
+
+	lightbox.option({
+		'resizeDuration': 0,
+		'wrapAround': false,
+	})
 });
 
 function page_anchor(anchorName) {

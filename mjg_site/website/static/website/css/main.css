@@ -1063,6 +1063,7 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 .text-xs-right { text-align: right; }
 .text-xs-center { text-align: center; }
 .text-xs-justify { text-align: justify; }
+.img_margin_top { margin-top: 10px; }
 
 /* xs only */
 @media (max-width: 768px) {

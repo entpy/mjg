@@ -25,6 +25,7 @@
 		{# Custom page script block #}
 		{% block custom_js %}
 		{% endblock custom_js %}
+		<script src="{% static "website/js/vendor/lightbox.min.js" %}"></script>
 		<script src="{% static "website/js/main.js" %}"></script>
 		{# Custom page extra script block #}
 		{% block extra_js %}
@@ -46,6 +47,7 @@
 		<link href="https://unpkg.com/ionicons@4.4.6/dist/css/ionicons.min.css" rel="stylesheet">
 		<!-- main style css -->
 		<link rel="stylesheet" href="{% static "website/css/main.css" %}">
+		<link rel="stylesheet" href="{% static "website/css/lightbox.min.css" %}">
 		{# custom css #}
 		{% block custom_css %}
 		{% endblock custom_css %}
