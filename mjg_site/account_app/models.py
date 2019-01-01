@@ -237,7 +237,6 @@ class Account(models.Model):
 
         return return_var
 
-    # TODO
     # controllare le bitmask
     def get_mkauto_accounts(self, days_from_creation, event_code=None, bitmask_to_check=project_constants.RECEIVE_MKAUTO_BITMASK):
         """Function to retrieve users list created 'days_from_creation' ago"""
@@ -290,7 +289,6 @@ class Account(models.Model):
         try:
             return_var = User.objects.values('id', 'first_name', 'last_name', 'email', 'account__account_code').get(pk=user_id)
         except User.DoesNotExist:
-            # TODO
             # la riga non esiste, mando una mail al developer
             pass
 
@@ -359,7 +357,6 @@ class Account(models.Model):
             # ordinamento di default: ordino per id DESC
             return_var = return_var.order_by("-id")
 
-        # TODO
         # implementare qui la ricerca
 	if search_text:
 	    return_var = return_var.filter(Q(first_name__icontains=search_text) | Q(last_name__icontains=search_text) | Q(email__icontains=search_text) | Q(account__mobile_number__icontains=search_text))
@@ -396,7 +393,6 @@ class Account(models.Model):
 
 	return return_var
 
-    # TODO
     def user_soft_deletion(self, user_obj):
 	"""Function to delete user (only status)"""
 	return_var = False

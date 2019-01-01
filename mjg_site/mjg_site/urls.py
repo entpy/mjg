@@ -23,7 +23,6 @@ urlpatterns = [
     url(r'^index/$', website.views.www_index, name='www_index'),
     url(r'^servizi/?$', website.views.www_services, name='www_services'),
     url(r'^contattaci/?$', website.views.www_contacts, name='www_contacts'),
-    url(r'^prenota-servizio/?$', website.views.www_service_booking, name='www_service_booking'),
     url(r'^ricevi-offerte/(?:(?P<master_code>[^\/]+)/)?$', website.views.www_get_offers, name='www_get_offers'),
     url(r'^meccatronica/?$', website.views.www_mechanics, name='www_mechanics'),
     url(r'^gommista/?$', website.views.www_tires, name='www_tires'),

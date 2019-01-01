@@ -132,7 +132,6 @@ class MaEvent(models.Model):
         else:
             str_key = strings_ma_code
 
-        # TODO
         # alcune eccezioni per il codice dell'immagine
         image_code = strings_ma_code
         if strings_ma_code == "friend_prize":
@@ -226,7 +225,6 @@ class MaEvent(models.Model):
                 return False
 
         # 2)
-        # TODO
         # aggiungere una riga anche se l'evento è disabilitato per evitare che la scaletta temporale degli eventi si modifichi
         # L'evento può essere inviato, inserisco una riga in ma_event_log
         # quindi il check dello status va fatto dopo questa funzione e non esternamente nello script
@@ -309,7 +307,6 @@ class MaEvent(models.Model):
         # generating a random code
         random_code = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
 
-        # TODO
         if MaEventCode.objects.filter(code=random_code).exists():
             # than recall this function to generate a new ones
             if depth < 50:
@@ -444,7 +441,6 @@ class MaEvent(models.Model):
 
         return ma_random_code_obj.random_code
 
-    # TODO
     def check_event_log_exists(self, user_id, ma_code):
         """Function to check if a code was already sent at least one time"""
         return_var = False
@@ -461,7 +457,6 @@ class MaEvent(models.Model):
 
         return return_var
 
-    # TODO
     def get_event_generic_prize_str(self, ma_code):
         """Function to retrieve event generic prize string"""
         return_var = ""
@@ -533,7 +528,6 @@ class MaEventCode(models.Model):
         """Function to check if a ma_event_code exists"""
         return MaEventCode.objects.filter(code=code).exists()
 
-    # TODO
     def count_code_used(self, last_x_days=False):
 	"""Function to count code used"""
 	return_var = 0
@@ -597,7 +591,6 @@ class Feedback(models.Model):
 
         return new_feedback_obj
 
-# TODO
 class MasterAccountCode(models.Model):
     master_account_code_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -661,7 +654,6 @@ class MasterAccountCode(models.Model):
 
         return random_code
 
-    # TODO
     def send_friend_invite(self, user_first_name, user_last_name, friend_first_name, friend_email, user_id):
         """Function to send an invite to a user's friend"""
 

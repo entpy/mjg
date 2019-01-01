@@ -1052,6 +1052,8 @@ footer h4 { color: white; }
 input[type="checkbox"], .checkbox input[type="checkbox"], .checkbox-inline input[type="checkbox"] { position: relative; margin-top: 6px; margin-right: 12px; vertical-align: top; border: none; background-color: transparent; -webkit-appearance: none; appearance: none; cursor: pointer; }
 input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio"] { margin-right: 12px; }
 .jumbotron { background-color: white; }
+/*.page_anchor { display: inline-block; float: left; width: 100%; }*/
+.carousel-description * { color: white; text-shadow: 1px 1px 5px black; }
 
 .force-left { text-align: left!important; }
 .force-right { text-align: right!important; }

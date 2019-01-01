@@ -69,25 +69,25 @@
 					<form class="form-horizontal validateFormAction" name="contact_form" method="POST" action="">
 						{% csrf_token %}
 						<fieldset>
-							<div class="form-group formGroupAction inputNameGroup">
+							<div class="form-group formGroupAction first_nameGroup">
 								<label for="first_name" class="col-lg-2 control-label">Nome&nbsp;*</label>
 								<div class="col-lg-10">
 									<input id="first_name" name="first_name" class="form-control" placeholder="Inserisci il tuo nome" type="text" required>
 								</div>
 							</div>
-							<div class="form-group formGroupAction inputEmailGroup">
+							<div class="form-group formGroupAction emailGroup">
 								<label for="email" class="col-lg-2 control-label">Email&nbsp;*</label>
 								<div class="col-lg-10">
 									<input id="email" name="email" class="form-control" placeholder="Inserisci la tua email" type="email" required>
 								</div>
 							</div>
-							<div class="form-group formGroupAction inputPhoneGroup">
+							<div class="form-group formGroupAction mobile_numberGroup">
 								<label for="mobile_number" class="col-lg-2 control-label">Telefono&nbsp;*</label>
 								<div class="col-lg-10">
 									<input id="mobile_number" name="mobile_number" class="form-control no-spinners" placeholder="Inserisci il tuo numero di telefono" type="number" required>
 								</div>
 							</div>
-							<div class="form-group formGroupAction inputTextGroup">
+							<div class="form-group formGroupAction textGroup">
 								<label for="text" class="col-lg-2 control-label">Messaggio&nbsp;*</label>
 								<div class="col-lg-10">
 									<textarea id="text" name="text"class="form-control contact_form_textarea" placeholder="Scrivi qui la tua richiesta..." rows="3" required></textarea>

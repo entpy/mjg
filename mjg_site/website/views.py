@@ -39,6 +39,7 @@ def www_services(request):
     return render(request, 'website/www/www_services.html')
 
 # TODO
+@ensure_csrf_cookie
 def www_contacts(request):
     """View to show contacts page"""
 
@@ -47,7 +48,6 @@ def www_contacts(request):
         form = ContactsForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            # TODO
             # invio una mail a info con la richiesta
             email_context = {
                 "subject" : "Richiesta informazioni",
@@ -62,10 +62,6 @@ def www_contacts(request):
             return HttpResponseRedirect("/contattaci/")
 
     return render(request, 'website/www/www_contacts.html')
-
-def www_service_booking(request):
-    """View to show service booking page"""
-    return render(request, 'website/www/www_service_booking.html')
 
 @ensure_csrf_cookie
 def www_get_offers(request, master_code):
@@ -85,11 +81,21 @@ def www_get_offers(request, master_code):
                 # creo messaggio di errore
                 messages.add_message(request, messages.ERROR, True)
             else:
+                # TODO: debug this
+                # creo e invio la mail di info ad admin
+                cur_date = datetime.datetime.now()
+                formatted_cur_date = cur_date.strftime("%d %B %Y")
+                email_context = {
+                    "subject" : "Registrazione di un nuovo cliente (" + formatted_cur_date + ")",
+                    "title" : "Registrazione di un nuovo cliente",
+                    "content" : "Complimenti, un nuovo cliente (" + str(user_obj.first_name) + " " + str(user_obj.email) + ") si è appena registrato sulla piattaforma, clicca sul link al fondo di questa email per andare nella pagina con le informazioni del nuovo cliente.<br /><a href='" + str(settings.SITE_URL) + "/dashboard/set-customer/" + str(user_obj.id) + "/'>Vedi cliente</a>",
+                }
+
+                CustomEmailTemplate(email_name="system_manage_email", email_context=email_context, recipient_list=[settings.INFO_EMAIL_ADDRESS,], email_from=False, template_type="admin")
+
                 # invio l'evento (non controllo se l'evento è già stato inviato perchè qui finisco solo in caso di nuovo account)
-                # TODO
                 # se presente un master_code, sono nella registrazione di un amico del cliente, mando quindi il relativo bonus
                 if master_code:
-                    # TODO
                     ma_event_return = ma_event_obj.make_event(user_id=user_obj.id, ma_code=mkauto_consts.event_code["friend_prize"], strings_ma_code=mkauto_consts.event_code["friend_prize"])
                     # l'utente proviene da un amico, aggiungo riga nella tabella 
                     friend_code_obj = FriendCode()
@@ -253,7 +259,6 @@ def www_profile(request, user_id, account_code, show_only_section):
         if form.is_valid():
             # salvo i dati validi nell'oggetto account
             try:
-                # TODO
                 save_data = { }
                 if show_only_section and show_only_section == "bd":
                     # salvo solo la data di nascita
@@ -283,7 +288,6 @@ def www_profile(request, user_id, account_code, show_only_section):
             else:
                 # creo messaggio di successo
                 if show_only_section and show_only_section == "bd" and user_obj.account.birthday_date:
-                    # TODO
                     # il check farlo sul nuovo campo "get_birthday_date_event_done"
                     # se il premio non è ancora stato inviato, lo invio
                     # altrimenti non invio niente mostro il messaggio di successo normale, senza più bonus
@@ -292,7 +296,6 @@ def www_profile(request, user_id, account_code, show_only_section):
                         # invio l'evento
                         ma_event_obj.make_event(user_id=user_id, ma_code=mkauto_consts.event_code["get_birthday_date"], strings_ma_code=mkauto_consts.event_code["get_birthday_date"], ma_code_dictionary=None, force_prize=True, skip_log_check=True)
 
-                        # TODO
                         # setto il campo 'get_birthday_date_event_done' dell'account a '1'
                         new_save_data = { "get_birthday_date_event_done" : "1" }
                         user_obj.account.update_account(save_data=new_save_data, user_obj=user_obj)
@@ -411,7 +414,6 @@ def www_refer_friends(request, user_id, account_code):
 
         # check whether it's valid:
         if form.is_valid():
-            # TODO
             # se la mail inserita come amico è già presente in db blocco il processo
             if not account_obj.check_if_email_exists(email_to_check=form.cleaned_data["friend_email"]):
                 # ora che ho anche il cognome, lo salvo nella riga dell'utente
@@ -445,7 +447,6 @@ def www_refer_friends(request, user_id, account_code):
 
     return render(request, 'website/www/www_refer_friends.html', context)
 
-# TODO
 @ensure_csrf_cookie
 def www_get_review(request, user_id, account_code):
     """View to write a review"""
@@ -465,7 +466,6 @@ def www_get_review(request, user_id, account_code):
 
     if request.method == "POST":
         if request.POST.get("review_notify_form_sent") and not mkauto_assigned:
-            # TODO
             # mando una mail ad admin e info con pulsante per inviare il bonus all'utente
             # NB: la verifica della recensione andrà fatta manualmente
 
@@ -494,6 +494,7 @@ def www_get_review(request, user_id, account_code):
     return render(request, 'website/www/www_get_review.html', context)
 
 @login_required
+@ensure_csrf_cookie
 def dashboard_index(request):
     """View to show dashboard index"""
 
@@ -509,8 +510,8 @@ def dashboard_index(request):
 
     return render(request, 'website/dashboard/dashboard_index.html', context)
 
-# TODO
 @login_required
+@ensure_csrf_cookie
 def dashboard_customers(request):
     """View to show dashboard customers page"""
 
@@ -535,6 +536,7 @@ def dashboard_customers(request):
     return render(request, 'website/dashboard/dashboard_customers.html')
 
 @login_required
+@ensure_csrf_cookie
 def dashboard_validate_coupon(request):
     """View to show dashboard validate coupons page"""
 
@@ -576,8 +578,8 @@ def dashboard_validate_coupon(request):
     }
     return render(request, 'website/dashboard/dashboard_validate_coupon.html', context)
 
-# TODO
 @login_required
+@ensure_csrf_cookie
 def dashboard_review_prize(request, user_id, account_code):
     """View to assign a prize after review"""
 
@@ -593,7 +595,6 @@ def dashboard_review_prize(request, user_id, account_code):
     prize_dict = event_dictionary.get("get_review", {})
     mkauto_prize = ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["get_review"])
 
-    # TODO
     if request.method == "POST":
         if request.POST.get("assign_review_prize_form_sent"):
             if not user_obj.account.get_review_event_done:
@@ -618,6 +619,7 @@ def dashboard_review_prize(request, user_id, account_code):
     return render(request, 'website/dashboard/dashboard_review_prize.html', context)
 
 @login_required
+@ensure_csrf_cookie
 def dashboard_set_customer(request, user_id):
     """View to show dashboard add/edit customer page"""
 
@@ -637,7 +639,6 @@ def dashboard_set_customer(request, user_id):
         # check whether it's valid:
         if form.is_valid():
             try:
-                # TODO
                 # se presente un id modifico i dati
                 if user_id:
                     # modifico l'intero profilo
