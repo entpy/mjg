@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {# page title #}
-{% block title %}MotorJab Garage | I nostri servizi{% endblock %}
+{% block title %}MotorJab Garage | Meccatronica: meccanica ed elettronica{% endblock %}
 
 {# page description #}
 {% block description %}{% endblock %}
@@ -11,20 +11,8 @@
 {% block custom_css %}{% endblock %}
 {# Custom page script block #}
 {% block custom_js %}
-<script src="{% static "website/js/vendor/jquery.scrollTo.min.js" %}"></script>
 {% endblock %}
 {% block extra_js %}
-<script>
-	page_anchor();
-	$(document).ready(function(){
-		$(document).on("click", ".serviceNavigationClick", function(){
-			var anchorName = $(this).data("navigationAnchor");
-			if (anchorName) {
-				page_anchor(anchorName);
-			}
-		});
-	})
-</script>
 {% endblock %}
 
 {# menu active element #}
@@ -36,143 +24,58 @@
 	<div><h1>Meccatronica</h1></div>
 	<div><h4>...ovvero l'insieme di meccanica + elettronica</h4></div>
 </div>
-<!-- three elements block -->
-<div id="_meccanica" class="row page_title_separator">
-	<div class="col-sm-12">
-		<h2>Meccanica</h2>
-		<div class="readable_text1">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-		</div>
-	</div>
-</div>
-<div class="row elements_container no_gutter">
-	<div class="col-sm-12">
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/tagliando-cambio-olio.png" %}" alt="">
-			<div class="block-label">Cambio olio, tagliando completo</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
+<div class="container-fluid info_block info_block_color2">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="col-md-offset-1 col-md-7 col-md-push-4 padding-xs-only padding-sm-only">
+				<div class="col-lg-12 no_gutter">
+					<h5>Un tagliando chiaro, realizzato su misura per te</h5>
+				</div>
+				<div class="col-lg-12 no_gutter">
+					<h3>Ecco il nostro tagliando</h3>
+				</div>
+				<div class="col-lg-12 no_gutter readable_text1">
+					Un tagliando puntuale è fondamentale per assicurare un corretto funzionamento della tua auto: <b>fare in modo che sia sempre sicura su strada</b> e <b>garantire longevità al tuo motore</b> sono i nostri obiettivi primari. Inoltre, tagliandando costantemente la tua auto potrai prevenire inutili guasti al tuo motore, evitando di incorrere in una riparazione dietro ad un'altra rendendo, il tutto più dispendioso.<br />
+					Grazie al nostro tagliando, potrai percorrere centinaia di migliaia di chilometri godendo appieno della tua auto e senza avere cattive sorprese.
+					<br /><br />Il nostro tagliando, in linea con chilometraggio e tipologia del tuo veicolo comprende:
+					<ul>
+						<li>sostituzione olio motore</li>
+						<li>sostituzione filtro olio</li>
+						<li>sostituzione filtro aria</li>
+						<li>sostituzione filtro abitacolo</li>
+						<li>sostituzione filtro carburante</li>
+						<li>sostituzione candele</li>
+						<li>verifica efficienza ammortizzatori</li>
+						<li>controllo impianto di scarico</li>
+						<li>controllo cinematismi inferiori e giochi organi sterzo</li>
+						<li>verifica usura freni anteriori e posteriori</li>
+						<li>serraggio bulloneria inferiore e superiore</li>
+						<li>controllo spazzole tergicristalli</li>
+						<li>controllo luci</li>
+						<li>verifica/rabbocco livello liquido vetri</li>
+						<li>verifica/rabbocco livello liquido batteria</li>
+						<li>verifica/rabbocco livello liquido radiatore</li>
+						<li>verifica/rabbocco livello liquido servosterzo</li>
+						<li>verifica livello liquido freni</li>
+						<li>pressione e usura pneumatici</li>
+						<li>stato e tensione cinghia servizi</li>
+						<li>verifica impianto di ricarica</li>
+						<li>diagnosi elettronica</li>
+						<li>reset parametri manutenzione</li>
+					</ul>
+				</div>
 			</div>
-		</div>
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/sistema-frenante.png" %}" alt="">
-			<div class="block-label">Sistema frenante</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/ammortizzatori.png" %}" alt="">
-			<div class="block-label">Ammortizzatori</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-12">
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/distribuzione.png" %}" alt="">
-			<div class="block-label">Distribuzione</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/frizione.png" %}" alt="">
-			<div class="block-label">Frizione</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/sistema-di-scarico.png" %}" alt="">
-			<div class="block-label">Sistema di scarico</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-12">
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/climatizzatore.png" %}" alt="">
-			<div class="block-label">Climatizzatore</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-	</div>
-</div>
-<div id="_elettronica" class="row page_title_separator">
-	<div class="col-sm-12">
-		<h2>Elettronica</h2>
-		<div class="readable_text1">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-		</div>
-	</div>
-</div>
-<div class="row elements_container no_gutter">
-	<div class="col-sm-12">
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/diagnosi-elettronica.png" %}" alt="">
-			<div class="block-label">Diagnosi elettronica</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/sostituzione-ricarica-batteria.png" %}" alt="">
-			<div class="block-label">Sostituzione / Ricarica batteria</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/lampadine.png" %}" alt="">
-			<div class="block-label">Lampadine</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-12">
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/efficienza-impianto-elettrico.png" %}" alt="">
-			<div class="block-label">Efficienza impianto elettrico</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-	</div>
-</div>
-<div id="_gommista" class="row page_title_separator">
-	<div class="col-sm-12">
-		<h2>Gommista</h2>
-		<div class="readable_text1">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-		</div>
-	</div>
-</div>
-<div class="row elements_container no_gutter">
-	<div class="col-sm-12">
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/sostituzione-riparazione.png" %}" alt="">
-			<div class="block-label">Sostituzione / Riparazione</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/rimessaggio-gomme.png" %}" alt="">
-			<div class="block-label">Rimessaggio</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
-			</div>
-		</div>
-		<div class="col-sm-4 single_service_block">
-			<img class="img-responsive" src="{% static "website/img/service_blocks/equilibratura-gomme.png" %}" alt="">
-			<div class="block-label">Equilibratura</div>
-			<div class="readable_text1">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus.
+			<div class="col-md-4 col-md-pull-8 text-xs-center text-md-left">
+				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
+				<a href="{% static "website/img/tagliando_1.jpg" %}" data-lightbox="tagliando_slide">
+					<img class="img-responsive" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/tagliando_1.jpg" %}">
+				</a>
+				<a href="{% static "website/img/tagliando_2.jpg" %}" data-lightbox="tagliando_slide">
+					<img class="img-responsive img_margin_top" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/tagliando_2.jpg" %}">
+				</a>
+				<a href="{% static "website/img/attrezzi_4.jpg" %}" data-lightbox="tagliando_slide">
+					<img class="img-responsive img_margin_top" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/attrezzi_4.jpg" %}">
+				</a>
 			</div>
 		</div>
 	</div>
@@ -182,19 +85,48 @@
 		<div class="col-md-10 col-md-offset-1">
 			<div class="col-md-7 padding-xs-only padding-sm-only">
 				<div class="col-lg-12 no_gutter">
-					<h4>Bielle, cilindri, pistoni e...</h4>
+					<h5>Non dovrai preoccuparti di nulla</h5>
 				</div>
 				<div class="col-lg-12 no_gutter">
-					<h1>MotorJab Garage</h1>
+					<h3>Manteniamo la Garanzia del costruttore¹</h3>
 				</div>
 				<div class="col-lg-12 no_gutter readable_text1">
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed quam eget ex posuere consequat. Cras imperdiet, lacus ac posuere ornare, neque tortor hendrerit odio, non interdum est orci sed quam. Sed at commodo eros. Sed eget diam lectus. Nunc eu elit non felis iaculis lacinia sed in libero. Nunc interdum orci ac lacus ullamcorper, sollicitudin accumsan urna finibus. Ut egestas ex eu convallis elementum. Nam eros ligula, commodo ut tortor et, venenatis feugiat augue. In ut ultrices massa, ut rutrum tortor. Cras lobortis purus finibus tortor euismod condimentum.
+					Sapevi che sei libero di decidere che sia MotorJab Garage ad occuparsi della manutenzione del tuo veicolo, fin dal primo giorno, senza perdere la garanzia del costruttore?<br />Lo stabilisce il regolamento n. <b>461/2010 della Commissione Europea</b> che afferma, di fatto, la libera concorrenza nel mercato della manutenzione auto in tutti i paesi dell'Unione Europea. Questo testo determina due importanti passi avanti in favore del consumatore:<br />
+					<ul>
+						<li>Garantisce la libera scelta del centro assistenza per la manutenzione del veicolo. Anche quando la vettura è ancora in garanzia.¹</li>
+						<li>Impone ai produttori dei veicoli di fornire - ai professionisti che si occupano della manutenzione e riparazione auto - tutte le caratteristiche dei veicoli e delle parti di ricambio necessarie per la riparazione.</li>
+					</ul><br />
+					¹<i>Il Tagliando Costruttore in Garanzia effettuato presso un nostro centro verrà registrato sul libretto di garanzia o di manutenzione della tua auto, garantendoti la totale sicurezza della tua scelta.</i>
 				</div>
-				<div class="col-lg-12 no_gutter"><a href="/howto/concorsi-a-tema/">Maggiori informazioni</a></div>
 			</div>
 			<div class="col-md-offset-1 col-md-4 text-xs-center text-md-right">
 				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
-				<img class="img-responsive" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/img1.png" %}">
+				<a href="{% static "website/img/tagliando-in-garanzia.png" %}" data-lightbox="image-4">
+					<img class="img-responsive" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/tagliando-in-garanzia.png" %}">
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container-fluid info_block info_block_color2">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-offset-2 col-md-8 text-center">
+				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
+				<a href="{% static "website/img/checkup.jpg" %}" data-lightbox="image-5">
+					<img class="img-responsive" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/checkup.jpg" %}">
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container-fluid info_block info_block_color2">
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="jumbotron text-center">
+				<h2>Vuoi ricevere uno sconto del 30%<br />da utilizzare sui nostri servizi?</h2>
+				<p>Registrati adesso, riceverai subito il tuo sconto!</p>
+				<p><a href="/ricevi-offerte/" class="btn btn-primary btn-lg">Ottieni sconto</a></p>
 			</div>
 		</div>
 	</div>
