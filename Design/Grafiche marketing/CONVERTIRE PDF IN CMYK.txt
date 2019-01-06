@@ -1,6 +1,1 @@
-gs -dSAFER -dBATCH \
-    -dNOPAUSE -dNOCACHE -sDEVICE=pdfwrite \
-    -sColorConversionStrategy=CMYK \
-    -dProcessColorModel=/DeviceCMYK \
-    -sOutputFile=document_cmyk.pdf \
-    document_rgb.pdf
+gs -dSAFER -dBATCH -dNOPAUSE -dNOCACHE -sDEVICE=pdfwrite -sColorConversionStrategy=CMYK -dProcessColorModel=/DeviceCMYK -sOutputFile=flyer_30_fronte_cmyk.pdf flyer_30_fronte.pdf
