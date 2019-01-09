@@ -40,6 +40,7 @@ class AccountForm(forms.Form):
     birthday_day = forms.ChoiceField(label='Giorno', choices=select_days_choices, required=False)
     birthday_month = forms.ChoiceField(label='Mese', choices=select_months_choices, required=False)
     birthday_year = forms.ChoiceField(label='Anno', choices=select_years_choices, required=False)
+    source = forms.IntegerField(required=False)
 
     def __init__(self, *args, **kwargs):
         super(AccountForm, self).__init__(*args, **kwargs)

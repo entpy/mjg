@@ -23,7 +23,7 @@ from mkauto_app.strings import MkautoStrings
 from mkauto_app.consts import mkauto_consts
 from mjg_site.consts import project_constants
 from email_app.email_core import CustomEmailTemplate
-import logging, json
+import datetime, logging, json
 
 from django.contrib.auth.models import User
 
@@ -64,10 +64,16 @@ def www_contacts(request):
     return render(request, 'website/www/www_contacts.html')
 
 @ensure_csrf_cookie
-def www_get_offers(request, master_code):
+def www_get_offers(request, master_code=None, source=None):
     """View to show get offers page"""
 
     ma_event_obj = MaEvent()
+
+    default_prize_code = "welcome_prize"
+    if source == project_constants.SOURCE_FLYER_CHECKUP:
+        # se sono arrivato dal flyer checkup uilizzo un altro codice premio
+        # TODO: cambiare il premio e fare le stringhe localizzate
+        default_prize_code = "welcome_prize2"
 
     if request.method == "POST":
         # create a form instance and populate it with data from the request:
@@ -76,6 +82,10 @@ def www_get_offers(request, master_code):
         if form.is_valid():
             try:
                 account_obj = Account()
+                if master_code:
+                    # se è presente un master_code l'utente proviene da un
+                    # amico, quindi lo specifico nel source
+                    form.cleaned_data["source"] = project_constants.SOURCE_REFER_FRIEND
                 user_obj = account_obj.create_account(form.cleaned_data)
             except UserAlreadyExistsError:
                 # creo messaggio di errore
@@ -105,12 +115,17 @@ def www_get_offers(request, master_code):
                     messages.add_message(request, messages.SUCCESS, "<h4>Grazie per esserti registrato</h4><strong>" + str(success_msg_mkauto_prize) + "</strong>.")
                     return HttpResponseRedirect("/ricevi-offerte/" + str(master_code))
                 else:
-                    ma_event_obj.make_event(user_id=user_obj.id, ma_code=mkauto_consts.event_code["welcome_prize"], strings_ma_code=mkauto_consts.event_code["welcome_prize"])
+                    ma_event_obj.make_event(user_id=user_obj.id, ma_code=mkauto_consts.event_code[default_prize_code], strings_ma_code=mkauto_consts.event_code[default_prize_code])
                     # creo messaggio di successo
-                    success_msg_mkauto_prize = "Il coupon con " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["welcome_prize"]) + " ti è stato inviato via email"
+                    success_msg_mkauto_prize = "Il coupon con " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code[default_prize_code]) + " ti è stato inviato via email"
                     messages.add_message(request, messages.SUCCESS, "<h4>Grazie per esserti registrato</h4><strong>" + str(success_msg_mkauto_prize) + "</strong>.")
                     # redirect to a new URL:
-                    return HttpResponseRedirect("/ricevi-offerte/")
+                    if source == project_constants.SOURCE_FLYER_30:
+                        return HttpResponseRedirect("/volantino/")
+                    elif source == project_constants.SOURCE_FLYER_CHECKUP:
+                        return HttpResponseRedirect("/offerta/")
+                    else:
+                        return HttpResponseRedirect("/ricevi-offerte/")
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -119,11 +134,11 @@ def www_get_offers(request, master_code):
     if master_code:
             # prelevo la stringa del premio in caso di amico
             title_mkauto_prize_str = ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["friend_prize"])
-            mkauto_prize = "Se ti registri, riceverai subito " + str(title_mkauto_prize_str) + " da utilizzare presso di noi."
+            mkauto_prize = "Se ti registri, riceverai subito un coupon con " + str(title_mkauto_prize_str) + " da utilizzare presso di noi."
     else:
             # prelevo la stringa del premio in caso di welcome_bonus
-            title_mkauto_prize_str = ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["welcome_prize"])
-            mkauto_prize = "Se ti registri, riceverai subito " + str(title_mkauto_prize_str) + " da utilizzare presso di noi."
+            title_mkauto_prize_str = ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code[default_prize_code])
+            mkauto_prize = "Se ti registri, riceverai subito un coupon con " + str(title_mkauto_prize_str) + " da utilizzare presso di noi."
 
     context = {
         "post" : request.POST,
@@ -133,6 +148,7 @@ def www_get_offers(request, master_code):
         "title_mkauto_prize_str" : "Ottieni " + title_mkauto_prize_str,
         "friend_name" : request.GET.get("fn", ""),
         "friend_email" : request.GET.get("fe", ""),
+        "source" : source,
     }
 
     return render(request, 'website/www/www_get_offers.html', context)
@@ -654,6 +670,7 @@ def dashboard_set_customer(request, user_id):
                     account_obj.update_account(save_data, user_obj=user_obj, set_birthday_date_flag=True)
                 else:
                     # creo un nuovo utente (verifico che email e/o telefono non siano già presenti)
+                    form.cleaned_data["source"] = project_constants.SOURCE_MANUAL
                     user_obj = account_obj.create_account(form.cleaned_data)
             except UserAlreadyExistsError:
                 # creo messaggio di errore

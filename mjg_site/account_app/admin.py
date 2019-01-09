@@ -13,7 +13,7 @@ from django.contrib.auth.forms import UserChangeForm
 # https://simpleisbetterthancomplex.com/tutorial/2016/11/23/how-to-add-user-profile-to-django-admin.html
 
 class AccountAdmin(admin.ModelAdmin):
-    list_display = ('id_account', 'user', 'mobile_number', 'notify_bitmask', 'birthday_date', 'creation_date', 'update_date', 'get_birthday_date_event_done', 'get_feedback_event_done', 'get_review_event_done', 'account_code', 'status')
+    list_display = ('id_account', 'user', 'mobile_number', 'notify_bitmask', 'birthday_date', 'creation_date', 'update_date', 'get_birthday_date_event_done', 'get_feedback_event_done', 'get_review_event_done', 'account_code', 'source', 'status')
     readonly_fields = ('update_date', )
 
 admin.site.register(Account, AccountAdmin)

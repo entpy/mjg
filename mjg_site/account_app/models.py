@@ -33,6 +33,7 @@ class Account(models.Model):
     get_feedback_event_done = models.IntegerField(null=True, blank=True, default=0)
     get_review_event_done = models.IntegerField(null=True, blank=True, default=0)
     account_code = models.CharField(max_length=20, null=False, blank=False)
+    source = models.IntegerField(null=True, blank=True, choices=project_constants.SOURCE, verbose_name="Indica la provenienza dell'utente, es. volantino, inserimento manuale, ...")
     status = models.IntegerField(null=True, default=1)
 
     class Meta:
@@ -106,7 +107,7 @@ class Account(models.Model):
             birthday_date = self.create_date(date_dictionary=save_data, get_isoformat=True)
             if "birthday_day" in save_data and "birthday_month" in save_data and "birthday_year" in save_data:
                 user_obj.account.birthday_date = birthday_date
-                if set_birthday_date_flag:
+                if set_birthday_date_flag and birthday_date:
                     user_obj.account.get_birthday_date_event_done = True
 
             # save addictiona models data
@@ -159,6 +160,7 @@ class Account(models.Model):
         birthday_day = account_data["birthday_day"]
         birthday_month = account_data["birthday_month"]
         birthday_year = account_data["birthday_year"]
+        source = account_data["source"]
         """
 
         # fare un get_by_email
@@ -177,6 +179,7 @@ class Account(models.Model):
             mobile_number=account_data.get("mobile_number"),
             birthday_date=bir_date,
             get_birthday_date_event_done=get_birthday_date_event_done,
+            source=account_data.get("source"),
         )
         new_account_obj.save(force_insert=True)
 

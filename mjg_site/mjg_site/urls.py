@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from mjg_site.consts import project_constants
 import website.views
 
 urlpatterns = [
@@ -23,7 +24,8 @@ urlpatterns = [
     url(r'^index/$', website.views.www_index, name='www_index'),
     url(r'^servizi/?$', website.views.www_services, name='www_services'),
     url(r'^contattaci/?$', website.views.www_contacts, name='www_contacts'),
-    url(r'^ricevi-offerte/(?:(?P<master_code>[^\/]+)/)?$', website.views.www_get_offers, name='www_get_offers'),
+    # TODO: testare che con i parametri al fondo master_code continui a funzionare
+    url(r'^ricevi-offerte/(?:(?P<master_code>[^\/]+)/)?$', website.views.www_get_offers, {'source': project_constants.SOURCE_GET_OFFERS}),
     url(r'^meccatronica/?$', website.views.www_mechanics, name='www_mechanics'),
     url(r'^gommista/?$', website.views.www_tires, name='www_tires'),
     url(r'^tagliando-completo/?$', website.views.www_checkup, name='www_checkup'),
@@ -34,6 +36,11 @@ urlpatterns = [
     url(r'^feedback/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/?$', website.views.www_feedback, name='www_feedback'),
     url(r'^invita-amici/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/?$', website.views.www_refer_friends, name='www_refer_friends'),
     url(r'^lascia-una-recensione/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/?$', website.views.www_get_review, name='www_get_review'),
+
+    # flyer 30
+    url(r'^volantino/?$', website.views.www_get_offers, {'source': project_constants.SOURCE_FLYER_30}),
+    # flyer checkup
+    url(r'^offerta/?$', website.views.www_get_offers, {'source': project_constants.SOURCE_FLYER_CHECKUP}),
 
     # dashboard {{{
     url(r'^dashboard/?$', website.views.dashboard_index, name='dashboard_index'),

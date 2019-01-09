@@ -26,7 +26,11 @@
 {% block www_main_content %}
 <div class="page_header_block contacts_header_block">
 	<div><h1>{{ title_mkauto_prize_str }}</h1></div>
-	<div><h4>Registrati adesso, riceverai subito il tuo sconto!</h4></div>
+	{% if source == 4 %}
+		<div><h4>Registrati adesso, riceverai subito il tuo buono!</h4></div>
+	{% else %}
+		<div><h4>Registrati adesso, riceverai subito il tuo sconto!</h4></div>
+	{% endif %}
 </div>
 <div class="container-fluid info_block info_block_color1">
 	<div class="row">
@@ -51,6 +55,9 @@
 				{% elif messages %}
 					{% for message in messages %}
 						{% if message.tags == "success" %}
+							<style>
+								.pageContainerAction { display: none; }
+							</style>
 							<div class="alert alert-success">
 								{{ message|safe }}
 							</div>
@@ -66,115 +73,120 @@
 		</div>
 	</div>
 	<div class="row">
-		{% if not messages %}
-			<div class="col-md-10 col-md-offset-1">
-				<div class="col-md-4 padding-xs-only padding-sm-only">
-					<h4>Perchè registrarsi</h4>
-					<p>Registrati per ricevere sconti e promozioni ogni tanto, non ti intaseremo la casella email! Per esempio sconti sul cambio gomma stagionale, sconti sul tagliando prima di partire per le vacanze, consigli su come mantenere la tua auto in buono stato e tanto altro.</p>
-					<p><b>{{ mkauto_prize }}</b></p>
-					{% if master_code %}
-						<div class="coupon_image_container text-sm-center text-xs-center"><img class="img-responsive" alt="{{ title_mkauto_prize_str }}" src="{% static "website/img/coupon_20.png" %}"></div>
+		<div class="col-md-10 col-md-offset-1 pageContainerAction">
+			<div class="col-md-4 padding-xs-only padding-sm-only">
+				<h4>Perchè registrarsi</h4>
+				{% if source != 3 and source != 4 and not master_code %}
+				<p>Registrati per ricevere sconti e promozioni ogni tanto, non ti intaseremo la casella email! Per esempio sconti sul cambio gomma stagionale, sconti sul tagliando prima di partire per le vacanze, consigli su come mantenere la tua auto in buono stato e tanto altro.</p>
+				{% endif %}
+				<p><b>{{ mkauto_prize }}</b></p>
+				{% if master_code %}
+					<div class="coupon_image_container text-sm-center text-xs-center"><img class="img-responsive" alt="{{ title_mkauto_prize_str }}" src="{% static "website/img/coupon_20.png" %}"></div>
+				{% else %}
+					{% if source == 4 %}
+						<div class="coupon_image_container text-sm-center text-xs-center"><img class="img-responsive" alt="{{ title_mkauto_prize_str }}" src="{% static "website/img/coupon_checkup.png" %}"></div>
 					{% else %}
 						<div class="coupon_image_container text-sm-center text-xs-center"><img class="img-responsive" alt="{{ title_mkauto_prize_str }}" src="{% static "website/img/coupon_30.png" %}"></div>
 					{% endif %}
-				</div>
-				<div class="col-md-offset-1 col-md-7">
-					<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
-						<div class="well bs-component">
-							<form class="form-horizontal validateFormAction" name="contact_form" method="POST" action="">
-								{% csrf_token %}
-								<fieldset>
-									<div class="form-group formGroupAction first_nameGroup">
-										<label for="first_name" class="col-lg-2 control-label">{{ form.first_name.label }}&nbsp;*</label>
-										<div class="col-lg-10">
-											<input id="first_name" name="first_name" class="form-control" placeholder="{{ form.first_name.field.widget.attrs.placeholder }}" type="text" value="{{ post.first_name | default:friend_name }}" required>
+				{% endif %}
+			</div>
+			<div class="col-md-offset-1 col-md-7">
+				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
+					<div class="well bs-component">
+						<form class="form-horizontal validateFormAction" name="contact_form" method="POST" action="">
+							{% csrf_token %}
+							<input id="source" name="source" type="hidden" value="{{ source }}">
+							<fieldset>
+								<div class="form-group formGroupAction first_nameGroup">
+									<label for="first_name" class="col-lg-2 control-label">{{ form.first_name.label }}&nbsp;*</label>
+									<div class="col-lg-10">
+										<input id="first_name" name="first_name" class="form-control" placeholder="{{ form.first_name.field.widget.attrs.placeholder }}" type="text" value="{{ post.first_name | default:friend_name }}" required>
+									</div>
+								</div>
+								<div class="form-group formGroupAction last_nameGroup">
+									<label for="last_name" class="col-lg-2 control-label">Cognome</label>
+									<div class="col-lg-10">
+										<input id="last_name" name="last_name" class="form-control" placeholder="{{ form.last_name.field.widget.attrs.placeholder }}" value="{{ post.last_name }}" type="text">
+									</div>
+								</div>
+								<div class="form-group formGroupAction emailGroup">
+									<label for="email" class="col-lg-2 control-label">Email&nbsp;*</label>
+									<div class="col-lg-10">
+										<input id="email" name="email" class="form-control" placeholder="{{ form.email.field.widget.attrs.placeholder }}" type="email" value="{{ post.email | default:friend_email }}" required>
+									</div>
+								</div>
+								<div class="form-group formGroupAction mobile_numberGroup">
+									<label for="mobile_number" class="col-lg-2 control-label">Telefono</label>
+									<div class="col-lg-10">
+										<input id="mobile_number" name="mobile_number" class="form-control no-spinners" placeholder="{{ form.mobile_number.field.widget.attrs.placeholder }}" value="{{ post.mobile_number }}" type="number">
+									</div>
+								</div>
+								<div class="form-group formGroupAction inputBirthdayGroup">
+									<label for="select" class="col-lg-2 control-label">Data di nascita</label>
+									<div class="col-lg-10 no_gutter">
+										<div class="col-sm-4">
+											<select id="birthday_date" class="form-control" name="birthday_day">
+												<option value="" selected="selected">Giorno</option>
+												{% for key,value in form.fields.birthday_day.choices %}
+													<option value="{{ key }}" {% if post.birthday_day == key|slugify %}selected="selected"{% endif %}>{{ value }}</option>
+												{% endfor %}
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<select id="birthday_month" class="form-control" name="birthday_month">
+												<option value="" selected="selected">Mese</option>
+												{% for key,value in form.fields.birthday_month.choices %}
+													<option value="{{ key }}" {% if post.birthday_month == key|slugify %}selected="selected"{% endif %}>{{ value }}</option>
+												{% endfor %}
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<select id="birthday_year" class="form-control" name="birthday_year">
+												<option value="" selected="selected">Anno</option>
+												{% for key,value in form.fields.birthday_year.choices %}
+													<option value="{{ key }}" {% if post.birthday_year == key|slugify %}selected="selected"{% endif %}>{{ value }}</option>
+												{% endfor %}
+											</select>
 										</div>
 									</div>
-									<div class="form-group formGroupAction last_nameGroup">
-										<label for="last_name" class="col-lg-2 control-label">Cognome</label>
-										<div class="col-lg-10">
-											<input id="last_name" name="last_name" class="form-control" placeholder="{{ form.last_name.field.widget.attrs.placeholder }}" value="{{ post.last_name }}" type="text">
+								</div>
+								<div class="form-group formGroupAction inputPrivacyGroup">
+									<label class="col-lg-2 control-label">Privacy *</label>
+									<div class="col-lg-10">
+										<div class="checkbox">
+											<label>
+												<input name="inputPrivacy" id="inputPrivacy" value="1" type="checkbox" required>Ho letto l'<a target="_blank" href="/privacy">informativa sulla privacy</a> e acconsento al trattamento dei miei dati personali.
+											</label>
 										</div>
 									</div>
-									<div class="form-group formGroupAction emailGroup">
-										<label for="email" class="col-lg-2 control-label">Email&nbsp;*</label>
-										<div class="col-lg-10">
-											<input id="email" name="email" class="form-control" placeholder="{{ form.email.field.widget.attrs.placeholder }}" type="email" value="{{ post.email | default:friend_email }}" required>
-										</div>
+								</div>
+								<div class="form-group text-md-right">
+									<div class="col-lg-10 col-lg-offset-2">
+										<button type="submit" class="btn btn-primary btn-lg formSendButtonClickAction">Registrati</button>
 									</div>
-									<div class="form-group formGroupAction mobile_numberGroup">
-										<label for="mobile_number" class="col-lg-2 control-label">Telefono</label>
-										<div class="col-lg-10">
-											<input id="mobile_number" name="mobile_number" class="form-control no-spinners" placeholder="{{ form.mobile_number.field.widget.attrs.placeholder }}" value="{{ post.mobile_number }}" type="number">
-										</div>
-									</div>
-									<div class="form-group formGroupAction inputBirthdayGroup">
-										<label for="select" class="col-lg-2 control-label">Data di nascita</label>
-										<div class="col-lg-10 no_gutter">
-											<div class="col-sm-4">
-												<select id="birthday_date" class="form-control" name="birthday_day">
-													<option value="" selected="selected">Giorno</option>
-													{% for key,value in form.fields.birthday_day.choices %}
-														<option value="{{ key }}" {% if post.birthday_day == key|slugify %}selected="selected"{% endif %}>{{ value }}</option>
-													{% endfor %}
-												</select>
-											</div>
-											<div class="col-sm-4">
-												<select id="birthday_month" class="form-control" name="birthday_month">
-													<option value="" selected="selected">Mese</option>
-													{% for key,value in form.fields.birthday_month.choices %}
-														<option value="{{ key }}" {% if post.birthday_month == key|slugify %}selected="selected"{% endif %}>{{ value }}</option>
-													{% endfor %}
-												</select>
-											</div>
-											<div class="col-sm-4">
-												<select id="birthday_year" class="form-control" name="birthday_year">
-													<option value="" selected="selected">Anno</option>
-													{% for key,value in form.fields.birthday_year.choices %}
-														<option value="{{ key }}" {% if post.birthday_year == key|slugify %}selected="selected"{% endif %}>{{ value }}</option>
-													{% endfor %}
-												</select>
-											</div>
-										</div>
-									</div>
-									<div class="form-group formGroupAction inputPrivacyGroup">
-										<label class="col-lg-2 control-label">Privacy *</label>
-										<div class="col-lg-10">
-											<div class="checkbox">
-												<label>
-													<input name="inputPrivacy" id="inputPrivacy" value="1" type="checkbox" required>Ho letto l'<a target="_blank" href="/privacy">informativa sulla privacy</a> e acconsento al trattamento dei miei dati personali.
-												</label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group text-md-right">
-										<div class="col-lg-10 col-lg-offset-2">
-											<button type="submit" class="btn btn-primary btn-lg formSendButtonClickAction">Registrati</button>
-										</div>
-									</div>
-								</fieldset>
-							</form>
-						</div>
+								</div>
+							</fieldset>
+						</form>
 					</div>
 				</div>
 			</div>
-		{% endif %}
-	</div>
-</div>
-<div class="container-fluid info_block info_block_color2">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="col-md-offset-1 col-md-5 text-center">
-				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
-				<a href="{% static "website/img/attrezzi_11.jpg" %}" data-lightbox="ricevi_offerte_slide">
-					<img class="img-responsive" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/attrezzi_11.jpg" %}">
-				</a>
-			</div>
-			<div class="col-md-5 text-center">
-				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
-				<a href="{% static "website/img/attrezzi_8.jpg" %}" data-lightbox="ricevi_offerte_slide">
-					<img class="img-responsive xs_only_img_margin_top sm_only_img_margin_top" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/attrezzi_8.jpg" %}">
-				</a>
+		</div>
+		<div class="container-fluid info_block info_block_color2 pageContainerAction">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-offset-1 col-md-5 text-center">
+						<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
+						<a href="{% static "website/img/attrezzi_11.jpg" %}" data-lightbox="ricevi_offerte_slide">
+							<img class="img-responsive" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/attrezzi_11.jpg" %}">
+						</a>
+					</div>
+					<div class="col-md-5 text-center">
+						<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
+						<a href="{% static "website/img/attrezzi_8.jpg" %}" data-lightbox="ricevi_offerte_slide">
+							<img class="img-responsive xs_only_img_margin_top sm_only_img_margin_top" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/attrezzi_8.jpg" %}">
+						</a>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

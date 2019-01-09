@@ -18,3 +18,21 @@ class project_constants(object):
     CHANNEL_EMAIL = 1
     CHANNEL_SMS = 2
     # notify bitmask }}}
+
+    # account source {{{
+    SOURCE_UNDEFINED = ""
+    SOURCE_MANUAL = 1
+    SOURCE_GET_OFFERS = 2
+    SOURCE_FLYER_30 = 3
+    SOURCE_FLYER_CHECKUP = 4
+    SOURCE_REFER_FRIEND = 5
+
+    SOURCE = (
+        (SOURCE_UNDEFINED, 'Indefinita'),
+        (SOURCE_MANUAL, 'Caricamento manuale'),
+        (SOURCE_GET_OFFERS, 'Pagina ricevi offerte'),
+        (SOURCE_FLYER_30, 'Volantino sconto 30'),
+        (SOURCE_FLYER_CHECKUP, 'Volantino checkup'),
+        (SOURCE_REFER_FRIEND, 'Proposto da un amico'),
+    )
+    # account source }}}

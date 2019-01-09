@@ -26,6 +26,23 @@ class MkautoStrings(object):
         str(mkauto_consts.event_code["welcome_prize"]) + ".call_to_action.label": "Visualizza profilo",
         str(mkauto_consts.event_code["welcome_prize"]) + ".call_to_action.url": mkauto_consts.mkauto_default_values["welcome_prize"].get("prize_call_to_action", ""), # l'url contiene le variabili {user_id} e {account_code}
         # welcome_prize }}}
+        #TODO
+        # welcome_prize2 {{{
+        str(mkauto_consts.event_code["welcome_prize2"]) + ".discount.subject": "grazie per la tua registrazione, ecco uno sconto del {prize_val}%",
+        str(mkauto_consts.event_code["welcome_prize2"]) + ".bonus.subject": "grazie per la tua registrazione, ecco un bonus di €{prize_val}",
+        str(mkauto_consts.event_code["welcome_prize2"]) + ".text.subject": "grazie per la tua registrazione, ecco {prize_val}",
+        str(mkauto_consts.event_code["welcome_prize2"]) + ".discount.title": "grazie per la tua registrazione,<br />ecco uno sconto del {prize_val}%",
+        str(mkauto_consts.event_code["welcome_prize2"]) + ".bonus.title": "grazie per la tua registrazione,<br />ecco un bonus di €{prize_val}",
+        str(mkauto_consts.event_code["welcome_prize2"]) + ".text.title": "grazie per la tua registrazione, ecco<br />{prize_val}",
+        str(mkauto_consts.event_code["welcome_prize2"]) + ".discount.content": "Complimenti, grazie alla tua registrazione su {website_name} riceverai sconti, promozioni e consigli per la tua auto.<br />Ti aspettiamo in officina ({business_address}).",
+        str(mkauto_consts.event_code["welcome_prize2"]) + ".bonus.content": "Complimenti, grazie alla tua registrazione su {website_name} riceverai sconti, promozioni e consigli per la tua auto.<br />Ti aspettiamo in officina ({business_address}).",
+        str(mkauto_consts.event_code["welcome_prize2"]) + ".text.content": "Complimenti, grazie alla tua registrazione su {website_name} riceverai sconti, promozioni e consigli per la tua auto.<br />Ti aspettiamo in officina ({business_address}).",
+        str(mkauto_consts.event_code["welcome_prize2"]) + ".call_to_action.title": "Per vedere il tuo profilo<br />clicca sul pulsante sotto",
+        str(mkauto_consts.event_code["welcome_prize2"]) + ".call_to_action.label": "Visualizza profilo",
+        str(mkauto_consts.event_code["welcome_prize2"]) + ".call_to_action.url": mkauto_consts.mkauto_default_values["welcome_prize2"].get("prize_call_to_action", ""), # l'url contiene le variabili {user_id} e {account_code}
+        # welcome_prize2 }}}
+
+
         # manual_welcome_prize {{{
         str(mkauto_consts.event_code["manual_welcome_prize"]) + ".discount.subject": "grazie per averci lasciato la tua email, ecco uno sconto del {prize_val}%",
         str(mkauto_consts.event_code["manual_welcome_prize"]) + ".bonus.subject": "grazie per averci lasciato la tua email, ecco un bonus di €{prize_val}",
