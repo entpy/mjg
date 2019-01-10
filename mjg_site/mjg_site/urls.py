@@ -18,6 +18,8 @@ from django.contrib import admin
 from mjg_site.consts import project_constants
 import website.views
 
+handler404 = 'website.views.www_404'
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', website.views.www_index, name='www_index'),
@@ -36,7 +38,6 @@ urlpatterns = [
     url(r'^feedback/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/?$', website.views.www_feedback, name='www_feedback'),
     url(r'^invita-amici/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/?$', website.views.www_refer_friends, name='www_refer_friends'),
     url(r'^lascia-una-recensione/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/?$', website.views.www_get_review, name='www_get_review'),
-    url(r'^404/?$', website.views.www_404, name='www_404'),
 
     # flyer 30
     url(r'^volantino/?$', website.views.www_get_offers, {'source': project_constants.SOURCE_FLYER_30}),
