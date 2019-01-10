@@ -1,0 +1,37 @@
+{% extends "website/inc/www_base.html" %}
+{% load staticfiles %}
+
+{# page title #}
+{% block title %}MotorJab Garage | Pagina non trovata{% endblock %}
+
+{# page description #}
+{% block description %}{% endblock %}
+
+{# custom page css block #}
+{% block custom_css %}
+<style>
+	.coupon_image_container { margin-top: 40px; margin-bottom: 20px; }
+</style>
+{% endblock %}
+{# Custom page script block #}
+{% block custom_js %}
+{# howto: https://validatejs.org #}
+<script src="{% static "website/js/vendor/validate.min.js" %}"></script>
+{% endblock %}
+
+{# container content #}
+{% block www_main_content %}
+<div class="page_header_block contacts_header_block">
+	<div>
+		<h1>Pagina non trovata</h1>
+	</div>
+</div>
+<div class="container-fluid info_block info_block_color2">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			Ops...la pagina richiesta non è stata trovata.<br />
+			<b>Torna in <a href="/">Home page</a></b>.
+		</div>
+	</div>
+</div>
+{% endblock %}

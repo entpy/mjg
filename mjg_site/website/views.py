@@ -38,6 +38,10 @@ def www_services(request):
     """View to show services page"""
     return render(request, 'website/www/www_services.html')
 
+def www_404(request):
+    """View to show 404 page"""
+    return render(request, 'website/www/www_404.html')
+
 # TODO
 @ensure_csrf_cookie
 def www_contacts(request):
