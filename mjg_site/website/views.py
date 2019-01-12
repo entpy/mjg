@@ -42,7 +42,10 @@ def www_404(request):
     """View to show 404 page"""
     return render(request, 'website/www/www_404.html')
 
-# TODO
+def www_500(request):
+    """View to show 500 page"""
+    return render(request, 'website/www/www_500.html')
+
 @ensure_csrf_cookie
 def www_contacts(request):
     """View to show contacts page"""

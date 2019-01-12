@@ -100,35 +100,57 @@
 	<div class="col-sm-12 text-center">
 		<h2>Come funziona?</h2>
 		<div class="row">
-				<div class="col-sm-4 col-xs-6 padding-xs-only-60 padding-sm-only-60">
+				<div class="col-md-4 col-xs-12 padding-xs-only-60 padding-sm-only-60">
 					<div class="box-sections numbers-sections animated fadeIn" data-animate="fadeIn" data-delay="100" style="opacity: 1;">
 						<div class="number-box">
 							<div class="number">1</div>
 							<h4>SCRIVICI LA RECENSIONE</h4>
 						</div>
 						<div class="clearfix"></div>
-						<p class="how_to_text">Clicca sul pulsante che trovi nella sezione "Scrivici la recensione" qui sotto.</p>
+						<p class="how_to_text review_how_to_text">Clicca sul pulsante qui sotto "<b>Scrivici la recensione</b>" per scrivere la tua recensione.<br />Potrai pubblicare la tua recensione direttamente su Google.</p>
 					</div>
 					<p></p>
+					{% if not mkauto_assigned %}
+						<div class="row">
+								<a class="btn btn-primary btn-lg" target="_blank" href="https://search.google.com/local/writereview?placeid=ChIJmSDHH5ptiEcRpXGh-rJM4W4">Scrivici la recensione</a>
+						</div>
+					{% endif %}
 				</div>
-				<div class="col-sm-4 col-xs-6 padding-xs-only-60 padding-sm-only-60">
+				<div class="review-xs-only-block review-sm-only-block col-md-4 col-xs-12 padding-xs-only-60 padding-sm-only-60">
 					<div class="box-sections numbers-sections animated fadeIn" data-animate="fadeIn" data-delay="100" style="opacity: 1;">
 						<div class="number-box">
 							<div class="number">2</div>
 							<h4>COMUNICACI CHE HAI SCRITTO<br />LA RECENSIONE</h4>
 						</div>
 						<div class="clearfix"></div>
-						<p class="how_to_text">Comunicacelo cliccando sul pulsante che trovi nella sezione "Hai scritto la recensione?" qui sotto.</p>
+						<p class="how_to_text review_how_to_text">Dopo aver pubblicato la tua recensione su Google, comunicacelo cliccando sul pulsante qui sotto "<b>Ho pubblicato la recensione</b>".</p>
+						{% if not mkauto_assigned %}
+							<div class="row">
+									<div class="form-group text-center">
+										<form class="form-horizontal reviewNotifyFormAction" name="review_notify_form" method="POST" action="">
+											{% csrf_token %}
+											<input type="hidden" name="review_notify_form_sent" value="1">
+											<fieldset>
+												<div class="form-group text-center">
+													<div class="col-sm-12">
+														<button type="submit" class="btn btn-primary btn-lg reviewNotifyButtonClickAction">Ho pubblicato la recensione</button>
+													</div>
+												</div>
+											</fieldset>
+										</form>
+									</div>
+							</div>
+						{% endif %}
 					</div>
 				</div>
-				<div class="col-sm-4 col-xs-6">
+				<div class="review-xs-only-block review-sm-only-block col-md-4 col-xs-12">
 					<div class="box-sections numbers-sections animated fadeIn" data-animate="fadeIn" data-delay="100" style="opacity: 1;">
 						<div class="number-box">
 							<div class="number">3</div>
 							<h4>RICEVI IL BUONO</h4>
 						</div>
 						<div class="clearfix"></div>
-						<p class="how_to_text">Verificheremo e ti manderemo il tuo buono sconto direttamente via email!</p>
+						<p class="how_to_text review_how_to_text">Verificheremo e ti manderemo il tuo buono sconto direttamente via email!</p>
 					</div>
 				</div>
 		</div>
@@ -136,17 +158,18 @@
 </div>
 
 {% if not mkauto_assigned %}
+<!--
 	<div class="container-fluid info_block info_block_color1">
 		<div class="row">
 			<div class="col-md-10 col-md-offset-1">
 				<h2 class="text-center"><span class="action_number_title">#1</span>Scrivici la recensione</h2>
 				<div class="col-md-12 padding-xs-only padding-sm-only text-center">
-					<p>Per scriverci la recensione clicca sul pulsante sotto, ti verrà mostrata una pagina per lasciare la recensione direttamente su Google.</p>
+					<p>Per scriverci la recensione <b>clicca sul pulsante sotto</b>, ti verrà mostrata una pagina per lasciare la recensione <b>direttamente su Google</b>.</p>
 				</div>
 				<div class="col-md-12">
 					<div class="form-group text-center">
 						<div class="col-sm-12">
-							<a class="btn btn-primary btn-lg" href="#">Scrivici la recensione</a>
+							<a class="btn btn-primary btn-lg" target="_blank" href="https://search.google.com/local/writereview?placeid=ChIJmSDHH5ptiEcRpXGh-rJM4W4">Scrivici la recensione</a>
 						</div>
 					</div>
 				</div>
@@ -158,7 +181,7 @@
 			<div class="col-md-10 col-md-offset-1">
 				<h2 class="text-center"><span class="action_number_title">#2</span>Hai scritto la recensione?</h2>
 				<div class="col-md-12 padding-xs-only padding-sm-only text-center">
-					<p>Hai scritto la recensione su Google? Bene, ora clicca sul pulsante sotto per comunicarcelo.<br />Terminate le nostre verifiche, ti invieremo il bonus direttamente via email.</p>
+					<p>Hai scritto la recensione su Google? Bene, ora <b>clicca sul pulsante sotto per comunicarcelo</b>.<br />Terminate le nostre verifiche, ti invieremo il bonus direttamente via email.</p>
 				</div>
 				<div class="col-md-12">
 					<div class="form-group text-center">
@@ -180,6 +203,7 @@
 			</div>
 		</div>
 	</div>
+-->
 {% endif %}
 {% endblock %}
 

@@ -19,6 +19,7 @@ from mjg_site.consts import project_constants
 import website.views
 
 handler404 = 'website.views.www_404'
+handler500 = 'website.views.www_500'
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

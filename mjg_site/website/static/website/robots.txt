@@ -4,3 +4,4 @@
 User-agent: *
 Disallow: 
 Disallow: /404/
+Disallow: /500/
