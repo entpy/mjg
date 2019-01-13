@@ -119,6 +119,37 @@
          style="fill:#ffff0b;fill-opacity:1;stroke:none"
          transform="matrix(0.00297271,-0.99999558,0.99999558,0.00297271,0,0)" />
     </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1486-1-3-3-2-9-367">
+      <path
+         inkscape:connector-curvature="0"
+         d="m 519.199,4033.22 -28.851,0 0,95.88 42.351,0 -1.769,-12.57 -28.325,0 0,-18.82 25.672,0 -1.281,-9.11 -24.391,0 0,-9.11 23.11,0 -1.07,-7.59 -22.04,0 0,-9.11 17.727,0 c -0.375,-0.75 -0.695,-1.55 -0.957,-2.38 -0.563,-1.83 -0.785,-3.69 -0.703,-5.51 l -16.067,0 0,-9.11 18.364,0 -1.77,-12.57"
+         id="path1488-5-6-9-5-7-5" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath7802-3">
+      <rect
+         y="6898.9556"
+         x="-161.65984"
+         height="754.72443"
+         width="535.03937"
+         id="rect7804-5"
+         style="fill:#ffff0b;fill-opacity:1;stroke:none" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath7911-6">
+      <rect
+         y="6863.9556"
+         x="-156.65984"
+         height="754.72443"
+         width="535.03937"
+         id="rect7913-2"
+         style="fill:#ffff0b;fill-opacity:1;stroke:none"
+         transform="matrix(0.00297271,-0.99999558,0.99999558,0.00297271,0,0)" />
+    </clipPath>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -128,8 +159,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.49497475"
-     inkscape:cx="354.9386"
-     inkscape:cy="270.95826"
+     inkscape:cx="358.97921"
+     inkscape:cy="432.58267"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -147,7 +178,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -158,7 +189,7 @@
      transform="translate(0,-297.63779)">
     <g
        transform="translate(156.65984,-6566.3178)"
-       id="g9950">
+       id="g8642">
       <rect
          style="fill:#ffff0b;fill-opacity:1;stroke:none"
          id="rect6454"
@@ -173,85 +204,81 @@
          height="192.5423"
          x="-137.94775"
          y="6910.2969" />
+      <text
+         xml:space="preserve"
+         style="font-size:26.10412598px;font-style:normal;font-variant:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Light"
+         x="109.97169"
+         y="6950.9048"
+         id="text6456"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           x="109.97168"
+           y="6950.9048"
+           id="tspan6458"
+           style="font-size:26.10412598px;fill:#ffffff">Ecco come ottenere uno</tspan><tspan
+           sodipodi:role="line"
+           x="109.97169"
+           y="6983.5352"
+           id="tspan6460"
+           style="font-size:26.10412598px;fill:#ffffff"><tspan
+   style="font-size:26.10412598px;font-weight:bold;fill:#ffffff"
+   id="tspan6462">sconto</tspan> del <tspan
+   style="font-size:26.10412598px;font-weight:bold;fill:#ffffff"
+   id="tspan6464">30%</tspan>:</tspan><tspan
+           id="tspan6466"
+           sodipodi:role="line"
+           x="109.97169"
+           y="7016.165"
+           style="font-size:26.10412598px;fill:#ffffff" /></text>
       <g
-         id="g9930">
+         transform="translate(-4.3612058,0)"
+         id="g8129">
+        <text
+           xml:space="preserve"
+           style="font-size:13.89951706px;font-style:normal;font-variant:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Light"
+           x="-60.897446"
+           y="7029.2827"
+           id="text6468"
+           sodipodi:linespacing="125%"><tspan
+             style="font-size:16px;font-weight:normal;fill:#ff0000;fill-opacity:1"
+             sodipodi:role="line"
+             id="tspan6470"
+             x="-60.897446"
+             y="7029.2827">1) Vai su <tspan
+   style="font-size:16px;font-weight:bold;fill:#ff0000;fill-opacity:1"
+   id="tspan6472">https://www.motorjab.it/volantino</tspan></tspan></text>
         <text
            sodipodi:linespacing="125%"
-           id="text6456"
-           y="6950.9048"
-           x="109.97169"
-           style="font-size:26.10412598px;font-style:normal;font-variant:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Light"
+           id="text6474"
+           y="7053.3418"
+           x="-61.041447"
+           style="font-size:13.89951706px;font-style:normal;font-variant:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Light"
            xml:space="preserve"><tspan
-             style="font-size:26.10412598px;fill:#ffffff"
-             id="tspan6458"
-             y="6950.9048"
-             x="109.97168"
-             sodipodi:role="line">Ecco come ottenere uno</tspan><tspan
-             style="font-size:26.10412598px;fill:#ffffff"
-             id="tspan6460"
-             y="6983.5352"
-             x="109.97169"
-             sodipodi:role="line"><tspan
-   id="tspan6462"
-   style="font-size:26.10412598px;font-weight:bold;fill:#ffffff">sconto</tspan> del <tspan
-   id="tspan6464"
-   style="font-size:26.10412598px;font-weight:bold;fill:#ffffff">30%</tspan>:</tspan><tspan
-             style="font-size:26.10412598px;fill:#ffffff"
-             y="7016.165"
-             x="109.97169"
+             y="7053.3418"
+             x="-61.041447"
+             id="tspan6476"
              sodipodi:role="line"
-             id="tspan6466" /></text>
-        <g
-           id="g7390"
-           style="fill:#ff0000;fill-opacity:1"
-           transform="translate(-43.048203,41.145912)">
-          <text
-             sodipodi:linespacing="125%"
-             id="text6468"
-             y="6988.1367"
-             x="-17.960449"
-             style="font-size:13.89951706px;font-style:normal;font-variant:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Light"
-             xml:space="preserve"><tspan
-               y="6988.1367"
-               x="-17.960449"
-               id="tspan6470"
-               sodipodi:role="line"
-               style="font-size:16px;font-weight:normal;fill:#ff0000;fill-opacity:1">1) Vai su <tspan
-   id="tspan6472"
-   style="font-size:16px;font-weight:bold;fill:#ff0000;fill-opacity:1">http://www.motorjab.it/volantino</tspan></tspan></text>
-          <text
-             xml:space="preserve"
-             style="font-size:13.89951706px;font-style:normal;font-variant:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Light"
-             x="-17.877075"
-             y="7012.1958"
-             id="text6474"
-             sodipodi:linespacing="125%"><tspan
-               style="font-size:16px;font-weight:bold;fill:#ff0000;fill-opacity:1"
-               sodipodi:role="line"
-               id="tspan6476"
-               x="-17.877075"
-               y="7012.1958"><tspan
+             style="font-size:16px;font-weight:bold;fill:#ff0000;fill-opacity:1"><tspan
+   id="tspan6478"
+   style="font-size:16px;font-weight:normal;fill:#ff0000;fill-opacity:1">2) </tspan>Registrati <tspan
    style="font-size:16px;font-weight:normal;fill:#ff0000;fill-opacity:1"
-   id="tspan6478">2) </tspan>Registrati <tspan
-   id="tspan6480"
-   style="font-size:16px;font-weight:normal;fill:#ff0000;fill-opacity:1">e...</tspan></tspan></text>
-          <text
-             sodipodi:linespacing="125%"
-             id="text6482"
-             y="7036.2544"
-             x="-17.849243"
-             style="font-size:13.89951706px;font-style:normal;font-variant:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Light"
-             xml:space="preserve"><tspan
-               y="7036.2544"
-               x="-17.849243"
-               id="tspan6484"
-               sodipodi:role="line"
-               style="font-size:16px;fill:#ff0000;fill-opacity:1;-inkscape-font-specification:Montserrat Semi-Light">3) ...<tspan
-   id="tspan7995"
-   style="font-weight:bold">r</tspan><tspan
-   id="tspan6486"
-   style="font-size:16px;font-weight:bold;fill:#ff0000;fill-opacity:1">iceverai istantaneamente lo sconto!</tspan></tspan></text>
-        </g>
+   id="tspan6480">e...</tspan></tspan></text>
+        <text
+           xml:space="preserve"
+           style="font-size:13.89951706px;font-style:normal;font-variant:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Light"
+           x="-60.897446"
+           y="7077.4004"
+           id="text6482"
+           sodipodi:linespacing="125%"><tspan
+             style="font-size:16px;fill:#ff0000;fill-opacity:1;-inkscape-font-specification:Montserrat Semi-Light"
+             sodipodi:role="line"
+             id="tspan6484"
+             x="-60.897446"
+             y="7077.4004">3) ...<tspan
+   style="font-weight:bold"
+   id="tspan7995">r</tspan><tspan
+   style="font-size:16px;font-weight:bold;fill:#ff0000;fill-opacity:1"
+   id="tspan6486">iceverai istantaneamente lo sconto!</tspan></tspan></text>
       </g>
       <text
          sodipodi:linespacing="125%"
@@ -544,7 +571,7 @@
                id="g6604"
                transform="matrix(0.1,0,0,0.1,522.67341,-4.9357968)">
               <g
-                 clip-path="url(#clipPath1486-1-3-3-2-9-7)"
+                 clip-path="url(#clipPath1486-1-3-3-2-9-367)"
                  id="g6606">
                 <path
                    inkscape:connector-curvature="0"
@@ -2500,7 +2527,7 @@
            id="tspan15368-5-6"
            sodipodi:role="line">www.motorjab.it</tspan></text>
       <g
-         clip-path="url(#clipPath7802-8)"
+         clip-path="url(#clipPath7802-3)"
          transform="translate(5,-43.485281)"
          id="g7798">
         <image
@@ -2521,7 +2548,7 @@
            y="7505.751" />
       </g>
       <image
-         clip-path="url(#clipPath7911-9)"
+         clip-path="url(#clipPath7911-6)"
          transform="matrix(0.00297271,0.99999558,-0.99999558,0.00297271,-4.6617573e-7,2.2671055e-5)"
          width="513.25354"
          height="513.25354"
