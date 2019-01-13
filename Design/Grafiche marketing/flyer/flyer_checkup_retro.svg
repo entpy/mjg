@@ -80,6 +80,68 @@
          style="fill:#ffff0b;fill-opacity:1;stroke:none"
          transform="matrix(0.00297271,-0.99999558,0.99999558,0.00297271,0,0)" />
     </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1486-1-3-3-2-9-9-36">
+      <path
+         inkscape:connector-curvature="0"
+         d="m 519.199,4033.22 -28.851,0 0,95.88 42.351,0 -1.769,-12.57 -28.325,0 0,-18.82 25.672,0 -1.281,-9.11 -24.391,0 0,-9.11 23.11,0 -1.07,-7.59 -22.04,0 0,-9.11 17.727,0 c -0.375,-0.75 -0.695,-1.55 -0.957,-2.38 -0.563,-1.83 -0.785,-3.69 -0.703,-5.51 l -16.067,0 0,-9.11 18.364,0 -1.77,-12.57"
+         id="path1488-5-6-9-5-7-7-7" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath7802-8-5">
+      <rect
+         y="6898.9556"
+         x="-161.65984"
+         height="754.72443"
+         width="535.03937"
+         id="rect7804-5-3"
+         style="fill:#ffff0b;fill-opacity:1;stroke:none" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath7911-4-5">
+      <rect
+         y="6863.9556"
+         x="-156.65984"
+         height="754.72443"
+         width="535.03937"
+         id="rect7913-1-6"
+         style="fill:#ffff0b;fill-opacity:1;stroke:none"
+         transform="matrix(0.00297271,-0.99999558,0.99999558,0.00297271,0,0)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1486-1-3-3-2-9-9-367">
+      <path
+         inkscape:connector-curvature="0"
+         d="m 519.199,4033.22 -28.851,0 0,95.88 42.351,0 -1.769,-12.57 -28.325,0 0,-18.82 25.672,0 -1.281,-9.11 -24.391,0 0,-9.11 23.11,0 -1.07,-7.59 -22.04,0 0,-9.11 17.727,0 c -0.375,-0.75 -0.695,-1.55 -0.957,-2.38 -0.563,-1.83 -0.785,-3.69 -0.703,-5.51 l -16.067,0 0,-9.11 18.364,0 -1.77,-12.57"
+         id="path1488-5-6-9-5-7-7-5" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath7802-8-3">
+      <rect
+         y="6898.9556"
+         x="-161.65984"
+         height="754.72443"
+         width="535.03937"
+         id="rect7804-5-56"
+         style="fill:#ffff0b;fill-opacity:1;stroke:none" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath7911-4-2">
+      <rect
+         y="6863.9556"
+         x="-156.65984"
+         height="754.72443"
+         width="535.03937"
+         id="rect7913-1-9"
+         style="fill:#ffff0b;fill-opacity:1;stroke:none"
+         transform="matrix(0.00297271,-0.99999558,0.99999558,0.00297271,0,0)" />
+    </clipPath>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -89,7 +151,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35"
-     inkscape:cx="380.71429"
+     inkscape:cx="392.14287"
      inkscape:cy="520"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -119,7 +181,7 @@
      transform="translate(0,-297.63779)">
     <g
        transform="translate(156.65984,-7491.3622)"
-       id="g10427">
+       id="g8132">
       <rect
          y="7789"
          x="-156.65987"
@@ -152,31 +214,12 @@
            id="tspan6460-3"
            style="font-size:26.10412598px;fill:#ffffff"><tspan
    style="font-size:26.10412598px;font-weight:bold;fill:#ffffff"
-   id="tspan6462-1">Checkup gratuito</tspan>:</tspan><tspan
+   id="tspan6462-1">Check-up gratuito</tspan>:</tspan><tspan
            id="tspan6466-9"
            sodipodi:role="line"
            x="110.67097"
            y="7939.2827"
            style="font-size:26.10412598px;fill:#ffffff" /></text>
-      <text
-         xml:space="preserve"
-         style="font-size:13.28857231px;font-style:normal;font-variant:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Light"
-         x="7.7003102"
-         y="8021.3945"
-         id="text6488-7"
-         sodipodi:linespacing="125%"><tspan
-           id="tspan15425"
-           style="font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;-inkscape-font-specification:Montserrat Semi-Light"
-           sodipodi:role="line"
-           x="7.7003102"
-           y="8021.3945">¹Nel caso di eventuali interventi, avrai diritto ad un</tspan><tspan
-           id="tspan15443"
-           style="font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;-inkscape-font-specification:Montserrat Semi-Light"
-           sodipodi:role="line"
-           x="7.7003102"
-           y="8038.0054">ulteriore sconto del <tspan
-   id="tspan15445"
-   style="font-style:normal;font-weight:bold;fill:#ffffff;-inkscape-font-specification:Montserrat Semi-Light">30%</tspan>, utilizzabile fin da subito.</tspan></text>
       <g
          id="g8739-6"
          transform="translate(-22.48034,934.94365)">
@@ -457,7 +500,7 @@
                id="g6604-6">
               <g
                  id="g6606-2"
-                 clip-path="url(#clipPath1486-1-3-3-2-9-9-3)">
+                 clip-path="url(#clipPath1486-1-3-3-2-9-9-367)">
                 <path
                    d="m 490.348,4033.22 42.3516,0 0,95.8828 -42.3516,0 0,-95.8828 z"
                    style="fill:#bae4e9;fill-opacity:1;fill-rule:nonzero;stroke:none"
@@ -2414,7 +2457,7 @@
       <g
          id="g7798-0"
          transform="translate(5.00003,880.14461)"
-         clip-path="url(#clipPath7802-8-7)">
+         clip-path="url(#clipPath7802-8-3)">
         <image
            transform="matrix(0.80909392,0.58767936,-0.58767936,0.80909392,0,0)"
            width="292.2464"
@@ -2440,56 +2483,75 @@
          height="513.25354"
          width="513.25354"
          transform="matrix(0.00297271,0.99999558,-0.99999558,0.00297271,3e-5,925.0442)"
-         clip-path="url(#clipPath7911-4-3)" />
+         clip-path="url(#clipPath7911-4-2)" />
       <g
-         transform="matrix(0.95604562,0,0,0.95604562,1.5706928,378.65577)"
-         id="g15457">
+         id="g8115">
+        <text
+           sodipodi:linespacing="125%"
+           id="text6488-7"
+           y="8021.3945"
+           x="9.6970272"
+           style="font-size:13.28857231px;font-style:normal;font-variant:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Light"
+           xml:space="preserve"><tspan
+             y="8021.3945"
+             x="9.6970272"
+             sodipodi:role="line"
+             style="font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;-inkscape-font-specification:Montserrat Semi-Light"
+             id="tspan15425">¹Nel caso di eventuali interventi, avrai diritto ad un</tspan><tspan
+             y="8038.0054"
+             x="9.6970272"
+             sodipodi:role="line"
+             style="font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;-inkscape-font-specification:Montserrat Semi-Light"
+             id="tspan15443">  ulteriore sconto del <tspan
+   style="font-style:normal;font-weight:bold;fill:#ffffff;-inkscape-font-specification:Montserrat Semi-Light"
+   id="tspan15445">30%</tspan>, utilizzabile fin da subito.</tspan></text>
         <g
-           id="g9918">
+           id="g8147"
+           transform="translate(-2.8382578,0)">
           <text
              sodipodi:linespacing="125%"
              id="text6468-4"
-             y="7923.3447"
-             x="-125.4294"
-             style="font-size:13.89951706px;font-style:normal;font-variant:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Light"
+             y="7953.7349"
+             x="-118.34554"
+             style="font-size:13.28857231px;font-style:normal;font-variant:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Light"
              xml:space="preserve"><tspan
-               y="7923.3447"
-               x="-125.4294"
+               y="7953.7349"
+               x="-118.34554"
                id="tspan6470-3"
                sodipodi:role="line"
-               style="font-size:16px;font-weight:normal;fill:#ff0000;fill-opacity:1">1) Vai su <tspan
+               style="font-size:15.29673004px;font-weight:normal;fill:#ff0000;fill-opacity:1">1) Vai su <tspan
    id="tspan6472-3"
-   style="font-size:16px;font-weight:bold;fill:#ff0000;fill-opacity:1">http://www.motorjab.it/offerta</tspan></tspan></text>
+   style="font-size:15.29673004px;font-weight:bold;fill:#ff0000;fill-opacity:1">http://www.motorjab.it/offerta</tspan></tspan></text>
           <text
              xml:space="preserve"
-             style="font-size:13.89951706px;font-style:normal;font-variant:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Light"
-             x="-125.34602"
-             y="7947"
+             style="font-size:13.28857231px;font-style:normal;font-variant:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Light"
+             x="-118.26582"
+             y="7976.3501"
              id="text6474-3"
              sodipodi:linespacing="125%"><tspan
-               style="font-size:16px;font-weight:bold;fill:#ff0000;fill-opacity:1"
+               style="font-size:15.29673004px;font-weight:bold;fill:#ff0000;fill-opacity:1"
                sodipodi:role="line"
                id="tspan6476-8"
-               x="-125.34602"
-               y="7947"><tspan
-   style="font-size:16px;font-weight:normal;fill:#ff0000;fill-opacity:1"
+               x="-118.26582"
+               y="7976.3501"><tspan
+   style="font-size:15.29673004px;font-weight:normal;fill:#ff0000;fill-opacity:1"
    id="tspan6478-6">2) </tspan>Registrati <tspan
    id="tspan6480-0"
-   style="font-size:16px;font-weight:normal;fill:#ff0000;fill-opacity:1">e...</tspan></tspan></text>
+   style="font-size:15.29673004px;font-weight:normal;fill:#ff0000;fill-opacity:1">e...</tspan></tspan></text>
           <text
              sodipodi:linespacing="125%"
              id="text6482-4"
-             y="7970.6548"
-             x="-125.31818"
-             style="font-size:13.89951706px;font-style:normal;font-variant:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Light"
+             y="7998.9653"
+             x="-118.2392"
+             style="font-size:13.28857231px;font-style:normal;font-variant:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Montserrat;-inkscape-font-specification:Montserrat Semi-Light"
              xml:space="preserve"><tspan
-               y="7970.6548"
-               x="-125.31818"
+               y="7998.9653"
+               x="-118.2392"
                sodipodi:role="line"
-               style="font-size:16px;fill:#ff0000;fill-opacity:1;-inkscape-font-specification:Montserrat Semi-Light"
+               style="font-size:15.29673004px;fill:#ff0000;fill-opacity:1;-inkscape-font-specification:Montserrat Semi-Light"
                id="tspan14931">3) ...riceverai istantaneamente il <tspan
    id="tspan6486-8"
-   style="font-size:16px;font-weight:bold;fill:#ff0000;fill-opacity:1">buono con il tuo checkup¹!</tspan></tspan></text>
+   style="font-size:15.29673004px;font-weight:bold;fill:#ff0000;fill-opacity:1">buono con il tuo check-up¹!</tspan></tspan></text>
         </g>
       </g>
     </g>

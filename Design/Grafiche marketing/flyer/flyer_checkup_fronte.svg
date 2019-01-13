@@ -64,6 +64,29 @@
          x="-916.29462"
          y="6863.9556" />
     </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath7911-6-36">
+      <rect
+         y="6863.9556"
+         x="-156.65984"
+         height="754.72443"
+         width="535.03937"
+         id="rect7913-2-7"
+         style="fill:#ffff0b;fill-opacity:1;stroke:none"
+         transform="matrix(0.00297271,-0.99999558,0.99999558,0.00297271,0,0)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath7711-9-5">
+      <rect
+         style="fill:#ffff0b;fill-opacity:1;stroke:none"
+         id="rect7713-1-3"
+         width="535.03937"
+         height="754.72443"
+         x="-916.29462"
+         y="6863.9556" />
+    </clipPath>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -73,8 +96,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
-     inkscape:cx="328.97092"
-     inkscape:cy="148.01434"
+     inkscape:cx="330.99123"
+     inkscape:cy="309.63875"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -103,7 +126,7 @@
      transform="translate(0,-297.63779)">
     <g
        transform="translate(916.29461,-7491.3621)"
-       id="g10904">
+       id="g8255">
       <rect
          y="7789"
          x="-916.29462"
@@ -871,9 +894,9 @@
          height="513.25354"
          width="513.25354"
          transform="matrix(0.00297271,0.99999558,-0.99999558,0.00297271,-759.63477,925.04425)"
-         clip-path="url(#clipPath7911-6-3)" />
+         clip-path="url(#clipPath7911-6-36)" />
       <g
-         clip-path="url(#clipPath7711-9-7)"
+         clip-path="url(#clipPath7711-9-5)"
          id="g7696-4"
          transform="translate(1.21e-5,971.71325)">
         <image
@@ -916,7 +939,7 @@
            style="font-size:40px;font-weight:bold;-inkscape-font-specification:Montserrat Bold"
            y="7919.3496"
            x="-648.77991"
-           sodipodi:role="line">Checkup <tspan
+           sodipodi:role="line">Check-up <tspan
    id="tspan9018"
    style="stroke:#ff0000">GRATUITO</tspan></tspan></text>
     </g>
