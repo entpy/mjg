@@ -125,6 +125,52 @@
          x="-916.29462"
          y="6863.9556" />
     </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath7911-3">
+      <rect
+         y="6863.9556"
+         x="-156.65984"
+         height="754.72443"
+         width="535.03937"
+         id="rect7913-6"
+         style="fill:#ffff0b;fill-opacity:1;stroke:none"
+         transform="matrix(0.00297271,-0.99999558,0.99999558,0.00297271,0,0)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath7711-7">
+      <rect
+         style="fill:#ffff0b;fill-opacity:1;stroke:none"
+         id="rect7713-5"
+         width="535.03937"
+         height="754.72443"
+         x="-916.29462"
+         y="6863.9556" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath7911-4">
+      <rect
+         y="6863.9556"
+         x="-156.65984"
+         height="754.72443"
+         width="535.03937"
+         id="rect7913-8"
+         style="fill:#ffff0b;fill-opacity:1;stroke:none"
+         transform="matrix(0.00297271,-0.99999558,0.99999558,0.00297271,0,0)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath7711-1">
+      <rect
+         style="fill:#ffff0b;fill-opacity:1;stroke:none"
+         id="rect7713-0"
+         width="535.03937"
+         height="754.72443"
+         x="-916.29462"
+         y="6863.9556" />
+    </clipPath>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -133,9 +179,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="484.42603"
-     inkscape:cy="358.30818"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="251.23956"
+     inkscape:cy="325.65379"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -164,7 +210,7 @@
      transform="translate(0,-297.63779)">
     <g
        transform="translate(916.29462,-6566.3178)"
-       id="g8226">
+       id="g7780">
       <rect
          y="6863.9556"
          x="-916.29462"
@@ -178,7 +224,7 @@
          id="path31718-7-1"
          inkscape:connector-curvature="0" />
       <g
-         transform="translate(-22.480349,14.999799)"
+         transform="matrix(1.0772867,0,0,1.0772867,25.923891,-519.64127)"
          id="g19958">
         <text
            xml:space="preserve"
@@ -958,9 +1004,9 @@
          height="513.25354"
          width="513.25354"
          transform="matrix(0.00297271,0.99999558,-0.99999558,0.00297271,-759.63478,2.2671054e-5)"
-         clip-path="url(#clipPath7911)" />
+         clip-path="url(#clipPath7911-4)" />
       <g
-         clip-path="url(#clipPath7711)"
+         clip-path="url(#clipPath7711-1)"
          id="g7696"
          transform="translate(0,46.669017)">
         <image
