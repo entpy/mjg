@@ -180,7 +180,7 @@ class mkauto_consts(object):
             "repeat_delay" : "0",
             "extra_text" : "",
             "ma_event_type" : ma_event_type["prize"],
-            "prize_call_to_action" : "/servizi/",
+            "prize_call_to_action" : "/",
             "tickle_call_to_action" : "",
             "status" : "1",
         },
