@@ -162,7 +162,7 @@ class mkauto_consts(object):
             "ma_code" : event_code["welcome_prize2"],
             "description" : "Bonus alternativo1 alla registrazione di un utente",
             "prize_type" : "text",
-            "prize_value" : "un checkup GRATUITO",
+            "prize_value" : "un check-up GRATUITO",
             "start_delay" : "0",
             "repeat_delay" : "0",
             "extra_text" : "",
