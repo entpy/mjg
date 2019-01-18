@@ -118,13 +118,13 @@ def www_get_offers(request, master_code=None, source=None):
                     friend_code_obj = FriendCode()
                     friend_code_obj.generate_friend_code(master_account_code=master_code, ma_event_code=ma_event_return["coupon_code"])
                     # creo messaggio di successo
-                    success_msg_mkauto_prize = "Il coupon con " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["friend_prize"]) + " ti è stato inviato via email"
+                    success_msg_mkauto_prize = "Il coupon con " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code["friend_prize"]) + " ti è stato inviato via email.<br />PS: <u>se utilizzi Gmail</u> prova a guardare nel tab \"Promozioni\""
                     messages.add_message(request, messages.SUCCESS, "<h4>Grazie per esserti registrato</h4><strong>" + str(success_msg_mkauto_prize) + "</strong>.")
                     return HttpResponseRedirect("/ricevi-offerte/" + str(master_code))
                 else:
                     ma_event_obj.make_event(user_id=user_obj.id, ma_code=mkauto_consts.event_code[default_prize_code], strings_ma_code=mkauto_consts.event_code[default_prize_code])
                     # creo messaggio di successo
-                    success_msg_mkauto_prize = "Il coupon con " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code[default_prize_code]) + " ti è stato inviato via email"
+                    success_msg_mkauto_prize = "Il coupon con " + ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code[default_prize_code]) + " ti è stato inviato via email<br />PS: <u>se utilizzi Gmail</u> prova a guardare nel tab \"Promozioni\""
                     messages.add_message(request, messages.SUCCESS, "<h4>Grazie per esserti registrato</h4><strong>" + str(success_msg_mkauto_prize) + "</strong>.")
                     # redirect to a new URL:
                     if source == project_constants.SOURCE_FLYER_30:
