@@ -178,6 +178,8 @@ class MaEvent(models.Model):
         separator can be: ', ' or ',<br />'
         """
         # create first name string
+	if not first_name:
+		separator = ""
         return self.ucfirst(first_name + separator + string)
 
     def make_event(self, user_id, ma_code=None, strings_ma_code=None, ma_code_dictionary=None, force_prize=False, skip_log_check=False):
@@ -301,7 +303,7 @@ class MaEvent(models.Model):
         logger.info("@@@ email context @@@")
         logger.info(email_context)
 
-        CustomEmailTemplate(email_name="mkauto_email", email_context=email_context, recipient_list=[account_info_dictionary["email"],])
+        CustomEmailTemplate(email_name="mkauto_email", email_context=email_context, recipient_list=[account_info_dictionary["first_name"] + "<" + account_info_dictionary["email"] + ">",])
 
         return { "user_id" : user_id, "coupon_code" : coupon_code, }
 
