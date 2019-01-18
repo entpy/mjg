@@ -673,6 +673,7 @@ def dashboard_set_customer(request, user_id):
                     save_data["birthday_day"] = form.cleaned_data["birthday_day"]
                     save_data["birthday_month"] = form.cleaned_data["birthday_month"]
                     save_data["birthday_year"] = form.cleaned_data["birthday_year"]
+                    save_data["note"] = form.cleaned_data["note"]
 
                     account_obj.update_account(save_data, user_obj=user_obj, set_birthday_date_flag=True)
                 else:

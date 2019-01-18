@@ -8,7 +8,12 @@
 {% block description %}{% endblock %}
 
 {# custom page css block #}
-{% block custom_css %}{{ block.super }}{% endblock %}
+{% block custom_css %}
+{{ block.super }}
+<style>
+	#note { height: 150px; }
+</style>
+{% endblock %}
 {# Custom page script block #}
 {% block custom_js %}
 {# howto: https://validatejs.org #}
@@ -126,6 +131,12 @@
 										{% endfor %}
 									</select>
 								</div>
+							</div>
+						</div>
+						<div class="form-group formGroupAction noteGroup">
+							<label for="note" class="col-lg-3 control-label">Note</label>
+							<div class="col-lg-9">
+								<textarea id="note" name="note" class="form-control no-spinners" placeholder="{{ form.note.field.widget.attrs.placeholder }}">{% if post.note %}{{ post.note }}{% else %}{% if user_info_dict %}{{ user_info_dict.account|get_item:"note" }}{% endif %}{% endif %}</textarea>
 							</div>
 						</div>
 						{% if not user_id %}

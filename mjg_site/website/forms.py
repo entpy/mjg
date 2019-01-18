@@ -41,6 +41,7 @@ class AccountForm(forms.Form):
     birthday_month = forms.ChoiceField(label='Mese', choices=select_months_choices, required=False)
     birthday_year = forms.ChoiceField(label='Anno', choices=select_years_choices, required=False)
     source = forms.IntegerField(required=False)
+    note = forms.CharField(required=False, widget=forms.Textarea)
 
     def __init__(self, *args, **kwargs):
         super(AccountForm, self).__init__(*args, **kwargs)
@@ -48,6 +49,7 @@ class AccountForm(forms.Form):
         self.fields['last_name'].widget.attrs.update({'placeholder': 'Inserisci il tuo cognome'})
         self.fields['email'].widget.attrs.update({'placeholder': 'Inserisci la tua email'})
         self.fields['mobile_number'].widget.attrs.update({'placeholder': 'Inserisci il tuo numero di telefono'})
+        self.fields['note'].widget.attrs.update({'placeholder': 'Inserisci eventuali note del cliente'})
 
     def clean(self):
         cleaned_data = super(AccountForm, self).clean()
