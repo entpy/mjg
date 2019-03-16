@@ -142,6 +142,7 @@ def run():
             ma_event_obj.make_event(user_id=single_account["id"], ma_code=current_ma_event, strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     ##### Chiedo all'utente di lasciare una recensione (informazioni pubbliche) }}} #####
 
+    """
     ##### Premio con un testo random  {{{ #####
     current_ma_event = "random_promo"
     account_list = None
@@ -159,7 +160,9 @@ def run():
         for single_account in account_list:
             ma_event_obj.make_event(user_id=single_account["id"], ma_code=current_ma_event, strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     ##### Premio con un testo random  }}} #####
+    """
 
+    """
     ##### Tip o info random {{{ #####
     current_ma_event = "random_tip"
     account_list = None
@@ -178,3 +181,4 @@ def run():
         for single_account in account_list:
             ma_event_obj.make_event(user_id=single_account["id"], ma_code=current_ma_event, strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
     ##### Tip o info random }}} #####
+    """
