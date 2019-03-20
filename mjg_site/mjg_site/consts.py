@@ -36,3 +36,20 @@ class project_constants(object):
         (SOURCE_REFER_FRIEND, 'Proposto da un amico'),
     )
     # account source }}}
+
+    # campaigns {{{
+    CAMPAIGN_TYPE_MKAUTO = "mkauto"
+    CAMPAIGN_TYPE_PROMOTION = "promotion"
+    CAMPAIGN_TYPE_NEWSLETTER = "newsletter"
+
+    CAMPAIGN_STATUS_IN_WORKING = 1
+    CAMPAIGN_STATUS_SENDING = 2
+    CAMPAIGN_STATUS_SENT = 3
+    CAMPAIGN_STATUS = (
+        (CAMPAIGN_STATUS_IN_WORKING, 'In lavorazione'),
+        (CAMPAIGN_STATUS_SENDING, 'In fase di invio'),
+        (CAMPAIGN_STATUS_SENT, 'Inviata'),
+    )
+
+    CAMPAIGN_UPLOAD_DIR = "campaign_images/"
+    # campaigns }}}

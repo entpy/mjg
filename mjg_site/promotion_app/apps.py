@@ -4,5 +4,5 @@ from __future__ import unicode_literals
 from django.apps import AppConfig
 
 
-class PromotionsConfig(AppConfig):
-    name = 'promotions'
+class PromotionAppConfig(AppConfig):
+    name = 'promotion_app'
