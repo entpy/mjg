@@ -29,6 +29,58 @@
 		{% endblock custom_js %}
 		<script src="{% static "website/js/vendor/lightbox.min.js" %}"></script>
 		<script src="{% static "website/js/main.js" %}"></script>
+
+		<!-- Markup JSON-LD generato da Assistente per il markup dei dati strutturati di Google. -->
+		<script type="application/ld+json">
+		{
+		  "@context" : "http://schema.org",
+		  "@type" : "LocalBusiness",
+		  "name" : "MotorJab Garage",
+		  "url":"https://www.motorjab.it/",
+		  "image" : "https://www.motorjab.it/static/website/img/logo.png",
+		  "telephone" : "011546928",
+		  "email" : "info@motorjab.it",
+		  "address" : {
+		    "@type" : "PostalAddress",
+		    "streetAddress" : "Via Bellini, 7",
+		    "addressLocality" : "Torino TO",
+		    "postalCode" : "10121"
+		  },
+		  "openingHoursSpecification": [
+		    {
+		      "@type": "OpeningHoursSpecification",
+		      "dayOfWeek": "http://schema.org/Monday",
+		      "opens": "08:30:00",
+		      "closes": "18:30:00"
+		    },
+		    {
+		      "@type": "OpeningHoursSpecification",
+		      "dayOfWeek": "http://schema.org/Tuesday",
+		      "opens": "08:30:00",
+		      "closes": "18:30:00"
+		    },
+		    {
+		      "@type": "OpeningHoursSpecification",
+		      "dayOfWeek":  "http://schema.org/Wednesday",
+		      "opens": "08:30:00",
+		      "closes": "18:30:00"
+		    },
+		    {
+		      "@type": "OpeningHoursSpecification",
+		      "dayOfWeek": "http://schema.org/Thursday",
+		      "opens": "08:30:00",
+		      "closes": "18:30:00"
+		    },
+		    {
+		      "@type": "OpeningHoursSpecification",
+		      "dayOfWeek":  "http://schema.org/Friday",
+		      "opens": "08:30:00",
+		      "closes": "18:30:00"
+		    }
+		  ]
+		}
+		</script>
+
 		{# Custom page extra script block #}
 		{% block extra_js %}
 		{% endblock extra_js %}
