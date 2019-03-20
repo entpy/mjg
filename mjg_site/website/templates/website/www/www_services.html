@@ -2,10 +2,10 @@
 {% load staticfiles %}
 
 {# page title #}
-{% block title %}MotorJab Garage | Meccanica, elettronica, gommista, scopri tutti i nostri servizi{% endblock %}
+{% block title %}{{ block.super }}{% endblock %}
 
 {# page description #}
-{% block description %}{% endblock %}
+{% block description %}{{ block.super }}{% endblock %}
 
 {# custom page css block #}
 {% block custom_css %}{% endblock %}
