@@ -1,3 +1,14 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+
 .navbar.navbar-main { background-color: #0497d2; }
 .navbar.navbar-main ul.nav a { color: black; }
 .navbar.navbar-main ul.nav a:hover, .nav.navbar-nav a.active { color: white!important; background-color: #01719e !important; }
@@ -38,7 +49,7 @@
 .campaign_flow_progress { margin-bottom: 50px; }
 .create_campaign_form .form-group { margin-bottom: 40px; }
 .create_campaign_form .input-group { width: 100%; }
-/*.campaign-bs-component { padding-left: 100px; padding-right: 100px; }*/
+.campaign-bs-component { background-color: #E6E6E6; padding-left: 40px; padding-right: 40px; }
 
 .campaign_flow_block > div { float: left; }
 /* campaigns }}} */
