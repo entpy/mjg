@@ -1,0 +1,150 @@
+{% extends "website/inc/dashboard_base.html" %}
+{% load staticfiles %}
+
+{# page title #}
+{% block title %}MotorJab Garage | Campagne{% endblock %}
+
+{# page description #}
+{% block description %}{% endblock %}
+
+{# custom page css block #}
+{% block custom_css %}
+{{ block.super }}
+<style>
+	.uploaded_image { max-width: 100px; margin-bottom: 5px; }
+</style>
+{% endblock %}
+{# Custom page script block #}
+{% block custom_js %}
+<script src="https://cloud.tinymce.com/5/tinymce.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script> -->
+<script src="http://malsup.github.com/jquery.form.js"></script> 
+<script>
+	tinymce.init({
+		selector:'textarea',
+		plugins: [
+			'advlist autolink link image lists charmap preview hr anchor pagebreak spellchecker',
+			'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+			'save table directionality emoticons template paste'
+		],
+		toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | preview media fullpage | forecolor backcolor emoticons',
+		height: 500,
+	});
+</script>
+{% endblock %}
+
+{# menu active element #}
+{% block navigation_active_campaigns %}active{% endblock %}
+
+{# container content #}
+{% block www_main_content %}
+{# title block {{{ #}
+{% block campaign_flow_container %}
+	{% include "website/dashboard/campaigns/campaign_header.html" with flow_active1="campaign_flow_block_active" complete_percentage="25" %}
+{% endblock %}
+{# title block }}} #}
+<div class="row no_gutter">
+	<div class="col-sm-12 col-md-offset-1">
+		<h4>1. Informazioni sulla campagna</h4>
+		<p>Inserisci le informazioni principali sulla campagna, come il <b>titolo</b>, il <b>prezzo iniziale</b>, il <b>prezzo finale</b>, una <b>descrizione</b> e l'<b>immagine</b>.</p>
+	</div>
+	<div class="col-sm-12 col-md-10 col-md-offset-1">
+		{# form #}
+		<div class="well bs-component campaign-bs-component">
+			<form class="form-horizontal create_campaign_form validateFormAction" enctype="multipart/form-data" method="POST" action="">
+				{% csrf_token %}
+				<input name="step1_form_sent" value="1" type="hidden">
+				<fieldset>
+					<div class="form-group formGroupAction camp_titleGroup">
+						<label for="camp_title" class="control-label">Titolo *</label>
+						<div class="input-group">
+							<input id="camp_title" name="camp_title" class="form-control" placeholder="Inserisci qui il titolo da visualizzare nella email" value="" type="text" required>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="row">
+								<div class="col-lg-9">
+									<div class="col-sm-4">
+										<div class="formGroupAction camp_was_priceGroup">
+											<label for="camp_was_price" class="control-label">Prezzo iniziale € *</label>
+											<div class="input-group">
+												<input  id="camp_was_price" name="camp_was_price" class="form-control" type="number" required>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-4">
+										<div class="formGroupAction camp_final_priceGroup">
+											<label for="camp_final_price" class="control-label">Prezzo finale € *</label>
+											<div class="input-group">
+												<input  id="camp_final_price" name="camp_final_price" class="form-control" type="number" required>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-4">
+										<div class="formGroupAction camp_discountGroup">
+											<label class="control-label">Sconto %</label>
+											<div class="input-group">
+												<input  id="camp_discount" name="camp_discount" class="form-control" type="number" readonly>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group formGroupAction camp_descriptionGroup">
+						<label for="camp_description" class="control-label">Descrizione *</label>
+						<div class="input-group">
+							<textarea id="camp_description" name="camp_description" class="form-control no-spinners" placeholder="Inserisci qui la descrizione della campagna" required></textarea>
+						</div>
+					</div>
+					<div class="form-group formGroupAction camp_imageGroup">
+						<label class="control-label">Immagine</label>
+						<div class="uploadedImagePreviewAction"></div>
+						<div class="input-group">
+							<a href="#" class="btn btn-primary uploadCampaignImageAction">Carica immagine</a>
+						</div>
+					</div>
+
+					<div class="form-group text-md-right">
+						<div class="col-lg-10 col-lg-offset-2">
+							<button type="submit" class="btn btn-primary formSendButtonClickAction">Avanti &gt;&gt;</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>
+
+<form class="uploadCampaignImageFormAction" style="display: none;" enctype="multipart/form-data" method="POST" action="/ajax/ajax-upload-campaign-image/">
+	{% csrf_token %}
+	<input class="uploadCampImageClickAction" name="camp_image" type="file">
+</form>
+<script>
+	$(document).ready(function(){
+		$(document).on("click", ".uploadCampaignImageAction", function(){
+			$(".uploadCampImageClickAction").click();
+
+			return false;
+		});
+
+		$(document).on("change", ".uploadCampImageClickAction", function(){
+			// prepare Options Object
+			var options = {
+				success: function(responseText, statusText, xhr, $form) {
+					// responseText.image_url;
+					// responseText.campaign_image_id;
+					console.log(responseText.image_url);
+					var imageTemplate = "<img class=\"uploaded_image\" src=\"" + responseText.image_url + "\" alt=\"Campaign Image\">";
+					$(".uploadedImagePreviewAction").html(imageTemplate);
+				}
+			};
+			$('.uploadCampaignImageFormAction').ajaxSubmit(options); 
+
+			return false;
+		});
+	});
+</script>
+{% endblock %}

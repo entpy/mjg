@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.contrib import messages
 from django.urls import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
@@ -16,9 +17,10 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 from mjg_site.exceptions import *
 from mjg_site.common_utils import CommonUtils
-from website.forms import AccountForm, AccountNotifyForm, FeedbackForm, ReferFriendForm, ValidateCouponForm, ContactsForm
+from website.forms import AccountForm, AccountNotifyForm, FeedbackForm, ReferFriendForm, ValidateCouponForm, ContactsForm, CampaignImageForm
 from account_app.models import Account
 from mkauto_app.models import MaEvent, Feedback, MasterAccountCode, FriendCode, MaEventCode
+from promotion_app.models import CampaignImage
 from mkauto_app.strings import MkautoStrings
 from mkauto_app.consts import mkauto_consts
 from mjg_site.consts import project_constants
@@ -723,7 +725,58 @@ def dashboard_set_customer(request, user_id):
         "birthday_month" : birthday_month,
         "birthday_year" : birthday_year,
     }
+
     return render(request, 'website/dashboard/dashboard_set_customer.html', context)
+
+@login_required
+@ensure_csrf_cookie
+def dashboard_campaigns_index(request):
+    """View to show campaign index view"""
+
+    context = {
+    }
+
+    return render(request, 'website/dashboard/campaigns/index.html', context)
+
+@login_required
+@ensure_csrf_cookie
+def dashboard_campaigns_step1(request):
+    """View to show create campaign flow"""
+
+    context = {
+    }
+
+    return render(request, 'website/dashboard/campaigns/step1.html', context)
+
+@login_required
+@ensure_csrf_cookie
+def dashboard_campaigns_step2(request):
+    """View to show create campaign flow"""
+
+    context = {
+    }
+
+    return render(request, 'website/dashboard/campaigns/step2.html', context)
+
+@login_required
+@ensure_csrf_cookie
+def dashboard_campaigns_step3(request):
+    """View to show create campaign flow"""
+
+    context = {
+    }
+
+    return render(request, 'website/dashboard/campaigns/step3.html', context)
+
+@login_required
+@ensure_csrf_cookie
+def dashboard_campaigns_stats(request):
+    """View to show stats page view"""
+
+    context = {
+    }
+
+    return render(request, 'website/dashboard/campaigns/stats.html', context)
 
 # ajax view {{{
 # https://github.com/yceruto/django-ajax
@@ -778,6 +831,41 @@ def ajax_customers_list(request):
     return_var = json.dumps(return_var, cls=DjangoJSONEncoder)
 
     logger.info("### ajax_customers_list JSON " + str(return_var))
+
+    # create http response (also attach a cookie if exists)
+    return_var = HttpResponse(return_var, content_type="application/json")
+
+    # return a JSON response
+    return return_var
+
+# TODO
+@login_required
+@require_POST
+def ajax_upload_campaign_image(request):
+    return_var = None
+
+    return_var = {
+        "chiamata": "ajax_upload_campaign_image"
+    }
+
+    if request.method == 'POST':
+        # form = CampaignImageForm(request.POST, request.FILES["camp_image"])
+        #if form.is_valid():
+        logger.info("image obj: " + str(request.FILES["camp_image"]))
+        CampaignImage_obj = CampaignImage()
+        CampaignImage_obj.image = request.FILES["camp_image"]
+        CampaignImage_obj.save()
+        uploaded_image_id = CampaignImage_obj.campaign_image_id
+        uploaded_image_url = str(CampaignImage_obj.image.url)
+
+        return_var = {
+            "campaign_image_id": uploaded_image_id,
+            "image_url": uploaded_image_url
+        }
+
+    return_var = json.dumps(return_var, cls=DjangoJSONEncoder)
+
+    logger.info("### ajax_upload_campaign_image JSON " + str(return_var))
 
     # create http response (also attach a cookie if exists)
     return_var = HttpResponse(return_var, content_type="application/json")

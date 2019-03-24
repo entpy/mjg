@@ -19,3 +19,26 @@
 .stats_block .title > span { line-height: 18px; display: inline-block; margin-bottom: 10px; margin-top: 10px; }
 .stats_block .title .subtitle { font-size: 11px; text-align: center; width: 100%; display: inline-block; float: left; margin-top: -9px; }
 .stats_block .content { text-align: center; color: #d20000; font-weight: bold; font-size: 18px; }
+
+/* campaigns {{{ */
+.campaign_flow_container { margin-top: 30px; margin-bottom: 30px; }
+.campaign_flow_container .campaign_flow_block {
+	display: inline-block;
+	margin: 10px;
+	background-color: gray;
+	min-width: 200px;
+	padding: 5px;
+	color: white;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+.campaign_flow_container .campaign_flow_block.campaign_flow_block_active { background-color: #0497d2; }
+.campaign_flow_container .campaign_flow_block .campaign_flow_num { font-size: 18px; font-weight: bold; }
+.campaign_flow_container .campaign_flow_block .campaign_flow_title { margin-top: 6px; margin-left: 10px; }
+.campaign_flow_progress { margin-bottom: 50px; }
+.create_campaign_form .form-group { margin-bottom: 40px; }
+.create_campaign_form .input-group { width: 100%; }
+/*.campaign-bs-component { padding-left: 100px; padding-right: 100px; }*/
+
+.campaign_flow_block > div { float: left; }
+/* campaigns }}} */

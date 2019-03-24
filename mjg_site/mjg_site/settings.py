@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'account_app',
     'mkauto_app',
     'email_app',
+    'promotion_app',
     'anymail',
 ]
 
@@ -147,6 +148,8 @@ LOGIN_URL = "/admin/login/"
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media') 
+MEDIA_URL = '/media/'
 GIT_PROJECT_NAME = "mjg"
 
 # loading local settings

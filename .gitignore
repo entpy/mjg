@@ -67,3 +67,4 @@ website/website/local_settings.py
 run/
 
 migrations/
+media/

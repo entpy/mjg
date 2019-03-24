@@ -4,6 +4,7 @@ from django import forms
 from datetime import date
 from django.conf import settings
 from mkauto_app.consts import mkauto_consts
+from promotion_app.models import CampaignImage
 import calendar, locale, sys
 
 # force utf8 read data
@@ -110,3 +111,8 @@ class ContactsForm(forms.Form):
     email = forms.EmailField(label='Email', max_length=50, required=True)
     mobile_number = forms.CharField(label='Telefono', max_length=50, required=True)
     text = forms.CharField(label='Messaggio', widget=forms.Textarea, required=True)
+
+class CampaignImageForm(forms.ModelForm):
+    class Meta:
+        model = CampaignImage
+        fields = ('image',) 
