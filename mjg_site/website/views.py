@@ -770,6 +770,16 @@ def dashboard_campaigns_step3(request):
 
 @login_required
 @ensure_csrf_cookie
+def dashboard_campaigns_step4(request):
+    """View to show create campaign flow"""
+
+    context = {
+    }
+
+    return render(request, 'website/dashboard/campaigns/step4.html', context)
+
+@login_required
+@ensure_csrf_cookie
 def dashboard_campaigns_stats(request):
     """View to show stats page view"""
 
@@ -852,15 +862,24 @@ def ajax_upload_campaign_image(request):
         # form = CampaignImageForm(request.POST, request.FILES["camp_image"])
         #if form.is_valid():
         logger.info("image obj: " + str(request.FILES["camp_image"]))
-        CampaignImage_obj = CampaignImage()
-        CampaignImage_obj.image = request.FILES["camp_image"]
-        CampaignImage_obj.save()
-        uploaded_image_id = CampaignImage_obj.campaign_image_id
-        uploaded_image_url = str(CampaignImage_obj.image.url)
+
+        # saving small image
+        CampaignImageSmall_obj = CampaignImage()
+        CampaignImageSmall_obj.image = request.FILES["camp_image"]
+        CampaignImageSmall_obj.size = "s"
+        CampaignImageSmall_obj.save()
+
+        # saving large image
+        CampaignImageLarge_obj = CampaignImage()
+        CampaignImageLarge_obj.image = request.FILES["camp_image"]
+        CampaignImageLarge_obj.size = "l"
+        CampaignImageLarge_obj.save()
 
         return_var = {
-            "campaign_image_id": uploaded_image_id,
-            "image_url": uploaded_image_url
+            "small_campaign_image_id": CampaignImageSmall_obj.campaign_image_id,
+            "small_image_url": str(CampaignImageSmall_obj.image.url),
+            "large_campaign_image_id": CampaignImageLarge_obj.campaign_image_id,
+            "large_image_url": str(CampaignImageLarge_obj.image.url)
         }
 
     return_var = json.dumps(return_var, cls=DjangoJSONEncoder)

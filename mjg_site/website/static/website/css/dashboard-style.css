@@ -52,4 +52,6 @@ input[type=number] {
 .campaign-bs-component { background-color: #E6E6E6; padding-left: 40px; padding-right: 40px; }
 
 .campaign_flow_block > div { float: left; }
+.form_input_container_width_100 { width: 100%; }
+.campaign_navigation_footer_container { margin-top: 50px; }
 /* campaigns }}} */

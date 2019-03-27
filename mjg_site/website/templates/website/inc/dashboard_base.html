@@ -14,7 +14,10 @@
 {# Custom page script block #}
 {% block custom_js %}{% endblock %}
 {# Custom page extra script block #}
-{% block extra_js %}{% endblock %}
+{% block extra_js %}
+{# howto: https://validatejs.org #}
+<script src="{% static "website/js/vendor/validate.min.js" %}"></script>
+{% endblock %}
 
 {% block header_block %}
 <div class="navbar-wrapper">

@@ -11,7 +11,7 @@
 {% block custom_css %}
 {{ block.super }}
 <style>
-	.uploaded_image { max-width: 100px; margin-bottom: 5px; }
+	.uploaded_image { max-width: 300px; margin-bottom: 5px; }
 </style>
 {% endblock %}
 {# Custom page script block #}
@@ -51,13 +51,15 @@
 	<div class="col-sm-12 col-md-10 col-md-offset-1">
 		{# form #}
 		<div class="well bs-component campaign-bs-component">
-			<form class="form-horizontal create_campaign_form validateFormAction" enctype="multipart/form-data" method="POST" action="">
+			<form class="form-horizontal step1_form validateFormAction" method="POST" action="">
 				{% csrf_token %}
 				<input name="step1_form_sent" value="1" type="hidden">
+				<input class="smallImageInputAction" name="small_image_id" type="hidden">
+				<input class="largeImageInputAction" name="large_image_id" type="hidden">
 				<fieldset>
 					<div class="form-group formGroupAction camp_titleGroup">
 						<label for="camp_title" class="control-label">Titolo *</label>
-						<div class="input-group">
+						<div class="input-group form_input_container_width_100">
 							<input id="camp_title" name="camp_title" class="form-control" placeholder="Inserisci qui il titolo da visualizzare nella email" value="" type="text" required>
 						</div>
 					</div>
@@ -69,7 +71,7 @@
 										<div class="formGroupAction camp_was_priceGroup">
 											<label for="camp_was_price" class="control-label">Prezzo iniziale € *</label>
 											<div class="input-group">
-												<input  id="camp_was_price" name="camp_was_price" class="form-control" placeholder="Es. 20" type="number" required>
+												<input id="camp_was_price" name="camp_was_price" class="form-control calculateDiscountAction" placeholder="Es. 20" type="number" required>
 											</div>
 										</div>
 									</div>
@@ -77,7 +79,7 @@
 										<div class="formGroupAction camp_final_priceGroup">
 											<label for="camp_final_price" class="control-label">Prezzo finale € *</label>
 											<div class="input-group">
-												<input  id="camp_final_price" name="camp_final_price" class="form-control" placeholder="Es. 15" type="number" required>
+												<input id="camp_final_price" name="camp_final_price" class="form-control calculateDiscountAction" placeholder="Es. 15" type="number" required>
 											</div>
 										</div>
 									</div>
@@ -85,7 +87,7 @@
 										<div class="formGroupAction camp_discountGroup">
 											<label class="control-label">Sconto %</label>
 											<div class="input-group">
-												<input  id="camp_discount" name="camp_discount" class="form-control" type="number" readonly>
+												<input id="camp_discount" name="camp_discount" class="form-control campDiscountAction" type="text" value="0" readonly>
 											</div>
 										</div>
 									</div>
@@ -94,7 +96,7 @@
 						</div>
 					</div>
 					<div class="form-group formGroupAction camp_descriptionGroup">
-						<label for="camp_description" class="control-label">Descrizione *</label>
+						<label for="camp_description" class="control-label">Descrizione (il testo verrà visualizzato nella pagina della promozione) *</label>
 						<div class="input-group">
 							<textarea id="camp_description" name="camp_description" class="form-control no-spinners" placeholder="Inserisci qui la descrizione della campagna" required></textarea>
 						</div>
@@ -107,7 +109,7 @@
 						</div>
 					</div>
 
-					<div class="form-group text-md-right">
+					<div class="form-group text-md-right campaign_navigation_footer_container">
 						<div class="col-lg-10 col-lg-offset-2">
 							<button type="submit" class="btn btn-primary formSendButtonClickAction">Avanti &gt;&gt;</button>
 						</div>
@@ -130,6 +132,7 @@
 			return false;
 		});
 
+		// upload dell'immagine della promo
 		$(document).on("change", ".uploadCampImageClickAction", function(){
 			// prepare Options Object
 			var options = {
@@ -139,13 +142,71 @@
 					// salvare l'id dell'immagine in un campo hidden nel form della promozione
 					// responseText.campaign_image_id;
 					console.log(responseText.image_url);
-					var imageTemplate = "<img class=\"uploaded_image\" src=\"" + responseText.image_url + "\" alt=\"Campaign Image\">";
+					var imageTemplate = "<img class=\"uploaded_image\" src=\"" + responseText.small_image_url + "\" alt=\"Campaign Image\">";
 					$(".uploadedImagePreviewAction").html(imageTemplate);
+
+					// setto gli id delle immagini salvate nei relativi campi hidden
+					$(".smallImageInputAction").val(responseText.small_campaign_image_id);
+					$(".largeImageInputAction").val(responseText.large_campaign_image_id);
 				}
 			};
 			$('.uploadCampaignImageFormAction').ajaxSubmit(options); 
 
 			return false;
+		});
+
+		// calcolo lo sconto
+		$(document).on("change keyup", ".calculateDiscountAction", function(){
+			var camp_was_price = $("#camp_was_price").val() * 1;
+			var camp_final_price = $("#camp_final_price").val() * 1;
+			var discount = 0;
+
+			// se entrambi i valori sono compilati calcolo lo sconto
+			if (camp_final_price > camp_was_price) {
+				$(".campDiscountAction").val("errore");
+			} else {
+				$(".campDiscountAction").val(Math.round(100-(camp_final_price / camp_was_price) * 100));
+			}
+
+			return true;
+		});
+
+		// validazione del form
+		$(document).on("click", ".formSendButtonClickAction", function(){
+
+			// aggiorno il contenuto della textarea per la validazione
+			tinymce.triggerSave();
+
+			var returnVar = false;
+			// lavora sui "name" NON sugli "id"
+			var constraints = {
+				camp_title: {
+					presence: true,
+				},
+				camp_description: {
+					presence: true,
+				},
+				camp_was_price: {
+					// trick per validare un campo di tipo number senza attributo required
+					// presence: (!camp_was_price.validity.valid),
+					presence: true,
+					numericality: {
+						greaterThan: 0,
+					},
+				},
+				camp_final_price: {
+					// trick per validare un campo di tipo number senza attributo required
+					// presence: (!camp_final_price.validity.valid),
+					presence: true,
+					numericality: {
+						greaterThan: 0,
+					},
+				},
+			};
+
+			returnVar = validateForm(constraints);
+
+			return returnVar;
 		});
 	});
 </script>

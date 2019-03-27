@@ -61,6 +61,7 @@ urlpatterns = [
     url(r'^dashboard/campaigns/step1/?$', website.views.dashboard_campaigns_step1, name='dashboard_campaigns_step1'),
     url(r'^dashboard/campaigns/step2/?$', website.views.dashboard_campaigns_step2, name='dashboard_campaigns_step2'),
     url(r'^dashboard/campaigns/step3/?$', website.views.dashboard_campaigns_step3, name='dashboard_campaigns_step3'),
+    url(r'^dashboard/campaigns/step4/?$', website.views.dashboard_campaigns_step4, name='dashboard_campaigns_step4'),
     url(r'^dashboard/campaigns/stats/?$', website.views.dashboard_campaigns_stats, name='dashboard_campaigns_stats'),
     # dashboard }}}
 

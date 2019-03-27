@@ -15,15 +15,13 @@ sys.setdefaultencoding("utf8")
 logger = logging.getLogger(__name__)
 
 class CampaignImage(models.Model):
-    """
     IMAGE_SIZE = (
         ("m", "m"),
         ("l", "l"),
     )
-    """
     campaign_image_id = models.AutoField(primary_key=True)
     image = models.ImageField(blank=False, null=False,verbose_name="Immagine della promozione", upload_to=project_constants.CAMPAIGN_UPLOAD_DIR)
-    # size = models.CharField(max_length=1, null=False, blank=False, choices=IMAGE_SIZE, verbose_name="Indica la dimensione dell'immagine")
+    size = models.CharField(max_length=1, null=False, blank=False, choices=IMAGE_SIZE, verbose_name="Indica la dimensione dell'immagine")
     creation_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
@@ -40,16 +38,12 @@ class CampaignImage(models.Model):
 
         # resize image
         if self.image:
-            custom_image_PIL_obj = CustomImagePIL(file_path=str(self.image.path), image_raw=None, box_width=600, box_height=600)
-            custom_image_PIL_obj.resize_image(filename=self.image.path)
-            """
             if self.size == "m":
-                custom_image_PIL_obj = CustomImagePIL(file_path=str(self.promo_image.path), None, 400, 400)
-                custom_image_PIL_obj.resize_image(filename=self.promo_image.path)
+                custom_image_PIL_obj = CustomImagePIL(file_path=str(self.image.path), image_raw=None, box_width=500, box_height=500)
+                custom_image_PIL_obj.resize_image(filename=self.image.path)
             elif self.size == "l":
-                custom_image_PIL_obj = CustomImagePIL(file_path=str(self.promo_image.path), None, 600, 600)
-                custom_image_PIL_obj.resize_image(filename=self.promo_image.path)
-            """
+                custom_image_PIL_obj = CustomImagePIL(file_path=str(self.image.path), image_raw=None, box_width=800, box_height=800)
+                custom_image_PIL_obj.resize_image(filename=self.image.path)
 
 class Campaign(models.Model):
     CAMPAIGN_TYPE = (
@@ -63,7 +57,8 @@ class Campaign(models.Model):
     was_price = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=15, verbose_name="Prezzo iniziale")
     final_price = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=15, verbose_name="Prezzo finale")
     discount = models.DecimalField(null=True, blank=True, max_digits=18, decimal_places=15)
-    image = models.ForeignKey(CampaignImage, blank=True, null=True, on_delete=models.SET_NULL)
+    small_image = models.ForeignKey(CampaignImage, related_name="CampaignImage_small", blank=True, null=True, on_delete=models.SET_NULL)
+    large_image = models.ForeignKey(CampaignImage, related_name="CampaignImage_large", blank=True, null=True, on_delete=models.SET_NULL)
     campaign_type = models.CharField(max_length=30, null=False, blank=False, choices=CAMPAIGN_TYPE, verbose_name="Indica il tipo di campagna (Promozione|Newsletter)")
     channel = models.IntegerField(default=(project_constants.CHANNEL_EMAIL), null=False, blank=False, verbose_name="Canale di destinazione (email/sms)")
     status = models.IntegerField(default=1, choices=project_constants.CAMPAIGN_STATUS, verbose_name="Indica lo stato della campagna (1=in lavorazione, 2=in fase di invio, 3=inviata)")

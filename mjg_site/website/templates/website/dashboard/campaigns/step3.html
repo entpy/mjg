@@ -8,9 +8,17 @@
 {% block description %}{% endblock %}
 
 {# custom page css block #}
-{% block custom_css %}{{ block.super }}{% endblock %}
+{% block custom_css %}
+{{ block.super }}
+<style>
+	.msg_text_textarea { height: 200px!important; }
+</style>
+{% endblock %}
 {# Custom page script block #}
-{% block custom_js %}{% endblock %}
+{% block custom_js %}
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script> -->
+<script src="http://malsup.github.com/jquery.form.js"></script> 
+{% endblock %}
 
 {# menu active element #}
 {% block navigation_active_campaigns %}active{% endblock %}
@@ -18,37 +26,73 @@
 {# container content #}
 {% block www_main_content %}
 {# title block {{{ #}
-<div class="row no_gutter page_main_title_block">
-	<div class="col-sm-12">
-		<div class="dashboard_page_title_block">
-			<div class="dashboard_page_title">Campagne</div>
-			<div class="dashboard_page_description">In questa sezione è possibile creare una nuova campagna oppure visualizzare le statistiche di una campagna creata precedentemente.</div>
-		</div>
-	</div>
-</div>
+{% block campaign_flow_container %}
+	{% include "website/dashboard/campaigns/campaign_header.html" with flow_active3="campaign_flow_block_active" complete_percentage="75" %}
+{% endblock %}
 {# title block }}} #}
 <div class="row no_gutter">
-	<div class="col-sm-12">
-		<div class="col-sm-9 text-center padding-xs-only-60 padding-sm-only-60">
-			<div class="col-sm-6 dasboard_action_block padding-xs-only padding-sm-only">
-				<div class="block-label"><h4>Crea campagna</h4></div>
-				<div class="text-center">
-					Crea una nuova campagna<br />da inviare ai tuoi clienti
-				</div>
-				<div class="text-center dashboard_action_button">
-					<a href="/dashboard/campaigns/step1/" class="btn btn-warning">Crea campagna</a>
-				</div>
-			</div>
-			<div class="col-sm-6 dasboard_action_block">
-				<div class="block-label"><h4>Visualizza statistiche</h4></div>
-				<div class="text-center">
-					Visualizza le statistiche<br />di una campagna creata precedentemente
-				</div>
-				<div class="text-center dashboard_action_button">
-					<a href="/dashboard/campaigns/stats/" class="btn btn-warning">Visualizza statistiche</a>
-				</div>
-			</div>
+	<div class="col-sm-12 col-md-offset-1">
+		<h4>3. Crea il messaggio email</h4>
+		<p>Inserisci l'<b>oggetto</b> e il <b>testo</b> che dovranno essere visti nell'email, in questa pagina puoi anche prelevare l'indirizzo della promozione per condividerla nel web.</p>
+	</div>
+	<div class="col-sm-12 col-md-10 col-md-offset-1">
+		{# form #}
+		<div class="well bs-component campaign-bs-component">
+			<form class="form-horizontal step3_form validateFormAction" method="POST" action="">
+				{% csrf_token %}
+				<input name="step3_form_sent" value="1" type="hidden">
+				<fieldset>
+					<div class="form-group formGroupAction camp_msg_subjectGroup">
+						<label for="camp_msg_subject" class="control-label">Oggetto *</label>
+						<div class="input-group form_input_container_width_100">
+							<input id="camp_msg_subject" name="camp_msg_subject" class="form-control" placeholder="Inserisci qui l'oggetto del messaggio email" value="" type="text" required>
+						</div>
+					</div>
+					<div class="form-group formGroupAction camp_msg_textGroup">
+						<label for="camp_msg_text" class="control-label">Testo *</label>
+						<div class="input-group form_input_container_width_100">
+							<textarea id="camp_msg_text" name="camp_msg_text" class="form-control no-spinners msg_text_textarea" placeholder="Inserisci il testo del messaggio email" required></textarea>
+						</div>
+					</div>
+					<div class="form-group formGroupAction camp_msg_subjectGroup">
+						<p><b>URL della tua promozione:</b><br />
+						<u>http://www.motorjab.it/promo/1d7sd87</u></p>
+					</div>
+
+					<div class="form-group text-xs-left campaign_navigation_footer_container">
+						<div class="col-xs-6">
+							<a href="step2" class="btn btn-primary">&lt; &lt; Indietro</a>
+						</div>
+						<div class="col-xs-6 text-xs-right">
+							<button type="submit" class="btn btn-primary formSendButtonClickAction">Avanti &gt;&gt;</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
 		</div>
 	</div>
 </div>
+
+<script>
+	$(document).ready(function(){
+		// validazione del form
+		$(document).on("click", ".formSendButtonClickAction", function(){
+
+			var returnVar = false;
+			// lavora sui "name" NON sugli "id"
+			var constraints = {
+				camp_msg_subject: {
+					presence: true,
+				},
+				camp_msg_text: {
+					presence: true,
+				},
+			};
+
+			returnVar = validateForm(constraints);
+
+			return returnVar;
+		});
+	});
+</script>
 {% endblock %}
