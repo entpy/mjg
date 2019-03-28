@@ -51,8 +51,9 @@ class Campaign(models.Model):
         (project_constants.CAMPAIGN_TYPE_NEWSLETTER, project_constants.CAMPAIGN_TYPE_NEWSLETTER),
     )
     campaign_id = models.AutoField(primary_key=True)
+    camp_title = models.CharField(max_length=200, null=False, blank=False, verbose_name="Indica il titolo della campagna")
+    camp_description = models.TextField(null=False, blank=False, verbose_name="Indica la descrizione della campagna")
     msg_subject = models.CharField(max_length=200, null=False, blank=False, verbose_name="Indica l'oggetto nel messaggio")
-    msg_title = models.CharField(max_length=200, null=False, blank=False, verbose_name="Indica il titolo nel messaggio")
     msg_text = models.TextField(null=False, blank=False, verbose_name="Indica il testo nel messaggio")
     was_price = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=15, verbose_name="Prezzo iniziale")
     final_price = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=15, verbose_name="Prezzo finale")
@@ -62,7 +63,7 @@ class Campaign(models.Model):
     campaign_type = models.CharField(max_length=30, null=False, blank=False, choices=CAMPAIGN_TYPE, verbose_name="Indica il tipo di campagna (Promozione|Newsletter)")
     channel = models.IntegerField(default=(project_constants.CHANNEL_EMAIL), null=False, blank=False, verbose_name="Canale di destinazione (email/sms)")
     status = models.IntegerField(default=1, choices=project_constants.CAMPAIGN_STATUS, verbose_name="Indica lo stato della campagna (1=in lavorazione, 2=in fase di invio, 3=inviata)")
-    expiring_date = models.DateTimeField(null=False, blank=False, verbose_name="Data di scadenza della promozione (scadenza minima=1 mese a partire da creazione promo)")
+    expiring_date = models.DateField(null=True, blank=False, verbose_name="Data di scadenza della promozione (scadenza minima=1 mese a partire da creazione promo)")
     creation_date = models.DateTimeField(default=timezone.now)
     update_date = models.DateTimeField(auto_now=True)
 
@@ -77,6 +78,95 @@ class Campaign(models.Model):
 
     def __unicode__(self):
         return str(self.campaign_id)
+
+    def create_update_campaign(self, data_dict = {}, campaign_id=None):
+        """Function to create or update a campaign"""
+
+        campaign_obj = Campaign()
+
+        if campaign_id:
+            try:
+                campaign_obj = Campaign.objects.get(campaign_id=campaign_id)
+            except Campaign.DoesNotExist:
+                # l'oggetto non esiste, notifico l'errore
+                logger.error("errore in create_update_campaign, oggetto non esistente")
+                raise 
+
+        # salvo/aggiorno i dati della campagna
+        if "camp_title" in data_dict:
+            campaign_obj.camp_title = data_dict["camp_title"]
+        if "camp_description" in data_dict:
+            campaign_obj.camp_description = data_dict["camp_description"]
+        if "msg_subject" in data_dict:
+            campaign_obj.msg_subject = data_dict["msg_subject"]
+        if "msg_text" in data_dict:
+            campaign_obj.msg_text = data_dict["msg_text"]
+        if "was_price" in data_dict:
+            campaign_obj.was_price = data_dict["was_price"]
+        if "final_price" in data_dict:
+            campaign_obj.final_price = data_dict["final_price"]
+        if "discount" in data_dict:
+            campaign_obj.discount = data_dict["discount"]
+        if "campaign_type" in data_dict:
+            campaign_obj.campaign_type = data_dict["campaign_type"]
+        if "channel" in data_dict:
+            campaign_obj.channel = data_dict["channel"]
+        if "status" in data_dict:
+            campaign_obj.status = data_dict["status"]
+        if "expiring_date" in data_dict:
+            campaign_obj.expiring_date = data_dict["expiring_date"]
+        # salvo le immagini utilizzando gli id (non le istanze) per migliorare le performance
+        if "small_image_id" in data_dict:
+            campaign_obj.small_image_id = data_dict["small_image_id"]
+        if "large_image_id" in data_dict:
+            campaign_obj.large_image_id = data_dict["large_image_id"]
+        campaign_obj.save()
+
+        return campaign_obj
+
+    def get_campaign(self, campaign_id):
+        """Function to retrieve campaign details"""
+
+        campaign_obj = Campaign()
+
+        if campaign_id:
+            try:
+                campaign_obj = Campaign.objects.get(campaign_id=campaign_id)
+            except Campaign.DoesNotExist:
+                # l'oggetto non esiste, notifico l'errore
+                logger.error("errore in get_campaign, oggetto non esistente")
+                raise 
+
+        return campaign_obj
+
+    def get_campaign_info_dict(self, campaign_id):
+        """Function to retrieve campaign details dictionary"""
+
+        campaign_obj = Campaign()
+        campaign_info_dict = {}
+
+        if campaign_id:
+            try:
+                campaign_obj = self.get_campaign(campaign_id=campaign_id)
+            except Campaign.DoesNotExist:
+                # l'oggetto non esiste, notifico l'errore
+                logger.error("errore in get_campaign_info_dict, oggetto non esistente")
+                raise 
+            else:
+                campaign_info_dict = {
+                    'campaign_id' : campaign_obj.campaign_id,
+                    'camp_title' : campaign_obj.camp_title,
+                    'was_price' : campaign_obj.was_price,
+                    'final_price' : campaign_obj.final_price,
+                    'camp_description' : campaign_obj.camp_description,
+                    'small_image_id' : campaign_obj.small_image.campaign_image_id,
+                    'large_image_id' : campaign_obj.large_image.campaign_image_id,
+                    'small_image_url' : campaign_obj.small_image.image.url,
+                    'large_image_url' : campaign_obj.large_image.image.url,
+                    'expiring_date' : campaign_obj.expiring_date,
+                }
+
+        return campaign_info_dict
 
 class CampaignDest(models.Model):
     campaign_dest_id = models.AutoField(primary_key=True)

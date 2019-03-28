@@ -58,11 +58,11 @@ urlpatterns = [
     url(r'^dashboard/create-mkauto-default/?$', website.views.dashboard_create_mkauto_default, name='dashboard_create_mkauto_default'),
     # campagne
     url(r'^dashboard/campaigns/?$', website.views.dashboard_campaigns_index, name='dashboard_campaigns_index'),
-    url(r'^dashboard/campaigns/step1/?$', website.views.dashboard_campaigns_step1, name='dashboard_campaigns_step1'),
-    url(r'^dashboard/campaigns/step2/?$', website.views.dashboard_campaigns_step2, name='dashboard_campaigns_step2'),
-    url(r'^dashboard/campaigns/step3/?$', website.views.dashboard_campaigns_step3, name='dashboard_campaigns_step3'),
-    url(r'^dashboard/campaigns/step4/?$', website.views.dashboard_campaigns_step4, name='dashboard_campaigns_step4'),
-    url(r'^dashboard/campaigns/stats/?$', website.views.dashboard_campaigns_stats, name='dashboard_campaigns_stats'),
+    url(r'^dashboard/campaigns/step1/(?:(?P<campaign_id>\d+)/)?$', website.views.dashboard_campaigns_step1, name='dashboard_campaigns_step1'),
+    url(r'^dashboard/campaigns/step2/(?:(?P<campaign_id>\d+)/)?$$', website.views.dashboard_campaigns_step2, name='dashboard_campaigns_step2'),
+    url(r'^dashboard/campaigns/step3/(?:(?P<campaign_id>\d+)/)?$$', website.views.dashboard_campaigns_step3, name='dashboard_campaigns_step3'),
+    url(r'^dashboard/campaigns/step4/(?:(?P<campaign_id>\d+)/)?$$', website.views.dashboard_campaigns_step4, name='dashboard_campaigns_step4'),
+    url(r'^dashboard/campaigns/stats/(?:(?P<campaign_id>\d+)/)?$$', website.views.dashboard_campaigns_stats, name='dashboard_campaigns_stats'),
     # dashboard }}}
 
     # ajax {{{

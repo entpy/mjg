@@ -1,5 +1,5 @@
 {% extends "website/inc/dashboard_base.html" %}
-{% load staticfiles %}
+{% load staticfiles website_extras %}
 
 {# page title #}
 {% block title %}MotorJab Garage | Campagne{% endblock %}
@@ -36,22 +36,59 @@
 		<h4>2. Scadenza della campagna</h4>
 		<p>Imposta una scadenza per la campagna.</p>
 	</div>
+</div>
+<div class="row no_gutter">
+	<div class="col-sm-12">
+		<div class="col-md-offset-2 col-md-8 padding-xs-only padding-sm-only">
+			{# messages block #}
+			<div class="error_container"></div>
+			{% if form.errors %}
+				<div class="alert alert-danger">
+					<h4>Controlla questi errori</h4>
+					<ul>
+						{% for field in form %}
+							{% for error in field.errors %}
+								<li>{{ field.label|escape }}: {{ error|escape }}</li>
+							{% endfor %}
+						{% endfor %}
+						{% for form_error in form.non_field_errors %}
+							<li>{{ form_error }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% elif messages %}
+				{% for message in messages %}
+					{% if message.tags == "success" %}
+						<div class="alert alert-success">
+							{{ message|safe }}
+						</div>
+					{% elif message.tags == "error" %}
+						<div class="alert alert-danger">
+							{{ message|safe }}
+						</div>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+</div>
+<div class="row no_gutter">
 	<div class="col-sm-12 col-md-10 col-md-offset-1">
 		{# form #}
 		<div class="well bs-component campaign-bs-component">
 			<form class="form-horizontal step2_form validateFormAction" method="POST" action="">
 				{% csrf_token %}
 				<input name="step2_form_sent" value="1" type="hidden">
-				<input id="camp_expiring" name="camp_expiring" class="form-control" value="" type="hidden" required>
+				<input id="expiring_date" name="expiring_date" class="form-control" value="{% if post.expiring_date %}{{ post.expiring_date }}{% else %}{{ campaign_info_dict|get_item:"expiring_date" }}{% endif %}" type="hidden" required>
 				<fieldset>
-					<div class="form-group formGroupAction camp_expiringGroup">
-						<label for="camp_expiring" class="control-label">Scadenza *</label>
+					<div class="form-group formGroupAction expiring_dateGroup">
+						<label class="control-label">{{ form.expiring_date.label }} *</label>
 						<div class="datepickerInitAction"></div>
 					</div>
 
 					<div class="form-group text-xs-left campaign_navigation_footer_container">
 						<div class="col-xs-6">
-							<a href="step1" class="btn btn-primary">&lt; &lt; Indietro</a>
+							<a href="/dashboard/campaigns/step1/{{ campaign_info_dict.campaign_id }}/" class="btn btn-primary">&lt; &lt; Indietro</a>
 						</div>
 						<div class="col-xs-6 text-xs-right">
 							<button type="submit" class="btn btn-primary formSendButtonClickAction">Avanti &gt;&gt;</button>
@@ -68,15 +105,11 @@
 		// datepicker init
 		$('.datepickerInitAction').datepicker({
 			language: 'it',
-			todayButton: new Date(),
 			clearButton: true,
 			minDate: new Date(moment().add(1, "days").format()), // Now can select only dates, which goes after today
 			onSelect: function onSelect(fd, date) {
 				var title = false;
-				// alert(fd);
-				$("#camp_expiring").val(fd);
-				// $('strong', $content).html(title)
-				// $('p', $content).html(content)
+				$("#expiring_date").val(fd);
 			},
 		});
 
@@ -86,7 +119,7 @@
 			var returnVar = false;
 			// lavora sui "name" NON sugli "id"
 			var constraints = {
-				camp_expiring: {
+				expiring_date: {
 					presence: true,
 				},
 			};
@@ -95,6 +128,13 @@
 
 			return returnVar;
 		});
+
+		// init del datepicker con data preselezionata
+		{% if post.expiring_date %}
+			$('.datepickerInitAction').data('datepicker').selectDate(new Date("{{ post.expiring_date }}"));
+		{% elif campaign_info_dict|get_item:"expiring_date" %}
+			$('.datepickerInitAction').data('datepicker').selectDate(new Date("{{ campaign_info_dict|get_item:"expiring_date" }}"));
+		{% endif %}
 	});
 </script>
 {% endblock %}

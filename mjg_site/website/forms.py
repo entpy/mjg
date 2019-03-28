@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
+from django.forms import ModelForm
 from datetime import date
 from django.conf import settings
 from mkauto_app.consts import mkauto_consts
-from promotion_app.models import CampaignImage
+from promotion_app.models import CampaignImage, Campaign
 import calendar, locale, sys
 
 # force utf8 read data
@@ -105,7 +106,6 @@ class ValidateCouponForm(forms.Form):
         super(ValidateCouponForm, self).__init__(*args, **kwargs)
         self.fields['coupon_code'].widget.attrs.update({'placeholder': 'Inserisci qui il codice coupon ES: S4J9KH12'})
 
-# TODO
 class ContactsForm(forms.Form):
     first_name = forms.CharField(label='Nome', max_length=30, required=True)
     email = forms.EmailField(label='Email', max_length=50, required=True)
@@ -116,3 +116,39 @@ class CampaignImageForm(forms.ModelForm):
     class Meta:
         model = CampaignImage
         fields = ('image',) 
+
+# campaign flow forms
+# TODO
+class CreateCampaignForm(ModelForm):
+    small_image_id = forms.IntegerField(required=False)
+    large_image_id = forms.IntegerField(required=False)
+
+    class Meta:
+        model = Campaign
+        fields = ['camp_title', 'was_price', 'final_price', 'camp_description', 'small_image_id', 'large_image_id']
+        labels = {
+            'camp_title' : 'Titolo (il titolo della campagna)',
+            'was_price' : 'Prezzo iniziale €',
+            'final_price' : 'Prezzo finale €',
+            'camp_description' : 'Descrizione (il testo verrà visualizzato nella pagina della promozione)',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CreateCampaignForm, self).__init__(*args, **kwargs)
+        self.fields['camp_title'].widget.attrs.update({'placeholder': 'Inserisci qui il titolo da visualizzare nella email'})
+        self.fields['was_price'].widget.attrs.update({'placeholder': 'Es. 20'})
+        self.fields['final_price'].widget.attrs.update({'placeholder': 'Es. 15'})
+
+class SetCampaignExpiringForm(ModelForm):
+    class Meta:
+        model = Campaign
+        fields = ['expiring_date']
+        labels = {
+            'expiring_date' : 'Scadenza',
+        }
+
+class SetCampaignMessageTextForm(forms.Form):
+    first_name = forms.CharField(label='Nome', max_length=30, required=True)
+    email = forms.EmailField(label='Email', max_length=50, required=True)
+    mobile_number = forms.CharField(label='Telefono', max_length=50, required=True)
+    text = forms.CharField(label='Messaggio', widget=forms.Textarea, required=True)

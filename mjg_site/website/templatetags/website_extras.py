@@ -11,7 +11,8 @@ def get_item(dictionary, key):
     """Custom filter to retrieve a value from a dictionary"""
     return_var = ""
     if dictionary:
-        dictionary = vars(dictionary)
-        return_var = dictionary.get(key)
+        dictionary = dict(dictionary)
+        if dictionary.get(key):
+            return_var = str(dictionary.get(key))
 
     return return_var

@@ -17,10 +17,11 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 from mjg_site.exceptions import *
 from mjg_site.common_utils import CommonUtils
-from website.forms import AccountForm, AccountNotifyForm, FeedbackForm, ReferFriendForm, ValidateCouponForm, ContactsForm, CampaignImageForm
+# from website.forms import AccountForm, AccountNotifyForm, FeedbackForm, ReferFriendForm, ValidateCouponForm, ContactsForm, CampaignImageForm
+from website.forms import *
 from account_app.models import Account
 from mkauto_app.models import MaEvent, Feedback, MasterAccountCode, FriendCode, MaEventCode
-from promotion_app.models import CampaignImage
+from promotion_app.models import *
 from mkauto_app.strings import MkautoStrings
 from mkauto_app.consts import mkauto_consts
 from mjg_site.consts import project_constants
@@ -740,20 +741,93 @@ def dashboard_campaigns_index(request):
 
 @login_required
 @ensure_csrf_cookie
-def dashboard_campaigns_step1(request):
+def dashboard_campaigns_step1(request, campaign_id):
     """View to show create campaign flow"""
 
+    # se presente un id carico i dati della campagna (azione comune in tutto il flow della campagna) {{{
+    campaign_obj = Campaign()
+    campaign_info_dict = {}
+    if campaign_id:
+        current_campaign_obj = campaign_obj.get_campaign(campaign_id)
+        campaign_info_dict = campaign_obj.get_campaign_info_dict(campaign_id=campaign_id)
+    # }}}
+
+    if request.method == "POST":
+        # create a form instance and populate it with data from the request:
+        form = CreateCampaignForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # creo/aggiorno la campagna
+            save_data = { }
+            save_data["camp_title"] = form.cleaned_data["camp_title"]
+            save_data["was_price"] = form.cleaned_data["was_price"]
+            save_data["final_price"] = form.cleaned_data["final_price"]
+            save_data["camp_description"] = form.cleaned_data["camp_description"]
+            save_data["small_image_id"] = form.cleaned_data["small_image_id"]
+            save_data["large_image_id"] = form.cleaned_data["large_image_id"]
+
+            # TODO
+            # calcolare lo sconto
+
+            saved_campaign_obj = campaign_obj.create_update_campaign(data_dict = save_data, campaign_id=campaign_id)
+            # redirect nello step2 con campaign_id
+            return HttpResponseRedirect("/dashboard/campaigns/step2/" + str(saved_campaign_obj.campaign_id) + "/")
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = CreateCampaignForm()
+
     context = {
+        "post" : request.POST,
+        "form" : form,
+        "campaign_info_dict" : campaign_info_dict,
     }
 
     return render(request, 'website/dashboard/campaigns/step1.html', context)
 
 @login_required
 @ensure_csrf_cookie
-def dashboard_campaigns_step2(request):
+def dashboard_campaigns_step2(request, campaign_id):
     """View to show create campaign flow"""
 
+    # se presente un id carico i dati della campagna (azione comune in tutto il flow della campagna) {{{
+    campaign_obj = Campaign()
+    campaign_info_dict = {}
+    if campaign_id:
+        current_campaign_obj = campaign_obj.get_campaign(campaign_id)
+        campaign_info_dict = campaign_obj.get_campaign_info_dict(campaign_id=campaign_id)
+    # }}}
+
+    if request.method == "POST":
+        # create a form instance and populate it with data from the request:
+        form = SetCampaignExpiringForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # creo/aggiorno la campagna
+            save_data = {}
+            #camp_expiring_date = datetime.datetime.date(form.cleaned_data["expiring_date"])
+            save_data["expiring_date"] = form.cleaned_data["expiring_date"]
+
+            # test_date = timezone.localtime(form.cleaned_data["expiring_date"])
+            # logger.info("tz data: " + str(test_date))
+            # logger.info("data: " + str(form.cleaned_data["expiring_date"]))
+            #camp_expiring_date = datetime.datetime.strptime(form.cleaned_data["expiring_date"], "%Y-%m-%d").date()
+
+            saved_campaign_obj = campaign_obj.create_update_campaign(data_dict = save_data, campaign_id=campaign_id)
+            # redirect nello step2 con campaign_id
+            return HttpResponseRedirect("/dashboard/campaigns/step3/" + str(saved_campaign_obj.campaign_id) + "/")
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = SetCampaignExpiringForm()
+
+    # 29/03/2019
+    #logger.info("data: " + str(camp_expiring_date))
+
     context = {
+        "post" : request.POST,
+        "form" : form,
+        "campaign_info_dict" : campaign_info_dict,
     }
 
     return render(request, 'website/dashboard/campaigns/step2.html', context)
