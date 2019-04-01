@@ -57,7 +57,7 @@ class Campaign(models.Model):
     msg_text = models.TextField(null=False, blank=False, verbose_name="Indica il testo nel messaggio")
     was_price = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=15, verbose_name="Prezzo iniziale")
     final_price = models.DecimalField(null=True, blank=True, max_digits=20, decimal_places=15, verbose_name="Prezzo finale")
-    discount = models.DecimalField(null=True, blank=True, max_digits=18, decimal_places=15)
+    # discount = models.DecimalField(null=True, blank=True, max_digits=18, decimal_places=15)
     small_image = models.ForeignKey(CampaignImage, related_name="CampaignImage_small", blank=True, null=True, on_delete=models.SET_NULL)
     large_image = models.ForeignKey(CampaignImage, related_name="CampaignImage_large", blank=True, null=True, on_delete=models.SET_NULL)
     campaign_type = models.CharField(max_length=30, null=False, blank=False, choices=CAMPAIGN_TYPE, verbose_name="Indica il tipo di campagna (Promozione|Newsletter)")
@@ -105,8 +105,8 @@ class Campaign(models.Model):
             campaign_obj.was_price = data_dict["was_price"]
         if "final_price" in data_dict:
             campaign_obj.final_price = data_dict["final_price"]
-        if "discount" in data_dict:
-            campaign_obj.discount = data_dict["discount"]
+        # if "discount" in data_dict:
+            # campaign_obj.discount = data_dict["discount"]
         if "campaign_type" in data_dict:
             campaign_obj.campaign_type = data_dict["campaign_type"]
         if "channel" in data_dict:
@@ -156,6 +156,8 @@ class Campaign(models.Model):
                 campaign_info_dict = {
                     'campaign_id' : campaign_obj.campaign_id,
                     'camp_title' : campaign_obj.camp_title,
+                    'msg_subject' : campaign_obj.msg_subject,
+                    'msg_text' : campaign_obj.msg_text,
                     'was_price' : campaign_obj.was_price,
                     'final_price' : campaign_obj.final_price,
                     'camp_description' : campaign_obj.camp_description,
@@ -212,6 +214,12 @@ class CampaignDest(models.Model):
             pass
 
         return random_code
+
+    # TODO
+    def get_or_create_camp_dest_channel(self):
+        """Function to retireve or create a camp_dest_channel"""
+
+        return True
 
 class CampaignUserTemp(models.Model):
     campaign_user_temp_id = models.AutoField(primary_key=True)

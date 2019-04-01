@@ -32,7 +32,7 @@
 {# title block }}} #}
 <div class="row no_gutter">
 	<div class="col-sm-12 col-md-offset-1">
-		<h4>3. Crea il messaggio email</h4>
+		<h4>3. Crea il messaggio dell'email</h4>
 		<p>Inserisci l'<b>oggetto</b> e il <b>testo</b> che dovranno essere visti nell'email, in questa pagina puoi anche prelevare l'indirizzo della promozione per condividerla nel web.</p>
 	</div>
 </div>
@@ -79,26 +79,25 @@
 				{% csrf_token %}
 				<input name="step3_form_sent" value="1" type="hidden">
 				<fieldset>
-					<div class="form-group formGroupAction camp_msg_subjectGroup">
-						<label for="camp_msg_subject" class="control-label">Oggetto *</label>
+					<div class="form-group formGroupAction msg_subjectGroup">
+						<label for="msg_subject" class="control-label">{{ form.msg_subject.label }} *</label>
 						<div class="input-group form_input_container_width_100">
-							<input id="camp_msg_subject" name="camp_msg_subject" class="form-control" placeholder="Inserisci qui l'oggetto del messaggio email" value="" type="text" required>
+							<input id="msg_subject" name="msg_subject" class="form-control" placeholder="{{ form.msg_subject.field.widget.attrs.placeholder }}" value="{% if post.msg_subject %}{{ post.msg_subject }}{% else %}{{ campaign_info_dict|get_item:"msg_subject" }}{% endif %}" type="text" maxlength="200" required>
 						</div>
 					</div>
-					<div class="form-group formGroupAction camp_msg_textGroup">
-						<label for="camp_msg_text" class="control-label">Testo *</label>
+					<div class="form-group formGroupAction msg_textGroup">
+						<label for="msg_text" class="control-label">{{ form.msg_text.label }} *</label>
 						<div class="input-group form_input_container_width_100">
-							<textarea id="camp_msg_text" name="camp_msg_text" class="form-control no-spinners msg_text_textarea" placeholder="Inserisci il testo del messaggio email" required></textarea>
+							<textarea id="msg_text" name="msg_text" class="form-control no-spinners" required>{% if post.msg_text %}{{ post.msg_text }}{% else %}{{ campaign_info_dict|get_item:"msg_text" }}{% endif %}</textarea>
 						</div>
 					</div>
 					<div class="form-group formGroupAction camp_msg_subjectGroup">
 						<p><b>URL della tua promozione:</b><br />
 						<u>http://www.motorjab.it/promo/1d7sd87</u></p>
 					</div>
-
 					<div class="form-group text-xs-left campaign_navigation_footer_container">
 						<div class="col-xs-6">
-							<a href="step2" class="btn btn-primary">&lt; &lt; Indietro</a>
+							<a href="/dashboard/campaigns/step2/{{ campaign_info_dict.campaign_id }}/" class="btn btn-primary">&lt; &lt; Indietro</a>
 						</div>
 						<div class="col-xs-6 text-xs-right">
 							<button type="submit" class="btn btn-primary formSendButtonClickAction">Avanti &gt;&gt;</button>
@@ -118,10 +117,10 @@
 			var returnVar = false;
 			// lavora sui "name" NON sugli "id"
 			var constraints = {
-				camp_msg_subject: {
+				msg_subject: {
 					presence: true,
 				},
-				camp_msg_text: {
+				msg_text: {
 					presence: true,
 				},
 			};

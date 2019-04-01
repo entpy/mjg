@@ -769,7 +769,7 @@ def dashboard_campaigns_step1(request, campaign_id):
             # TODO
             # calcolare lo sconto
 
-            saved_campaign_obj = campaign_obj.create_update_campaign(data_dict = save_data, campaign_id=campaign_id)
+            saved_campaign_obj = campaign_obj.create_update_campaign(data_dict=save_data, campaign_id=campaign_id)
             # redirect nello step2 con campaign_id
             return HttpResponseRedirect("/dashboard/campaigns/step2/" + str(saved_campaign_obj.campaign_id) + "/")
 
@@ -813,16 +813,13 @@ def dashboard_campaigns_step2(request, campaign_id):
             # logger.info("data: " + str(form.cleaned_data["expiring_date"]))
             #camp_expiring_date = datetime.datetime.strptime(form.cleaned_data["expiring_date"], "%Y-%m-%d").date()
 
-            saved_campaign_obj = campaign_obj.create_update_campaign(data_dict = save_data, campaign_id=campaign_id)
+            saved_campaign_obj = campaign_obj.create_update_campaign(data_dict=save_data, campaign_id=campaign_id)
             # redirect nello step2 con campaign_id
             return HttpResponseRedirect("/dashboard/campaigns/step3/" + str(saved_campaign_obj.campaign_id) + "/")
 
     # if a GET (or any other method) we'll create a blank form
     else:
         form = SetCampaignExpiringForm()
-
-    # 29/03/2019
-    #logger.info("data: " + str(camp_expiring_date))
 
     context = {
         "post" : request.POST,
@@ -834,20 +831,64 @@ def dashboard_campaigns_step2(request, campaign_id):
 
 @login_required
 @ensure_csrf_cookie
-def dashboard_campaigns_step3(request):
+def dashboard_campaigns_step3(request, campaign_id):
     """View to show create campaign flow"""
 
+    # se presente un id carico i dati della campagna (azione comune in tutto il flow della campagna) {{{
+    campaign_obj = Campaign()
+    campaign_info_dict = {}
+    if campaign_id:
+        current_campaign_obj = campaign_obj.get_campaign(campaign_id)
+        campaign_info_dict = campaign_obj.get_campaign_info_dict(campaign_id=campaign_id)
+    # }}}
+
+    # TODO
+    # creo, se non esistesse, il channel url
+
+    # TODO
+    # prelevo il codice del channel url
+
+    if request.method == "POST":
+        # create a form instance and populate it with data from the request:
+        form = SetCampaignMessageTextForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # creo/aggiorno la campagna
+            save_data = { }
+            save_data["msg_subject"] = form.cleaned_data["msg_subject"]
+            save_data["msg_text"] = form.cleaned_data["msg_text"]
+
+            saved_campaign_obj = campaign_obj.create_update_campaign(data_dict=save_data, campaign_id=campaign_id)
+            # redirect nello step2 con campaign_id
+            return HttpResponseRedirect("/dashboard/campaigns/step4/" + str(saved_campaign_obj.campaign_id) + "/")
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = SetCampaignMessageTextForm()
+
     context = {
+        "post" : request.POST,
+        "form" : form,
+        "campaign_info_dict" : campaign_info_dict,
     }
 
     return render(request, 'website/dashboard/campaigns/step3.html', context)
 
 @login_required
 @ensure_csrf_cookie
-def dashboard_campaigns_step4(request):
+def dashboard_campaigns_step4(request, campaign_id):
     """View to show create campaign flow"""
 
+    # se presente un id carico i dati della campagna (azione comune in tutto il flow della campagna) {{{
+    campaign_obj = Campaign()
+    campaign_info_dict = {}
+    if campaign_id:
+        current_campaign_obj = campaign_obj.get_campaign(campaign_id)
+        campaign_info_dict = campaign_obj.get_campaign_info_dict(campaign_id=campaign_id)
+    # }}}
+
     context = {
+        "campaign_info_dict" : campaign_info_dict,
     }
 
     return render(request, 'website/dashboard/campaigns/step4.html', context)

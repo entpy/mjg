@@ -120,6 +120,7 @@ class CampaignImageForm(forms.ModelForm):
 # campaign flow forms
 # TODO
 class CreateCampaignForm(ModelForm):
+    # campi extra del form non presenti nel model
     small_image_id = forms.IntegerField(required=False)
     large_image_id = forms.IntegerField(required=False)
 
@@ -147,8 +148,17 @@ class SetCampaignExpiringForm(ModelForm):
             'expiring_date' : 'Scadenza',
         }
 
-class SetCampaignMessageTextForm(forms.Form):
-    first_name = forms.CharField(label='Nome', max_length=30, required=True)
-    email = forms.EmailField(label='Email', max_length=50, required=True)
-    mobile_number = forms.CharField(label='Telefono', max_length=50, required=True)
-    text = forms.CharField(label='Messaggio', widget=forms.Textarea, required=True)
+class SetCampaignMessageTextForm(ModelForm):
+
+    class Meta:
+        model = Campaign
+        fields = ['msg_subject', 'msg_text']
+        labels = {
+            'msg_subject' : "L'oggetto dell'email",
+            'msg_text' : "Il testo dell'email",
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(SetCampaignMessageTextForm, self).__init__(*args, **kwargs)
+        self.fields['msg_subject'].widget.attrs.update({'placeholder': "Inserisci qui l'oggetto dell'email"})
+        self.fields['msg_text'].widget.attrs.update({'placeholder': "Inserisci qui il contenuto da mostrare nell'email"})

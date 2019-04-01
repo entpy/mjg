@@ -135,7 +135,7 @@
 					</div>
 					<div class="form-group formGroupAction camp_descriptionGroup">
 						<label for="camp_description" class="control-label">{{ form.camp_description.label }} *</label>
-						<div class="input-group">
+						<div class="input-group form_input_container_width_100">
 							<textarea id="camp_description" name="camp_description" class="form-control no-spinners" required>{% if post.camp_description %}{{ post.camp_description }}{% else %}{{ campaign_info_dict|get_item:"camp_description" }}{% endif %}</textarea>
 						</div>
 					</div>
