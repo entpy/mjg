@@ -289,6 +289,28 @@ class Account(models.Model):
 
         return return_var
 
+    # TODO
+    def get_campaign_accounts(self, bitmask_to_check):
+        """Function to retrieve campaign user list"""
+
+        return_var = None
+
+        return_var = User.objects.values('id', 'first_name', 'last_name', 'email', 'account__mobile_number', 'account__notify_bitmask').filter()
+        # solo gli utenti che vogliono ricevere queste notifiche (controllo la bitmask)
+        return_var = return_var.annotate(bitmask_annotated_field=F('account__notify_bitmask').bitand(bitmask_to_check))
+        return_var = return_var.filter(bitmask_annotated_field__gt=0)
+        # solo gli utenti attivi (status=1)
+        return_var = return_var.filter(account__status=1)
+        # ... e che non facciano parte dello staff
+        return_var = return_var.filter(is_staff=False)
+
+	# performing query
+        return_var = list(return_var)
+
+        logger.info("elenco utenti: " + str(return_var))
+
+        return return_var
+
     def get_user_data_as_dictionary(self, user_id):
         """Function to retrieve a user data as dictionary"""
         return_var = None

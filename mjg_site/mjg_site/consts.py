@@ -17,6 +17,7 @@ class project_constants(object):
     # channels bitmask {{{
     CHANNEL_EMAIL = 1
     CHANNEL_SMS = 2
+    CHANNEL_URL = 4
     # notify bitmask }}}
 
     # account source {{{
@@ -45,10 +46,12 @@ class project_constants(object):
     CAMPAIGN_STATUS_IN_WORKING = 1
     CAMPAIGN_STATUS_SENDING = 2
     CAMPAIGN_STATUS_SENT = 3
+    CAMPAIGN_STATUS_CLOSED = 4
     CAMPAIGN_STATUS = (
         (CAMPAIGN_STATUS_IN_WORKING, 'In lavorazione'),
         (CAMPAIGN_STATUS_SENDING, 'In fase di invio'),
         (CAMPAIGN_STATUS_SENT, 'Inviata'),
+        (CAMPAIGN_STATUS_CLOSED, 'Chiusa senza invio'),
     )
 
     CAMPAIGN_UPLOAD_DIR = "campaign_images/"

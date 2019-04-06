@@ -10,6 +10,8 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
+from background_task import background
+from django.core import management
 
 from django.shortcuts import render
 # from django_ajax.decorators import ajax
@@ -29,7 +31,6 @@ from email_app.email_core import CustomEmailTemplate
 import datetime, logging, json
 
 from django.contrib.auth.models import User
-
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -748,7 +749,6 @@ def dashboard_campaigns_step1(request, campaign_id):
     campaign_obj = Campaign()
     campaign_info_dict = {}
     if campaign_id:
-        current_campaign_obj = campaign_obj.get_campaign(campaign_id)
         campaign_info_dict = campaign_obj.get_campaign_info_dict(campaign_id=campaign_id)
     # }}}
 
@@ -794,7 +794,6 @@ def dashboard_campaigns_step2(request, campaign_id):
     campaign_obj = Campaign()
     campaign_info_dict = {}
     if campaign_id:
-        current_campaign_obj = campaign_obj.get_campaign(campaign_id)
         campaign_info_dict = campaign_obj.get_campaign_info_dict(campaign_id=campaign_id)
     # }}}
 
@@ -838,15 +837,13 @@ def dashboard_campaigns_step3(request, campaign_id):
     campaign_obj = Campaign()
     campaign_info_dict = {}
     if campaign_id:
-        current_campaign_obj = campaign_obj.get_campaign(campaign_id)
         campaign_info_dict = campaign_obj.get_campaign_info_dict(campaign_id=campaign_id)
     # }}}
 
-    # TODO
-    # creo, se non esistesse, il channel url
+    campaign_dest_obj = CampaignDest()
 
-    # TODO
-    # prelevo il codice del channel url
+    # prelevo l'url della campagna
+    campaign_url = campaign_dest_obj.get_campaign_url(campaign_id=campaign_id)
 
     if request.method == "POST":
         # create a form instance and populate it with data from the request:
@@ -869,6 +866,7 @@ def dashboard_campaigns_step3(request, campaign_id):
     context = {
         "post" : request.POST,
         "form" : form,
+        "campaign_url" : campaign_url,
         "campaign_info_dict" : campaign_info_dict,
     }
 
@@ -883,12 +881,34 @@ def dashboard_campaigns_step4(request, campaign_id):
     campaign_obj = Campaign()
     campaign_info_dict = {}
     if campaign_id:
-        current_campaign_obj = campaign_obj.get_campaign(campaign_id)
         campaign_info_dict = campaign_obj.get_campaign_info_dict(campaign_id=campaign_id)
     # }}}
 
+    campaign_user_temp_obj = CampaignUserTemp()
+    campaign_dest_obj = CampaignDest()
+
+    # creo l'elenco dei destinatari temporanei
+    campaign_user_temp_obj.manage_promotion_sender_list(campaign_id=campaign_id)
+
+    # conteggio l'elenco dei destinatari
+    count_campaign_sender = campaign_user_temp_obj.count_campaign_sender(campaign_id=campaign_id)
+
+    # prelevo l'url della campagna
+    campaign_url = campaign_dest_obj.get_campaign_url(campaign_id=campaign_id)
+
+    if request.method == "POST":
+        if request.POST.get("send_campaign") == "1":
+            logger.info("chiamo lo script 'send_campaign'")
+            # add new task in order to send a campaign
+            send_campaign(campaign_id=campaign_id)
+            # eseguo il comando per eseguire i task schedulati
+            # https://docs.djangoproject.com/en/1.11/ref/django-admin/#running-management-commands-from-your-code
+            management.call_command('process_tasks', duration=1, interactive=False)
+
     context = {
         "campaign_info_dict" : campaign_info_dict,
+        "count_campaign_sender" : count_campaign_sender,
+        "campaign_url" : campaign_url,
     }
 
     return render(request, 'website/dashboard/campaigns/step4.html', context)
@@ -1023,3 +1043,12 @@ def dashboard_create_mkauto_default(request):
         return HttpResponse("Mkauto inizializzata con successo")
     else:
         return HttpResponse("Esistono già degli eventi, non faccio nulla")
+
+# background actions {{{
+@background(schedule=timezone.now())
+def send_campaign(campaign_id):
+    campaign_obj = Campaign()
+    campaign_obj.send_campaign(campaign_id=campaign_id)
+
+    return True
+# background actions }}}

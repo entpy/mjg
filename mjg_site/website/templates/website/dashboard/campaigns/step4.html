@@ -77,29 +77,30 @@
 	<div class="col-sm-12 col-md-10 col-md-offset-1">
 		{# form #}
 		<div class="well bs-component campaign-bs-component">
-			<form class="form-horizontal step4_form validateFormAction" method="POST" action="">
+			<form class="form-horizontal step4_form submitFormAction validateFormAction" method="POST" action="">
 				{% csrf_token %}
 				<input name="step4_form_sent" value="1" type="hidden">
+				<input name="send_campaign" value="1" type="hidden">
 				<fieldset>
 					<div class="form-group formGroupAction camp_msg_subjectGroup">
 						<p><b>Oggetto del messaggio:</b><br />
-						Oggetto del messaggio</p>
+						{{ campaign_info_dict|get_item:"msg_subject" }}</p>
 					</div>
 					<div class="form-group formGroupAction camp_msg_subjectGroup">
 						<p><b>Testo del messaggio:</b><br />
-						Testo del messaggio</p>
+						{{ campaign_info_dict|get_item:"msg_text" }}</p>
 					</div>
 					<div class="form-group formGroupAction camp_msg_subjectGroup">
 						<p><b>Titolo della promozione:</b><br />
-						Titolo della promozione</p>
+						{{ campaign_info_dict|get_item:"camp_title" }}</p>
 					</div>
 					<div class="form-group formGroupAction camp_msg_subjectGroup">
 						<p><b>Totale destinatari:</b><br />
-						xx</p>
+						{{ count_campaign_sender }}</p>
 					</div>
 					<div class="form-group formGroupAction camp_msg_subjectGroup">
 						<p><b>URL della tua promozione:</b><br />
-						http://www.motorjab.it/promo/1d7sd87</p>
+						{{ campaign_url }}</p>
 					</div>
 
 					<div class="form-group text-xs-left campaign_navigation_footer_container">
@@ -124,7 +125,7 @@
 				<h4 class="modal-title" id="myModalLabel"><span class="modal_text">Conferma invio...</span></h4>
 			</div>
 			<div class="modal-body">
-				<span class="modal_text">Stai per inviare la campagna a <b>xx</b> clienti, confermi l'invio?</span>
+				<span class="modal_text">Stai per inviare la campagna a <b>{{ count_campaign_sender }}</b> clienti, confermi l'invio?</span>
 				<div class="text-center">
 					<!-- <img src="{% static "website/img/campaign_loader.gif" %}" alt="Conferma invio"> -->
 					<section class="wrapper">
@@ -159,8 +160,7 @@
 
 		// invio la campagna
 		$(document).on("click", ".formSendButtonClickAction", function(){
-			$("#campaignConfirmationModal").modal();
-			$(".step4_form").submit();
+			$(".submitFormAction").submit();
 
 			return false;
 		});
