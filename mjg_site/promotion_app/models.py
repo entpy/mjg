@@ -8,6 +8,7 @@ from mjg_site.consts import project_constants
 from account_app.models import Account
 from email_app.email_core import CustomEmailTemplate
 from mjg_site.CustomImagePIL import CustomImagePIL
+from datetime import time
 import datetime, random, string, sys, logging
 
 # force utf8 read data
@@ -191,12 +192,24 @@ class Campaign(models.Model):
         # ottengo i dati della campagna
         campaign_info_dict = self.get_campaign_info_dict(campaign_id=campaign_id)
 
+        # prelevo la scadenza della campagna
+        campaign_expiring_str = False
+        if campaign_info_dict["expiring_date"]:
+            campaign_expiring_str = self.get_readable_campaign_expiring(expiring_date=str(campaign_info_dict["expiring_date"]) + ' 00:00:00')
+
+        # calcolo i prezzi della campagna
+        campaign_was_price = self.format_number(number=campaign_info_dict["was_price"])
+        campaign_final_price = self.format_number(number=campaign_info_dict["final_price"])
+        campaign_discount =  self.format_number(number=self.get_campaign_discount(was_price=campaign_info_dict["was_price"], final_price=campaign_info_dict["final_price"]))
+        campaign_saving = self.format_number(number=self.get_campaign_saving(was_price=campaign_info_dict["was_price"], final_price=campaign_info_dict["final_price"]))
+
         # per ogni riga
         # - creo un nuovo destinatario
         # - invio la mail
         # - elimino l'utente da camp_dest_temp
         if campaign_dest_tmp_list:
             for single_tmp_dest in campaign_dest_tmp_list:
+                email_context = {}
                 # 1) creo il destinatario
                 campaign_dest_obj = CampaignDest()
                 dest_code = campaign_dest_obj.generate_dest_code()
@@ -220,12 +233,12 @@ class Campaign(models.Model):
                     "user_profile_url" : settings.SITE_URL + "/profilo/" + str(single_tmp_dest["user__id"]) + "/" + str(single_tmp_dest["user__account__account_code"]),
                     "email_unsubscribe_url" : settings.SITE_URL + "/disiscriviti/" + str(single_tmp_dest["user__id"]) + "/" + str(single_tmp_dest["user__account__account_code"] + "/"),
                     # campaign price block
-                    "campaign_was_price" : str(float(campaign_info_dict["was_price"])),
-                    "campaign_final_price" : str(float(campaign_info_dict["final_price"])),
-                    "campaign_discount" : str(float(self.get_campaign_discount(was_price=campaign_info_dict["was_price"], final_price=campaign_info_dict["final_price"]))),
-                    "campaign_saving" : str(float(self.get_campaign_saving(was_price=campaign_info_dict["was_price"], final_price=campaign_info_dict["final_price"]))),
+                    "campaign_was_price" : campaign_was_price,
+                    "campaign_final_price" : campaign_final_price,
+                    "campaign_discount" : campaign_discount,
+                    "campaign_saving" : campaign_saving,
                     # campaign expiring block
-                    "campaign_expiring" : "3G 10H 9M (da calcolare)",
+                    "campaign_expiring" : campaign_expiring_str,
                 }
                 CustomEmailTemplate(email_name="customer_email", email_context=email_context, recipient_list=[single_tmp_dest["user__first_name"] + "<" + single_tmp_dest["dest"] + ">",])
 
@@ -241,6 +254,11 @@ class Campaign(models.Model):
         self.create_update_campaign(data_dict=data_dict, campaign_id=campaign_id)
 
         return True
+
+    def format_number(self, number):
+        """Function to formato a number"""
+
+        return ('%f' % number).rstrip('0').rstrip('.')
 
     def get_campaign_discount(self, was_price, final_price):
         """Function to retrieve campaign discount"""
@@ -273,6 +291,117 @@ class Campaign(models.Model):
             return_var = settings.SITE_URL + "/p/" + str(camp_dest_code) + "/"
 
         return return_var
+
+    def seconds_between_date(self, expiring_date):
+        """Function to retrieve seconds diff between two date"""
+
+        return_var = False
+
+        if expiring_date:
+            date1 = timezone.make_aware(datetime.datetime.strptime(expiring_date, '%Y-%m-%d %H:%M:%S'))
+            date2 = timezone.now()
+            timedelta = date1 - date2
+            return_var = timedelta.days * 24 * 3600 + timedelta.seconds
+
+        return return_var
+
+    # TODO
+    def check_campaign_expiring(self, expiring_date):
+        """
+        Function to check campaign expiring
+        True on valid campaign
+        False on expirid campaign
+        """
+
+        return_var = False
+
+        if expiring_date:
+            # seconds between two dates
+            date_diff_in_seconds = self.seconds_between_date(expiring_date=expiring_date)
+            if date_diff_in_seconds >= 0:
+                return_var = True
+
+        return return_var
+
+    # TODO
+    def get_readable_campaign_expiring(self, expiring_date, html=True):
+        """
+        Function to return a readable campaign expiring
+        ie: 13G 8H 7M
+        """
+
+        return_var = ""
+        d_label = ' <span class="expiring_label" style="font-size: 20px;">Giorni</span>'
+        h_label = ' <span class="expiring_label" style="font-size: 20px;">Ore</span>'
+        m_label = ' <span class="expiring_label" style="font-size: 20px;">Minuti</span>'
+        s_label = ' <span class="expiring_label" style="font-size: 20px;">Secondi</span>'
+
+        d_label_sing = ' <span class="expiring_label" style="font-size: 20px;">Giorno</span>'
+        h_label_sing = ' <span class="expiring_label" style="font-size: 20px;">Ora</span>'
+        m_label_sing = ' <span class="expiring_label" style="font-size: 20px;">Minuto</span>'
+        s_label_sing = ' <span class="expiring_label" style="font-size: 20px;">Secondo</span>'
+
+        if expiring_date:
+            # seconds between two dates
+            date_diff_in_seconds = self.seconds_between_date(expiring_date=expiring_date)
+
+            if date_diff_in_seconds >= 0:
+                minutes, seconds = divmod(date_diff_in_seconds, 60)
+                hours, minutes = divmod(minutes, 60)
+                days, hours = divmod(hours, 24)
+
+                if date_diff_in_seconds >= 60*60*24:
+                    # sono presenti 1 o più giorni, stampo la stringa senza i secondi
+                    # aggiungo i giorni
+                    if days == 1:
+                        return_var += str(days) + d_label_sing + " "
+                    else:
+                        return_var += str(days) + d_label + " "
+
+                    # aggiungo le ore
+                    if hours == 1:
+                        return_var += str(hours) + h_label_sing + " "
+                    else:
+                        return_var += str(hours) + h_label + " "
+
+                    # aggiungo i minuti
+                    if minutes == 1:
+                        return_var += str(minutes) + m_label_sing
+                    else:
+                        return_var += str(minutes) + m_label
+                else:
+                    # non sono più presenti giorni
+                    if date_diff_in_seconds >= 60*60:
+                        # se presente almeno un'ora
+                        if hours == 1:
+                            return_var += str(hours) + h_label_sing + " "
+                        else:
+                            return_var += str(hours) + h_label + " "
+
+                    if date_diff_in_seconds >= 60:
+                        # se presente almeno un minuto
+                        if minutes == 1:
+                            return_var += str(minutes) + m_label_sing + " "
+                        else:
+                            return_var += str(minutes) + m_label + " "
+
+                    # stampo anche i secondi
+                    if seconds > 0:
+                        if seconds == 1:
+                            return_var += str(seconds) + s_label_sing
+                        else:
+                            return_var += str(seconds) + s_label
+
+                logger.info("## countdown {{{ ##")
+                logger.info("## date_diff_in_seconds: " + str(date_diff_in_seconds) + " ##")
+                logger.info("## days: " + str(days) + " ##")
+                logger.info("## hours: " + str(hours) + " ##")
+                logger.info("## minutes: " + str(minutes) + " ##")
+                logger.info("## seconds: " + str(seconds) + " ##")
+                logger.info("## countdown str: '" + str(return_var.rstrip()) + "' ##")
+                logger.info("## countdown }}} ##")
+
+        return return_var.rstrip()
 
 class CampaignDest(models.Model):
     campaign_dest_id = models.AutoField(primary_key=True)

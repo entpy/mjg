@@ -883,6 +883,10 @@ def dashboard_campaigns_step4(request, campaign_id):
     if campaign_id:
         campaign_info_dict = campaign_obj.get_campaign_info_dict(campaign_id=campaign_id)
     # }}}
+    # logger.info("sddsdsdsds: " + str(campaign_info_dict["expiring_date"]))
+    # TODO
+    # solo per test
+    # campaign_obj.get_readable_campaign_expiring(expiring_date='2019-04-08 00:00:00')
 
     campaign_user_temp_obj = CampaignUserTemp()
     campaign_dest_obj = CampaignDest()
