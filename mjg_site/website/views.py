@@ -83,7 +83,6 @@ def www_get_offers(request, master_code=None, source=None):
     default_prize_code = "welcome_prize"
     if source == project_constants.SOURCE_FLYER_CHECKUP:
         # se sono arrivato dal flyer checkup uilizzo un altro codice premio
-        # TODO: cambiare il premio e fare le stringhe localizzate
         default_prize_code = "welcome_prize2"
 
     if request.method == "POST":
@@ -102,7 +101,6 @@ def www_get_offers(request, master_code=None, source=None):
                 # creo messaggio di errore
                 messages.add_message(request, messages.ERROR, True)
             else:
-                # TODO: debug this
                 # creo e invio la mail di info ad admin
                 cur_date = datetime.datetime.now()
                 formatted_cur_date = cur_date.strftime("%d %B %Y")
@@ -765,9 +763,7 @@ def dashboard_campaigns_step1(request, campaign_id):
             save_data["camp_description"] = form.cleaned_data["camp_description"]
             save_data["small_image_id"] = form.cleaned_data["small_image_id"]
             save_data["large_image_id"] = form.cleaned_data["large_image_id"]
-
-            # TODO
-            # calcolare lo sconto
+            save_data["campaign_type"] = project_constants.CAMPAIGN_TYPE_PROMOTION
 
             saved_campaign_obj = campaign_obj.create_update_campaign(data_dict=save_data, campaign_id=campaign_id)
             # redirect nello step2 con campaign_id
@@ -883,16 +879,50 @@ def dashboard_campaigns_step4(request, campaign_id):
     if campaign_id:
         campaign_info_dict = campaign_obj.get_campaign_info_dict(campaign_id=campaign_id)
     # }}}
-    # logger.info("sddsdsdsds: " + str(campaign_info_dict["expiring_date"]))
-    # TODO
-    # solo per test
-    # campaign_obj.get_readable_campaign_expiring(expiring_date='2019-04-08 00:00:00')
+
+    # prelevo la lista di destinatari validi per la campagna
+    account_obj = Account()
+    campaign_user_temp_obj = CampaignUserTemp()
+    # promotion|newsletter
+    account_list = account_obj.get_campaign_accounts(campaign_type=project_constants.CAMPAIGN_TYPE_PROMOTION)
+
+    # provo a precompilare la lista di destinatari temporanei
+    valid_dest_list = campaign_user_temp_obj.get_sender_list_dict(campaign_id=campaign_id)
+
+    if request.method == "POST":
+        if request.POST.get("step4_form_sent") == "1":
+            valid_dest_list = {}
+            for single_dest in request.POST.getlist("selected_dest_account[]"):
+                # inserisco l'utente nell'elenco dei destinatari
+                valid_dest_list[int(single_dest)] = True
+            # salvo l'elenco dei destinatari in campaign_user_temp
+            campaign_user_temp_obj.create_sender_list(campaign_id=campaign_id, campaign_accounts=account_list, valid_dest_id_list=valid_dest_list)
+
+            # redirect nello step5
+            return HttpResponseRedirect("/dashboard/campaigns/step5/" + str(campaign_id) + "/")
+
+    context = {
+        "campaign_info_dict" : campaign_info_dict,
+        "dest_account_list" : account_list,
+        "valid_dest_list" : valid_dest_list,
+    }
+
+    return render(request, 'website/dashboard/campaigns/step4.html', context)
+
+@login_required
+@ensure_csrf_cookie
+def dashboard_campaigns_step5(request, campaign_id):
+    """View to show create campaign flow"""
+
+    # se presente un id carico i dati della campagna (azione comune in tutto il flow della campagna) {{{
+    campaign_obj = Campaign()
+    campaign_info_dict = {}
+    if campaign_id:
+        campaign_info_dict = campaign_obj.get_campaign_info_dict(campaign_id=campaign_id)
+    # }}}
 
     campaign_user_temp_obj = CampaignUserTemp()
     campaign_dest_obj = CampaignDest()
-
-    # creo l'elenco dei destinatari temporanei
-    campaign_user_temp_obj.manage_promotion_sender_list(campaign_id=campaign_id)
 
     # conteggio l'elenco dei destinatari
     count_campaign_sender = campaign_user_temp_obj.count_campaign_sender(campaign_id=campaign_id)
@@ -905,7 +935,7 @@ def dashboard_campaigns_step4(request, campaign_id):
             logger.info("chiamo lo script 'send_campaign'")
             # add new task in order to send a campaign
             send_campaign(campaign_id=campaign_id)
-            # eseguo il comando per eseguire i task schedulati
+            # lancio il comando per eseguire i task schedulati
             # https://docs.djangoproject.com/en/1.11/ref/django-admin/#running-management-commands-from-your-code
             management.call_command('process_tasks', duration=1, interactive=False)
 
@@ -915,7 +945,7 @@ def dashboard_campaigns_step4(request, campaign_id):
         "campaign_url" : campaign_url,
     }
 
-    return render(request, 'website/dashboard/campaigns/step4.html', context)
+    return render(request, 'website/dashboard/campaigns/step5.html', context)
 
 @login_required
 @ensure_csrf_cookie
@@ -987,7 +1017,6 @@ def ajax_customers_list(request):
     # return a JSON response
     return return_var
 
-# TODO
 @login_required
 @require_POST
 def ajax_upload_campaign_image(request):

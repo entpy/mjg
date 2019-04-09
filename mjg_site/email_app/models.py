@@ -30,6 +30,26 @@ class EmailSent(models.Model):
 
     class Meta:
         app_label = 'email_app'
+        indexes = [
+            models.Index(fields=['email_code',]),
+            models.Index(fields=['dest',]),
+            models.Index(fields=['email_type',]),
+            models.Index(fields=['type_id',]),
+        ]
 
     def __unicode__(self):
         return str(self.email_sent_id)
+
+    # TODO
+    def set_email_sent(self, email_type, type_id, user_id, dest, email_code):
+        """Function to add a new email sent"""
+
+        email_sent_obj = EmailSent()
+        email_sent_obj.email_type = email_type
+        email_sent_obj.type_id = type_id
+        email_sent_obj.user_id = user_id
+        email_sent_obj.dest = dest
+        email_sent_obj.email_code = email_code
+        email_sent_obj.save()
+
+        return email_sent_obj.email_sent_id

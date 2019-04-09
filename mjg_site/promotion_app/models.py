@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from mjg_site.consts import project_constants
 from account_app.models import Account
+from email_app.models import EmailSent
 from email_app.email_core import CustomEmailTemplate
 from mjg_site.CustomImagePIL import CustomImagePIL
 from datetime import time
@@ -170,16 +171,17 @@ class Campaign(models.Model):
                     'small_image_url' : campaign_obj.small_image.image.url,
                     'large_image_url' : campaign_obj.large_image.image.url,
                     'expiring_date' : campaign_obj.expiring_date,
+                    'campaign_type' : campaign_obj.campaign_type,
                 }
 
         return campaign_info_dict
 
-    # TODO
     def send_campaign(self, campaign_id):
         """Function to send a campaign"""
         logger.info("sending campaign: " + str(campaign_id))
 
         campaign_user_temp_obj = CampaignUserTemp()
+        email_sent_obj = EmailSent()
 
         # marco la campagna come 'in fase di invio'
         data_dict = { }
@@ -240,14 +242,16 @@ class Campaign(models.Model):
                     # campaign expiring block
                     "campaign_expiring" : campaign_expiring_str,
                 }
+
+                # TODO
+                # prelevo l'email code
                 CustomEmailTemplate(email_name="customer_email", email_context=email_context, recipient_list=[single_tmp_dest["user__first_name"] + "<" + single_tmp_dest["dest"] + ">",])
 
-                # TODO
                 # inserisco l'email inviata nella tabella email_sent
+                email_sent_obj.set_email_sent(email_type=campaign_info_dict["campaign_type"], type_id=campaign_id, user_id=single_tmp_dest["user__id"], dest=single_tmp_dest["dest"], email_code="123")
 
-                # TODO
                 # 3) elimino il destinatario temporaneo
-                # campaign_user_temp_obj.delete_tmp_sender(campaign_user_temp_id=single_tmp_dest["campaign_user_temp_id"])
+                campaign_user_temp_obj.delete_tmp_sender(campaign_user_temp_id=single_tmp_dest["campaign_user_temp_id"])
 
         # marco la campagna come 'inviata'
         data_dict = { 'status' : project_constants.CAMPAIGN_STATUS_SENT }
@@ -305,7 +309,6 @@ class Campaign(models.Model):
 
         return return_var
 
-    # TODO
     def check_campaign_expiring(self, expiring_date):
         """
         Function to check campaign expiring
@@ -323,7 +326,6 @@ class Campaign(models.Model):
 
         return return_var
 
-    # TODO
     def get_readable_campaign_expiring(self, expiring_date, html=True):
         """
         Function to return a readable campaign expiring
@@ -425,7 +427,6 @@ class CampaignDest(models.Model):
     def __unicode__(self):
         return str(self.campaign_dest_id)
 
-    # TODO
     def generate_dest_code(self, depth=0):
         """
         Generating a random promo code, if the generated code already
@@ -449,7 +450,6 @@ class CampaignDest(models.Model):
 
         return random_code
 
-    # TODO
     def get_or_create_camp_dest_channel_url(self, campaign_id):
         """Function to retireve or create an URL camp_dest_channel"""
 
@@ -495,8 +495,9 @@ class CampaignUserTemp(models.Model):
     def __unicode__(self):
         return str(self.campaign_user_temp_id)
 
+    """
     def manage_promotion_sender_list(self, campaign_id, channel=project_constants.CHANNEL_EMAIL):
-        """Function to create a sender list about a promotional campaign"""
+        ""Function to create a sender list about a promotional campaign""
 
         # elimino gli eventuali destinatari temporanei
         self.delete_campaign_sender_list(campaign_id=campaign_id)
@@ -506,7 +507,7 @@ class CampaignUserTemp(models.Model):
         return True
 
     def manage_newsletter_sender_list(self, campaign_id, channel=project_constants.CHANNEL_EMAIL):
-        """Function to create a sender list about a newsletter campaign"""
+        ""Function to create a sender list about a newsletter campaign""
 
         # elimino gli eventuali destinatari temporanei
         self.delete_campaign_sender_list(campaign_id=campaign_id)
@@ -514,33 +515,51 @@ class CampaignUserTemp(models.Model):
         self.create_sender_list(campaign_id=campaign_id, bitmask_to_check=project_constants.RECEIVE_NEWSLETTERS_BITMASK, channel=channel)
 
         return True
+    """
 
-    def create_sender_list(self, campaign_id, bitmask_to_check, channel):
+    def create_sender_list(self, campaign_id, campaign_accounts, valid_dest_id_list):
         """Function to create a sender list about a campaign (newsletter or promotion)"""
 
-        account_obj = Account()
-        account_list = account_obj.get_campaign_accounts(bitmask_to_check=bitmask_to_check)
+        # elimino gli eventuali destinatari temporanei
+        self.delete_campaign_sender_list(campaign_id=campaign_id)
 
-        # itero su 'account_list' e inserisco per ogni utente una riga in CampaignUserTemp
-        # User.objects.values('id', 'first_name', 'last_name', 'email', 'account__mobile_number', 'account__notify_bitmask').filter()
-        logger.info("account per la promozione: " + str(account_list))
-        if account_list:
-            for single_account in account_list:
-                campaign_user_temp_obj = CampaignUserTemp()
-                campaign_user_temp_obj.campaign_id = campaign_id
-                campaign_user_temp_obj.user_id = single_account["id"]
-                campaign_user_temp_obj.dest = single_account["email"]
-                campaign_user_temp_obj.channel = channel
-                campaign_user_temp_obj.save()
+        # creo la nuova lista di destinatari temporanei
+        if campaign_accounts:
+            for single_account in campaign_accounts:
+                if valid_dest_id_list.get(single_account["id"]):
+                    # l'utente è abilitato per la campagna
+                    campaign_user_temp_obj = CampaignUserTemp()
+                    campaign_user_temp_obj.campaign_id = campaign_id
+                    campaign_user_temp_obj.user_id = single_account["id"]
+                    campaign_user_temp_obj.dest = single_account["email"]
+                    campaign_user_temp_obj.channel = project_constants.CHANNEL_EMAIL
+                    campaign_user_temp_obj.save()
 
         return True
 
-    # TODO
+    def get_sender_list_dict(self, campaign_id):
+        """Function to retrieve a sender list"""
+
+        return_var = {}
+        tmp_list = CampaignUserTemp.objects.values('user__id').filter(campaign_id=campaign_id)
+        tmp_list = list(tmp_list)
+        if tmp_list:
+            for single_dest_id in tmp_list:
+                return_var[int(single_dest_id["user__id"])] = True
+
+        """
+        logger.info("Sender list dict {{{")
+        logger.info(return_var)
+        logger.info("Sender list dict }}}")
+        """
+
+        return return_var
+
     def get_tmp_campaign_sender_list(self, campaign_id):
         """Function to retrieve temp campaign sender list"""
 
         # user dest channel 
-        return_var = CampaignUserTemp.objects.values('campaign_user_temp_id', 'user__first_name', 'user__id', 'user__account__account_code', 'dest', 'channel').filter()
+        return_var = CampaignUserTemp.objects.values('campaign_user_temp_id', 'user__first_name', 'user__id', 'user__account__account_code', 'dest', 'channel').filter(campaign_id=campaign_id)
 
 	# performing query
         return_var = list(return_var)
@@ -585,7 +604,6 @@ class CampaignOrder(models.Model):
     def __unicode__(self):
         return str(self.campaign_order_id)
 
-    # TODO
     def generate_random_code(self, depth=0):
         """
         Generating a random promo code, if the generated code already
