@@ -518,6 +518,20 @@ def www_get_review(request, user_id, account_code):
 
     return render(request, 'website/www/www_get_review.html', context)
 
+@ensure_csrf_cookie
+def www_promotion(request, camp_dest_code):
+    """View to show campaign info"""
+
+    if not camp_dest_code:
+        # se non sono riuscito a tirare fuori l'utente mostro un 404
+        raise Http404()
+
+    context = {
+        "camp_dest_code" : camp_dest_code,
+    }
+
+    return render(request, 'website/www/www_promotion.html', context)
+
 @login_required
 @ensure_csrf_cookie
 def dashboard_index(request):

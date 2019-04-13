@@ -292,7 +292,7 @@ class Campaign(models.Model):
         return_var = False
 
         if camp_dest_code:
-            return_var = settings.SITE_URL + "/p/" + str(camp_dest_code) + "/"
+            return_var = settings.SITE_URL + "/" + settings.PROMO_URL_PATH + "/" + str(camp_dest_code) + "/"
 
         return return_var
 
@@ -476,7 +476,7 @@ class CampaignDest(models.Model):
 
         campaign_dest_obj = self.get_or_create_camp_dest_channel_url(campaign_id=campaign_id)
 
-        return settings.SITE_URL + "/promo/" + str(campaign_dest_obj.code)
+        return settings.SITE_URL + "/" + settings.PROMO_URL_PATH + "/" + str(campaign_dest_obj.code)
 
 class CampaignUserTemp(models.Model):
     campaign_user_temp_id = models.AutoField(primary_key=True)

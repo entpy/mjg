@@ -71,6 +71,11 @@ urlpatterns = [
     url(r'^ajax/ajax-upload-campaign-image/?$', website.views.ajax_upload_campaign_image, name='ajax_upload_campaign_image'),
     # ajax }}}
 
+    # email tracking
+    url(r'^anymail/', include('anymail.urls')),
+
+    # promozioni
+    url(r'^p/(?P<camp_dest_code>[^\/]+)/?$', website.views.www_promotion, name='www_promotion'),
 ]
 
 if settings.DEBUG:

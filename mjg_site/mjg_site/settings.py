@@ -155,6 +155,7 @@ GIT_PROJECT_NAME = "mjg"
 
 # per eseguire i task in maniera asincrona
 BACKGROUND_TASK_RUN_ASYNC=True
+PROMO_URL_PATH = "p"
 
 # loading local settings
 try:
