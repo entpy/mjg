@@ -76,6 +76,7 @@ urlpatterns = [
 
     # promozioni
     url(r'^p/(?P<camp_dest_code>[^\/]+)/?$', website.views.www_promotion, name='www_promotion'),
+    url(r'^p/(?P<camp_dest_code>[^\/]+)/code/?$', website.views.www_get_promo_code, name='www_get_promo_code'),
 ]
 
 if settings.DEBUG:

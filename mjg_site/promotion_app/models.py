@@ -9,8 +9,7 @@ from account_app.models import Account
 from email_app.models import EmailSent
 from email_app.email_core import CustomEmailTemplate
 from mjg_site.CustomImagePIL import CustomImagePIL
-from datetime import time
-import datetime, random, string, sys, logging
+import datetime, random, string, sys, logging, time
 
 # force utf8 read data
 reload(sys)
@@ -171,7 +170,12 @@ class Campaign(models.Model):
                     'small_image_url' : campaign_obj.small_image.image.url,
                     'large_image_url' : campaign_obj.large_image.image.url,
                     'expiring_date' : campaign_obj.expiring_date,
+                    'expiring_date_timestamp' : time.mktime(campaign_obj.expiring_date.timetuple()),
                     'campaign_type' : campaign_obj.campaign_type,
+                    'was_price_display' : self.format_number(number=campaign_obj.was_price),
+                    'final_price_display' : self.format_number(number=campaign_obj.final_price),
+                    'discount_display' : self.format_number(number=self.get_campaign_discount(was_price=campaign_obj.was_price, final_price=campaign_obj.final_price)),
+                    'saving_display' : self.format_number(number=self.get_campaign_saving(was_price=campaign_obj.was_price, final_price=campaign_obj.final_price)),
                 }
 
         return campaign_info_dict
@@ -200,10 +204,12 @@ class Campaign(models.Model):
             campaign_expiring_str = self.get_readable_campaign_expiring(expiring_date=str(campaign_info_dict["expiring_date"]) + ' 00:00:00')
 
         # calcolo i prezzi della campagna
+        """
         campaign_was_price = self.format_number(number=campaign_info_dict["was_price"])
         campaign_final_price = self.format_number(number=campaign_info_dict["final_price"])
         campaign_discount =  self.format_number(number=self.get_campaign_discount(was_price=campaign_info_dict["was_price"], final_price=campaign_info_dict["final_price"]))
         campaign_saving = self.format_number(number=self.get_campaign_saving(was_price=campaign_info_dict["was_price"], final_price=campaign_info_dict["final_price"]))
+        """
 
         # per ogni riga
         # - creo un nuovo destinatario
@@ -235,10 +241,10 @@ class Campaign(models.Model):
                     "user_profile_url" : settings.SITE_URL + "/profilo/" + str(single_tmp_dest["user__id"]) + "/" + str(single_tmp_dest["user__account__account_code"]),
                     "email_unsubscribe_url" : settings.SITE_URL + "/disiscriviti/" + str(single_tmp_dest["user__id"]) + "/" + str(single_tmp_dest["user__account__account_code"] + "/"),
                     # campaign price block
-                    "campaign_was_price" : campaign_was_price,
-                    "campaign_final_price" : campaign_final_price,
-                    "campaign_discount" : campaign_discount,
-                    "campaign_saving" : campaign_saving,
+                    "campaign_was_price" : campaign_info_dict["was_price_display"],
+                    "campaign_final_price" : campaign_info_dict["final_price_display"],
+                    "campaign_discount" : campaign_info_dict["discount_display"],
+                    "campaign_saving" : campaign_info_dict["saving_display"],
                     # campaign expiring block
                     "campaign_expiring" : campaign_expiring_str,
                 }
@@ -404,6 +410,35 @@ class Campaign(models.Model):
                 logger.info("## countdown }}} ##")
 
         return return_var.rstrip()
+
+    # TODO
+    def get_campaign_by_campaign_dest(self, campaign_dest_code):
+        """Function to retrieve campaign info by campaign dest code"""
+
+        return_var = None
+
+        if campaign_dest_code:
+            try:
+                campaign_dest_obj = CampaignDest.objects.get(code=campaign_dest_code)
+            except CampaignDest.DoesNotExist:
+                pass
+            else:
+                # TODO
+                # ora che ho la riga di campaign_dest, prelevo la campagna relativa
+                return_var = self.get_campaign_info_dict(campaign_id=campaign_dest_obj.campaign_id)
+
+        return return_var
+
+    # TODO
+    def get_campaign_dest(self, campaign_dest_code):
+        """Function to retrieve campaign_dest row"""
+
+        return_var = None
+
+        if campaign_dest_code and CampaignDest.objects.filter(code=campaign_dest_code).exists():
+            return_var = CampaignDest.objects.filter(code=campaign_dest_code).values()[0]
+
+        return return_var
 
 class CampaignDest(models.Model):
     campaign_dest_id = models.AutoField(primary_key=True)
@@ -588,7 +623,8 @@ class CampaignUserTemp(models.Model):
 class CampaignOrder(models.Model):
     campaign_order_id = models.AutoField(primary_key=True)
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    dest = models.CharField(max_length=50, null=False, blank=False, verbose_name="La destinazione della promozione")
     code = models.CharField(max_length=15, null=False, blank=False, verbose_name="Il codice generato, quello evenetualmente da bruciare")
     status = models.IntegerField(null=False, blank=False, default=1, verbose_name="Indica se il codice è utilizzato o no (1=non utilizzato 2=utilizzato)")
     creation_date = models.DateTimeField(default=timezone.now)
@@ -626,3 +662,27 @@ class CampaignOrder(models.Model):
             pass
 
         return random_code
+
+    # TODO
+    def get_or_create_campaign_order(self, campaign_id, user_id=None, dest=project_constants.CHANNEL_URL):
+        """Function to retrieve or create campaign order"""
+
+        try:
+            if dest == project_constants.CHANNEL_URL:
+                # provo a prelevare il codice per il channel url
+                campaign_order_obj = CampaignOrder.objects.get(dest=project_constants.CHANNEL_URL, campaign_id=campaign_id)
+            else:
+                # provo a prelevare il codice per il destinatario della promo
+                campaign_order_obj = CampaignOrder.objects.get(user_id=user_id, campaign_id=campaign_id)
+        except CampaignOrder.DoesNotExist:
+            # creo l'oggetto
+            campaign_order_obj = CampaignOrder()
+            campaign_order_obj.campaign_id = campaign_id
+            if user_id:
+                # se il channel è url non è presente lo user_id
+                campaign_order_obj.user_id = user_id
+            campaign_order_obj.dest = dest
+            campaign_order_obj.code = self.generate_random_code()
+            campaign_order_obj.save()
+
+        return campaign_order_obj

@@ -523,14 +523,57 @@ def www_promotion(request, camp_dest_code):
     """View to show campaign info"""
 
     if not camp_dest_code:
-        # se non sono riuscito a tirare fuori l'utente mostro un 404
+        # se non sono riuscito a trovare una campagna tiro un 404
         raise Http404()
+
+    campaign_obj = Campaign()
+    campaign_info_dict = campaign_obj.get_campaign_by_campaign_dest(campaign_dest_code=camp_dest_code)
 
     context = {
         "camp_dest_code" : camp_dest_code,
+        "campaign_info_dict" : campaign_info_dict,
     }
 
     return render(request, 'website/www/www_promotion.html', context)
+
+# TODO
+@ensure_csrf_cookie
+def www_get_promo_code(request, camp_dest_code):
+    """View to retrieve campaign code"""
+
+    campaign_obj = Campaign()
+    campaign_order_obj = CampaignOrder()
+    campaign_order_instance_obj = {}
+
+    if not camp_dest_code:
+        # se non sono riuscito a trovare una campagna tiro un 404
+        raise Http404()
+
+    # prelevo lo user_id, nel caso di un channel via URL non sarà presente
+    campaign_dest_obj = campaign_obj.get_campaign_dest(campaign_dest_code=camp_dest_code)
+
+    if not campaign_dest_obj:
+        raise Http404()
+
+    # prelevo i dettagli della campagna
+    campaign_info_dict = campaign_obj.get_campaign_by_campaign_dest(campaign_dest_code=camp_dest_code)
+
+    if request.method == "POST":
+        if request.POST.get("campaign_code_form_sent"):
+            # TODO
+            # se il codice non esiste invio una mail ad admin
+
+            # creo un codice promozionale per la campagna e lo mostro al destinatario della promo
+            campaign_order_instance_obj = campaign_order_obj.get_or_create_campaign_order(campaign_id=campaign_dest_obj.get("campaign_id"), user_id=campaign_dest_obj.get("user_id"), dest=campaign_dest_obj.get("dest"))
+
+    context = {
+        "camp_dest_code" : camp_dest_code,
+        "campaign_order_obj" : campaign_order_instance_obj,
+        "campaign_info_dict" : campaign_info_dict,
+        "business_address" : settings.BUSINESS_ADDRESS,
+    }
+
+    return render(request, 'website/www/www_get_promo_code.html', context)
 
 @login_required
 @ensure_csrf_cookie
