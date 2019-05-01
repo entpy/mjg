@@ -522,12 +522,70 @@ def www_get_review(request, user_id, account_code):
 def www_promotion(request, camp_dest_code):
     """View to show campaign info"""
 
+    campaign_obj = Campaign()
+    campaign_order_obj = CampaignOrder()
+
     if not camp_dest_code:
         # se non sono riuscito a trovare una campagna tiro un 404
         raise Http404()
 
-    campaign_obj = Campaign()
+    # prelevo lo user_id, nel caso di un channel via URL non sarà presente
+    campaign_dest_obj = campaign_obj.get_campaign_dest(campaign_dest_code=camp_dest_code)
+
+    if not campaign_dest_obj:
+        raise Http404()
+
     campaign_info_dict = campaign_obj.get_campaign_by_campaign_dest(campaign_dest_code=camp_dest_code)
+
+    if not campaign_info_dict:
+        # se non sono riuscito a trovare una campagna tiro un 404
+        raise Http404()
+
+    # TODO logica spostata dalla view successiva
+    if request.method == "POST":
+        # controllo se il campaign_order è già esistente oppure no, solo se è stato generato per un utente
+        campaign_order_exists = False
+        if campaign_dest_obj.get("user_id") and campaign_order_obj.get_campaign_order(campaign_id=campaign_dest_obj.get("campaign_id"), user_id=campaign_dest_obj.get("user_id")):
+            campaign_order_exists = True
+
+        # proveniente dalla view 'www_promotion'
+        if request.POST.get("campaign_code_form_sent"):
+            # ...altrimenti creo un codice promozionale per la campagna
+            campaign_order_instance_obj = campaign_order_obj.get_or_create_campaign_order(campaign_id=campaign_dest_obj.get("campaign_id"), user_id=campaign_dest_obj.get("user_id"), dest=campaign_dest_obj.get("dest"))
+
+            # MAIL AL CLIENTE
+            # se il codice non esiste invio una mail ad admin e all'utente (se non è anonimo)
+            if not campaign_order_exists and campaign_dest_obj.get("user_id"):
+                campaign_obj.send_campaign_coupon(campaign_title=campaign_info_dict["camp_title"], campaign_order_code=campaign_order_instance_obj.code, campaign_image=campaign_info_dict["small_image_url"], user_id=campaign_dest_obj.get("user_id"))
+
+            # MAIL AD ADMIN
+            if not campaign_order_exists or campaign_dest_obj.get("dest") == project_constants.CHANNEL_URL:
+                # identificazione dell'utente per la mail di admin
+                user_text = "anonimo - proveniente dal canale " + campaign_dest_obj.get("dest")
+                if campaign_dest_obj.get("user_id"):
+                    user_text = str(campaign_order_instance_obj.user.first_name) + " " + str(campaign_order_instance_obj.user.email)
+
+                # creo e invio la mail di info ad admin
+                cur_date = datetime.datetime.now()
+                formatted_cur_date = cur_date.strftime("%d %B %Y")
+                admin_email_context = {
+                    "subject" : "Prenotazione di un coupon (" + formatted_cur_date + ")",
+                    "title" : "Un cliente ha prenotato un coupon",
+                    "content" : "Complimenti, un cliente (" + str(user_text) + ") ha appena prenotato un coupon per la campagna: " + str(campaign_info_dict["camp_title"])
+                }
+
+                CustomEmailTemplate(email_name="system_manage_email", email_context=admin_email_context, recipient_list=[settings.INFO_EMAIL_ADDRESS,], email_from=False, template_type="admin")
+
+            # TODO
+            # redirect nella pagina per visualizzare il codice dell'ordine
+            return HttpResponseRedirect("/p/" + str(camp_dest_code) + "/" + str(campaign_order_instance_obj.code) + "/")
+
+
+
+
+    # se la campagna è scaduta mostro messaggio di errore
+    if not campaign_obj.check_campaign_expiring(expiring_date=str(campaign_info_dict["expiring_date"])):
+        return HttpResponseRedirect("/promozione-scaduta/")
 
     context = {
         "camp_dest_code" : camp_dest_code,
@@ -536,14 +594,14 @@ def www_promotion(request, camp_dest_code):
 
     return render(request, 'website/www/www_promotion.html', context)
 
-# TODO
 @ensure_csrf_cookie
-def www_get_promo_code(request, camp_dest_code):
+def www_show_promo_code(request, camp_dest_code, camp_order_code):
     """View to retrieve campaign code"""
 
     campaign_obj = Campaign()
     campaign_order_obj = CampaignOrder()
     campaign_order_instance_obj = {}
+    show_success_msg = False
 
     if not camp_dest_code:
         # se non sono riuscito a trovare una campagna tiro un 404
@@ -558,22 +616,31 @@ def www_get_promo_code(request, camp_dest_code):
     # prelevo i dettagli della campagna
     campaign_info_dict = campaign_obj.get_campaign_by_campaign_dest(campaign_dest_code=camp_dest_code)
 
+    # MAIL AL CLIENTE ANONIMO
     if request.method == "POST":
-        if request.POST.get("campaign_code_form_sent"):
-            # TODO
-            # se il codice non esiste invio una mail ad admin
+        if request.POST.get("send_coupon_form_sent") and request.POST.get("email"):
+            # l'utente anonimo ha scelto di inviarsi il coupon via email
+            campaign_obj.send_campaign_coupon(campaign_title=campaign_info_dict["camp_title"], campaign_order_code=campaign_order_instance_obj.code, campaign_image=campaign_info_dict["small_image_url"], user_id=False, user_email=request.POST.get("email"))
 
-            # creo un codice promozionale per la campagna e lo mostro al destinatario della promo
-            campaign_order_instance_obj = campaign_order_obj.get_or_create_campaign_order(campaign_id=campaign_dest_obj.get("campaign_id"), user_id=campaign_dest_obj.get("user_id"), dest=campaign_dest_obj.get("dest"))
+            # TODO
+            # redirect a questa pagina con messaggio di successo
 
     context = {
         "camp_dest_code" : camp_dest_code,
-        "campaign_order_obj" : campaign_order_instance_obj,
+        #"campaign_dest_obj" : campaign_dest_obj,
+        "camp_order_code" : camp_order_code,
         "campaign_info_dict" : campaign_info_dict,
         "business_address" : settings.BUSINESS_ADDRESS,
+        "show_success_msg" : show_success_msg,
     }
 
-    return render(request, 'website/www/www_get_promo_code.html', context)
+    return render(request, 'website/www/www_show_promo_code.html', context)
+
+@ensure_csrf_cookie
+def www_expired_promotion(request):
+    """View to show expired promotion page"""
+
+    return render(request, 'website/www/www_expired_promotion.html', {})
 
 @login_required
 @ensure_csrf_cookie

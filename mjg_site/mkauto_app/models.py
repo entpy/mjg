@@ -56,7 +56,7 @@ class MaEvent(models.Model):
         return str(self.ma_event_id)
 
     def get_by_ma_code(self, ma_code):
-        """Funtion to retrieve ma_event by ma_code"""
+        """Function to retrieve ma_event by ma_code"""
         return_var = None
 
         try:

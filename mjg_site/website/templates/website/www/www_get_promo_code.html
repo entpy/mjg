@@ -109,36 +109,50 @@
 		<div class="col-md-10 col-md-offset-1 pageContainerAction">
 			<div class="col-sm-4 padding-xs-only padding-sm-only">
 				<div class="text-center">
-					<img class="emailMainImage" src="http://127.0.0.1:8000/media/campaign_images/www.dmzwarez.info_Natures__0037.jpg" alt="Image" border="0">
+					{% if campaign_info_dict.large_image_url %}
+						<img class="emailMainImage" src="{{ campaign_info_dict.large_image_url }}" alt="Image" border="0">
+					{% else %}
+						<img class="emailMainImage" src="{% static "website/img/default_campaign_image.png" %}" alt="Image" border="0">
+					{% endif %}
 				</div>
 			</div>
 			<div class="col-sm-offset-1 col-sm-7">
 				<div class="well bs-component">
 					<div class="text emailCampaignPriceTitle fallback-text">Il tuo coupon</div>
-					<div class="text emailCampaignPriceValue fallback-text">{{ campaign_order_obj|get_item:"code" }}</div>
+					<div class="text emailCampaignPriceValue fallback-text">{{ camp_order_code }}</div>
 					<div class="how_it_works_block">
 						<div class="text emailCampaignPriceTitle fallback-text">Come utilizzare il coupon</div>
 						<div class="text emailMainDescription fallback-text">Presentaci il coupon in sede, <a href="https://www.google.com/maps/place/MotorJab+Garage+|+Gommista+Meccanica+Elettronica+Autoriparazioni+a+Torino/@45.065561,7.6723756,19z/data=!3m1!4b1!4m12!1m6!3m5!1s0x47886d9a1fc72099:0x6ee14cb2faa171a5!2sMotorJab+Garage+|+Gommista+Meccanica+Elettronica+Autoriparazioni+a+Torino!8m2!3d45.0655601!4d7.6729228!3m4!1s0x47886d9a1fc72099:0x6ee14cb2faa171a5!8m2!3d45.0655601!4d7.6729228" target="_blank">{{ business_address }}</a>, per poter utilizzare l'offerta.<br />Questo coupon non è cumulabile con altre offerte.</div>
 					</div>
 					<div class="how_it_works_block">
-						<div class="alert alert-success">
-							<b>Una copia del coupon ti è stata inviata via email.</b><br />NOTA: se non lo trovi controlla la scheda "offerte" della tua webmail.
-						</div>
-						<div class="text emailCampaignPriceTitle fallback-text">Inviati il coupon via email</div>
-						<form class="form-horizontal validateFormAction" name="send_coupon_form" method="POST" action="">
-							{% csrf_token %}
-							<fieldset>
-								<div class="form-group formGroupAction emailGroup">
-									<label class="control-label">Email</label>
-									<div class="input-group">
-										<input id="email" name="email" class="form-control" placeholder="Inserisci la tua email" type="email" required>
-										<span class="input-group-btn">
-											<button type="submit" class="btn btn-primary btn-md formSendButtonClickAction">Invia</button>
-										</span>
+						{% if customer_coupon_sent %}
+							<div class="alert alert-success animated jackInTheBox">
+								<b>Una copia del coupon ti è stata inviata via email.</b><br />NOTA: se non lo trovi controlla la scheda "offerte" della tua webmail.
+							</div>
+						{% elif show_success_msg %}
+							<div class="alert alert-success">
+								<b>Una copia del coupon ti è stata appena inviata via email.</b><br />NOTA: se non lo trovi controlla la scheda "offerte" della tua webmail.
+							</div>
+						{% endif %}
+						{% if not customer_coupon_autosent %}
+							<div class="text emailCampaignPriceTitle fallback-text">Inviati il coupon via email</div>
+							<form class="form-horizontal validateFormAction" name="send_coupon_form" method="POST" action="">
+								{% csrf_token %}
+								<input type="hidden" name="send_coupon_form_sent" value="1" />
+								<input type="hidden" name="campaign_order_code" value="{{ camp_order_code }}" />
+								<fieldset>
+									<div class="form-group formGroupAction emailGroup">
+										<label class="control-label">Email</label>
+										<div class="input-group">
+											<input id="email" name="email" class="form-control" placeholder="Inserisci la tua email" type="email" required>
+											<span class="input-group-btn">
+												<button type="submit" class="btn btn-primary btn-md formSendButtonClickAction">Invia</button>
+											</span>
+										</div>
 									</div>
-								</div>
-							</fieldset>
-						</form>
+								</fieldset>
+							</form>
+						{% endif %}
 					</div>
 				</div>
 			</div>

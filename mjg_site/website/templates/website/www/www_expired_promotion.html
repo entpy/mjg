@@ -1,0 +1,39 @@
+{% extends "website/inc/www_base.html" %}
+{% load staticfiles website_extras %}
+
+{# page title #}
+{% block title %}MotorJab Garage | La promozione è scaduta{% endblock %}
+
+{# page description #}
+{% block description %}{% endblock %}
+
+{# custom page css block #}
+{% block custom_css %}
+<style>
+
+	.expiredPromoTitle { font-size: 32px !important; }
+	.expiredPromoText { font-size: 20px !important; }
+	@media all and (max-width: 600px){
+		.expiredPromoTitle { font-size: 26px !important; }
+		.expiredPromoText { font-size: 18px !important; }
+	}
+</style>
+{% endblock %}
+{# Custom page script block #}
+
+{# container content #}
+{% block www_main_content %}
+<div class="container-fluid info_block info_block_color1">
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="jumbotron">
+				<h2 class="expiredPromoTitle">Promozione scaduta</h1>
+				<p class="expiredPromoText">Ops...la promozione è scaduta.<br />Vuoi ricevere promozioni e sconti da utilizzare presso di noi? <b><a href="/ricevi-offerte/">Registrati</a></b> per ricevere le nostre offerte.</p>
+				<p>
+					<a href="/" class="btn btn-primary btn-md">Torna in home page</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

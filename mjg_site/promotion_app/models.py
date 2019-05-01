@@ -7,6 +7,7 @@ from django.conf import settings
 from mjg_site.consts import project_constants
 from account_app.models import Account
 from email_app.models import EmailSent
+from mkauto_app.models import MaEvent
 from email_app.email_core import CustomEmailTemplate
 from mjg_site.CustomImagePIL import CustomImagePIL
 import datetime, random, string, sys, logging, time
@@ -308,7 +309,7 @@ class Campaign(models.Model):
         return_var = False
 
         if expiring_date:
-            date1 = timezone.make_aware(datetime.datetime.strptime(expiring_date, '%Y-%m-%d %H:%M:%S'))
+            date1 = timezone.make_aware(datetime.datetime.strptime(expiring_date, '%Y-%m-%d'))
             date2 = timezone.now()
             timedelta = date1 - date2
             return_var = timedelta.days * 24 * 3600 + timedelta.seconds
@@ -319,7 +320,7 @@ class Campaign(models.Model):
         """
         Function to check campaign expiring
         True on valid campaign
-        False on expirid campaign
+        False on expired campaign
         """
 
         return_var = False
@@ -327,6 +328,7 @@ class Campaign(models.Model):
         if expiring_date:
             # seconds between two dates
             date_diff_in_seconds = self.seconds_between_date(expiring_date=expiring_date)
+            logger.info("secondi prima della scadenza: " + str(date_diff_in_seconds))
             if date_diff_in_seconds >= 0:
                 return_var = True
 
@@ -439,6 +441,60 @@ class Campaign(models.Model):
             return_var = CampaignDest.objects.filter(code=campaign_dest_code).values()[0]
 
         return return_var
+
+    # TODO
+    def send_campaign_coupon(self, campaign_title, campaign_order_code, campaign_image=False, user_id=False, user_email=False):
+        """Function to send a campaign coupon via email"""
+        ma_event_obj = MaEvent()
+        campaign_order_obj = CampaignOrder()
+        user_first_name = ""
+        email_profile_url = False
+        email_unsubscribe_url = False
+
+        # prelevo le info dell'account
+        if user_id:
+            account_obj = Account()
+            account_info_dictionary = account_obj.get_user_data_as_dictionary(user_id=user_id)
+            user_first_name = account_info_dictionary["first_name"]
+            user_email = account_info_dictionary["email"]
+
+        subject_str = ma_event_obj.create_first_name_string(string="ecco il tuo coupon per " + str(campaign_title), separator=",", first_name=user_first_name)
+
+        # la data odierna da inserire nel subject
+        cur_date = datetime.datetime.now()
+        formatted_cur_date = cur_date.strftime("%d %B %Y")
+
+        # testo extra per il coupon
+        coupon_extra_text = "Questo coupon non è cumulabile con altre offerte."
+
+        # testo dell'email
+        email_content = "Ecco il tuo coupon per <b>" + str(campaign_title) + "</b>.<br />Per poter utilizzare l'offerta presentaci questo coupon in sede (" + str(settings.BUSINESS_ADDRESS) + ")"
+
+        email_campaign_image = "/static/website/img/generic_coupon_image.png"
+        if campaign_image:
+            email_campaign_image = campaign_image
+
+        if user_id:
+            email_profile_url = settings.SITE_URL + "/profilo/" + str(user_id) + "/" + str(account_info_dictionary["account__account_code"]) + "/"
+            email_unsubscribe_url = settings.SITE_URL + "/disiscriviti/" + str(user_id) + "/" + str(account_info_dictionary["account__account_code"]) + "/"
+
+        email_context = {
+            "subject" : subject_str + " (" + formatted_cur_date + ")",
+            "title" : campaign_title,
+            "content" : email_content,
+            "image_url" : settings.SITE_URL + email_campaign_image,
+            "coupon_code" : campaign_order_code,
+            "coupon_code_extra_text" : '<p class="text fallback-text" style="color:#333;font-family:\'sans-serif\', Helvetica, Arial;font-size:15px;font-weight:300;font-style:normal;letter-spacing:normal;line-height:35px;text-transform:none;text-align:left;padding:0;margin:0;">' + str(coupon_extra_text) + "</p>",
+            "user_profile_url" : email_profile_url,
+            "email_unsubscribe_url" : email_unsubscribe_url,
+        }
+
+        logger.info("@@@ campaign email context @@@")
+        logger.info(email_context)
+
+        CustomEmailTemplate(email_name="mkauto_email", email_context=email_context, recipient_list=[str(user_first_name) + "<" + str(user_email) + ">",])
+
+        return True
 
 class CampaignDest(models.Model):
     campaign_dest_id = models.AutoField(primary_key=True)
@@ -667,14 +723,11 @@ class CampaignOrder(models.Model):
     def get_or_create_campaign_order(self, campaign_id, user_id=None, dest=project_constants.CHANNEL_URL):
         """Function to retrieve or create campaign order"""
 
-        try:
-            if dest == project_constants.CHANNEL_URL:
-                # provo a prelevare il codice per il channel url
-                campaign_order_obj = CampaignOrder.objects.get(dest=project_constants.CHANNEL_URL, campaign_id=campaign_id)
-            else:
-                # provo a prelevare il codice per il destinatario della promo
-                campaign_order_obj = CampaignOrder.objects.get(user_id=user_id, campaign_id=campaign_id)
-        except CampaignOrder.DoesNotExist:
+        campaign_order_obj = None
+        if user_id:
+            campaign_order_obj = self.get_campaign_order(campaign_id=campaign_id, user_id=user_id)
+
+        if not campaign_order_obj:
             # creo l'oggetto
             campaign_order_obj = CampaignOrder()
             campaign_order_obj.campaign_id = campaign_id
@@ -684,5 +737,31 @@ class CampaignOrder(models.Model):
             campaign_order_obj.dest = dest
             campaign_order_obj.code = self.generate_random_code()
             campaign_order_obj.save()
+
+        return campaign_order_obj
+
+    # TODO
+    def get_campaign_order(self, campaign_id, user_id):
+        """Function to retrieve a campaign order by campaign_id and user_id"""
+
+        campaign_order_obj = None
+
+        try:
+            # provo a prelevare il codice per il destinatario della promo
+            campaign_order_obj = CampaignOrder.objects.get(user_id=user_id, campaign_id=campaign_id)
+        except CampaignOrder.DoesNotExist:
+            pass
+
+        return campaign_order_obj
+
+    # TODO
+    def get_campaign_order_by_code(self, code):
+        """Function to retrieve a campaign order by code"""
+
+        try:
+            # provo a prelevare il codice per il destinatario della promo
+            campaign_order_obj = CampaignOrder.objects.get(code=code)
+        except CampaignOrder.DoesNotExist:
+            raise
 
         return campaign_order_obj

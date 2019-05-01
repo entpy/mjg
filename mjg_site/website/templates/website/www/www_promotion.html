@@ -124,12 +124,16 @@
 	</div>
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1 pageContainerAction">
-			<form name="campaign_code_form" method="POST" action="/p/{{ camp_dest_code }}/code/">
+			<form name="campaign_code_form" method="POST" action="">
 				{% csrf_token %}
 				<input type="hidden" name="campaign_code_form_sent" value="1" />
 				<div class="col-sm-4 padding-xs-only padding-sm-only">
 					<div class="text-center">
-						<img class="emailMainImage" src="http://127.0.0.1:8000/media/campaign_images/www.dmzwarez.info_Natures__0037.jpg" alt="Image" border="0">
+						{% if campaign_info_dict.large_image_url %}
+							<img class="emailMainImage" src="{{ campaign_info_dict.large_image_url }}" alt="Image" border="0">
+						{% else %}
+							<img class="emailMainImage" src="{% static "website/img/default_campaign_image.png" %}" alt="Image" border="0">
+						{% endif %}
 					</div>
 					<table class="getCouponContainerAction" width="100%" style="width: 100%; margin-top: 20px;">
 						<tr>
