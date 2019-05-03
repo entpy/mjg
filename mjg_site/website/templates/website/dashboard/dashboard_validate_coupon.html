@@ -78,7 +78,7 @@
 				</div>
 				<div class="panel-body">
 					<div>Codice: <b>{{ code_info_dict.code }}</b></div>
-					<div>Contenuto: <b>{{ code_info_dict.content }}</b></div>
+					<div>Contenuto: {{ code_info_dict.content | safe }}</div>
 				</div>
 			</div>
 			<form class="form-horizontal validateFormAction" name="validate_code_form" method="POST" action="">

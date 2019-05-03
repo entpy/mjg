@@ -541,7 +541,6 @@ def www_promotion(request, camp_dest_code):
         # se non sono riuscito a trovare una campagna tiro un 404
         raise Http404()
 
-    # TODO logica spostata dalla view successiva
     if request.method == "POST":
         # controllo se il campaign_order è già esistente oppure no, solo se è stato generato per un utente
         campaign_order_exists = False
@@ -576,12 +575,8 @@ def www_promotion(request, camp_dest_code):
 
                 CustomEmailTemplate(email_name="system_manage_email", email_context=admin_email_context, recipient_list=[settings.INFO_EMAIL_ADDRESS,], email_from=False, template_type="admin")
 
-            # TODO
             # redirect nella pagina per visualizzare il codice dell'ordine
             return HttpResponseRedirect("/p/" + str(camp_dest_code) + "/" + str(campaign_order_instance_obj.code) + "/")
-
-
-
 
     # se la campagna è scaduta mostro messaggio di errore
     if not campaign_obj.check_campaign_expiring(expiring_date=str(campaign_info_dict["expiring_date"])):
@@ -603,14 +598,20 @@ def www_show_promo_code(request, camp_dest_code, camp_order_code):
     campaign_order_instance_obj = {}
     show_success_msg = False
 
-    if not camp_dest_code:
+    if not camp_dest_code or not camp_order_code:
         # se non sono riuscito a trovare una campagna tiro un 404
         raise Http404()
 
-    # prelevo lo user_id, nel caso di un channel via URL non sarà presente
+    # check campaign_dest
     campaign_dest_obj = campaign_obj.get_campaign_dest(campaign_dest_code=camp_dest_code)
 
     if not campaign_dest_obj:
+        raise Http404()
+
+    # check campaign_order
+    campaign_order_instance_obj = campaign_order_obj.get_campaign_order_by_code(code=camp_order_code)
+
+    if not campaign_order_instance_obj:
         raise Http404()
 
     # prelevo i dettagli della campagna
@@ -622,12 +623,18 @@ def www_show_promo_code(request, camp_dest_code, camp_order_code):
             # l'utente anonimo ha scelto di inviarsi il coupon via email
             campaign_obj.send_campaign_coupon(campaign_title=campaign_info_dict["camp_title"], campaign_order_code=campaign_order_instance_obj.code, campaign_image=campaign_info_dict["small_image_url"], user_id=False, user_email=request.POST.get("email"))
 
-            # TODO
+            # creo messaggio di successo
+            messages.add_message(request, messages.SUCCESS, True)
+
             # redirect a questa pagina con messaggio di successo
+            return HttpResponseRedirect("/p/" + str(camp_dest_code) + "/" + str(camp_order_code) + "/")
+
+    # se è un cliente non anonimo mostro il messaggio di successo
+    if campaign_order_instance_obj.user_id:
+        show_success_msg = True
 
     context = {
         "camp_dest_code" : camp_dest_code,
-        #"campaign_dest_obj" : campaign_dest_obj,
         "camp_order_code" : camp_order_code,
         "campaign_info_dict" : campaign_info_dict,
         "business_address" : settings.BUSINESS_ADDRESS,

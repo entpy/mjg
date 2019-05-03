@@ -202,7 +202,7 @@ class Campaign(models.Model):
         # prelevo la scadenza della campagna
         campaign_expiring_str = False
         if campaign_info_dict["expiring_date"]:
-            campaign_expiring_str = self.get_readable_campaign_expiring(expiring_date=str(campaign_info_dict["expiring_date"]) + ' 00:00:00')
+            campaign_expiring_str = self.get_readable_campaign_expiring(expiring_date=str(campaign_info_dict["expiring_date"]))
 
         # calcolo i prezzi della campagna
         """
@@ -250,12 +250,12 @@ class Campaign(models.Model):
                     "campaign_expiring" : campaign_expiring_str,
                 }
 
-                # TODO
                 # prelevo l'email code
-                CustomEmailTemplate(email_name="customer_email", email_context=email_context, recipient_list=[single_tmp_dest["user__first_name"] + "<" + single_tmp_dest["dest"] + ">",])
+                email_template_obj = None
+                email_template_obj = CustomEmailTemplate(email_name="customer_email", email_context=email_context, recipient_list=[single_tmp_dest["user__first_name"] + "<" + single_tmp_dest["dest"] + ">",])
 
                 # inserisco l'email inviata nella tabella email_sent
-                email_sent_obj.set_email_sent(email_type=campaign_info_dict["campaign_type"], type_id=campaign_id, user_id=single_tmp_dest["user__id"], dest=single_tmp_dest["dest"], email_code="123")
+                email_sent_obj.set_email_sent(email_type=campaign_info_dict["campaign_type"], type_id=campaign_id, user_id=single_tmp_dest["user__id"], dest=single_tmp_dest["dest"], email_code=email_template_obj.msg_id)
 
                 # 3) elimino il destinatario temporaneo
                 campaign_user_temp_obj.delete_tmp_sender(campaign_user_temp_id=single_tmp_dest["campaign_user_temp_id"])
@@ -413,7 +413,6 @@ class Campaign(models.Model):
 
         return return_var.rstrip()
 
-    # TODO
     def get_campaign_by_campaign_dest(self, campaign_dest_code):
         """Function to retrieve campaign info by campaign dest code"""
 
@@ -425,13 +424,11 @@ class Campaign(models.Model):
             except CampaignDest.DoesNotExist:
                 pass
             else:
-                # TODO
                 # ora che ho la riga di campaign_dest, prelevo la campagna relativa
                 return_var = self.get_campaign_info_dict(campaign_id=campaign_dest_obj.campaign_id)
 
         return return_var
 
-    # TODO
     def get_campaign_dest(self, campaign_dest_code):
         """Function to retrieve campaign_dest row"""
 
@@ -442,7 +439,6 @@ class Campaign(models.Model):
 
         return return_var
 
-    # TODO
     def send_campaign_coupon(self, campaign_title, campaign_order_code, campaign_image=False, user_id=False, user_email=False):
         """Function to send a campaign coupon via email"""
         ma_event_obj = MaEvent()
@@ -567,7 +563,7 @@ class CampaignDest(models.Model):
 
         campaign_dest_obj = self.get_or_create_camp_dest_channel_url(campaign_id=campaign_id)
 
-        return settings.SITE_URL + "/" + settings.PROMO_URL_PATH + "/" + str(campaign_dest_obj.code)
+        return settings.SITE_URL + "/" + settings.PROMO_URL_PATH + "/" + str(campaign_dest_obj.code) + "/"
 
 class CampaignUserTemp(models.Model):
     campaign_user_temp_id = models.AutoField(primary_key=True)
@@ -719,7 +715,6 @@ class CampaignOrder(models.Model):
 
         return random_code
 
-    # TODO
     def get_or_create_campaign_order(self, campaign_id, user_id=None, dest=project_constants.CHANNEL_URL):
         """Function to retrieve or create campaign order"""
 
@@ -740,7 +735,6 @@ class CampaignOrder(models.Model):
 
         return campaign_order_obj
 
-    # TODO
     def get_campaign_order(self, campaign_id, user_id):
         """Function to retrieve a campaign order by campaign_id and user_id"""
 
@@ -754,14 +748,15 @@ class CampaignOrder(models.Model):
 
         return campaign_order_obj
 
-    # TODO
     def get_campaign_order_by_code(self, code):
         """Function to retrieve a campaign order by code"""
+
+        campaign_order_obj = None
 
         try:
             # provo a prelevare il codice per il destinatario della promo
             campaign_order_obj = CampaignOrder.objects.get(code=code)
         except CampaignOrder.DoesNotExist:
-            raise
+            pass
 
         return campaign_order_obj

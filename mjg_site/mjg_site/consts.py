@@ -56,3 +56,9 @@ class project_constants(object):
 
     CAMPAIGN_UPLOAD_DIR = "campaign_images/"
     # campaigns }}}
+
+    # email {{{
+    EMAIL_STATUS_SENT = 1
+    EMAIL_STATUS_OPEN = 2
+    EMAIL_STATUS_CLICK = 4
+    # }}}

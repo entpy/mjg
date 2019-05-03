@@ -3,6 +3,7 @@
 # common utils object
 from mkauto_app.models import *
 from mkauto_app.consts import mkauto_consts
+from promotion_app.models import *
 import logging
 
 # Get an instance of a logger
@@ -11,6 +12,7 @@ logger = logging.getLogger(__name__)
 class CommonUtils(object):
 
     CODE_TYPE_MKAUTO = "mkauto"
+    CODE_TYPE_CAMPAIGN = "campaign"
 
     def identify_code_type(self, code):
         """Function to identify code type (mkauto, promo, ...) about code length"""
@@ -19,6 +21,8 @@ class CommonUtils(object):
 
         if len(code) == 8:
             return_var = self.CODE_TYPE_MKAUTO
+        elif len(code) == 10:
+            return_var = self.CODE_TYPE_CAMPAIGN
 
         return return_var
 
@@ -37,7 +41,17 @@ class CommonUtils(object):
             
             code_content = ma_event_obj.get_event_generic_prize_str(ma_code=mkauto_consts.event_code[ma_event_code_instance.ma_event.ma_code])
             return_var["code"] = code
-            return_var["content"] = code_content
+            return_var["content"] = "<b>" + str(code_content) + "</b>"
+        elif self.identify_code_type(code=code) == self.CODE_TYPE_CAMPAIGN:
+            # TODO
+            # è un codice campagna
+            campaign_obj = Campaign()
+            campaign_order_obj = CampaignOrder()
+            campaign_order_instance = campaign_order_obj.get_campaign_order_by_code(code=code)
+            if campaign_order_instance:
+                campaign_info_dict = campaign_obj.get_campaign_info_dict(campaign_order_instance.campaign_id)
+                return_var["code"] = code
+                return_var["content"] = "coupon di una campagna (vedi qui sotto i dettagli)<br /><br />Titolo campagna: " + str(campaign_info_dict["camp_title"]) + "<br />Costava: €" + str(campaign_info_dict["was_price_display"]) + "<br />Sconto: " + str(campaign_info_dict["discount_display"]) + "%<br /><b>Prezzo finale: €" + str(campaign_info_dict["final_price_display"]) + "</b>"
 
         return return_var
 
@@ -49,6 +63,12 @@ class CommonUtils(object):
         if self.identify_code_type(code=code) == self.CODE_TYPE_MKAUTO:
             ma_event_code_obj = MaEventCode()
             if ma_event_code_obj.check_event_code_exists(code=code):
+                # codice esistente
+                return_var = True
+        elif self.identify_code_type(code=code) == self.CODE_TYPE_CAMPAIGN:
+            campaign_order_obj = CampaignOrder()
+            campaign_order_instance = campaign_order_obj.get_campaign_order_by_code(code=code)
+            if campaign_order_instance:
                 # codice esistente
                 return_var = True
 
@@ -65,6 +85,12 @@ class CommonUtils(object):
             if ma_event_code_instance.status == 2:
                 # codice già utilizzato
                 return_var = True
+        elif self.identify_code_type(code=code) == self.CODE_TYPE_CAMPAIGN:
+            campaign_order_obj = CampaignOrder()
+            campaign_order_instance = campaign_order_obj.get_campaign_order_by_code(code=code)
+            if campaign_order_instance.status == 2:
+                # codice già utilizzato
+                return_var = True
 
         return return_var
 
@@ -78,8 +104,8 @@ class CommonUtils(object):
             ma_event_code_instance = ma_event_code_obj.get_by_code(code=code)
             ma_event_code_instance.status = 2
             ma_event_code_instance.save()
+            return_var = True
 
-            # TODO
             # se si tratta di un codice refer_friend mando il bonus a chi ha presentato l'amico
             # se il codice è di tipo "friend_prize"
             if ma_event_code_instance.ma_event.ma_code == mkauto_consts.event_code["friend_prize"]:
@@ -96,11 +122,15 @@ class CommonUtils(object):
                 logger.debug("### mark_code_as_used")
                 logger.debug("master_account_id: " + str(master_account_id))
 
-                # TODO
                 # invio il bonus
                 ma_event_obj = MaEvent()
                 ma_event_obj.make_event(user_id=master_account_id, ma_code=mkauto_consts.event_code["refer_friend"], strings_ma_code=mkauto_consts.event_code["refer_friend"], ma_code_dictionary=None, force_prize=True, skip_log_check=True)
-
-            return_var = ma_event_code_instance
+        elif self.identify_code_type(code=code) == self.CODE_TYPE_CAMPAIGN:
+            campaign_order_obj = CampaignOrder()
+            campaign_order_instance = campaign_order_obj.get_campaign_order_by_code(code=code)
+            if campaign_order_instance:
+                campaign_order_instance.status = 2
+                campaign_order_instance.save()
+                return_var = True
 
         return return_var

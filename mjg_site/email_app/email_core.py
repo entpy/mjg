@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.core.mail import send_mail, EmailMultiAlternatives
+from anymail.message import AnymailMessage
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.conf import settings
@@ -142,6 +143,8 @@ class CustomEmailTemplate():
 
     def __init__(self, email_name, email_context, recipient_list=[], email_from=False, template_type="default", reply_to=False):
 
+        # msg id
+        msg_id = None
         # the email name, es. recover_password_email
         self.email_name = None
 
@@ -188,7 +191,7 @@ class CustomEmailTemplate():
                 self.email_subject = str(self.available_email_name.get(email_name, {}).get("subject_prefix", "")) + self.email_subject
 
             # perform email sending
-            self.send_mail()
+            self.msg_id = self.send_mail()
 
     def set_email_from_address(self, email_name, email_from_forced=False):
 	"""Function to set email to address"""
@@ -610,15 +613,18 @@ class CustomEmailTemplate():
     def send_mail(self):
         """Function to send email"""
 	return_var = None
+        send_status = None
 	plain_text = self.get_plain_template()
 	html_text = self.get_html_template()
 
         # send email
         text_content = plain_text
         html_content = html_text
-        msg = EmailMultiAlternatives(subject=self.email_subject, body=text_content, from_email=self.email_from, to=self.email_to, reply_to=self.reply_to)
+        msg = AnymailMessage(subject=self.email_subject, body=text_content, from_email=self.email_from, to=self.email_to, reply_to=self.reply_to)
         msg.attach_alternative(html_content, "text/html")
-        return_var = msg.send()
+        send_status = msg.send()
+        status = msg.anymail_status  # available after sending
+        return_var = status.message_id  # e.g., '<12345.67890@example.com>'
 
 	"""
         logger.info("###START EMAIL HTML###")
@@ -626,6 +632,6 @@ class CustomEmailTemplate():
         logger.info("###END EMAIL HTML###")
 	"""
 
-        logger.info("email inviata a " + str(self.email_to) + " | stato invio: " + str(return_var) + " (1=ok)")
+        logger.info("email inviata a " + str(self.email_to) + " | stato invio: " + str(send_status) + " (1=ok) | msg_id: " + str(return_var))
 
         return return_var
