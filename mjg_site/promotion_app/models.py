@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.db import models
+from django.db.models import Q
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.conf import settings
@@ -158,6 +159,10 @@ class Campaign(models.Model):
                 logger.error("errore in get_campaign_info_dict, oggetto non esistente")
                 raise 
             else:
+                expiring_date_timestamp = None
+                if campaign_obj.expiring_date:
+                    expiring_date_timestamp = time.mktime(campaign_obj.expiring_date.timetuple())
+
                 campaign_info_dict = {
                     'campaign_id' : campaign_obj.campaign_id,
                     'camp_title' : campaign_obj.camp_title,
@@ -171,7 +176,8 @@ class Campaign(models.Model):
                     'small_image_url' : campaign_obj.small_image.image.url,
                     'large_image_url' : campaign_obj.large_image.image.url,
                     'expiring_date' : campaign_obj.expiring_date,
-                    'expiring_date_timestamp' : time.mktime(campaign_obj.expiring_date.timetuple()),
+                    'creation_date' : campaign_obj.creation_date,
+                    'expiring_date_timestamp' : expiring_date_timestamp,
                     'campaign_type' : campaign_obj.campaign_type,
                     'was_price_display' : self.format_number(number=campaign_obj.was_price),
                     'final_price_display' : self.format_number(number=campaign_obj.final_price),
@@ -492,6 +498,69 @@ class Campaign(models.Model):
 
         return True
 
+    # TODO
+    def get_campaign_list(self, campaign_status):
+        """Function to retrieve a campaign list"""
+        return_var = None
+
+        if campaign_status:
+            return_var = Campaign.objects.values('campaign_id', 'creation_date', 'camp_title', 'camp_description', 'campaign_type', 'status').filter(status=campaign_status).order_by("-creation_date")
+        else:
+            return_var = Campaign.objects.values('campaign_id', 'creation_date', 'camp_title', 'camp_description', 'campaign_type', 'status').order_by("-creation_date")
+
+        return_var = list(return_var)
+
+        return return_var
+
+    # TODO
+    def get_campaign_stats(self, campaign_id):
+        """Function to retrieve stats about campaign"""
+        return_var = {}
+        email_sent_obj = EmailSent()
+        campaign_order_obj = CampaignOrder()
+
+        # tutte le email inviate per la campagna
+        return_var["dest"] = email_sent_obj.get_stats(email_type=project_constants.CAMPAIGN_TYPE_PROMOTION, type_id=campaign_id, status_bitmask=None)
+        return_var["dest_count"] = len(return_var["dest"])
+
+        # tutte le email ricevute per la campagna (quelle effettivamente inviate con successo)
+        return_var["sent"] = email_sent_obj.get_stats(email_type=project_constants.CAMPAIGN_TYPE_PROMOTION, type_id=campaign_id, status_bitmask=project_constants.EMAIL_STATUS_SENT)
+        return_var["sent_count"] = len(return_var["sent"])
+
+        # tutte le email aperte per la campagna
+        return_var["opened"] = email_sent_obj.get_stats(email_type=project_constants.CAMPAIGN_TYPE_PROMOTION, type_id=campaign_id, status_bitmask=project_constants.EMAIL_STATUS_OPEN)
+        return_var["opened_count"] = len(return_var["opened"])
+
+        # tutte le email cliccate per la campagna
+        return_var["clicked"] = email_sent_obj.get_stats(email_type=project_constants.CAMPAIGN_TYPE_PROMOTION, type_id=campaign_id, status_bitmask=project_constants.EMAIL_STATUS_CLICK)
+        return_var["clicked_count"] = len(return_var["clicked"])
+
+        # statistiche sui coupon {{{
+        coupon_stats = campaign_order_obj.get_campaign_order_stats(campaign_id=campaign_id)
+
+        return_var["generated_coupon_url"] = coupon_stats["generated_coupon_url"]
+        return_var["used_coupon_url"] = coupon_stats["used_coupon_url"]
+        return_var["generated_coupon_email"] = coupon_stats["generated_coupon_email"]
+        return_var["used_coupon_email"] = coupon_stats["used_coupon_email"]
+        # statistiche sui coupon }}}
+
+        return return_var
+
+    def delete_campaign(self, campaign_id):
+        """Function to delete a campaign"""
+
+        return_var = False
+
+        try:
+            campaign_obj_instance = Campaign.objects.get(campaign_id=campaign_id)
+        except Campaign.DoesNotExist:
+            pass
+        else:
+            campaign_obj_instance.delete()
+            return_var = True
+
+        return return_var
+
 class CampaignDest(models.Model):
     campaign_dest_id = models.AutoField(primary_key=True)
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
@@ -760,3 +829,22 @@ class CampaignOrder(models.Model):
             pass
 
         return campaign_order_obj
+
+    # TODO
+    def get_campaign_order_stats(self, campaign_id):
+        """Function to retrieve stats about campaign_oder"""
+        return_var = {}
+
+        generated_coupon_url = CampaignOrder.objects.filter(campaign_id=campaign_id, dest="url").count()
+        used_coupon_url = CampaignOrder.objects.filter(campaign_id=campaign_id, dest="url", status=2).count()
+        generated_coupon_email = CampaignOrder.objects.filter(~Q(dest="url"), campaign_id=campaign_id).count()
+        used_coupon_email = CampaignOrder.objects.filter(~Q(dest="url"), campaign_id=campaign_id, status=2).count()
+
+        return_var = {
+            "generated_coupon_url" : generated_coupon_url,
+            "used_coupon_url" : used_coupon_url,
+            "generated_coupon_email" : generated_coupon_email,
+            "used_coupon_email" : used_coupon_email,
+        }
+
+        return return_var

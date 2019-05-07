@@ -1,0 +1,81 @@
+{% extends "website/inc/dashboard_base.html" %}
+{% load staticfiles %}
+
+{# page title #}
+{% block title %}MotorJab Garage | Campagne{% endblock %}
+
+{# page description #}
+{% block description %}{% endblock %}
+
+{# custom page css block #}
+{% block custom_css %}
+{{ block.super }}
+<style>
+.campaign_stat_row { padding: 8px; }
+</style>
+{% endblock %}
+{# Custom page script block #}
+{% block custom_js %}{% endblock %}
+
+{# menu active element #}
+{% block navigation_active_campaigns %}active{% endblock %}
+
+{# container content #}
+{% block www_main_content %}
+{# title block {{{ #}
+<div class="row no_gutter page_main_title_block">
+	<div class="col-sm-12">
+		<div class="dashboard_page_title_block">
+			<div class="dashboard_page_title">Statistiche campagna</div>
+			<div class="dashboard_page_description">Visualizza le statistiche della campagna selezionata.</div>
+		</div>
+	</div>
+</div>
+{# title block }}} #}
+<div class="row no_gutter">
+	<div class="col-sm-12">
+		<div class="campaign_stat_row">
+			<span><b>Titolo: </b></span><span>{{ campaign_info_dict.camp_title }}</span>
+		</div>
+		<div class="campaign_stat_row">
+			<span><b>Data creazione: </b></span><span>{{ campaign_info_dict.creation_date }}</span>
+		</div>
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>Totale destinatari</th>
+					<th>Email inviate con successo</th>
+					<th>Email aperte</th>
+					<th>Email cliccate</th>
+					<th>Coupon generati</th>
+					<th>Coupon utilizzati</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="warning">
+					<td>{% if campaign_stats_dict.dest_count %}{{ campaign_stats_dict.dest_count }}{% else %}-{% endif %}</td>
+					<td>{% if campaign_stats_dict.sent_count %}{{ campaign_stats_dict.sent_count }}{% else %}-{% endif %}</td>
+					<td>{% if campaign_stats_dict.opened_count %}{{ campaign_stats_dict.opened_count }}{% else %}-{% endif %}</td>
+					<td>{% if campaign_stats_dict.clicked_count %}{{ campaign_stats_dict.clicked_count }}{% else %}-{% endif %}</td>
+					<td>{% if campaign_stats_dict.generated_coupon_email %}{{ campaign_stats_dict.generated_coupon_email }}{% else %}-{% endif %}</td>
+					<td>{% if campaign_stats_dict.used_coupon_email %}{{ campaign_stats_dict.used_coupon_email }}{% else %}-{% endif %}</td>
+				</tr>
+			</tbody>
+		</table>
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>Coupon generati channel url</th>
+					<th>Coupon utilizzati channel url</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="warning">
+					<td>{% if campaign_stats_dict.generated_coupon_url %}{{ campaign_stats_dict.generated_coupon_url }}{% else %}-{% endif %}</td>
+					<td>{% if campaign_stats_dict.used_coupon_url %}{{ campaign_stats_dict.used_coupon_url }}{% else %}-{% endif %}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endblock %}

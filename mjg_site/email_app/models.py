@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.db import models
+from django.db.models import F
 from django.utils import timezone
 from django.contrib.auth.models import User
 from mjg_site.consts import project_constants
@@ -88,3 +89,19 @@ class EmailSent(models.Model):
             return_var = True
 
         return return_var
+
+    # TODO
+    def get_stats(self, email_type, type_id, status_bitmask=None):
+        """
+        email_type = Tipo di email (mkauto,promozione,newsletter)
+        type_id = L'id della promozione/newsletter o l'id dell'evento della mkauto
+        status_bitmask = Lo status della mail
+        """
+
+        return_var = EmailSent.objects.values('dest').filter(email_type=email_type, type_id=type_id)
+        if status_bitmask:
+            # solo le email con un certo status
+            return_var = return_var.annotate(bitmask_annotated_field=F('status_bitmask').bitand(status_bitmask))
+            return_var = return_var.filter(bitmask_annotated_field__gt=0)
+
+        return list(return_var)

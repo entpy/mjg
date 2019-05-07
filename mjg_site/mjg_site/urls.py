@@ -63,7 +63,8 @@ urlpatterns = [
     url(r'^dashboard/campaigns/step3/(?:(?P<campaign_id>\d+)/)?$', website.views.dashboard_campaigns_step3, name='dashboard_campaigns_step3'),
     url(r'^dashboard/campaigns/step4/(?:(?P<campaign_id>\d+)/)?$', website.views.dashboard_campaigns_step4, name='dashboard_campaigns_step4'),
     url(r'^dashboard/campaigns/step5/(?:(?P<campaign_id>\d+)/)?$', website.views.dashboard_campaigns_step5, name='dashboard_campaigns_step5'),
-    url(r'^dashboard/campaigns/stats/(?:(?P<campaign_id>\d+)/)?$', website.views.dashboard_campaigns_stats, name='dashboard_campaigns_stats'),
+    url(r'^dashboard/campaigns/stats/?$', website.views.dashboard_campaigns_stats, name='dashboard_campaigns_stats'),
+    url(r'^dashboard/campaigns/stats/(?:(?P<campaign_id>\d+)/)?$', website.views.dashboard_single_campaign_stats, name='dashboard_single_campaign_stats'),
     # dashboard }}}
 
     # ajax {{{

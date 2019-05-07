@@ -1070,6 +1070,11 @@ def dashboard_campaigns_step5(request, campaign_id):
             # https://docs.djangoproject.com/en/1.11/ref/django-admin/#running-management-commands-from-your-code
             management.call_command('process_tasks', duration=1, interactive=False)
 
+            # creo messaggio di successo
+            messages.add_message(request, messages.SUCCESS, "<h4>Campagna inviata</h4>La campagna è stata inviata con successo, controlla le statistiche per vedere come funziona.")
+            # redirect nella pagina delle promozioni
+            return HttpResponseRedirect("/dashboard/campaigns/")
+
     context = {
         "campaign_info_dict" : campaign_info_dict,
         "count_campaign_sender" : count_campaign_sender,
@@ -1078,15 +1083,66 @@ def dashboard_campaigns_step5(request, campaign_id):
 
     return render(request, 'website/dashboard/campaigns/step5.html', context)
 
+# TODO
 @login_required
 @ensure_csrf_cookie
 def dashboard_campaigns_stats(request):
     """View to show stats page view"""
 
+    campaign_obj = Campaign()
+    campaign_list_working = []
+    campaign_list_closed = []
+
+    # TODO
+    # eliminazione campagna
+    if request.method == "POST":
+        if int(request.POST.get("delete_campaign_form_sent")) == 1 and request.POST.get("campaign_id"):
+            logger.info("elimino la campagna '" + str(request.POST.get("campaign_id")) + "'")
+            campaign_obj.delete_campaign(campaign_id=request.POST.get("campaign_id"))
+
+            messages.add_message(request, messages.SUCCESS, "<h4>Campagna eliminata</h4>La campagna è stata eliminata con successo.")
+
+            # redirect nella pagina delle promozioni
+            return HttpResponseRedirect("/dashboard/campaigns/stats/")
+
+    # elenco delle campagne da completare
+    campaign_list_working = campaign_obj.get_campaign_list(campaign_status=project_constants.CAMPAIGN_STATUS_IN_WORKING)
+
+    # elenco delle campagne inviate
+    campaign_list_closed = campaign_obj.get_campaign_list(campaign_status=project_constants.CAMPAIGN_STATUS_SENT)
+
     context = {
+        "campaign_list_working" : campaign_list_working,
+        "campaign_list_closed" : campaign_list_closed,
     }
 
     return render(request, 'website/dashboard/campaigns/stats.html', context)
+
+@login_required
+@ensure_csrf_cookie
+def dashboard_single_campaign_stats(request, campaign_id):
+    """View to show single campaign stats"""
+
+    campaign_obj = Campaign()
+
+    # se presente un id carico i dati della campagna (azione comune in tutto il flow della campagna) {{{
+    campaign_obj = Campaign()
+    campaign_info_dict = {}
+    if campaign_id:
+        campaign_info_dict = campaign_obj.get_campaign_info_dict(campaign_id=campaign_id)
+    # }}}
+
+    # prelevo le statistiche per la campagna 'campaign_id':
+    # (email inviate - email aperte - email cliccate - coupon generati - coupon utilizzati)
+    # (coupon generati channel url - coupon utilizzati channel url)
+    campaign_stats_dict = campaign_obj.get_campaign_stats(campaign_id=campaign_id)
+
+    context = {
+        "campaign_stats_dict" : campaign_stats_dict,
+        "campaign_info_dict" : campaign_info_dict,
+    }
+
+    return render(request, 'website/dashboard/campaigns/single_stats.html', context)
 
 # ajax view {{{
 # https://github.com/yceruto/django-ajax

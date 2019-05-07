@@ -255,7 +255,9 @@
 		if (final_price > was_price) {
 			$(".campDiscountAction").val("errore");
 		} else {
-			$(".campDiscountAction").val(Math.round(100-(final_price / was_price) * 100));
+			if (was_price) {
+				$(".campDiscountAction").val(Math.round(100-(final_price / was_price) * 100));
+			}
 		}
 	}
 </script>
