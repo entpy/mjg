@@ -163,6 +163,8 @@ class Campaign(models.Model):
                 if campaign_obj.expiring_date:
                     expiring_date_timestamp = time.mktime(campaign_obj.expiring_date.timetuple())
 
+                campaign_obj.small_image
+
                 campaign_info_dict = {
                     'campaign_id' : campaign_obj.campaign_id,
                     'camp_title' : campaign_obj.camp_title,
@@ -171,10 +173,10 @@ class Campaign(models.Model):
                     'was_price' : campaign_obj.was_price,
                     'final_price' : campaign_obj.final_price,
                     'camp_description' : campaign_obj.camp_description,
-                    'small_image_id' : campaign_obj.small_image.campaign_image_id,
-                    'large_image_id' : campaign_obj.large_image.campaign_image_id,
-                    'small_image_url' : campaign_obj.small_image.image.url,
-                    'large_image_url' : campaign_obj.large_image.image.url,
+                    'small_image_id' : campaign_obj.small_image.campaign_image_id if campaign_obj.small_image else None,
+                    'large_image_id' : campaign_obj.large_image.campaign_image_id if campaign_obj.large_image else None,
+                    'small_image_url' : campaign_obj.small_image.image.url if campaign_obj.small_image else "/static/website/img/default_campaign_image_s.png",
+                    'large_image_url' : campaign_obj.large_image.image.url if campaign_obj.large_image else "/static/website/img/default_campaign_image_l.png",
                     'expiring_date' : campaign_obj.expiring_date,
                     'creation_date' : campaign_obj.creation_date,
                     'expiring_date_timestamp' : expiring_date_timestamp,

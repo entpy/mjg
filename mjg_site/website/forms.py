@@ -118,7 +118,6 @@ class CampaignImageForm(forms.ModelForm):
         fields = ('image',) 
 
 # campaign flow forms
-# TODO
 class CreateCampaignForm(ModelForm):
     # campi extra del form non presenti nel model
     small_image_id = forms.IntegerField(required=False)
