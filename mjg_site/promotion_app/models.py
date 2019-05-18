@@ -786,7 +786,7 @@ class CampaignOrder(models.Model):
 
         return random_code
 
-    def get_or_create_campaign_order(self, campaign_id, user_id=None, dest=project_constants.CHANNEL_URL):
+    def get_or_create_campaign_order(self, campaign_id, user_id=None, dest="url"):
         """Function to retrieve or create campaign order"""
 
         campaign_order_obj = None

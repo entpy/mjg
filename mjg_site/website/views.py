@@ -558,7 +558,7 @@ def www_promotion(request, camp_dest_code):
                 campaign_obj.send_campaign_coupon(campaign_title=campaign_info_dict["camp_title"], campaign_order_code=campaign_order_instance_obj.code, campaign_image=campaign_info_dict["small_image_url"], user_id=campaign_dest_obj.get("user_id"))
 
             # MAIL AD ADMIN
-            if not campaign_order_exists or campaign_dest_obj.get("dest") == project_constants.CHANNEL_URL:
+            if not campaign_order_exists or campaign_dest_obj.get("dest") == "url":
                 # identificazione dell'utente per la mail di admin
                 user_text = "anonimo - proveniente dal canale " + campaign_dest_obj.get("dest")
                 if campaign_dest_obj.get("user_id"):
@@ -635,7 +635,7 @@ def www_show_promo_code(request, camp_dest_code, camp_order_code):
 
     # se è il channel URL mostro il form per inviare la mail con il coupon
     show_email_form = False
-    if campaign_dest_obj.get("dest") == project_constants.CHANNEL_URL:
+    if campaign_dest_obj.get("dest") == "url":
         show_email_form = True
 
     context = {
