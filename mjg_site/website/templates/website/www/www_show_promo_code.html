@@ -99,7 +99,7 @@
 								<b>Una copia del coupon ti è stata appena inviata via email.</b><br />NOTA: se non lo trovi controlla la scheda "offerte" o "promozioni" della tua webmail.
 							</div>
 						{% endif %}
-						{% if not customer_coupon_autosent %}
+						{% if not show_email_form %}
 							<div class="text emailCampaignPriceTitle fallback-text">Inviati il coupon via email</div>
 							<form class="form-horizontal validateFormAction" name="send_coupon_form" method="POST" action="">
 								{% csrf_token %}
@@ -107,7 +107,7 @@
 								<input type="hidden" name="campaign_order_code" value="{{ camp_order_code }}" />
 								<fieldset>
 									<div class="form-group formGroupAction emailGroup">
-										<label class="control-label">Email</label>
+										<label class="control-label">Email *</label>
 										<div class="input-group">
 											<input id="email" name="email" class="form-control" placeholder="Inserisci la tua email" type="email" required>
 											<span class="input-group-btn">

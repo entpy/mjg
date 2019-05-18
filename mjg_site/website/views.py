@@ -633,12 +633,18 @@ def www_show_promo_code(request, camp_dest_code, camp_order_code):
     if campaign_order_instance_obj.user_id:
         show_success_msg = True
 
+    # se è il channel URL mostro il form per inviare la mail con il coupon
+    show_email_form = False
+    if campaign_dest_obj.get("dest") == project_constants.CHANNEL_URL:
+        show_email_form = True
+
     context = {
         "camp_dest_code" : camp_dest_code,
         "camp_order_code" : camp_order_code,
         "campaign_info_dict" : campaign_info_dict,
         "business_address" : settings.BUSINESS_ADDRESS,
         "show_success_msg" : show_success_msg,
+        "show_email_form" : show_email_form,
     }
 
     return render(request, 'website/www/www_show_promo_code.html', context)
