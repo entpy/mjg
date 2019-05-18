@@ -99,7 +99,7 @@
 								<b>Una copia del coupon ti è stata appena inviata via email.</b><br />NOTA: se non lo trovi controlla la scheda "offerte" o "promozioni" della tua webmail.
 							</div>
 						{% endif %}
-						{% if not show_email_form %}
+						{% if show_email_form %}
 							<div class="text emailCampaignPriceTitle fallback-text">Inviati il coupon via email</div>
 							<form class="form-horizontal validateFormAction" name="send_coupon_form" method="POST" action="">
 								{% csrf_token %}
