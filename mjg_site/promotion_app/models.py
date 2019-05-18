@@ -307,7 +307,7 @@ class Campaign(models.Model):
         return_var = False
 
         if camp_dest_code:
-            return_var = settings.SITE_URL + "/" + settings.PROMO_URL_PATH + "/" + str(camp_dest_code) + "/"
+            return_var = "/" + settings.PROMO_URL_PATH + "/" + str(camp_dest_code) + "/"
 
         return return_var
 
