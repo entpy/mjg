@@ -13,3 +13,6 @@ pip install django-background-tasks
 # https://github.com/yceruto/django-ajax
 pip install djangoajax
 pip install https://github.com/yceruto/django-ajax/archive/2.x.zip
+
+# per la gestione delle immagini
+pip install pillow
