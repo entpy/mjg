@@ -1076,6 +1076,8 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 	.single_service_block:last-child .readable_text1 { padding-bottom: 0px; }
 	.navbar-nav .open .dropdown-menu { background-color: #3e3c3c; }
 	.review-xs-only-block { margin-top: 50px; }
+	.couponContainerTop { display: none; }
+	.promotionPageImage { padding-bottom: 40px; }
 }
 /* xs sm only */
 @media (max-width: 992px) {

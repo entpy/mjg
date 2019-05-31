@@ -12,7 +12,7 @@
 {% block custom_css %}
 <style>
 	.page_header_block { padding: 30px 0; background-color: #0a102c; }
-	.page_header_block h2 { margin: 0px; font-weight: bold; color: #fff; }
+	.page_header_block h2 { padding: 0px 25px; margin: 0px; font-weight: bold; color: #fff; }
 	.btn-primary, .btn-primary:hover, .btn-primary:active { background-color: #ff0505!important; }
 	.info_block img, .info_block img.emailMainImage { display: inline-block; height: auto; max-width: 450px; width: 100%; }
 	.countdownContainer { color:#ff0505;font-size:25px;font-weight:100;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0; }
@@ -83,6 +83,7 @@
 	<div><h2>{{ campaign_info_dict|get_item:"camp_title" }}</h2></div>
 </div>
 <div class="container-fluid info_block info_block_color1">
+	{% if form.errors or messages %}
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
 			<div class="col-xs-12 padding-xs-only padding-sm-only">
@@ -122,18 +123,21 @@
 			</div>
 		</div>
 	</div>
+	{% endif %}
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1 pageContainerAction">
 			<form name="campaign_code_form" method="POST" action="">
 				{% csrf_token %}
 				<input type="hidden" name="campaign_code_form_sent" value="1" />
-				<div class="col-sm-4 padding-xs-only padding-sm-only">
+				<div class="col-sm-4 promotionPageImage">
 					<div class="text-center">
-						<img class="emailMainImage" src="{{ campaign_info_dict.large_image_url }}" alt="Image" border="0">
+						<a href="{{ campaign_info_dict.large_image_url }}" data-lightbox="offerte">
+							<img class="emailMainImage" alt="Autoriparazioni MotorJab Garage" src="{{ campaign_info_dict.large_image_url }}">
+						</a>
 					</div>
-					<table class="getCouponContainerAction" width="100%" style="width: 100%; margin-top: 20px;">
+					<table class="getCouponContainerAction couponContainerTop" width="100%" style="width: 100%; margin-top: 20px;">
 						<tr>
-							<td style="text-align: center; padding-top: 10px; line-height: 1; padding-bottom: 5px;"><p class="text emailCampaignDiscountTitle fallback-text" style="color:#333;font-size:13px;font-weight:300;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0;">Ottieni il coupon dell'offerta</p></td>
+							<td style="text-align: center; padding-top: 10px; line-height: 1; padding-bottom: 10px;"><p class="text emailCampaignDiscountTitle fallback-text" style="color:#333;font-size:13px;font-weight:300;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0;">Ottieni il coupon dell'offerta</p></td>
 						</tr>
 						<tr>
 							<td>
@@ -208,7 +212,7 @@
 									<td>
 										<table class="getCouponContainerAction" width="100%" style="width: 100%;">
 											<tr>
-												<td style="text-align: center; padding-top: 10px; line-height: 1; padding-bottom: 5px;"><p class="text emailCampaignDiscountTitle fallback-text" style="color:#333;font-size:13px;font-weight:300;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0;">Ottieni il coupon dell'offerta</p></td>
+												<td style="text-align: center; padding-top: 10px; line-height: 1; padding-bottom: 10px;"><p class="text emailCampaignDiscountTitle fallback-text" style="color:#333;font-size:13px;font-weight:300;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0;">Ottieni il coupon dell'offerta</p></td>
 											</tr>
 											<tr>
 												<td>
