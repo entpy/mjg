@@ -1060,7 +1060,7 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 .main_block .main_block_contents .main_block_contents_wrapper { width: 90%; margin: 0 auto; text-align: center; }
 .main_block .main_block_contents .main_block_contents_wrapper h1 { color: white; font-weight: bold; font-size: 4em; line-height: 70px; margin-top: -10px; }
 .main_block .main_block_contents_bottom { position: absolute; bottom: 0px; width: 100%; }
-.main_block .main_block_contents_bottom h2 { background-color: #23bdcc80; display: inline-block; font-size: 19px; line-height: 30px; letter-spacing: 0.03em; color: #003139; padding: 30px; width: 100%; text-align: center; margin: 0px; }
+.main_block .main_block_contents_bottom h2 { background-color: rgba(6, 173, 170, 0.4); display: inline-block; font-size: 19px; line-height: 30px; letter-spacing: 0.03em; color: #000; padding: 30px; width: 100%; text-align: center; margin: 0px; }
 .main_block .main_block_arrow_container { position: absolute; width: 100%; bottom: 160px; text-align: center; }
 .main_block .title_caption { color: #ffc812; font-size: 21px; font-weight: bold; }
 .main_block .main_block_arrow { font-size: 5em; color: white; position: absolute; top: -80px; }
