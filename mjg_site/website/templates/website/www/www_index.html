@@ -8,111 +8,59 @@
 {% block description %}{{ block.super }}{% endblock %}
 
 {# custom page css block #}
-{% block custom_css %}{% endblock %}
+{% block custom_css %}
+{{ block.super}}
+<style>
+.bounce {
+  -moz-animation: bounce 2s infinite;
+  -webkit-animation: bounce 2s infinite;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-30px);
+  }
+  60% {
+    transform: translateY(-15px);
+  }
+}
+</style>
+{% endblock %}
 {# Custom page script block #}
-{% block custom_js %}{% endblock %}
+{% block custom_js %}
+{{ block.super }}
+<script src="{% static "website/js/vendor/jquery.scrollTo.min.js" %}"></script>
+{% endblock %}
 
 {# menu active element #}
 {% block navigation_active_home %}active{% endblock %}
 
 {# container content #}
 {% block www_main_content %}
-<!-- Begin Carousel -->
-<div class="carousel">
-	<div id="carouselHome" class="carousel slide carousel-fade" data-ride="carousel">
-		<!-- Indicators -->
-		<ol class="carousel-indicators">
-			<li data-target="#carouselHome" data-slide-to="0" class="active"></li>
-			<li data-target="#carouselHome" data-slide-to="1" class=""></li>
-			<li data-target="#carouselHome" data-slide-to="2" class=""></li>
-		</ol>
-		<!-- Progress Bar -->
-		<hr class="transition-timer-carousel-progress-bar" style="width: 37.5%;">
-		<!-- Begin Wrapper for slides -->
-		<div class="carousel-inner">
-			<!-- Begin Item 1 -->
-			<div class="item active">
-				<!-- Item BG -->
-				<div class="background-main skrollable skrollable-between" style='background-image: url("{% static "website/img/slide_1.jpg" %}"); background-position: center center; background-size: cover;' data-0="background-position:0px 0px;" data-500="background-position:0px -250px;">
-					<div class="container">
-						<div class="row carousel-content center-vertically-right">
-							<!-- Content -->
-							<div class="" data-animation="fadeInRight">
-								<div class="carousel-description col-sm-6 col-sm-offset-5">
-									<h3 class="heavy text-white"><span>Passione ed esperienza</span></h3>
-									<p class="mt20">Passione ed esperienza si fondono per offrirti un servizio di qualità superiore, curiamo ogni aspetto della tua auto: meccanica, elettronica, impianto refrigerante, pneumatici e <a href="/servizi/">tanto altro</a>.</p>
-								</div>
-							</div>
-						</div>
-						<!-- /content container -->
-					</div>
-					<!-- /container -->
-				</div>
-				<!-- /bg div -->
-			</div>
-			<!-- /item -->
-			<!-- End Item 1 -->
-			<!-- Begin Item 2 -->
-			<div class="item">
-				<!-- Item BG -->
-				<div style='background-image: url("{% static "website/img/slide_2.jpg" %}"); background-position: center center; background-size: cover;' data-0="background-position:0px 0px;" data-500="background-position:0px -250px;" class="skrollable skrollable-between">
-					<div class="container">
-						<div class="row carousel-content center-vertically-right">
-							<div class="" data-animation="fadeInUpBig">
-								<div class="carousel-description col-sm-8 col-sm-offset-2 text-center">
-									<!-- Content -->
-									<span class="fa fa-anchor fa-4x text-white mb20"></span>
-									<h2 class="heavy text-white"><span>Cura nei dettagli</span></h2>
-									<p class="mt20">Dedichiamo alla tua auto l'attenzione che merita: siamo meticolosi e precisi nell'eseguire qualsiasi tipo di intervento tecnico sulla tua auto.</p>
-								</div>
-							</div>
-						</div>
-						<!-- /content container -->
-					</div>
-					<!-- /container -->
-				</div>
-				<!-- /bg div -->
-			</div>
-			<!-- /item -->
-			<!-- End Item 2 -->
-			<!-- Begin Item 3 -->
-			<div class="item">
-				<!-- Item BG -->
-				<div style='background-image: url("{% static "website/img/slide_3.jpg" %}"); background-position: center center; background-size: cover;' data-0="background-position:0px 0px;" data-500="background-position:0px -250px;" class="skrollable skrollable-between">
-					<div class="container">
-						<div class="row carousel-content center-vertically-left">
-							<!-- Content -->
-							<div class="">
-								<div class="carousel-description mt10 col-md-8 col-md-offset-2">
-									<h3 class="heavy text-white" data-animation="fadeInRight"><span>Avanguardia e tecnica</span></h3>
-									<p class="mt20" data-animation="fadeInLeft">Ci aggiorniamo costantemente, dalla metodologia di lavoro fino all'attrezzatura, da MotorJab a Torino troverai la soluzione perfetta per ogni problema della tua auto.</p>
-								</div>
-							</div>
-						</div>
-						<!-- /content container -->
-					</div>
-					<!-- /container -->
-				</div>
-				<!-- /bg div -->
-			</div>
-			<!-- /item -->
-			<!-- End Item 3 -->
-		</div>
-		<!-- /carousel inner -->
-		<!-- End Wrapper for slides -->
-		<!-- Controls -->
-		<a class="left carousel-control" href="#carouselHome" role="button" data-slide="prev">
-		<span class="ion-ios-arrow-back carousel-arrow-left" aria-hidden="true"></span>
-		</a>
-		<a class="right carousel-control" href="#carouselHome" role="button" data-slide="next">
-		<span class="ion-ios-arrow-forward carousel-arrow-right" aria-hidden="true"></span>
-		</a>
-	</div>
-	<!-- /carousel id div -->
-</div>
-<!-- /carousel div -->
-<!-- End Carousel -->
 <!-- three elements block -->
+<div class="main_block">
+	<!--<img class="main_block_image" src="{% static "website/img/slide_3.jpg" %}" />-->
+	<div class="main_block_contents">
+		<div class="main_block_contents_wrapper">
+			<span class="title_caption">MotorJab Garage</span>
+			<h1>Autoriparazioni, elettronica e gommista a Torino</h1>
+		</div>
+	</div>
+	<div class="main_block_arrow_container">
+		<div class="bounce">
+			<a href="#" class="mainBlockArrowAction">
+				<i class="ion-ios-arrow-round-down main_block_arrow"></i>
+			</a>
+		</div>
+	</div>
+	<div class="main_block_contents_bottom scrollToAction">
+		<h2>MotorJab Garage a Torino: un unico centro, tanti servizi per la tua auto.<br /><b>Dai tagliandi alla sostituzione degli pneumatici</b></h2>
+	</div>
+</div>
 <div class="row elements_container no_gutter">
 	<div class="col-sm-12">
 		<div class="col-sm-4 text-center no_gutter padding-sm-only padding-xs-only-60">
@@ -259,6 +207,103 @@
 		</div>
 	</div>
 </div>
+{% comment %}
+<!-- Begin Carousel -->
+<div class="carousel info_block">
+	<div id="carouselHome" class="carousel slide carousel-fade" data-ride="carousel">
+		<!-- Indicators -->
+		<ol class="carousel-indicators">
+			<li data-target="#carouselHome" data-slide-to="0" class="active"></li>
+			<li data-target="#carouselHome" data-slide-to="1" class=""></li>
+			<li data-target="#carouselHome" data-slide-to="2" class=""></li>
+		</ol>
+		<!-- Progress Bar -->
+		<hr class="transition-timer-carousel-progress-bar" style="width: 37.5%;">
+		<!-- Begin Wrapper for slides -->
+		<div class="carousel-inner">
+			<!-- Begin Item 1 -->
+			<div class="item active">
+				<!-- Item BG -->
+				<div class="background-main skrollable skrollable-between" style='background-image: url("{% static "website/img/slide_1.jpg" %}"); background-position: center center; background-size: cover;' data-0="background-position:0px 0px;" data-500="background-position:0px -250px;">
+					<div class="container">
+						<div class="row carousel-content center-vertically-right">
+							<!-- Content -->
+							<div class="" data-animation="fadeInRight">
+								<div class="carousel-description col-sm-6 col-sm-offset-5">
+									<h3 class="heavy text-white"><span>Passione ed esperienza</span></h3>
+									<p class="mt20">Passione ed esperienza si fondono per offrirti un servizio di qualità superiore, curiamo ogni aspetto della tua auto: meccanica, elettronica, impianto refrigerante, pneumatici e <a href="/servizi/">tanto altro</a>.</p>
+								</div>
+							</div>
+						</div>
+						<!-- /content container -->
+					</div>
+					<!-- /container -->
+				</div>
+				<!-- /bg div -->
+			</div>
+			<!-- /item -->
+			<!-- End Item 1 -->
+			<!-- Begin Item 2 -->
+			<div class="item">
+				<!-- Item BG -->
+				<div style='background-image: url("{% static "website/img/slide_2.jpg" %}"); background-position: center center; background-size: cover;' data-0="background-position:0px 0px;" data-500="background-position:0px -250px;" class="skrollable skrollable-between">
+					<div class="container">
+						<div class="row carousel-content center-vertically-right">
+							<div class="" data-animation="fadeInUpBig">
+								<div class="carousel-description col-sm-8 col-sm-offset-2 text-center">
+									<!-- Content -->
+									<span class="fa fa-anchor fa-4x text-white mb20"></span>
+									<h2 class="heavy text-white"><span>Cura nei dettagli</span></h2>
+									<p class="mt20">Dedichiamo alla tua auto l'attenzione che merita: siamo meticolosi e precisi nell'eseguire qualsiasi tipo di intervento tecnico sulla tua auto.</p>
+								</div>
+							</div>
+						</div>
+						<!-- /content container -->
+					</div>
+					<!-- /container -->
+				</div>
+				<!-- /bg div -->
+			</div>
+			<!-- /item -->
+			<!-- End Item 2 -->
+			<!-- Begin Item 3 -->
+			<div class="item">
+				<!-- Item BG -->
+				<div style='background-image: url("{% static "website/img/slide_3.jpg" %}"); background-position: center center; background-size: cover;' data-0="background-position:0px 0px;" data-500="background-position:0px -250px;" class="skrollable skrollable-between">
+					<div class="container">
+						<div class="row carousel-content center-vertically-left">
+							<!-- Content -->
+							<div class="">
+								<div class="carousel-description mt10 col-md-8 col-md-offset-2">
+									<h3 class="heavy text-white" data-animation="fadeInRight"><span>Avanguardia e tecnica</span></h3>
+									<p class="mt20" data-animation="fadeInLeft">Ci aggiorniamo costantemente, dalla metodologia di lavoro fino all'attrezzatura, da MotorJab a Torino troverai la soluzione perfetta per ogni problema della tua auto.</p>
+								</div>
+							</div>
+						</div>
+						<!-- /content container -->
+					</div>
+					<!-- /container -->
+				</div>
+				<!-- /bg div -->
+			</div>
+			<!-- /item -->
+			<!-- End Item 3 -->
+		</div>
+		<!-- /carousel inner -->
+		<!-- End Wrapper for slides -->
+		<!-- Controls -->
+		<a class="left carousel-control" href="#carouselHome" role="button" data-slide="prev">
+		<span class="ion-ios-arrow-back carousel-arrow-left" aria-hidden="true"></span>
+		</a>
+		<a class="right carousel-control" href="#carouselHome" role="button" data-slide="next">
+		<span class="ion-ios-arrow-forward carousel-arrow-right" aria-hidden="true"></span>
+		</a>
+	</div>
+	<!-- /carousel id div -->
+</div>
+<!-- /carousel div -->
+<!-- End Carousel -->
+{% endcomment %}
 <div class="container-fluid info_block info_block_color2">
 	<div class="row">
 		<div class="col-xs-12">
@@ -270,4 +315,13 @@
 		</div>
 	</div>
 </div>
+<script>
+	$(document).ready(function(){
+		$(document).on("click", ".mainBlockArrowAction", function(){
+			$.scrollTo(".scrollToAction", {duration:3000});
+
+			return false;
+		});
+	});
+</script>
 {% endblock %}
