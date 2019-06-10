@@ -462,7 +462,7 @@ class Campaign(models.Model):
             user_first_name = account_info_dictionary["first_name"]
             user_email = account_info_dictionary["email"]
 
-        subject_str = ma_event_obj.create_first_name_string(string="ecco il tuo coupon per " + str(campaign_title), separator=",", first_name=user_first_name)
+        subject_str = ma_event_obj.create_first_name_string(string="ecco il tuo coupon per " + str(campaign_title), separator=", ", first_name=user_first_name)
 
         # la data odierna da inserire nel subject
         cur_date = datetime.datetime.now()
