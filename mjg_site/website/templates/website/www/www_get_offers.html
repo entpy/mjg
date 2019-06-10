@@ -2,10 +2,10 @@
 {% load staticfiles %}
 
 {# page title #}
-{% block title %}MotorJab Garage | Offerte esclusive dedicate a te{% endblock %}
+{% block title %}Offerte esclusive da utilizzare per la manutenzione della tua auto | Un unico centro, tanti servizi per la tua auto{% endblock %}
 
 {# page description #}
-{% block description %}{% endblock %}
+{% block description %}Vuoi ricevere uno sconto da utilizzare in officina? Registrati adesso e riceverai subito il tuo bonus...affrettati. MotorJab Garage è il tuo centro di fiducia per la tua auto a Torino{% endblock %}
 
 {# custom page css block #}
 {% block custom_css %}
@@ -27,9 +27,9 @@
 <div class="page_header_block contacts_header_block">
 	<div><h1>{{ title_mkauto_prize_str }}</h1></div>
 	{% if source == 4 %}
-		<div><h4>Registrati adesso, riceverai subito il tuo buono!</h4></div>
+		<div><h2>Registrati adesso, riceverai subito il tuo buono!</h2></div>
 	{% else %}
-		<div><h4>Registrati adesso, riceverai subito il tuo sconto!</h4></div>
+		<div><h2>Registrati adesso, riceverai subito il tuo sconto!</h2></div>
 	{% endif %}
 </div>
 <div class="container-fluid info_block info_block_color1">
