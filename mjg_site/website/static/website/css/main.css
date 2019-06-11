@@ -1026,7 +1026,7 @@ blockquote {
 .readable_text1 { letter-spacing: 0.02em; line-height: 1.8678; }
 .img-responsive { display: inline-block; }
 .page_header_block { display: inline-block; padding: 70px 0; text-align: center; width: 100%; }
-.page_header_block h4 { background-color: black; color: white; display: inline-block; font-size: 22px; font-weight: 100; padding: 5px 10px; }
+.page_header_block h2 { background-color: black; color: white; display: inline-block; font-size: 22px; font-weight: 100; padding: 5px 10px; }
 .service_header_block { background-image: url("../img/service_bg.png"); background-position: center center; background-size: initial; background-attachment: fixed; }
 .contacts_header_block { background-image: url("../img/contacts_bg.png"); background-position: center center; background-size: initial; background-attachment: fixed; }
 .single_service_block { text-align: center; }
@@ -1054,11 +1054,21 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 .jumbotron { background-color: white; }
 /*.page_anchor { display: inline-block; float: left; width: 100%; }*/
 .carousel-description * { color: white; text-shadow: 0px 0px 1px black; }
+.main_block { background-image: url("../img/motorjab_garage.jpg"); background-repeat: no-repeat; height: 100vh; margin-top: -80px; background-size: cover; min-height: 535px; position: relative; }
+.main_block .main_block_contents { position: absolute; margin-top: 150px; }
+.main_block .main_block_contents .main_block_contents_wrapper { width: 90%; margin: 0 auto; text-align: center; }
+.main_block .main_block_contents .main_block_contents_wrapper h1 { color: white; font-weight: bold; font-size: 4em; line-height: 70px; margin-top: -10px; }
+.main_block .main_block_contents_bottom { position: absolute; bottom: 0px; width: 100%; }
+.main_block .main_block_contents_bottom h2 { background-color: rgba(0, 0, 0, 0.83); display: inline-block; font-size: 19px; line-height: 30px; letter-spacing: 0.03em; color: #ff0707; padding: 30px; width: 100%; text-align: center; margin: 0px; }
+.main_block .main_block_arrow_container { position: absolute; width: 100%; bottom: 160px; text-align: center; }
+.main_block .title_caption { color: #ffc812; font-size: 21px; font-weight: bold; }
+.main_block .main_block_arrow { font-size: 5em; color: white; position: absolute; top: -80px; }
+.footer_social_container { float: left; margin-left: 20px; }
+.footer_social_container a { font-size: 29px; }
 
 .force-left { text-align: left!important; }
 .force-right { text-align: right!important; }
 .force-center { text-align: center!important; }
-
 
 /* resolution generic style */
 .text-xs-left { text-align: left; }
@@ -1076,6 +1086,15 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 	.single_service_block:last-child .readable_text1 { padding-bottom: 0px; }
 	.navbar-nav .open .dropdown-menu { background-color: #3e3c3c; }
 	.review-xs-only-block { margin-top: 50px; }
+	.couponContainerTop { display: none; }
+	.promotionPageImage { padding-bottom: 40px; }
+
+	.main_block .main_block_contents { margin-top: 100px; }
+	.main_block .main_block_contents .main_block_contents_wrapper h1 { font-size: 2.5em; line-height: 40px; margin-top: 5px; }
+	.main_block .main_block_contents_bottom h2 { font-size: 17px; line-height: 25px; padding: 15px; }
+	.main_block .main_block_arrow_container { bottom: 160px; }
+	.main_block .main_block_arrow { font-size: 3.5em; top: -100px; }
+	.main_block .title_caption { font-size: 18px; }
 }
 /* xs sm only */
 @media (max-width: 992px) {
@@ -1094,6 +1113,13 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 	.page_header_block h1 { background-color: black; color: white; display: inline-block; font-size: 35px; font-weight: 100; padding: 10px 20px; text-transform: uppercase; }
 	.sm_only_img_margin_top { margin-top: 10px; }
 	.review-sm-only-block { margin-top: 50px; }
+
+	.main_block .main_block_contents { margin-top: 150px; }
+	.main_block .main_block_contents .main_block_contents_wrapper h1 { font-size: 3.8em; line-height: 50px; margin-top: 5px; }
+	.main_block .main_block_contents_bottom h2 { font-size: 19px; line-height: 25px; padding: 15px; }
+	.main_block .main_block_arrow_container { bottom: 160px; }
+	.main_block .main_block_arrow { bottom: -70px; }
+	.main_block .title_caption { font-size: 18px; }
 }
 @media (min-width: 768px) {
 	.dropdown:hover .dropdown-menu { display: block; }

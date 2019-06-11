@@ -2,10 +2,10 @@
 {% load staticfiles %}
 
 {# page title #}
-{% block title %}MotorJab Garage | Autoriparazioni - Autoriparazioni Torino - Autofficina - Autofficina Torino - Meccanico - Meccanico Torino - Officina riparazione auto torino - Meccatronica - Meccatronica Torino - Sostituzione pneumatici Torino - Gommista Torino - Torino - Torino Centro{% endblock %}
+{% block title %}Motorjab Garage: autoriparazioni, elettronica e gommista a Torino{% endblock %}
 
 {# page description #}
-{% block description %}MotorJab Garage,Autoriparazioni,Autoriparazioni Torino,Autofficina,Autofficina Torino,Meccanico,Meccanico Torino,Officina riparazione auto torino,Meccatronica,Meccatronica Torino,Sostituzione pneumatici Torino,Gommista Torino,Torino,Torino Centro{% endblock %}
+{% block description %}MotorJab Garage: un unico centro, tanti servizi per la tua auto. Dai tagliandi alla sostituzione degli pneumatici fino alla riparazione della parte elettronica{% endblock %}
 
 {# custom page css block #}
 {% block custom_css %}{% endblock %}
@@ -26,25 +26,24 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="/">
-					<img class="main-logo" src="{% static "website/img/logo_white.png" %}" alt="MotorJab Garage">
+				<a title="MotorJab Garage" class="navbar-brand" href="/">
+					<img class="main-logo" src="{% static "website/img/logo_white.png" %}" alt="Autoriparazioni, elettronica e gommista a Torino">
 				</a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right">
-					<li><a class="{% block navigation_active_home %}{% endblock %}" href="/">HOME</a></li>
+					<li><a title="Home Page" class="{% block navigation_active_home %}{% endblock %}" href="/">HOME</a></li>
 					<li class="dropdown">
-						<a href="/servizi" class="dropdown-toggle {% block navigation_active_services %}{% endblock %}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SERVIZI <span class="caret"></span></a>
+						<a title="Servizi" href="/servizi" class="dropdown-toggle {% block navigation_active_services %}{% endblock %}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SERVIZI <span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li><a class="serviceNavigationClick" data-navigation-anchor="meccanica" href="/servizi?#_meccanica">MECCANICA</a></li>
-							<li><a class="serviceNavigationClick" data-navigation-anchor="elettronica"  href="/servizi?#_elettronica">ELETTRONICA</a></li>
-							<li><a class="serviceNavigationClick" data-navigation-anchor="gommista"  href="/servizi?#_gommista">GOMMISTA</a></li>
+							<li><a title="Meccanica" class="serviceNavigationClick" data-navigation-anchor="meccanica" href="/servizi?#_meccanica">MECCANICA</a></li>
+							<li><a title="Elettronica" class="serviceNavigationClick" data-navigation-anchor="elettronica"  href="/servizi?#_elettronica">ELETTRONICA</a></li>
+							<li><a title="Gommista" class="serviceNavigationClick" data-navigation-anchor="gommista"  href="/servizi?#_gommista">GOMMISTA</a></li>
 						</ul>
 					</li>
-					<li><a class="{% block navigation_active_contacts %}{% endblock %}" href="/contattaci">CONTATTACI</a></li>
-					<!--<li><a class="{% block navigation_active_booking_services %}{% endblock %}" href="/prenota-servizio">PRENOTA SERVIZIO</a></li>-->
-					<li><a class="{% block navigation_active_get_offers %}{% endblock %}" href="/ricevi-offerte">RICEVI OFFERTE</a></li>
+					<li><a title="Contattaci" class="{% block navigation_active_contacts %}{% endblock %}" href="/contattaci">CONTATTACI</a></li>
+					<li><a title="Ricevi offerte" class="{% block navigation_active_get_offers %}{% endblock %}" href="/ricevi-offerte">RICEVI OFFERTE</a></li>
 				</ul>
 			<!-- </div> -->
 			<!-- /.navbar-collapse -->
@@ -62,17 +61,17 @@
 			<section class="col-lg-3 col-md-3 col-xs-12 col-sm-3 footer-one">
 				<h4>Chi Siamo</h4>
 				<p> 
-				Siamo appassionati di motori, le nostre competenze ci permetto di offrire servizi di qualità superiore per tutti i fieri possessori di automobili.<br /><i><a href="/servizi?#_meccanica">Meccanica</a> - <a href="/servizi?#_elettronica">Elettronica</a> - <a href="/gommista/">Gommista</a></i>
+				Siamo appassionati di motori, le nostre competenze ci permetto di offrire servizi di qualità superiore per tutti i fieri possessori di automobili.<br /><i><a title="Meccanica" href="/servizi?#_meccanica">Meccanica</a> - <a title="Elettronica" href="/servizi?#_elettronica">Elettronica</a> - <a title="Gommista" href="/gommista/">Gommista</a></i>
 				</p>
 			</section>
 			<section class="col-lg-3 col-md-3 col-xs-12 col-sm-3 footer-two">
 				<h4>Link rapidi</h4>
 				<ul>
-					<li><a href="/servizi">Servizi</a></li>
-					<li><a href="/contattaci">Contattaci</a></li>
-					<li><a href="/ricevi-offerte">Ricevi offerte</a></li>
-					<li><a href="/privacy">Privacy &amp; GDPR</a></li>
-					<li><a href="/cookie-policy">Cookie Policy</a></li>
+					<li><a title="Servizi" href="/servizi">Servizi</a></li>
+					<li><a title="Contattaci" href="/contattaci">Contattaci</a></li>
+					<li><a title="Ricevi offerte" href="/ricevi-offerte">Ricevi offerte</a></li>
+					<li><a title="Privacy &amp; GDPR" href="/privacy">Privacy &amp; GDPR</a></li>
+					<li><a title="Cookie Policy" href="/cookie-policy">Cookie Policy</a></li>
 				</ul>
 			</section>
 			<section class="col-lg-3 col-md-3 col-xs-12 col-sm-3 padding-xs-only footer-three">
@@ -90,7 +89,12 @@
 					</li>
 					<li>
 						<i class="ion-ios-at"></i>
-						<p><strong>Email:</strong><a href="mailto:info@motorjab.it">info@motorjab.it</a></p>
+						<p><strong>Email:</strong><a title="La nostra email" href="mailto:info@motorjab.it">info@motorjab.it</a></p>
+					</li>
+					<li>
+							<div class="footer_social_container">
+								<a title="Follow us on Instagram" target="_blank" href="https://www.instagram.com/motorjabgarage/"><i class="ion-logo-instagram"></i></a>
+							</div>
 					</li>
 				</ul>
 			</section>
@@ -105,7 +109,7 @@
 <div class="footer-bottom">
 	<div class="container">
 		<div class="row">
-			<div class="col-xs-12 text-xs-center text-sm-left"> &copy; Copyright {% now 'Y' %} | Proudly made by <a href="http://www.entpy.com" target="_blank">Entpy Software</a>. All Rights Reserved. | P. IVA n.00340188887</div>
+			<div class="col-xs-12 text-xs-center text-sm-left"> &copy; Copyright {% now 'Y' %} | Proudly made by <a title="Entpy Software" href="http://www.entpy.com" target="_blank">Entpy Software</a>. All Rights Reserved. | P. IVA n.00340188887</div>
 		</div>
 	</div>
 </div>

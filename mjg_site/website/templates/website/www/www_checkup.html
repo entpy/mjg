@@ -2,10 +2,13 @@
 {% load staticfiles %}
 
 {# page title #}
-{% block title %}MotorJab Garage | Tagliando completo a Torino - Tagliando auto - Tagliando auto Torino - Autoriparazioni - Autoriparazioni Torino - Autofficina - Autofficina Torino - Meccanico - Meccanico Torino - Officina riparazione auto torino - Torino - Torino Centro{% endblock %}
+{% block title %}Servizio di tagliando auto a Torino - Tagliando auto | Un unico centro, tanti servizi per la tua auto{% endblock %}
 
 {# page description #}
-{% block description %}MotorJab Garage,Tagliando completo a Torino,Tagliando auto,Tagliando auto Torino,Autoriparazioni,Autoriparazioni Torino,Autofficina,Autofficina Torino,Meccanico,Meccanico Torino,Officina riparazione auto torino,Torino,Torino Centro{% endblock %}
+{% block description %}Servizio di tagliando auto a Torino. Grazie al nostro tagliando, in linea con chilometraggio e tipologia della tua auto, potrai percorrere centinaia di migliaia di chilometri godendo appieno della tua auto e senza avere cattive sorprese.{% endblock %}
+
+{# page keywords #}
+{% block keywords %}tagliando completo,tagliando completo Torino,tagliando,tagliando Torino,tagliando Torino Centro,tagliando in garanzia,tagliando in garanzia Torino,tagliando in garanzia Torino Centro,MotorJab Garage{% endblock %}
 
 {# custom page css block #}
 {% block custom_css %}{% endblock %}
@@ -18,8 +21,8 @@
 {# container content #}
 {% block www_main_content %}
 <div class="page_header_block service_header_block">
-	<div><h1>Tagliando completo a Torino</h1></div>
-	<div><h4>Perchè è importante farlo regolarmente</h4></div>
+	<div><h1>Tagliando auto a Torino</h1></div>
+	<div><h2>Perchè è importante farlo regolarmente</h2></div>
 </div>
 <div class="container-fluid info_block info_block_color2">
 	<div class="row">
@@ -64,13 +67,13 @@
 			</div>
 			<div class="col-md-4 col-md-pull-8 text-xs-center text-md-left">
 				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
-				<a href="{% static "website/img/tagliando_1.jpg" %}" data-lightbox="tagliando_slide">
+				<a title="Autoriparazioni MotorJab Garage" href="{% static "website/img/tagliando_1.jpg" %}" data-lightbox="tagliando_slide">
 					<img class="img-responsive" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/tagliando_1.jpg" %}">
 				</a>
-				<a href="{% static "website/img/tagliando_2.jpg" %}" data-lightbox="tagliando_slide">
+				<a title="Autoriparazioni MotorJab Garage" href="{% static "website/img/tagliando_2.jpg" %}" data-lightbox="tagliando_slide">
 					<img class="img-responsive img_margin_top" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/tagliando_2.jpg" %}">
 				</a>
-				<a href="{% static "website/img/attrezzi_4.jpg" %}" data-lightbox="tagliando_slide">
+				<a title="Autoriparazioni MotorJab Garage" href="{% static "website/img/attrezzi_4.jpg" %}" data-lightbox="tagliando_slide">
 					<img class="img-responsive img_margin_top" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/attrezzi_4.jpg" %}">
 				</a>
 			</div>
@@ -98,7 +101,7 @@
 			</div>
 			<div class="col-md-offset-1 col-md-4 text-xs-center text-md-right">
 				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
-				<a href="{% static "website/img/tagliando-in-garanzia.png" %}" data-lightbox="image-4">
+				<a title="Autoriparazioni MotorJab Garage" href="{% static "website/img/tagliando-in-garanzia.png" %}" data-lightbox="image-4">
 					<img class="img-responsive" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/tagliando-in-garanzia.png" %}">
 				</a>
 			</div>
@@ -110,7 +113,7 @@
 		<div class="col-md-12">
 			<div class="col-md-offset-2 col-md-8 text-center">
 				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
-				<a href="{% static "website/img/checkup.jpg" %}" data-lightbox="image-5">
+				<a title="Autoriparazioni MotorJab Garage" href="{% static "website/img/checkup.jpg" %}" data-lightbox="image-5">
 					<img class="img-responsive" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/checkup.jpg" %}">
 				</a>
 			</div>
@@ -123,7 +126,7 @@
 			<div class="jumbotron text-center">
 				<h2>Vuoi ricevere uno sconto del 30%<br />da utilizzare sui nostri servizi?</h2>
 				<p>Registrati adesso, riceverai subito il tuo sconto!</p>
-				<p><a href="/ricevi-offerte/" class="btn btn-primary btn-lg">Ottieni sconto</a></p>
+				<p><a title="Ottieni sconto" href="/ricevi-offerte/" class="btn btn-primary btn-lg">Ottieni sconto</a></p>
 			</div>
 		</div>
 	</div>

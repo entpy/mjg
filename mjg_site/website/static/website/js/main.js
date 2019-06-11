@@ -10,7 +10,7 @@
 })(jQuery);
 
 $(document).ready(function () {
-	var percent = 0, bar = $('.transition-timer-carousel-progress-bar'), crsl = $('#carouselHome');
+	/*var percent = 0, bar = $('.transition-timer-carousel-progress-bar'), crsl = $('#carouselHome');
 	var timing = 10;
 	crsl.carousel({ interval: false, pause: true }).on('slide.bs.carousel', function () { percent = 0; });
 	function progressBarCarousel() {
@@ -48,7 +48,7 @@ $(document).ready(function () {
 			var anim_ = $this.data('animation');
 			animateElement($this, anim_);
 		});
-	});
+	});*/
 
 	// popup to show cookie policy
 	lawCookieCompliance.createDivOnLoad();

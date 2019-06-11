@@ -6,9 +6,12 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.contrib import messages
 from django.urls import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
+from background_task import background
+from django.core import management
 
 from django.shortcuts import render
 # from django_ajax.decorators import ajax
@@ -16,9 +19,11 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 from mjg_site.exceptions import *
 from mjg_site.common_utils import CommonUtils
-from website.forms import AccountForm, AccountNotifyForm, FeedbackForm, ReferFriendForm, ValidateCouponForm, ContactsForm
+# from website.forms import AccountForm, AccountNotifyForm, FeedbackForm, ReferFriendForm, ValidateCouponForm, ContactsForm, CampaignImageForm
+from website.forms import *
 from account_app.models import Account
 from mkauto_app.models import MaEvent, Feedback, MasterAccountCode, FriendCode, MaEventCode
+from promotion_app.models import *
 from mkauto_app.strings import MkautoStrings
 from mkauto_app.consts import mkauto_consts
 from mjg_site.consts import project_constants
@@ -26,7 +31,6 @@ from email_app.email_core import CustomEmailTemplate
 import datetime, logging, json
 
 from django.contrib.auth.models import User
-
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -79,7 +83,6 @@ def www_get_offers(request, master_code=None, source=None):
     default_prize_code = "welcome_prize"
     if source == project_constants.SOURCE_FLYER_CHECKUP:
         # se sono arrivato dal flyer checkup uilizzo un altro codice premio
-        # TODO: cambiare il premio e fare le stringhe localizzate
         default_prize_code = "welcome_prize2"
 
     if request.method == "POST":
@@ -98,7 +101,6 @@ def www_get_offers(request, master_code=None, source=None):
                 # creo messaggio di errore
                 messages.add_message(request, messages.ERROR, True)
             else:
-                # TODO: debug this
                 # creo e invio la mail di info ad admin
                 cur_date = datetime.datetime.now()
                 formatted_cur_date = cur_date.strftime("%d %B %Y")
@@ -516,6 +518,143 @@ def www_get_review(request, user_id, account_code):
 
     return render(request, 'website/www/www_get_review.html', context)
 
+@ensure_csrf_cookie
+def www_promotion(request, camp_dest_code):
+    """View to show campaign info"""
+
+    campaign_obj = Campaign()
+    campaign_order_obj = CampaignOrder()
+
+    if not camp_dest_code:
+        # se non sono riuscito a trovare una campagna tiro un 404
+        raise Http404()
+
+    # prelevo lo user_id, nel caso di un channel via URL non sarà presente
+    campaign_dest_obj = campaign_obj.get_campaign_dest(campaign_dest_code=camp_dest_code)
+
+    if not campaign_dest_obj:
+        raise Http404()
+
+    campaign_info_dict = campaign_obj.get_campaign_by_campaign_dest(campaign_dest_code=camp_dest_code)
+
+    if not campaign_info_dict:
+        # se non sono riuscito a trovare una campagna tiro un 404
+        raise Http404()
+
+    if request.method == "POST":
+        # controllo se il campaign_order è già esistente oppure no, solo se è stato generato per un utente
+        campaign_order_exists = False
+        if campaign_dest_obj.get("user_id") and campaign_order_obj.get_campaign_order(campaign_id=campaign_dest_obj.get("campaign_id"), user_id=campaign_dest_obj.get("user_id")):
+            campaign_order_exists = True
+
+        # proveniente dalla view 'www_promotion'
+        if request.POST.get("campaign_code_form_sent"):
+            # ...altrimenti creo un codice promozionale per la campagna
+            campaign_order_instance_obj = campaign_order_obj.get_or_create_campaign_order(campaign_id=campaign_dest_obj.get("campaign_id"), user_id=campaign_dest_obj.get("user_id"), dest=campaign_dest_obj.get("dest"))
+
+            # MAIL AL CLIENTE
+            # se il codice non esiste invio una mail ad admin e all'utente (se non è anonimo)
+            if not campaign_order_exists and campaign_dest_obj.get("user_id"):
+                campaign_obj.send_campaign_coupon(campaign_title=campaign_info_dict["camp_title"], campaign_order_code=campaign_order_instance_obj.code, campaign_image=campaign_info_dict["small_image_url"], user_id=campaign_dest_obj.get("user_id"))
+
+            # MAIL AD ADMIN
+            if not campaign_order_exists or campaign_dest_obj.get("dest") == "url":
+                # identificazione dell'utente per la mail di admin
+                user_text = "anonimo - proveniente dal canale " + campaign_dest_obj.get("dest")
+                if campaign_dest_obj.get("user_id"):
+                    user_text = str(campaign_order_instance_obj.user.first_name) + " " + str(campaign_order_instance_obj.user.email)
+
+                # creo e invio la mail di info ad admin
+                cur_date = datetime.datetime.now()
+                formatted_cur_date = cur_date.strftime("%d %B %Y")
+                admin_email_context = {
+                    "subject" : "Prenotazione di un coupon (" + formatted_cur_date + ")",
+                    "title" : "Un cliente ha prenotato un coupon",
+                    "content" : "Complimenti, un cliente (" + str(user_text) + ") ha appena prenotato un coupon per la campagna: " + str(campaign_info_dict["camp_title"])
+                }
+
+                CustomEmailTemplate(email_name="system_manage_email", email_context=admin_email_context, recipient_list=[settings.INFO_EMAIL_ADDRESS,], email_from=False, template_type="admin")
+
+            # redirect nella pagina per visualizzare il codice dell'ordine
+            return HttpResponseRedirect("/p/" + str(camp_dest_code) + "/" + str(campaign_order_instance_obj.code) + "/")
+
+    # se la campagna è scaduta mostro messaggio di errore
+    if not campaign_obj.check_campaign_expiring(expiring_date=str(campaign_info_dict["expiring_date"])):
+        return HttpResponseRedirect("/promozione-scaduta/")
+
+    context = {
+        "camp_dest_code" : camp_dest_code,
+        "campaign_info_dict" : campaign_info_dict,
+    }
+
+    return render(request, 'website/www/www_promotion.html', context)
+
+@ensure_csrf_cookie
+def www_show_promo_code(request, camp_dest_code, camp_order_code):
+    """View to retrieve campaign code"""
+
+    campaign_obj = Campaign()
+    campaign_order_obj = CampaignOrder()
+    campaign_order_instance_obj = {}
+    show_success_msg = False
+
+    if not camp_dest_code or not camp_order_code:
+        # se non sono riuscito a trovare una campagna tiro un 404
+        raise Http404()
+
+    # check campaign_dest
+    campaign_dest_obj = campaign_obj.get_campaign_dest(campaign_dest_code=camp_dest_code)
+
+    if not campaign_dest_obj:
+        raise Http404()
+
+    # check campaign_order
+    campaign_order_instance_obj = campaign_order_obj.get_campaign_order_by_code(code=camp_order_code)
+
+    if not campaign_order_instance_obj:
+        raise Http404()
+
+    # prelevo i dettagli della campagna
+    campaign_info_dict = campaign_obj.get_campaign_by_campaign_dest(campaign_dest_code=camp_dest_code)
+
+    # MAIL AL CLIENTE ANONIMO
+    if request.method == "POST":
+        if request.POST.get("send_coupon_form_sent") and request.POST.get("email"):
+            # l'utente anonimo ha scelto di inviarsi il coupon via email
+            campaign_obj.send_campaign_coupon(campaign_title=campaign_info_dict["camp_title"], campaign_order_code=campaign_order_instance_obj.code, campaign_image=campaign_info_dict["small_image_url"], user_id=False, user_email=request.POST.get("email"))
+
+            # creo messaggio di successo
+            messages.add_message(request, messages.SUCCESS, True)
+
+            # redirect a questa pagina con messaggio di successo
+            return HttpResponseRedirect("/p/" + str(camp_dest_code) + "/" + str(camp_order_code) + "/")
+
+    # se è un cliente non anonimo mostro il messaggio di successo
+    if campaign_order_instance_obj.user_id:
+        show_success_msg = True
+
+    # se è il channel URL mostro il form per inviare la mail con il coupon
+    show_email_form = False
+    if campaign_dest_obj.get("dest") == "url":
+        show_email_form = True
+
+    context = {
+        "camp_dest_code" : camp_dest_code,
+        "camp_order_code" : camp_order_code,
+        "campaign_info_dict" : campaign_info_dict,
+        "business_address" : settings.BUSINESS_ADDRESS,
+        "show_success_msg" : show_success_msg,
+        "show_email_form" : show_email_form,
+    }
+
+    return render(request, 'website/www/www_show_promo_code.html', context)
+
+@ensure_csrf_cookie
+def www_expired_promotion(request):
+    """View to show expired promotion page"""
+
+    return render(request, 'website/www/www_expired_promotion.html', {})
+
 @login_required
 @ensure_csrf_cookie
 def dashboard_index(request):
@@ -723,7 +862,293 @@ def dashboard_set_customer(request, user_id):
         "birthday_month" : birthday_month,
         "birthday_year" : birthday_year,
     }
+
     return render(request, 'website/dashboard/dashboard_set_customer.html', context)
+
+@login_required
+@ensure_csrf_cookie
+def dashboard_campaigns_index(request):
+    """View to show campaign index view"""
+
+    context = {
+    }
+
+    return render(request, 'website/dashboard/campaigns/index.html', context)
+
+@login_required
+@ensure_csrf_cookie
+def dashboard_campaigns_step1(request, campaign_id):
+    """View to show create campaign flow"""
+
+    # se presente un id carico i dati della campagna (azione comune in tutto il flow della campagna) {{{
+    campaign_obj = Campaign()
+    campaign_info_dict = {}
+    if campaign_id:
+        campaign_info_dict = campaign_obj.get_campaign_info_dict(campaign_id=campaign_id)
+    # }}}
+
+    if request.method == "POST":
+        # create a form instance and populate it with data from the request:
+        form = CreateCampaignForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # creo/aggiorno la campagna
+            save_data = { }
+            save_data["camp_title"] = form.cleaned_data["camp_title"]
+            save_data["was_price"] = form.cleaned_data["was_price"]
+            save_data["final_price"] = form.cleaned_data["final_price"]
+            save_data["camp_description"] = form.cleaned_data["camp_description"]
+            save_data["small_image_id"] = form.cleaned_data["small_image_id"]
+            save_data["large_image_id"] = form.cleaned_data["large_image_id"]
+            save_data["campaign_type"] = project_constants.CAMPAIGN_TYPE_PROMOTION
+
+            saved_campaign_obj = campaign_obj.create_update_campaign(data_dict=save_data, campaign_id=campaign_id)
+            # redirect nello step2 con campaign_id
+            return HttpResponseRedirect("/dashboard/campaigns/step2/" + str(saved_campaign_obj.campaign_id) + "/")
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = CreateCampaignForm()
+
+    context = {
+        "post" : request.POST,
+        "form" : form,
+        "campaign_info_dict" : campaign_info_dict,
+    }
+
+    return render(request, 'website/dashboard/campaigns/step1.html', context)
+
+@login_required
+@ensure_csrf_cookie
+def dashboard_campaigns_step2(request, campaign_id):
+    """View to show create campaign flow"""
+
+    # se presente un id carico i dati della campagna (azione comune in tutto il flow della campagna) {{{
+    campaign_obj = Campaign()
+    campaign_info_dict = {}
+    if campaign_id:
+        campaign_info_dict = campaign_obj.get_campaign_info_dict(campaign_id=campaign_id)
+    # }}}
+
+    if request.method == "POST":
+        # create a form instance and populate it with data from the request:
+        form = SetCampaignExpiringForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # creo/aggiorno la campagna
+            save_data = {}
+            #camp_expiring_date = datetime.datetime.date(form.cleaned_data["expiring_date"])
+            save_data["expiring_date"] = form.cleaned_data["expiring_date"]
+
+            # test_date = timezone.localtime(form.cleaned_data["expiring_date"])
+            # logger.info("tz data: " + str(test_date))
+            # logger.info("data: " + str(form.cleaned_data["expiring_date"]))
+            #camp_expiring_date = datetime.datetime.strptime(form.cleaned_data["expiring_date"], "%Y-%m-%d").date()
+
+            saved_campaign_obj = campaign_obj.create_update_campaign(data_dict=save_data, campaign_id=campaign_id)
+            # redirect nello step2 con campaign_id
+            return HttpResponseRedirect("/dashboard/campaigns/step3/" + str(saved_campaign_obj.campaign_id) + "/")
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = SetCampaignExpiringForm()
+
+    context = {
+        "post" : request.POST,
+        "form" : form,
+        "campaign_info_dict" : campaign_info_dict,
+    }
+
+    return render(request, 'website/dashboard/campaigns/step2.html', context)
+
+@login_required
+@ensure_csrf_cookie
+def dashboard_campaigns_step3(request, campaign_id):
+    """View to show create campaign flow"""
+
+    # se presente un id carico i dati della campagna (azione comune in tutto il flow della campagna) {{{
+    campaign_obj = Campaign()
+    campaign_info_dict = {}
+    if campaign_id:
+        campaign_info_dict = campaign_obj.get_campaign_info_dict(campaign_id=campaign_id)
+    # }}}
+
+    campaign_dest_obj = CampaignDest()
+
+    # prelevo l'url della campagna
+    campaign_url = campaign_dest_obj.get_campaign_url(campaign_id=campaign_id)
+
+    if request.method == "POST":
+        # create a form instance and populate it with data from the request:
+        form = SetCampaignMessageTextForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # creo/aggiorno la campagna
+            save_data = { }
+            save_data["msg_subject"] = form.cleaned_data["msg_subject"]
+            save_data["msg_text"] = form.cleaned_data["msg_text"]
+
+            saved_campaign_obj = campaign_obj.create_update_campaign(data_dict=save_data, campaign_id=campaign_id)
+            # redirect nello step2 con campaign_id
+            return HttpResponseRedirect("/dashboard/campaigns/step4/" + str(saved_campaign_obj.campaign_id) + "/")
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = SetCampaignMessageTextForm()
+
+    context = {
+        "post" : request.POST,
+        "form" : form,
+        "campaign_url" : campaign_url,
+        "campaign_info_dict" : campaign_info_dict,
+    }
+
+    return render(request, 'website/dashboard/campaigns/step3.html', context)
+
+@login_required
+@ensure_csrf_cookie
+def dashboard_campaigns_step4(request, campaign_id):
+    """View to show create campaign flow"""
+
+    # se presente un id carico i dati della campagna (azione comune in tutto il flow della campagna) {{{
+    campaign_obj = Campaign()
+    campaign_info_dict = {}
+    if campaign_id:
+        campaign_info_dict = campaign_obj.get_campaign_info_dict(campaign_id=campaign_id)
+    # }}}
+
+    # prelevo la lista di destinatari validi per la campagna
+    account_obj = Account()
+    campaign_user_temp_obj = CampaignUserTemp()
+    # promotion|newsletter
+    account_list = account_obj.get_campaign_accounts(campaign_type=project_constants.CAMPAIGN_TYPE_PROMOTION)
+
+    # provo a precompilare la lista di destinatari temporanei
+    valid_dest_list = campaign_user_temp_obj.get_sender_list_dict(campaign_id=campaign_id)
+
+    if request.method == "POST":
+        if request.POST.get("step4_form_sent") == "1":
+            valid_dest_list = {}
+            for single_dest in request.POST.getlist("selected_dest_account[]"):
+                # inserisco l'utente nell'elenco dei destinatari
+                valid_dest_list[int(single_dest)] = True
+            # salvo l'elenco dei destinatari in campaign_user_temp
+            campaign_user_temp_obj.create_sender_list(campaign_id=campaign_id, campaign_accounts=account_list, valid_dest_id_list=valid_dest_list)
+
+            # redirect nello step5
+            return HttpResponseRedirect("/dashboard/campaigns/step5/" + str(campaign_id) + "/")
+
+    context = {
+        "campaign_info_dict" : campaign_info_dict,
+        "dest_account_list" : account_list,
+        "valid_dest_list" : valid_dest_list,
+    }
+
+    return render(request, 'website/dashboard/campaigns/step4.html', context)
+
+@login_required
+@ensure_csrf_cookie
+def dashboard_campaigns_step5(request, campaign_id):
+    """View to show create campaign flow"""
+
+    # se presente un id carico i dati della campagna (azione comune in tutto il flow della campagna) {{{
+    campaign_obj = Campaign()
+    campaign_info_dict = {}
+    if campaign_id:
+        campaign_info_dict = campaign_obj.get_campaign_info_dict(campaign_id=campaign_id)
+    # }}}
+
+    campaign_user_temp_obj = CampaignUserTemp()
+    campaign_dest_obj = CampaignDest()
+
+    # conteggio l'elenco dei destinatari
+    count_campaign_sender = campaign_user_temp_obj.count_campaign_sender(campaign_id=campaign_id)
+
+    # prelevo l'url della campagna
+    campaign_url = campaign_dest_obj.get_campaign_url(campaign_id=campaign_id)
+
+    if request.method == "POST":
+        if request.POST.get("send_campaign") == "1":
+            logger.info("chiamo lo script 'send_campaign'")
+            # add new task in order to send a campaign
+            send_campaign(campaign_id=campaign_id)
+            # lancio il comando per eseguire i task schedulati
+            # https://docs.djangoproject.com/en/1.11/ref/django-admin/#running-management-commands-from-your-code
+            management.call_command('process_tasks', duration=1, interactive=False)
+
+            # creo messaggio di successo
+            messages.add_message(request, messages.SUCCESS, "<h4>Campagna inviata</h4>La campagna è stata inviata con successo, controlla le statistiche per vedere come funziona.")
+            # redirect nella pagina delle promozioni
+            return HttpResponseRedirect("/dashboard/campaigns/")
+
+    context = {
+        "campaign_info_dict" : campaign_info_dict,
+        "count_campaign_sender" : count_campaign_sender,
+        "campaign_url" : campaign_url,
+    }
+
+    return render(request, 'website/dashboard/campaigns/step5.html', context)
+
+# TODO
+@login_required
+@ensure_csrf_cookie
+def dashboard_campaigns_stats(request):
+    """View to show stats page view"""
+
+    campaign_obj = Campaign()
+    campaign_list_working = []
+    campaign_list_closed = []
+
+    # TODO
+    # eliminazione campagna
+    if request.method == "POST":
+        if int(request.POST.get("delete_campaign_form_sent")) == 1 and request.POST.get("campaign_id"):
+            logger.info("elimino la campagna '" + str(request.POST.get("campaign_id")) + "'")
+            campaign_obj.delete_campaign(campaign_id=request.POST.get("campaign_id"))
+
+            messages.add_message(request, messages.SUCCESS, "<h4>Campagna eliminata</h4>La campagna è stata eliminata con successo.")
+
+            # redirect nella pagina delle promozioni
+            return HttpResponseRedirect("/dashboard/campaigns/stats/")
+
+    # elenco delle campagne da completare
+    campaign_list_working = campaign_obj.get_campaign_list(campaign_status=project_constants.CAMPAIGN_STATUS_IN_WORKING)
+
+    # elenco delle campagne inviate
+    campaign_list_closed = campaign_obj.get_campaign_list(campaign_status=project_constants.CAMPAIGN_STATUS_SENT)
+
+    context = {
+        "campaign_list_working" : campaign_list_working,
+        "campaign_list_closed" : campaign_list_closed,
+    }
+
+    return render(request, 'website/dashboard/campaigns/stats.html', context)
+
+@login_required
+@ensure_csrf_cookie
+def dashboard_single_campaign_stats(request, campaign_id):
+    """View to show single campaign stats"""
+
+    campaign_obj = Campaign()
+
+    # se presente un id carico i dati della campagna (azione comune in tutto il flow della campagna) {{{
+    campaign_obj = Campaign()
+    campaign_info_dict = {}
+    if campaign_id:
+        campaign_info_dict = campaign_obj.get_campaign_info_dict(campaign_id=campaign_id)
+    # }}}
+
+    # prelevo le statistiche per la campagna 'campaign_id':
+    # (email inviate - email aperte - email cliccate - coupon generati - coupon utilizzati)
+    # (coupon generati channel url - coupon utilizzati channel url)
+    campaign_stats_dict = campaign_obj.get_campaign_stats(campaign_id=campaign_id)
+
+    context = {
+        "campaign_stats_dict" : campaign_stats_dict,
+        "campaign_info_dict" : campaign_info_dict,
+    }
+
+    return render(request, 'website/dashboard/campaigns/single_stats.html', context)
 
 # ajax view {{{
 # https://github.com/yceruto/django-ajax
@@ -784,6 +1209,49 @@ def ajax_customers_list(request):
 
     # return a JSON response
     return return_var
+
+@login_required
+@require_POST
+def ajax_upload_campaign_image(request):
+    return_var = None
+
+    return_var = {
+        "chiamata": "ajax_upload_campaign_image"
+    }
+
+    if request.method == 'POST':
+        # form = CampaignImageForm(request.POST, request.FILES["camp_image"])
+        #if form.is_valid():
+        logger.info("image obj: " + str(request.FILES["camp_image"]))
+
+        # saving small image
+        CampaignImageSmall_obj = CampaignImage()
+        CampaignImageSmall_obj.image = request.FILES["camp_image"]
+        CampaignImageSmall_obj.size = "s"
+        CampaignImageSmall_obj.save()
+
+        # saving large image
+        CampaignImageLarge_obj = CampaignImage()
+        CampaignImageLarge_obj.image = request.FILES["camp_image"]
+        CampaignImageLarge_obj.size = "l"
+        CampaignImageLarge_obj.save()
+
+        return_var = {
+            "small_campaign_image_id": CampaignImageSmall_obj.campaign_image_id,
+            "small_image_url": str(CampaignImageSmall_obj.image.url),
+            "large_campaign_image_id": CampaignImageLarge_obj.campaign_image_id,
+            "large_image_url": str(CampaignImageLarge_obj.image.url)
+        }
+
+    return_var = json.dumps(return_var, cls=DjangoJSONEncoder)
+
+    logger.info("### ajax_upload_campaign_image JSON " + str(return_var))
+
+    # create http response (also attach a cookie if exists)
+    return_var = HttpResponse(return_var, content_type="application/json")
+
+    # return a JSON response
+    return return_var
 # ajax view }}}
 
 @login_required
@@ -801,3 +1269,12 @@ def dashboard_create_mkauto_default(request):
         return HttpResponse("Mkauto inizializzata con successo")
     else:
         return HttpResponse("Esistono già degli eventi, non faccio nulla")
+
+# background actions {{{
+@background(schedule=timezone.now())
+def send_campaign(campaign_id):
+    campaign_obj = Campaign()
+    campaign_obj.send_campaign(campaign_id=campaign_id)
+
+    return True
+# background actions }}}

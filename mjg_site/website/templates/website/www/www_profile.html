@@ -33,13 +33,13 @@
 	{% if show_only_section and show_only_section == "bd" %}
 		{% if not user_info_dict.account.get_birthday_date_event_done %}
 			<div><h1>{{ title_mkauto_prize }}</h1></div>
-			<div><h4>Lasciaci la tua data di nascita</h4></div>
+			<div><h2>Lasciaci la tua data di nascita</h2></div>
 		{% else %}
 			<div><h1>Lasciaci la tua data di nascita</h1></div>
 		{% endif %}
 	{% else %}
 		<div><h1>Il mio profilo</h1></div>
-		<div><h4>Visualizza o modifica le tue informazioni</h4></div>
+		<div><h2>Visualizza o modifica le tue informazioni</h2></div>
 	{% endif %}
 </div>
 <div class="container-fluid info_block info_block_color1">

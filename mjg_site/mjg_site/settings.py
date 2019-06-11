@@ -39,11 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'anymail',
+    'background_task',
     'website',
     'account_app',
     'mkauto_app',
     'email_app',
-    'anymail',
+    'promotion_app',
 ]
 
 MIDDLEWARE = [
@@ -147,7 +149,13 @@ LOGIN_URL = "/admin/login/"
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media') 
+MEDIA_URL = '/media/'
 GIT_PROJECT_NAME = "mjg"
+
+# per eseguire i task in maniera asincrona
+BACKGROUND_TASK_RUN_ASYNC=True
+PROMO_URL_PATH = "p"
 
 # loading local settings
 try:

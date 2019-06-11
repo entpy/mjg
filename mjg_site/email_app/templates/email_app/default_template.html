@@ -15,6 +15,7 @@
 			html,body,div,span,aOpen Sanspplet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{
 				border:0;
 				vertical-align:baseline;
+				-webkit-text-size-adjust: none;
 			}
 			article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{
 				display:block;
@@ -35,6 +36,14 @@
 				border-collapse:collapse;
 				border-spacing:0;
 			}
+			.ExternalClass * {
+				line-height: 100%;
+			}
+			.Ni {
+				font-size: 14px;
+				line-height: normal!important;
+			}
+
 			@media all and (max-width: 600px){
 				.emailMainTitle{
 					font-size:22px !important;
@@ -54,6 +63,34 @@
 				}
 				.emailMainImage{
 					width:75% !important;
+				}
+				/*
+				Only form campaign email
+				...
+				emailCampaignPriceTitle
+				emailCampaignPriceCurrency
+				emailCampaignPriceValue
+				emailCampaignDiscountTitle
+				emailCampaignDiscounturrency
+				emailCampaignDiscountValue
+				*/
+				.emailCampaignPriceTitle{
+					font-size:12px !important;
+				}
+				.emailCampaignPriceCurrency{
+					font-size:25px !important;
+				}
+				.emailCampaignPriceValue{
+					font-size:35px !important;
+				}
+				.emailCampaignDiscountTitle{
+					font-size:12px !important;
+				}
+				.emailCampaignDiscountValue{
+					font-size:21px !important;
+				}
+				.expiring_label {
+					font-size:15px !important;
 				}
 			}
 		</style>
@@ -84,28 +121,7 @@
 												</table>
 												<!-- Email Wrapper Webview Close //-->
 												<!-- Email Wrapper Header Open //-->
-												<table style="max-width:600px;" class="wrapperWebview" cellspacing="0" cellpadding="0" border="0" width="100%">
-													<tbody>
-														<tr>
-															<td valign="top" align="center">
-																<!-- Content Table Open // -->
-																<table cellspacing="0" cellpadding="0" border="0" width="100%">
-																	<tbody>
-																		<tr>
-																			<td style="padding-top:25px;padding-bottom:25px;" class="emailLogo" valign="middle" align="center">
-																				<!-- Logo and Link // -->
-																				<a href="{{base_url}}">
-																					<img class="emailMainLogo" src="{{base_url}}/static/website/img/email_logo.png" alt="MotorJab Garage" style="width:100%; max-width:180px;height:auto; display:block;" border="0" width="180">
-																				</a>
-																			</td>
-																		</tr>
-																	</tbody>
-																</table>
-																<!-- Content Table Close // -->
-															</td>
-														</tr>
-													</tbody>
-												</table>
+												{{ email_header_image_block }}
 												<!-- Email Wrapper Header Close //-->
 												<!-- Email Wrapper Body Open // -->
 												<table style="max-width:600px;" class="wrapperBody" cellspacing="0" cellpadding="0" border="0" width="100%">
@@ -126,6 +142,8 @@
 																			<td style="padding-left:20px;padding-right:20px;" class="containtTable ui-sortable" valign="top" align="center">
 																				<table class="tableDescription" cellspacing="0" cellpadding="0" border="0" width="100%">
 																					<tbody>
+																						{{campaign_price_block}}
+																						{{campaign_expiring_block}}
 																						<tr>
 																							<td style="padding-bottom:50px;" class="description" valign="top" align="center">
 																								<!-- Description Text// -->
@@ -157,6 +175,9 @@
 													</tbody>
 												</table>
 												<!-- Email Wrapper Body Close // -->
+												<!-- Email Wrapper Header Open //-->
+												{{ email_footer_image_block }}
+												<!-- Email Wrapper Header Close //-->
 												<!-- Email Wrapper Footer Open // -->
 												<table style="max-width:600px;" class="wrapperFooter" cellspacing="0" cellpadding="0" border="0" width="100%">
 													<tbody>

@@ -14,7 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
+from django.conf.urls.static import static
 from django.contrib import admin
+from django.conf import settings
 from mjg_site.consts import project_constants
 import website.views
 
@@ -54,10 +56,30 @@ urlpatterns = [
     url(r'^dashboard/review-prize/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/?$', website.views.dashboard_review_prize, name='dashboard_review_prize'),
     # pagina raggiungibile solo da URL per inizializzare la mkauto
     url(r'^dashboard/create-mkauto-default/?$', website.views.dashboard_create_mkauto_default, name='dashboard_create_mkauto_default'),
+    # campagne
+    url(r'^dashboard/campaigns/?$', website.views.dashboard_campaigns_index, name='dashboard_campaigns_index'),
+    url(r'^dashboard/campaigns/step1/(?:(?P<campaign_id>\d+)/)?$', website.views.dashboard_campaigns_step1, name='dashboard_campaigns_step1'),
+    url(r'^dashboard/campaigns/step2/(?:(?P<campaign_id>\d+)/)?$', website.views.dashboard_campaigns_step2, name='dashboard_campaigns_step2'),
+    url(r'^dashboard/campaigns/step3/(?:(?P<campaign_id>\d+)/)?$', website.views.dashboard_campaigns_step3, name='dashboard_campaigns_step3'),
+    url(r'^dashboard/campaigns/step4/(?:(?P<campaign_id>\d+)/)?$', website.views.dashboard_campaigns_step4, name='dashboard_campaigns_step4'),
+    url(r'^dashboard/campaigns/step5/(?:(?P<campaign_id>\d+)/)?$', website.views.dashboard_campaigns_step5, name='dashboard_campaigns_step5'),
+    url(r'^dashboard/campaigns/stats/?$', website.views.dashboard_campaigns_stats, name='dashboard_campaigns_stats'),
+    url(r'^dashboard/campaigns/stats/(?:(?P<campaign_id>\d+)/)?$', website.views.dashboard_single_campaign_stats, name='dashboard_single_campaign_stats'),
     # dashboard }}}
 
     # ajax {{{
     url(r'^ajax/customers-list/?$', website.views.ajax_customers_list, name='ajax_customers_list'),
+    url(r'^ajax/ajax-upload-campaign-image/?$', website.views.ajax_upload_campaign_image, name='ajax_upload_campaign_image'),
     # ajax }}}
 
+    # email tracking
+    url(r'^anymail/', include('anymail.urls')),
+
+    # promozioni
+    url(r'^p/(?P<camp_dest_code>[^\/]+)/?$', website.views.www_promotion, name='www_promotion'),
+    url(r'^p/(?P<camp_dest_code>[^\/]+)/(?P<camp_order_code>[^\/]+)/?$', website.views.www_show_promo_code, name='www_show_promo_code'),
+    url(r'^promozione-scaduta/?$', website.views.www_expired_promotion, name='www_expired_promotion'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

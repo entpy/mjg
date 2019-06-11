@@ -1,0 +1,273 @@
+{% extends "website/inc/www_base.html" %}
+{% load staticfiles website_extras %}
+
+{% block header_block %}{% endblock %}
+{# page title #}
+{% block title %}MotorJab Garage | {{ campaign_info_dict|get_item:"camp_title" }}{% endblock %}
+
+{# page description #}
+{% block description %}{% endblock %}
+
+{# custom page css block #}
+{% block custom_css %}
+<style>
+	.page_header_block { padding: 30px 0; background-color: #0a102c; }
+	.page_header_block h2 { padding: 0px 25px; margin: 0px; font-weight: bold; color: #fff; background-color: transparent; }
+	.btn-primary, .btn-primary:hover, .btn-primary:active { background-color: #ff0505!important; }
+	.info_block img, .info_block img.emailMainImage { display: inline-block; height: auto; max-width: 450px; width: 100%; }
+	.countdownContainer { color:#ff0505;font-size:25px;font-weight:100;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0; }
+	.countdownContainer .timeLabel { font-size:20px; }
+	.display_none { display: none; }
+	.emailMainDescription > p { color:#333;font-size:18px;font-weight:300;font-style:normal;letter-spacing:normal;line-height:35px;text-transform:none;text-align:left;padding:0;margin:0; }
+	@media all and (max-width: 600px){
+		.emailMainTitle{
+			font-size:22px !important;
+		}
+		.emailMainDescription{
+			font-size:16px !important;
+		}
+		.emailCouponInfo{
+			font-size:14px !important;
+		}
+		.emailCouponCode{
+			font-size:32px !important;
+		}
+		.emailMainLogo{
+			min-width:140px !important;
+			width:40% !important;
+		}
+		.emailMainImage{
+			width:75% !important;
+		}
+		/*
+		Only form campaign email
+		...
+		emailCampaignPriceTitle
+		emailCampaignPriceCurrency
+		emailCampaignPriceValue
+		emailCampaignDiscountTitle
+		emailCampaignDiscounturrency
+		emailCampaignDiscountValue
+		*/
+		.emailCampaignPriceTitle{
+			font-size:12px !important;
+		}
+		.emailCampaignPriceCurrency{
+			font-size:25px !important;
+		}
+		.emailCampaignPriceValue{
+			font-size:35px !important;
+		}
+		.emailCampaignDiscountTitle{
+			font-size:12px !important;
+		}
+		.emailCampaignDiscountValue{
+			font-size:21px !important;
+		}
+		.expiring_label {
+			font-size:15px !important;
+		}
+	}
+</style>
+{% endblock %}
+{# Custom page script block #}
+{% block custom_js %}
+{# howto: https://validatejs.org #}
+<script src="{% static "website/js/vendor/validate.min.js" %}"></script>
+<script src="{% static "website/js/vendor/countdown.min.js" %}"></script>
+{% endblock %}
+
+{# container content #}
+{% block www_main_content %}
+<div class="page_header_block">
+	<div><h2>{{ campaign_info_dict|get_item:"camp_title" }}</h2></div>
+</div>
+<div class="container-fluid info_block info_block_color1">
+	{% if form.errors or messages %}
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="col-xs-12 padding-xs-only padding-sm-only">
+				{# messages block #}
+				<div class="error_container"></div>
+				{% if form.errors %}
+					<div class="alert alert-danger">
+						<h4>Controlla questi errori</h4>
+						<ul>
+							{% for field in form %}
+								{% for error in field.errors %}
+									<li>{{ field.label|escape }}: {{ error|escape }}</li>
+								{% endfor %}
+							{% endfor %}
+							{% for form_error in form.non_field_errors %}
+								<li>{{ form_error }}</li>
+							{% endfor %}
+						</ul>
+					</div>
+				{% elif messages %}
+					{% for message in messages %}
+						{% if message.tags == "success" %}
+							<style>
+								.pageContainerAction { display: none; }
+							</style>
+							<div class="alert alert-success">
+								{{ message|safe }}
+							</div>
+						{% elif message.tags == "error" %}
+							<div class="alert alert-danger">
+								<h4>Controlla questi errori</h4>
+								<strong>I dati inseriti (email e/o telefono) sono già presenti</strong>.
+							</div>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	{% endif %}
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1 pageContainerAction">
+			<form name="campaign_code_form" method="POST" action="">
+				{% csrf_token %}
+				<input type="hidden" name="campaign_code_form_sent" value="1" />
+				<div class="col-sm-4 promotionPageImage">
+					<div class="text-center">
+						<a href="{{ campaign_info_dict.large_image_url }}" data-lightbox="offerte">
+							<img class="emailMainImage" alt="Autoriparazioni MotorJab Garage" src="{{ campaign_info_dict.large_image_url }}">
+						</a>
+					</div>
+					<table class="getCouponContainerAction couponContainerTop" width="100%" style="width: 100%; margin-top: 20px;">
+						<tr>
+							<td style="text-align: center; padding-top: 10px; line-height: 1; padding-bottom: 10px;"><p class="text emailCampaignDiscountTitle fallback-text" style="color:#333;font-size:13px;font-weight:300;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0;">Ottieni il coupon dell'offerta</p></td>
+						</tr>
+						<tr>
+							<td>
+								<div class="form-group text-center">
+									<button type="submit" class="btn btn-primary btn-lg formSendButtonClickAction">Ottieni coupon</button>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="col-sm-offset-1 col-sm-7">
+					<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
+						<div class="well bs-component">
+							<table class="tableDescription" width="100%" cellspacing="0" cellpadding="0" border="0">
+								{# price block #}
+								<tr>
+									<td style="padding-bottom:50px;" class="description" valign="top" align="center">
+										<table style="width: 100%;">
+											<tr>
+												<td style="text-align: center; line-height: 1; padding-bottom: 5px;"><p class="text emailCampaignPriceTitle fallback-text" style="color:#008b99;font-size:16px;font-weight:bold;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0;">Prezzo</p></td>
+											</tr>
+											<tr>
+												<td style="text-align: center; line-height: 1;"><span class="text emailCampaignPriceCurrency fallback-text" style="color:#008b99;font-size:35px;font-weight:100;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0;margin-right: 5px;">€</span><span class="text emailCampaignPriceValue fallback-text" style="color:#008b99;font-size:47px;font-weight:bold;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0;">{{ campaign_info_dict|get_item:"final_price_display" }}</span></td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								{# discount block #}
+								<tr>
+									<td style="padding-bottom:20px;" class="description" valign="top" align="center">
+										<table style="width: 100%; border-top: 1px solid #cccaca; border-bottom: 1px solid #cccaca;">
+											<tr>
+												<td style="text-align: center; padding-top: 10px; line-height: 1; padding-bottom: 5px;"><p class="text emailCampaignDiscountTitle fallback-text" style="color:#333;font-size:13px;font-weight:300;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0;">Costava</p></td>
+												<td style="text-align: center; padding-top: 10px; line-height: 1; padding-bottom: 5px;"><p class="text emailCampaignDiscountTitle fallback-text" style="color:#333;font-size:13px;font-weight:300;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0;">Sconto</p></td>
+												<td style="text-align: center; padding-top: 10px; line-height: 1; padding-bottom: 5px;"><p class="text emailCampaignDiscountTitle fallback-text" style="color:#333;font-size:13px;font-weight:300;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0;">Risparmi</p></td>
+											</tr>
+											<tr>
+												<td style="text-align: center; padding-bottom: 10px; line-height: 1;"><span class="text emailCampaignDiscounturrency fallback-text" style="color:#333;font-size:18px;font-weight:100;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0;margin-right: 5px;">€</span><span class="text emailCampaignDiscountValue fallback-text" style="color:#333;font-size:25px;font-weight:100;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0;">{{ campaign_info_dict|get_item:"was_price_display" }}</span></td>
+												<td style="text-align: center; padding-bottom: 10px; line-height: 1;"><span class="text emailCampaignDiscountValue fallback-text" style="color:#333;font-size:25px;font-weight:400;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0;">{{ campaign_info_dict|get_item:"discount_display" }}%</span></td>
+												<td style="text-align: center; padding-bottom: 10px; line-height: 1;"><span class="text emailCampaignDiscounturrency fallback-text" style="color:#333;font-size:18px;font-weight:100;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0;margin-right: 5px;">€</span><span class="text emailCampaignDiscountValue fallback-text" style="color:#333;font-size:25px;font-weight:400;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0;">{{ campaign_info_dict|get_item:"saving_display" }}</span></td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								{# expiring block #}
+								<tr>
+									<td style="padding-bottom:50px;" class="description" valign="top" align="center">
+										<table style="width: 100%;">
+											<tr>
+												<td style="text-align: center; padding-top: 10px; line-height: 1; padding-bottom: 5px;"><p class="text emailCampaignDiscountTitle fallback-text" style="color:#ff0505;font-size:13px;font-weight:300;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0;">Affrettati, scade tra</p></td>
+											</tr>
+											<tr>
+												<td style="text-align: center; padding-bottom: 10px; line-height: 1;" class="countdownEndAction"><span class="countdownContainerAction countdownContainer"></span></td>
+											</tr>
+											<tr>
+												<td style="text-align: center; padding-bottom: 10px; line-height: 1;" class="countdownEndText display_none"></td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								{# description block #}
+								<tr>
+									<td style="text-align: center; padding-top: 10px; line-height: 1; padding-bottom: 5px;"><p class="text emailCampaignDiscountTitle fallback-text" style="color:#333;font-size:13px;font-weight:300;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0;">Dettagli offerta</p></td>
+								</tr>
+								<tr>
+									<td style="padding-bottom:50px;" class="description" valign="top" align="center">
+										<!-- Description Text// -->
+										<span class="text emailMainDescription fallback-text" style="color:#333;font-size:18px;font-weight:300;font-style:normal;letter-spacing:normal;line-height:35px;text-transform:none;text-align:left;padding:0;margin:0;">{{ campaign_info_dict|get_item:"camp_description"|safe }}</span>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<table class="getCouponContainerAction" width="100%" style="width: 100%;">
+											<tr>
+												<td style="text-align: center; padding-top: 10px; line-height: 1; padding-bottom: 10px;"><p class="text emailCampaignDiscountTitle fallback-text" style="color:#333;font-size:13px;font-weight:300;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0;">Ottieni il coupon dell'offerta</p></td>
+											</tr>
+											<tr>
+												<td>
+													<div class="form-group text-center">
+														<button type="submit" class="btn btn-primary btn-lg formSendButtonClickAction">Ottieni coupon</button>
+													</div>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+	$(document).ready(function(){
+		startCountdown();
+	});
+
+	function startCountdown() {
+
+		// time.mktime(datetime.datetime.now().timetuple() -> è un timestamp
+		var timedelta = "{{ campaign_info_dict|get_item:"expiring_date_timestamp" }}" * 1000; // moltiplico * 1000 il timestamp di mktime
+
+		countdown.setLabels(
+			' <span class="timeLabel">millisecondo</span>| <span class="timeLabel">secondo</span>| <span class="timeLabel">minuto</span>| <span class="timeLabel">ora</span>| <span class="timeLabel">giorno</span>| <span class="timeLabel">settimana</span>| <span class="timeLabel">mese</span>| <span class="timeLabel">anno</span>| <span class="timeLabel">decennio</span>| <span class="timeLabel">secolo</span>| <span class="timeLabel">millennio</span>',
+			' <span class="timeLabel">millisecondi</span>| <span class="timeLabel">secondi</span>| <span class="timeLabel">minuti</span>| <span class="timeLabel">ore</span>| <span class="timeLabel">giorni</span>| <span class="timeLabel">settimane</span>| <span class="timeLabel">mesi</span>| <span class="timeLabel">anni</span>| <span class="timeLabel">decenni</span>| <span class="timeLabel">secoli</span>| <span class="timeLabel">millenni</span>',
+			' <span class="timeLabel">e</span> ',
+			'  '
+		);
+
+		var timerId = countdown(
+			timedelta * 1,
+			function(ts) {
+				if (!ts.days && !ts.hours && !ts.minutes && !ts.seconds) {
+					// countdown finish
+					window.clearInterval(timerId);
+					$(".getCouponContainerAction").hide();
+					$('.countdownEndAction').remove();
+					$('.countdownEndText').html('<span class="countdownContainer">Offerta scaduta</span>');
+					$('.countdownEndText').removeClass("display_none");
+				}
+				// il contenitore con il countdown
+				$('.countdownContainerAction').html(ts.toHTML());
+			},
+			countdown.DAYS|countdown.HOURS|countdown.MINUTES|countdown.SECONDS
+		      ).toString();
+	}
+</script>
+{% endblock %}

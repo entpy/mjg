@@ -1,0 +1,109 @@
+{% extends "website/inc/dashboard_base.html" %}
+{% load staticfiles %}
+
+{# page title #}
+{% block title %}MotorJab Garage | Campagne{% endblock %}
+
+{# page description #}
+{% block description %}{% endblock %}
+
+{# custom page css block #}
+{% block custom_css %}
+{{ block.super }}
+<style>
+.delete_campaign_form { display: inline; }
+</style>
+{% endblock %}
+{# Custom page script block #}
+{% block custom_js %}{% endblock %}
+
+{# menu active element #}
+{% block navigation_active_campaigns %}active{% endblock %}
+
+{# container content #}
+{% block www_main_content %}
+{# title block {{{ #}
+<div class="row no_gutter page_main_title_block">
+	<div class="col-sm-12">
+		<div class="dashboard_page_title_block">
+			<div class="dashboard_page_title">Campagne</div>
+			<div class="dashboard_page_description">In questa sezione è possibile creare una nuova campagna oppure visualizzare le statistiche di una campagna creata precedentemente.</div>
+		</div>
+	</div>
+</div>
+{# title block }}} #}
+<div class="row no_gutter">
+	<div class="col-sm-12">
+		<div class="col-md-offset-2 col-md-8 padding-xs-only padding-sm-only">
+			{# messages block #}
+			<div class="error_container"></div>
+			{% if form.errors %}
+				<div class="alert alert-danger">
+					<h4>Controlla questi errori</h4>
+					<ul>
+						{% for field in form %}
+							{% for error in field.errors %}
+								<li>{{ field.label|escape }}: {{ error|escape }}</li>
+							{% endfor %}
+						{% endfor %}
+						{% for form_error in form.non_field_errors %}
+							<li>{{ form_error }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% elif messages %}
+				{% for message in messages %}
+					{% if message.tags == "success" %}
+						<div class="alert alert-success">
+							{{ message|safe }}
+						</div>
+					{% elif message.tags == "error" %}
+						<div class="alert alert-danger">
+							{{ message|safe }}
+						</div>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+</div>
+<div class="row no_gutter">
+	<div class="col-sm-12">
+		<div><h5>Campagne da completare</h5></div>
+		{% if campaign_list_working %}
+			{% for single_campaign_list_working in campaign_list_working %}
+			<div>{{ single_campaign_list_working.camp_title }} - {{ single_campaign_list_working.creation_date }} - <a href="/dashboard/campaigns/step1/{{ single_campaign_list_working.campaign_id }}/">Modifica e invia</a> - 
+				<form class="form-horizontal delete_campaign_form" method="POST" action="">
+					{% csrf_token %}
+					<input name="delete_campaign_form_sent" value="1" type="hidden">
+					<input name="campaign_id" value="{{ single_campaign_list_working.campaign_id }}" type="hidden">
+					<button type="submit" class="btn btn-primary btn-sm deleteCampaignClickAction">Elimina</button>
+				</form>
+			</div>
+			{% endfor %}
+		{% else %}
+			<span>-</span>
+		{% endif %}
+		<div><h5>Campagne inviate</h5></div>
+		{% if campaign_list_closed %}
+			{% for single_campaign_list_closed in campaign_list_closed %}
+				<div>{{ single_campaign_list_closed.camp_title }} - {{ single_campaign_list_closed.creation_date }} - <a href="/dashboard/campaigns/stats/{{ single_campaign_list_closed.campaign_id }}/">Statistiche</a></div>
+			{% endfor %}
+		{% else %}
+			<span>-</span>
+		{% endif %}
+	</div>
+</div>
+<script>
+	$(document).ready(function(){
+		$(document).on("click", ".deleteCampaignClickAction", function(){
+			var return_var = false;
+			if (confirm("Stai per eliminare la campagna, confermi?")) {
+				return_var = true;
+			}
+
+			return return_var;
+		});
+	});
+</script>
+{% endblock %}

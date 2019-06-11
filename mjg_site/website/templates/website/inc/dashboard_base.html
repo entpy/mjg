@@ -14,7 +14,10 @@
 {# Custom page script block #}
 {% block custom_js %}{% endblock %}
 {# Custom page extra script block #}
-{% block extra_js %}{% endblock %}
+{% block extra_js %}
+{# howto: https://validatejs.org #}
+<script src="{% static "website/js/vendor/validate.min.js" %}"></script>
+{% endblock %}
 
 {% block header_block %}
 <div class="navbar-wrapper">
@@ -36,6 +39,7 @@
 			<ul class="nav navbar-nav navbar-right">
 				<li><a class="{% block navigation_active_home %}{% endblock %}" href="/dashboard/">HOME</a></li>
 				<li><a class="{% block navigation_active_customers %}{% endblock %}" href="/dashboard/customers/">CLIENTI</a></li>
+				<li><a class="{% block navigation_active_campaigns %}{% endblock %}" href="/dashboard/campaigns/">PROMOZIONI</a></li>
 				<li><a class="{% block navigation_active_coupon %}{% endblock %}" href="/dashboard/validate-coupon/">COUPON</a></li>
 			</ul>
 		</div>

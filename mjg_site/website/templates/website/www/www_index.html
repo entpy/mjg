@@ -2,23 +2,245 @@
 {% load staticfiles %}
 
 {# page title #}
-{% block title %}{{ block.super }}{% endblock %}
+{% block title %}Autoriparazioni, elettronica e gommista a Torino{% endblock %}
 
 {# page description #}
-{% block description %}{{ block.super }}{% endblock %}
+{% block description %}MotorJab Garage a Torino: un unico centro, tanti servizi per la tua auto. Dal tagliando alla sostituzione degli pneumatici. Autoriparazioni Torino, Meccanico Torino, Officina riparazione auto torino, Sostituzione pneumatici Torino, Gommista Torino{% endblock %}
+
+{# page keywords #}
+{% block keywords %}autoriparazioni Torino,meccanico Torino,gommista Torino,sostituzione pneumatici Torino,riparazione veicoli ibridi Torino,riparazione veicoli elettrici Torino,elettrauto Torino,MotorJab Garage{% endblock %}
 
 {# custom page css block #}
-{% block custom_css %}{% endblock %}
+{% block custom_css %}
+{{ block.super}}
+<style>
+.bounce {
+  -moz-animation: bounce 2s infinite;
+  -webkit-animation: bounce 2s infinite;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-30px);
+  }
+  60% {
+    transform: translateY(-15px);
+  }
+}
+</style>
+{% endblock %}
 {# Custom page script block #}
-{% block custom_js %}{% endblock %}
+{% block custom_js %}
+{{ block.super }}
+<script src="{% static "website/js/vendor/jquery.scrollTo.min.js" %}"></script>
+{% endblock %}
 
 {# menu active element #}
 {% block navigation_active_home %}active{% endblock %}
 
 {# container content #}
 {% block www_main_content %}
+<!-- three elements block -->
+<div class="main_block">
+	<!--<img class="main_block_image" src="{% static "website/img/slide_3.jpg" %}" />-->
+	<div class="main_block_contents">
+		<div class="main_block_contents_wrapper">
+			<span class="title_caption">#motorjabgarage</span>
+			<h1>Autoriparazioni, elettronica e gommista a Torino</h1>
+		</div>
+	</div>
+	<div class="main_block_arrow_container">
+		<div class="bounce">
+			<a href="#" class="mainBlockArrowAction">
+				<i class="ion-ios-arrow-round-down main_block_arrow"></i>
+			</a>
+		</div>
+	</div>
+	<div class="main_block_contents_bottom scrollToAction">
+		<h2>MotorJab Garage a Torino: un unico centro, tanti servizi per la tua auto.<br /><b>Dal tagliando alla sostituzione degli pneumatici</b></h2>
+	</div>
+</div>
+<div class="row elements_container no_gutter">
+	<div class="col-sm-12">
+		<div class="col-sm-4 text-center no_gutter padding-sm-only padding-xs-only-60">
+			<a title="Tagliando completo" class="simple_link hvr-grow" href="tagliando-completo">
+				<img class="img-responsive" src="{% static "website/img/tagliando-completo.png" %}" alt="Tagliando completo">
+				<div class="block-label">Tagliando completo</div>
+			</a>
+		</div>
+		<div class="col-sm-4 text-center no_gutter padding-sm-only padding-xs-only-60">
+			<a title="Meccanica/Elettronica" class="simple_link hvr-grow" href="/meccatronica">
+				<img class="img-responsive" src="{% static "website/img/meccatronica.png" %}" alt="Meccanicatronica">
+				<div class="block-label">Meccanica/Elettronica</div>
+			</a>
+		</div>
+		<div class="col-sm-4 text-center no_gutter">
+			<a title="Gommista" class="simple_link hvr-grow" href="/gommista">
+				<img class="img-responsive" src="{% static "website/img/gommista.png" %}" alt="Gommista">
+				<div class="block-label">Gommista</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="container-fluid info_block info_block_color2">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="col-md-7 padding-xs-only padding-sm-only">
+				<div class="col-lg-12 no_gutter">
+					<h5>Bielle, cilindri, pistoni e...</h5>
+				</div>
+				<div class="col-lg-12 no_gutter">
+					<h3>MotorJab Garage</h3>
+				</div>
+				<div class="col-lg-12 no_gutter readable_text1">
+					Siamo un'azienda di Torino che opera nel settore dell'automotive, attiva sul mercato da oltre 40 anni, orgogliosa di essere arrivata alla 3° generazione. Offriamo al cliente ciò che le grandi multinazionali non danno: attenzione alla persona e cura nell'elaborare e risolvere piccoli e grandi problemi riguardanti le automobili.<br />Da noi potrete trovare familiarità cortesia e grande esperienza.<br /><br />
+					<i>Abbiamo fatto della nostra passione il nostro lavoro.</i>
+				</div>
+				<div class="col-lg-12 no_gutter"><a title="I nostri servizi" href="/servizi">Scopri i nostri servizi</a></div>
+			</div>
+			<div class="col-md-offset-1 col-md-4 text-xs-center text-md-right">
+				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
+				<a title="Autoriparazioni MotorJab Garage" href="{% static "website/img/img1.png" %}" data-lightbox="image-1">
+					<img class="img-responsive" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/img1.png" %}">
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container-fluid info_block info_block_color2">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="col-md-offset-1 col-md-7 col-md-push-4 padding-xs-only padding-sm-only">
+				<div class="col-lg-12 no_gutter">
+					<h5>Il centro per l'auto giusto per te!</h5>
+				</div>
+				<div class="col-lg-12 no_gutter">
+					<h3>Servizio di <b>autoriparazioni</b>, <b>elettronica</b> e <b>gommista</b> a Torino</h3>
+				</div>
+				<div class="col-lg-12 no_gutter readable_text1">
+					Il nostro lavoro si basa su tre servizi principali: <b>autoriparazioni</b>, riparazioni meccaniche di ogni genere per la tua auto. <b>Elettronica</b>, manutenzione impianto elettrico, anche per veicoli ibridi ed elettrici. <b>Servizio gommista</b>, ti guidiamo nell'acquisto del pneumatico più adatto alle tue esigenze, eseguiamo il cambio stagionale, con possibilità di custodire i tuoi pneumatici.<br />
+					Grazie alla nostra professionalità maturata nel corso degli anni e agli strumenti tecnici e pratici in nostro possesso, siamo in grado di riparare ed eseguire manutenzione su auto di ogni marca.<br /><br />
+					<i>Curioso di vedere il nostro lavoro? Rimani aggiornato sulle ultime novità.</i>
+				</div>
+				<div class="col-lg-12 no_gutter"><a title="Follow us on Instagram" target="_blank" href="https://www.instagram.com/motorjabgarage/">Seguici anche tu sulla nostra pagina Instagram</a></div>
+			</div>
+			<div class="col-md-4 col-md-pull-8 text-xs-center text-md-left">
+				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
+				<a title="Autoriparazioni MotorJab Garage" href="{% static "website/img/riparazioni_multimarca.jpg" %}" data-lightbox="image-2">
+					<img class="img-responsive" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/riparazioni_multimarca.jpg" %}">
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container-fluid info_block info_block_color1">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="col-md-offset-1 col-md-7 col-md-push-4 padding-xs-only padding-sm-only">
+				<div class="col-lg-12 no_gutter">
+					<h5>Una piccola anteprima</h5>
+				</div>
+				<div class="col-lg-12 no_gutter">
+					<h3 class="service_pie_title servicePieTitleAction">Ecco alcuni dei nostri servizi</h3>
+				</div>
+				<div class="col-lg-12 no_gutter">
+					<span class="hidden service_content_pie1">La frizione serve a trasferire o isolare il movimento dal motore al cambio. Generalmente è formata da tre componenti principali: disco, spingidisco e cuscinetto reggispinta. La durata di una frizione dipende molto dallo stile di guida, ma in media ha una durata di 60.000 km.<p><b>Hai un problema con il cambio o la frizione?</b><br /><a href="/contattaci/">Contattaci</a></p></span>
+					<span class="hidden service_content_pie2">La diagnosi elettronica consente di individuare problemi o guasti su parti elettriche ed elettroniche. Tutto questo è possibile grazie all’utilizzo di apparecchiature che comunicano con le centraline del veicolo. Ogni guasto è identificato da un codice univoco, per cui non serve dover procedere per tentativi e l’esame sarà rapido e indolore.<p><b>Hai un'indicazione di avaria o malfunzionamento sul cruscotto?</b><br /><a href="/contattaci/">Contattaci</a></p></span>
+					<span class="hidden service_content_pie3">La cinghia di distribuzione è fondamentale per il funzionamento del motore (in alcuni veicoli è presente una catena), in quanto regola il sincornismo tra valvole e pistoni. E' di vitale importanza sostituirla nei chilometri prestabiliti dalla casa costruttrice.<p><b>Vuoi sapere se la cinghia o la catena di distribuzione sono da sostituire?</b><br /><a href="/contattaci/">Contattaci</a></p></span>
+					<span class="hidden service_content_pie4">I Pneumatici svolgono un ruolo essenziale per la stabilità e la sicurezza. Essendo l'unico punto di contatto con la strada, la stabilità del veicolo dipende in gran parte dal loro stato. Per questo è opportuno non superare un certo grado di usura del battistrada.<p><b>Hai bisogno di verificare, sostituire o riparare i tuoi pneumatici?</b><br /><a href="/contattaci/">Contattaci</a></p></span>
+					<span class="hidden service_content_pie5">L'impianto di scarico è un sistema complesso, composto da diversi componenti. Oltre a influire sulle prestazione del motore, aiuta a proteggere l'ambiente. Catalizzatore, DPF o FAP (filtro antiparticolato) sono una parte cruciale nel processo di pulizia dei gas di scarico del tuo veicolo, per questo si raccomanda di effettuare un controllo ogni 20.000 km.<p><b>Vuoi far controllare il sistema di scarico?</b><br /><a href="/contattaci/">Contattaci</a></p></span>
+					<span class="hidden service_content_pie6">E' importante garantire che il tuo veicolo abbia sempre l'energia necessaria per azionare le componenti elettriche ed elettroniche fondamentali per il suo funzionamento. In MotorJab Garage controlliamo sempre alternatore, motorino d'avviamento e batteria, per avere la certezza che l'impianto elettrico della tua auto funzioni correttamente.<p><b>Vuoi far controllare l'impianto elettrico?</b><br /><a href="/contattaci/">Contattaci</a></p></span>
+					<span class="hidden service_content_pie7">Il sistema frenante è uno dei principali elementi di sicurezza attiva del veicolo. Dischi e pastiglie – i materiali d’attrito dei freni – devono essere in condizioni ottimali, quindi richiedono una manutenzione e sostituzione periodica, perché soggetti a usura. Un controllo dei freni è consigliabile ogni 10.000 km, ma è da effettuare immediatamente qualora insorgessero vibrazioni, rumori e odori sgradevoli durante la frenata.<p><b>Vuoi far controllare il sistema frenante o sostituire i freni?</b><br /><a href="/contattaci/">Contattaci</a></p></span>
+					<span class="hidden service_content_pie8">Gli ammortizzatori sono tra i componenti più importanti delle sospensioni di un'auto insieme agli pneumatici e alla molla. Assicurano una buona connessione tra la strada e lo pneumatico. Gli ammortizzatori assorbono l'effetto di rimbalzo delle gomme a terra e le vibrazioni, rendendo la guida più stabile e comfortevole. Ti consigliamo di far controllare gli ammortizzatori ogni 20.000 km e di farli sostituire ogni 50.000 km.<p><b>Vuoi far controllare o sostituire gli ammortizzatori?</b><br /><a href="/contattaci/">Contattaci</a></p></span>
+					<span class="hidden service_content_pie9">Un tagliando puntuale è fondamentale per assicurare un corretto funzionamento della tua auto: fare in modo che sia sempre sicura su strada e garantire longevità al tuo motore sono i nostri obiettivi primari. Inoltre, tagliandando costantemente la tua auto potrai prevenire inutili guasti al tuo motore, evitando di incorrere in una riparazione dietro ad un'altra rendendo, il tutto più dispendioso.<p><b>Hai bisogno di un tagliando completo?</b><br /><a href="/tagliando-completo/">Scopri il nostro tagliando</a></p></span>
+					<span class="hidden service_title_pie1"><img alt="Cambio frizione" src="{% static "website/img/service_pie/cambio-frizione.png" %}">&nbsp;Cambio e frizione</span>
+					<span class="hidden service_title_pie2"><img alt="Diagnosi elettronica" src="{% static "website/img/service_pie/diagnosi-elettronica.png" %}">&nbsp;Diagnosi elettronica</span>
+					<span class="hidden service_title_pie3"><img alt="Distribuzione" src="{% static "website/img/service_pie/distribuzione.png" %}">&nbsp;Distribuzione</span>
+					<span class="hidden service_title_pie4"><img alt="Gommista" src="{% static "website/img/service_pie/gommista.png" %}">&nbsp;Gommista</span>
+					<span class="hidden service_title_pie5"><img alt="Impianto di scarico" src="{% static "website/img/service_pie/impianto-di-scarico.png" %}">&nbsp;Impianto di scarico</span>
+					<span class="hidden service_title_pie6"><img alt="Impianto elettrico" src="{% static "website/img/service_pie/impianto-elettrico.png" %}">&nbsp;Impianto elettrico</span>
+					<span class="hidden service_title_pie7"><img alt="Impianto frenante" src="{% static "website/img/service_pie/impianto-frenante.png" %}">&nbsp;Sistema frenante</span>
+					<span class="hidden service_title_pie8"><img alt="Sospensioni" src="{% static "website/img/service_pie/sospensioni.png" %}">&nbsp;Ammortizzatori</span>
+					<span class="hidden service_title_pie9"><img alt="Tagliando" src="{% static "website/img/service_pie/tagliando.png" %}">&nbsp;Tagliando</span>
+					<span class="current_service_pie_content readable_text1 servicePieContentAction">Scopri quali sono tutti i nostri servizi, dalla meccanica, come revisione motori, frizioni, freni, cinghia di distribuzione, fino alla diagnosi elettronica della tua auto. Seleziona sulla ruota un servizio per visualizzarne una descrizione rapida.<br /><a href="/servizi">Scopri tutti i nostri servizi</a></span>
+				</div>
+			</div>
+			<div class="col-md-4 col-md-pull-8 text-xs-center text-md-left">
+				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
+				<!-- torta con i servizi -->
+				<div class="cn-wrapper" style="border-radius: 50%; overflow: hidden;">
+					<ul>
+						<li class="circle-1 circle servicePieAction" data-pie-name="pie1"><a><img alt="Cambio frizione" src="{% static "website/img/service_pie/cambio-frizione.png" %}"></span></a></li>
+						<li class="circle-2 circle servicePieAction" data-pie-name="pie2"><a><img alt="Diagnosi elettronica" src="{% static "website/img/service_pie/diagnosi-elettronica.png" %}"></a></li>
+						<li class="circle-3 circle servicePieAction" data-pie-name="pie3"><a><img alt="Distribuzione" src="{% static "website/img/service_pie/distribuzione.png" %}"></a></li>
+						<li class="circle-4 circle servicePieAction" data-pie-name="pie4"><a><img alt="Gommista" src="{% static "website/img/service_pie/gommista.png" %}"></a></li>
+						<li class="circle-5 circle servicePieAction" data-pie-name="pie5"><a><img alt="Impianto di scarico" src="{% static "website/img/service_pie/impianto-di-scarico.png" %}"></a></li>
+						<li class="circle-6 circle servicePieAction" data-pie-name="pie6"><a><img alt="Impianto elettrico" src="{% static "website/img/service_pie/impianto-elettrico.png" %}"></a></li>
+						<li class="circle-7 circle servicePieAction" data-pie-name="pie7"><a><img alt="Impianto frenante" src="{% static "website/img/service_pie/impianto-frenante.png" %}"></a></li>
+						<li class="circle-8 circle servicePieAction" data-pie-name="pie8"><a><img alt="Sospensioni" src="{% static "website/img/service_pie/sospensioni.png" %}"></a></li>
+						<li class="circle-9 circle servicePieAction" data-pie-name="pie9"><a><img alt="Tagliando" src="{% static "website/img/service_pie/tagliando.png" %}"></a></li>
+					</ul>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container-fluid info_block info_block_color2">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-lg-12 no_gutter text-center">
+				<h5>Servizio autoriparazioni, elettronica e gommista a Torino,<br />il punto di riferimento per la tua auto</h5>
+			</div>
+			<div class="col-lg-12 no_gutter text-center">
+				<h3>Qualità e precisione al tuo servizio</h3>
+			</div>
+			<div class="col-md-4 text-center">
+				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12"></div>
+				<a title="Autoriparazioni MotorJab Garage" href="{% static "website/img/attrezzi_2.jpg" %}" data-lightbox="attrezzi_slide">
+					<img class="img-responsive md_img_margin_top" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/attrezzi_2.jpg" %}">
+				</a>
+			</div>
+			<div class="col-md-4 text-center">
+				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12"></div>
+				<a title="Autoriparazioni MotorJab Garage" href="{% static "website/img/attrezzi_10.jpg" %}" data-lightbox="attrezzi_slide">
+					<img class="img-responsive xs_only_img_margin_top sm_only_img_margin_top md_img_margin_top" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/attrezzi_10.jpg" %}">
+				</a>
+			</div>
+			<div class="col-md-4 text-center">
+				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12"></div>
+				<a title="Autoriparazioni MotorJab Garage" href="{% static "website/img/attrezzi_5.jpg" %}" data-lightbox="attrezzi_slide">
+					<img class="img-responsive xs_only_img_margin_top sm_only_img_margin_top md_img_margin_top" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/attrezzi_5.jpg" %}">
+				</a>
+			</div>
+			<div class="col-md-4 text-center">
+				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12"></div>
+				<a title="Autoriparazioni MotorJab Garage" href="{% static "website/img/attrezzi_9.jpg" %}" data-lightbox="attrezzi_slide">
+					<img class="img-responsive xs_only_img_margin_top sm_only_img_margin_top md_img_margin_top" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/attrezzi_9.jpg" %}">
+				</a>
+			</div>
+			<div class="col-md-4 text-center">
+				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12"></div>
+				<a title="Autoriparazioni MotorJab Garage" href="{% static "website/img/attrezzi_4.jpg" %}" data-lightbox="attrezzi_slide">
+					<img class="img-responsive xs_only_img_margin_top sm_only_img_margin_top md_img_margin_top" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/attrezzi_4.jpg" %}">
+				</a>
+			</div>
+			<div class="col-md-4 text-center">
+				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12"></div>
+				<a title="Autoriparazioni MotorJab Garage" href="{% static "website/img/attrezzi_6.jpg" %}" data-lightbox="attrezzi_slide">
+					<img class="img-responsive xs_only_img_margin_top sm_only_img_margin_top md_img_margin_top" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/attrezzi_6.jpg" %}">
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+{% comment %}
 <!-- Begin Carousel -->
-<div class="carousel">
+<div class="carousel info_block">
 	<div id="carouselHome" class="carousel slide carousel-fade" data-ride="carousel">
 		<!-- Indicators -->
 		<ol class="carousel-indicators">
@@ -112,162 +334,25 @@
 </div>
 <!-- /carousel div -->
 <!-- End Carousel -->
-<!-- three elements block -->
-<div class="row elements_container no_gutter">
-	<div class="col-sm-12">
-		<div class="col-sm-4 text-center no_gutter padding-sm-only padding-xs-only-60">
-			<a class="simple_link hvr-grow" href="tagliando-completo">
-				<img class="img-responsive" src="{% static "website/img/tagliando-completo.png" %}" alt="">
-				<div class="block-label">Tagliando completo</div>
-			</a>
-		</div>
-		<div class="col-sm-4 text-center no_gutter padding-sm-only padding-xs-only-60">
-			<a class="simple_link hvr-grow" href="/meccatronica">
-				<img class="img-responsive" src="{% static "website/img/meccatronica.png" %}" alt="Meccanicatronica">
-				<div class="block-label">Meccatronica</div>
-			</a>
-		</div>
-		<div class="col-sm-4 text-center no_gutter">
-			<a class="simple_link hvr-grow" href="/gommista">
-				<img class="img-responsive" src="{% static "website/img/gommista.png" %}" alt="Gommista">
-				<div class="block-label">Gommista</div>
-			</a>
-		</div>
-	</div>
-</div>
-<div class="container-fluid info_block info_block_color2">
-	<div class="row">
-		<div class="col-md-10 col-md-offset-1">
-			<div class="col-md-7 padding-xs-only padding-sm-only">
-				<div class="col-lg-12 no_gutter">
-					<h5>Bielle, cilindri, pistoni e...</h5>
-				</div>
-				<div class="col-lg-12 no_gutter">
-					<h3>MotorJab Garage</h3>
-				</div>
-				<div class="col-lg-12 no_gutter readable_text1">
-					Siamo un'azienda di Torino che opera nel settore dell'automotive, attiva sul mercato da oltre 40 anni, orgogliosa di essere arrivata alla 3° generazione. Offriamo al cliente ciò che le grandi multinazionali non danno: attenzione alla persona e cura nell'elaborare e risolvere piccoli e grandi problemi riguardanti le automobili.<br />Da noi potrete trovare familiarità cortesia e grande esperienza.<br /><br />
-					<i>Abbiamo fatto della nostra passione il nostro lavoro.</i>
-				</div>
-				<div class="col-lg-12 no_gutter"><a href="/servizi">Scopri i nostri servizi</a></div>
-			</div>
-			<div class="col-md-offset-1 col-md-4 text-xs-center text-md-right">
-				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
-				<img class="img-responsive" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/img1.png" %}">
-			</div>
-		</div>
-	</div>
-</div>
-<div class="container-fluid info_block info_block_color1">
-	<div class="row">
-		<div class="col-md-10 col-md-offset-1">
-			<div class="col-md-offset-1 col-md-7 col-md-push-4 padding-xs-only padding-sm-only">
-				<div class="col-lg-12 no_gutter">
-					<h5>Una piccola anteprima</h5>
-				</div>
-				<div class="col-lg-12 no_gutter">
-					<h3 class="service_pie_title servicePieTitleAction">Ecco alcuni dei nostri servizi</h3>
-				</div>
-				<div class="col-lg-12 no_gutter">
-					<span class="hidden service_content_pie1">La frizione serve a trasferire o isolare il movimento dal motore al cambio. Generalmente è formata da tre componenti principali: disco, spingidisco e cuscinetto reggispinta. La durata di una frizione dipende molto dallo stile di guida, ma in media ha una durata di 60.000 km.<p><b>Hai un problema con il cambio o la frizione?</b><br /><a href="/contattaci/">Contattaci</a></p></span>
-					<span class="hidden service_content_pie2">La diagnosi elettronica consente di individuare problemi o guasti su parti elettriche ed elettroniche. Tutto questo è possibile grazie all’utilizzo di apparecchiature che comunicano con le centraline del veicolo. Ogni guasto è identificato da un codice univoco, per cui non serve dover procedere per tentativi e l’esame sarà rapido e indolore.<p><b>Hai un'indicazione di avaria o malfunzionamento sul cruscotto?</b><br /><a href="/contattaci/">Contattaci</a></p></span>
-					<span class="hidden service_content_pie3">La cinghia di distribuzione è fondamentale per il funzionamento del motore (in alcuni veicoli è presente una catena), in quanto regola il sincornismo tra valvole e pistoni. E' di vitale importanza sostituirla nei chilometri prestabiliti dalla casa costruttrice.<p><b>Vuoi sapere se la cinghia o la catena di distribuzione sono da sostituire?</b><br /><a href="/contattaci/">Contattaci</a></p></span>
-					<span class="hidden service_content_pie4">I Pneumatici svolgono un ruolo essenziale per la stabilità e la sicurezza. Essendo l'unico punto di contatto con la strada, la stabilità del veicolo dipende in gran parte dal loro stato. Per questo è opportuno non superare un certo grado di usura del battistrada.<p><b>Hai bisogno di verificare, sostituire o riparare i tuoi pneumatici?</b><br /><a href="/contattaci/">Contattaci</a></p></span>
-					<span class="hidden service_content_pie5">L'impianto di scarico è un sistema complesso, composto da diversi componenti. Oltre a influire sulle prestazione del motore, aiuta a proteggere l'ambiente. Catalizzatore, DPF o FAP (filtro antiparticolato) sono una parte cruciale nel processo di pulizia dei gas di scarico del tuo veicolo, per questo si raccomanda di effettuare un controllo ogni 20.000 km.<p><b>Vuoi far controllare il sistema di scarico?</b><br /><a href="/contattaci/">Contattaci</a></p></span>
-					<span class="hidden service_content_pie6">E' importante garantire che il tuo veicolo abbia sempre l'energia necessaria per azionare le componenti elettriche ed elettroniche fondamentali per il suo funzionamento. In MotorJab Garage controlliamo sempre alternatore, motorino d'avviamento e batteria, per avere la certezza che l'impianto elettrico della tua auto funzioni correttamente.<p><b>Vuoi far controllare l'impianto elettrico?</b><br /><a href="/contattaci/">Contattaci</a></p></span>
-					<span class="hidden service_content_pie7">Il sistema frenante è uno dei principali elementi di sicurezza attiva del veicolo. Dischi e pastiglie – i materiali d’attrito dei freni – devono essere in condizioni ottimali, quindi richiedono una manutenzione e sostituzione periodica, perché soggetti a usura. Un controllo dei freni è consigliabile ogni 10.000 km, ma è da effettuare immediatamente qualora insorgessero vibrazioni, rumori e odori sgradevoli durante la frenata.<p><b>Vuoi far controllare il sistema frenante o sostituire i freni?</b><br /><a href="/contattaci/">Contattaci</a></p></span>
-					<span class="hidden service_content_pie8">Gli ammortizzatori sono tra i componenti più importanti delle sospensioni di un'auto insieme agli pneumatici e alla molla. Assicurano una buona connessione tra la strada e lo pneumatico. Gli ammortizzatori assorbono l'effetto di rimbalzo delle gomme a terra e le vibrazioni, rendendo la guida più stabile e comfortevole. Ti consigliamo di far controllare gli ammortizzatori ogni 20.000 km e di farli sostituire ogni 50.000 km.<p><b>Vuoi far controllare o sostituire gli ammortizzatori?</b><br /><a href="/contattaci/">Contattaci</a></p></span>
-					<span class="hidden service_content_pie9">Un tagliando puntuale è fondamentale per assicurare un corretto funzionamento della tua auto: fare in modo che sia sempre sicura su strada e garantire longevità al tuo motore sono i nostri obiettivi primari. Inoltre, tagliandando costantemente la tua auto potrai prevenire inutili guasti al tuo motore, evitando di incorrere in una riparazione dietro ad un'altra rendendo, il tutto più dispendioso.<p><b>Hai bisogno di un tagliando completo?</b><br /><a href="/tagliando-completo/">Scopri il nostro tagliando</a></p></span>
-					<span class="hidden service_title_pie1"><img alt="Cambio frizione" src="{% static "website/img/service_pie/cambio-frizione.png" %}">&nbsp;Cambio e frizione</span>
-					<span class="hidden service_title_pie2"><img alt="Diagnosi elettronica" src="{% static "website/img/service_pie/diagnosi-elettronica.png" %}">&nbsp;Diagnosi elettronica</span>
-					<span class="hidden service_title_pie3"><img alt="Distribuzione" src="{% static "website/img/service_pie/distribuzione.png" %}">&nbsp;Distribuzione</span>
-					<span class="hidden service_title_pie4"><img alt="Gommista" src="{% static "website/img/service_pie/gommista.png" %}">&nbsp;Gommista</span>
-					<span class="hidden service_title_pie5"><img alt="Impianto di scarico" src="{% static "website/img/service_pie/impianto-di-scarico.png" %}">&nbsp;Impianto di scarico</span>
-					<span class="hidden service_title_pie6"><img alt="Impianto elettrico" src="{% static "website/img/service_pie/impianto-elettrico.png" %}">&nbsp;Impianto elettrico</span>
-					<span class="hidden service_title_pie7"><img alt="Impianto frenante" src="{% static "website/img/service_pie/impianto-frenante.png" %}">&nbsp;Sistema frenante</span>
-					<span class="hidden service_title_pie8"><img alt="Sospensioni" src="{% static "website/img/service_pie/sospensioni.png" %}">&nbsp;Ammortizzatori</span>
-					<span class="hidden service_title_pie9"><img alt="Tagliando" src="{% static "website/img/service_pie/tagliando.png" %}">&nbsp;Tagliando</span>
-					<span class="current_service_pie_content readable_text1 servicePieContentAction">Scopri quali sono tutti i nostri servizi, dalla meccanica, come revisione motori, frizioni, freni, cinghia di distribuzione, fino alla diagnosi elettronica della tua auto. Seleziona sulla ruota un servizio per visualizzarne una descrizione rapida.<br /><a href="/servizi">Scopri tutti i nostri servizi</a></span>
-				</div>
-			</div>
-			<div class="col-md-4 col-md-pull-8 text-xs-center text-md-left">
-				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
-				<!-- torta con i servizi -->
-				<div class="cn-wrapper" style="border-radius: 50%; overflow: hidden;">
-					<ul>
-						<li class="circle-1 circle servicePieAction" data-pie-name="pie1"><a><img alt="Cambio frizione" src="{% static "website/img/service_pie/cambio-frizione.png" %}"></span></a></li>
-						<li class="circle-2 circle servicePieAction" data-pie-name="pie2"><a><img alt="Diagnosi elettronica" src="{% static "website/img/service_pie/diagnosi-elettronica.png" %}"></a></li>
-						<li class="circle-3 circle servicePieAction" data-pie-name="pie3"><a><img alt="Distribuzione" src="{% static "website/img/service_pie/distribuzione.png" %}"></a></li>
-						<li class="circle-4 circle servicePieAction" data-pie-name="pie4"><a><img alt="Gommista" src="{% static "website/img/service_pie/gommista.png" %}"></a></li>
-						<li class="circle-5 circle servicePieAction" data-pie-name="pie5"><a><img alt="Impianto di scarico" src="{% static "website/img/service_pie/impianto-di-scarico.png" %}"></a></li>
-						<li class="circle-6 circle servicePieAction" data-pie-name="pie6"><a><img alt="Impianto elettrico" src="{% static "website/img/service_pie/impianto-elettrico.png" %}"></a></li>
-						<li class="circle-7 circle servicePieAction" data-pie-name="pie7"><a><img alt="Impianto frenante" src="{% static "website/img/service_pie/impianto-frenante.png" %}"></a></li>
-						<li class="circle-8 circle servicePieAction" data-pie-name="pie8"><a><img alt="Sospensioni" src="{% static "website/img/service_pie/sospensioni.png" %}"></a></li>
-						<li class="circle-9 circle servicePieAction" data-pie-name="pie9"><a><img alt="Tagliando" src="{% static "website/img/service_pie/tagliando.png" %}"></a></li>
-					</ul>
-					<div class="clearfix"></div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="container-fluid info_block info_block_color2">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="col-lg-12 no_gutter text-center">
-				<h5>MotorJab Garage a Torino, il punto di riferimento per la tua auto</h5>
-			</div>
-			<div class="col-lg-12 no_gutter text-center">
-				<h3>Qualità e precisione al tuo servizio</h3>
-			</div>
-			<div class="col-md-4 text-center">
-				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12"></div>
-				<a href="{% static "website/img/attrezzi_2.jpg" %}" data-lightbox="attrezzi_slide">
-					<img class="img-responsive md_img_margin_top" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/attrezzi_2.jpg" %}">
-				</a>
-			</div>
-			<div class="col-md-4 text-center">
-				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12"></div>
-				<a href="{% static "website/img/attrezzi_10.jpg" %}" data-lightbox="attrezzi_slide">
-					<img class="img-responsive xs_only_img_margin_top sm_only_img_margin_top md_img_margin_top" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/attrezzi_10.jpg" %}">
-				</a>
-			</div>
-			<div class="col-md-4 text-center">
-				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12"></div>
-				<a href="{% static "website/img/attrezzi_5.jpg" %}" data-lightbox="attrezzi_slide">
-					<img class="img-responsive xs_only_img_margin_top sm_only_img_margin_top md_img_margin_top" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/attrezzi_5.jpg" %}">
-				</a>
-			</div>
-			<div class="col-md-4 text-center">
-				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12"></div>
-				<a href="{% static "website/img/attrezzi_9.jpg" %}" data-lightbox="attrezzi_slide">
-					<img class="img-responsive xs_only_img_margin_top sm_only_img_margin_top md_img_margin_top" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/attrezzi_9.jpg" %}">
-				</a>
-			</div>
-			<div class="col-md-4 text-center">
-				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12"></div>
-				<a href="{% static "website/img/attrezzi_4.jpg" %}" data-lightbox="attrezzi_slide">
-					<img class="img-responsive xs_only_img_margin_top sm_only_img_margin_top md_img_margin_top" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/attrezzi_4.jpg" %}">
-				</a>
-			</div>
-			<div class="col-md-4 text-center">
-				<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12"></div>
-				<a href="{% static "website/img/attrezzi_6.jpg" %}" data-lightbox="attrezzi_slide">
-					<img class="img-responsive xs_only_img_margin_top sm_only_img_margin_top md_img_margin_top" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/attrezzi_6.jpg" %}">
-				</a>
-			</div>
-		</div>
-	</div>
-</div>
+{% endcomment %}
 <div class="container-fluid info_block info_block_color2">
 	<div class="row">
 		<div class="col-xs-12">
 			<div class="jumbotron text-center">
 				<h2>Vuoi ricevere uno sconto del 30%<br />da utilizzare sui nostri servizi?</h2>
 				<p>Registrati adesso, riceverai subito il tuo sconto!</p>
-				<p><a href="/ricevi-offerte/" class="btn btn-primary btn-lg">Ottieni sconto</a></p>
+				<p><a title="Ricevi le nostre offerte" href="/ricevi-offerte/" class="btn btn-primary btn-lg">Ottieni sconto</a></p>
 			</div>
 		</div>
 	</div>
 </div>
+<script>
+	$(document).ready(function(){
+		$(document).on("click", ".mainBlockArrowAction", function(){
+			$.scrollTo(".scrollToAction", {duration:3000});
+
+			return false;
+		});
+	});
+</script>
 {% endblock %}

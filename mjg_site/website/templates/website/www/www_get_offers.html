@@ -2,10 +2,10 @@
 {% load staticfiles %}
 
 {# page title #}
-{% block title %}MotorJab Garage | Offerte esclusive dedicate a te{% endblock %}
+{% block title %}Offerte esclusive da utilizzare per la manutenzione della tua auto | Un unico centro, tanti servizi per la tua auto{% endblock %}
 
 {# page description #}
-{% block description %}{% endblock %}
+{% block description %}Vuoi ricevere uno sconto da utilizzare in officina? Registrati adesso e riceverai subito il tuo bonus...affrettati. MotorJab Garage è il tuo centro di fiducia per la tua auto a Torino{% endblock %}
 
 {# custom page css block #}
 {% block custom_css %}
@@ -27,9 +27,9 @@
 <div class="page_header_block contacts_header_block">
 	<div><h1>{{ title_mkauto_prize_str }}</h1></div>
 	{% if source == 4 %}
-		<div><h4>Registrati adesso, riceverai subito il tuo buono!</h4></div>
+		<div><h2>Registrati adesso, riceverai subito il tuo buono!</h2></div>
 	{% else %}
-		<div><h4>Registrati adesso, riceverai subito il tuo sconto!</h4></div>
+		<div><h2>Registrati adesso, riceverai subito il tuo sconto!</h2></div>
 	{% endif %}
 </div>
 <div class="container-fluid info_block info_block_color1">
@@ -155,7 +155,7 @@
 									<div class="col-lg-10">
 										<div class="checkbox">
 											<label>
-												<input name="inputPrivacy" id="inputPrivacy" value="1" type="checkbox" required>Ho letto l'<a target="_blank" href="/privacy">informativa sulla privacy</a> e acconsento al trattamento dei miei dati personali.
+												<input name="inputPrivacy" id="inputPrivacy" value="1" type="checkbox" required>Ho letto l'<a title="Informativa sulla privacy" target="_blank" href="/privacy">informativa sulla privacy</a> e acconsento al trattamento dei miei dati personali.
 											</label>
 										</div>
 									</div>
@@ -176,13 +176,13 @@
 				<div class="col-md-12">
 					<div class="col-md-offset-1 col-md-5 text-center">
 						<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
-						<a href="{% static "website/img/attrezzi_11.jpg" %}" data-lightbox="ricevi_offerte_slide">
+						<a title="Autoriparazioni MotorJab Garage" href="{% static "website/img/attrezzi_11.jpg" %}" data-lightbox="ricevi_offerte_slide">
 							<img class="img-responsive" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/attrezzi_11.jpg" %}">
 						</a>
 					</div>
 					<div class="col-md-5 text-center">
 						<div class="visible-sm-inline-block visible-xs-inline-block col-xs-12 block-vspace"></div>
-						<a href="{% static "website/img/attrezzi_8.jpg" %}" data-lightbox="ricevi_offerte_slide">
+						<a title="Autoriparazioni MotorJab Garage" href="{% static "website/img/attrezzi_8.jpg" %}" data-lightbox="ricevi_offerte_slide">
 							<img class="img-responsive xs_only_img_margin_top sm_only_img_margin_top" alt="Autoriparazioni MotorJab Garage" src="{% static "website/img/attrezzi_8.jpg" %}">
 						</a>
 					</div>

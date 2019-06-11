@@ -6,8 +6,11 @@
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<title>{% block title %}{% endblock %}</title>
 		<meta name="description" content="{% block description %}{% endblock %}">
+		<meta name="keywords" content="{% block keywords %}{% endblock %}">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<link rel="canonical" href="https://www.motorjab.it/" />
+		<meta name="robots" content="all" />
+		<meta name="GOOGLEBOT" content="NOODP" />
 
 		<link rel="apple-touch-icon" sizes="180x180" href="{% static "website/apple-touch-icon.png" %}">
 		<link rel="icon" type="image/png" sizes="32x32" href="{% static "website/favicon-32x32.png" %}">
@@ -16,6 +19,21 @@
 		<link rel="mask-icon" href="{% static "website/safari-pinned-tab.svg" %}" color="#5bbad5">
 		<meta name="msapplication-TileColor" content="#da532c">
 		<meta name="theme-color" content="#ffffff">
+
+		<!-- fb/tw meta -->
+		<meta property="og:locale" content="it_IT" />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="MotorJab Garage - Autoriparazioni, elettronica e gommista a Torino" />
+		<meta property="og:description" content="MotorJab Garage a Torino: un unico centro, tanti servizi per la tua auto. Dal tagliando alla sostituzione degli pneumatici. Autoriparazioni Torino, Meccanico Torino, Officina riparazione auto torino, Sostituzione pneumatici Torino, Gommista Torino" />
+		<meta property="og:url" content="https://www.motorjab.it/" />
+		<meta property="og:image" content="https://www.motorjab.it/static/website/img/motorjab_garage.jpg">
+		<meta property="og:site_name" content="MotorJab Garage - Autoriparazioni - elettronica - gommista - Torino" />
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:description" content="MotorJab Garage a Torino: un unico centro, tanti servizi per la tua auto. Dal tagliando alla sostituzione degli pneumatici. Autoriparazioni Torino, Meccanico Torino, Officina riparazione auto torino, Sostituzione pneumatici Torino, Gommista Torino" />
+		<meta name="twitter:title" content="MotorJab Garage - Autoriparazioni, elettronica e gommista a Torino" />
+		<meta name="twitter:image" content="https://www.motorjab.it/static/website/img/motorjab_garage.jpg" />
+		<!--<meta name="twitter:site" content="https://www.motorjab.it/">-->
+
 
 		<!-- JavaScript -->
 		<script src="{% static "website/js/vendor/modernizr-3.6.0.min.js" %}"></script>

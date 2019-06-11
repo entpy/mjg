@@ -1,0 +1,140 @@
+{% extends "website/inc/dashboard_base.html" %}
+{% load staticfiles website_extras %}
+
+{# page title #}
+{% block title %}MotorJab Garage | Campagne{% endblock %}
+
+{# page description #}
+{% block description %}{% endblock %}
+
+{# custom page css block #}
+{% block custom_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static "website/css/datepicker.min.css" %}">
+{% endblock %}
+{# Custom page script block #}
+{% block custom_js %}
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script> -->
+<script src="{% static "website/js/vendor/jquery.form.js" %}"></script>
+<!-- doc: http://t1m0n.name/air-datepicker/docs/ -->
+<script src="{% static "website/js/vendor/datepicker.min.js" %}"></script>
+<script src="{% static "website/js/vendor/moment-with-locales.js" %}"></script>
+{% endblock %}
+
+{# menu active element #}
+{% block navigation_active_campaigns %}active{% endblock %}
+
+{# container content #}
+{% block www_main_content %}
+{# title block {{{ #}
+{% block campaign_flow_container %}
+	{% include "website/dashboard/campaigns/campaign_header.html" with flow_active2="campaign_flow_block_active" complete_percentage="40" %}
+{% endblock %}
+{# title block }}} #}
+<div class="row no_gutter">
+	<div class="col-sm-12 col-md-offset-1">
+		<h4>2. Scadenza della campagna</h4>
+		<p>Imposta una scadenza per la campagna.<br />La scadenza è intesa alla mezzanotte del giorno selezionato.<br />Per esempio, se come data di scadenza si imposta il giorno 15, l'offerta sarà valida fino al giorno 14 alle ore 23:59<br />allo scoccare della mezzanotte l'offerta sarà scaduta.</p>
+	</div>
+</div>
+<div class="row no_gutter">
+	<div class="col-sm-12">
+		<div class="col-md-offset-2 col-md-8 padding-xs-only padding-sm-only">
+			{# messages block #}
+			<div class="error_container"></div>
+			{% if form.errors %}
+				<div class="alert alert-danger">
+					<h4>Controlla questi errori</h4>
+					<ul>
+						{% for field in form %}
+							{% for error in field.errors %}
+								<li>{{ field.label|escape }}: {{ error|escape }}</li>
+							{% endfor %}
+						{% endfor %}
+						{% for form_error in form.non_field_errors %}
+							<li>{{ form_error }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% elif messages %}
+				{% for message in messages %}
+					{% if message.tags == "success" %}
+						<div class="alert alert-success">
+							{{ message|safe }}
+						</div>
+					{% elif message.tags == "error" %}
+						<div class="alert alert-danger">
+							{{ message|safe }}
+						</div>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+</div>
+<div class="row no_gutter">
+	<div class="col-sm-12 col-md-10 col-md-offset-1">
+		{# form #}
+		<div class="well bs-component campaign-bs-component">
+			<form class="form-horizontal step2_form validateFormAction" method="POST" action="">
+				{% csrf_token %}
+				<input name="step2_form_sent" value="1" type="hidden">
+				<input id="expiring_date" name="expiring_date" class="form-control" value="{% if post.expiring_date %}{{ post.expiring_date }}{% else %}{{ campaign_info_dict|get_item:"expiring_date" }}{% endif %}" type="hidden" required>
+				<fieldset>
+					<div class="form-group formGroupAction expiring_dateGroup">
+						<label class="control-label">{{ form.expiring_date.label }} *</label>
+						<div class="datepickerInitAction"></div>
+					</div>
+
+					<div class="form-group text-xs-left campaign_navigation_footer_container">
+						<div class="col-xs-6">
+							<a href="/dashboard/campaigns/step1/{{ campaign_info_dict.campaign_id }}/" class="btn btn-primary">&lt; &lt; Indietro</a>
+						</div>
+						<div class="col-xs-6 text-xs-right">
+							<button type="submit" class="btn btn-primary formSendButtonClickAction">Avanti &gt;&gt;</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function(){
+		// datepicker init
+		$('.datepickerInitAction').datepicker({
+			language: 'it',
+			clearButton: true,
+			minDate: new Date(moment().add(1, "days").format()), // Now can select only dates, which goes after today
+			onSelect: function onSelect(fd, date) {
+				var title = false;
+				$("#expiring_date").val(fd);
+			},
+		});
+
+		// validazione del form
+		$(document).on("click", ".formSendButtonClickAction", function(){
+
+			var returnVar = false;
+			// lavora sui "name" NON sugli "id"
+			var constraints = {
+				expiring_date: {
+					presence: true,
+				},
+			};
+
+			returnVar = validateForm(constraints);
+
+			return returnVar;
+		});
+
+		// init del datepicker con data preselezionata
+		{% if post.expiring_date %}
+			$('.datepickerInitAction').data('datepicker').selectDate(new Date("{{ post.expiring_date }}"));
+		{% elif campaign_info_dict|get_item:"expiring_date" %}
+			$('.datepickerInitAction').data('datepicker').selectDate(new Date("{{ campaign_info_dict|get_item:"expiring_date" }}"));
+		{% endif %}
+	});
+</script>
+{% endblock %}

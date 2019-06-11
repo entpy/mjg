@@ -1,0 +1,264 @@
+{% extends "website/inc/dashboard_base.html" %}
+{% load staticfiles website_extras %}
+
+{# page title #}
+{% block title %}MotorJab Garage | Campagne{% endblock %}
+
+{# page description #}
+{% block description %}{% endblock %}
+
+{# custom page css block #}
+{% block custom_css %}
+{{ block.super }}
+<style>
+	.uploaded_image { max-width: 300px; margin-bottom: 5px; }
+</style>
+{% endblock %}
+{# Custom page script block #}
+{% block custom_js %}
+{{ block.super }}
+<script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=90hq675gj9itvklgqg70z92kqn59t5xyxuum359nt93fvjuh"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script> -->
+<script src="{% static "website/js/vendor/jquery.form.js" %}"></script>
+<script>
+	tinymce.init({
+		selector:'textarea',
+		plugins: [
+			'advlist autolink link image lists charmap preview hr anchor pagebreak spellchecker',
+			'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+			'save table directionality emoticons template paste'
+		],
+		toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | preview media fullpage | forecolor backcolor emoticons',
+		height: 500,
+	});
+</script>
+{% endblock %}
+
+{# menu active element #}
+{% block navigation_active_campaigns %}active{% endblock %}
+
+{# container content #}
+{% block www_main_content %}
+{# title block {{{ #}
+{% block campaign_flow_container %}
+	{% include "website/dashboard/campaigns/campaign_header.html" with flow_active1="campaign_flow_block_active" complete_percentage="20" %}
+{% endblock %}
+{# title block }}} #}
+<div class="row no_gutter">
+	<div class="col-sm-12 col-md-offset-1">
+		<h4>1. Informazioni sulla campagna</h4>
+		<p>Inserisci le informazioni principali sulla campagna, come il <b>titolo</b>, il <b>prezzo iniziale</b>, il <b>prezzo finale</b>, una <b>descrizione</b> e l'<b>immagine</b>.</p>
+	</div>
+</div>
+<div class="row no_gutter">
+	<div class="col-sm-12">
+		<div class="col-md-offset-2 col-md-8 padding-xs-only padding-sm-only">
+			{# messages block #}
+			<div class="error_container"></div>
+			{% if form.errors %}
+				<div class="alert alert-danger">
+					<h4>Controlla questi errori</h4>
+					<ul>
+						{% for field in form %}
+							{% for error in field.errors %}
+								<li>{{ field.label|escape }}: {{ error|escape }}</li>
+							{% endfor %}
+						{% endfor %}
+						{% for form_error in form.non_field_errors %}
+							<li>{{ form_error }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% elif messages %}
+				{% for message in messages %}
+					{% if message.tags == "success" %}
+						<div class="alert alert-success">
+							{{ message|safe }}
+						</div>
+					{% elif message.tags == "error" %}
+						<div class="alert alert-danger">
+							{{ message|safe }}
+						</div>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+</div>
+<div class="row no_gutter">
+	<div class="col-sm-12 col-md-10 col-md-offset-1">
+		{# form #}
+		<div class="well bs-component campaign-bs-component">
+			<form class="form-horizontal step1_form validateFormAction" method="POST" action="">
+				{% csrf_token %}
+				<input name="step1_form_sent" value="1" type="hidden">
+				<input class="smallImageInputAction" name="small_image_id" value="{% if campaign_info_dict.small_image_id %}{{ campaign_info_dict.small_image_id }}{% endif %}" type="hidden">
+				<input class="largeImageInputAction" name="large_image_id" value="{% if campaign_info_dict.large_image_id %}{{ campaign_info_dict.large_image_id }}{% endif %}" type="hidden">
+				<fieldset>
+					<div class="form-group formGroupAction camp_titleGroup">
+						<label for="camp_title" class="control-label">{{ form.camp_title.label }} *</label>
+						<div class="input-group form_input_container_width_100">
+							<input id="camp_title" name="camp_title" class="form-control" placeholder="{{ form.camp_title.field.widget.attrs.placeholder }}" value="{% if post.camp_title %}{{ post.camp_title }}{% else %}{{ campaign_info_dict|get_item:"camp_title" }}{% endif %}" type="text" maxlength="200" required>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="row">
+								<div class="col-lg-9">
+									<div class="col-sm-4">
+										<div class="formGroupAction was_priceGroup">
+											<label for="was_price" class="control-label">{{ form.was_price.label }} *</label>
+											<div class="input-group">
+												<input id="was_price" name="was_price" class="form-control calculateDiscountAction" placeholder="{{ form.was_price.field.widget.attrs.placeholder }}" value="{% if post.was_price %}{{ post.was_price }}{% else %}{{ campaign_info_dict|get_item:"was_price" }}{% endif %}" type="number" required>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-4">
+										<div class="formGroupAction final_priceGroup">
+											<label for="final_price" class="control-label">{{ form.final_price.label }} *</label>
+											<div class="input-group">
+												<input id="final_price" name="final_price" class="form-control calculateDiscountAction" placeholder="{{ form.final_price.field.widget.attrs.placeholder }}" value="{% if post.final_price %}{{ post.final_price }}{% else %}{{ campaign_info_dict|get_item:"final_price" }}{% endif %}" type="number" required>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-4">
+										<div class="formGroupAction camp_discountGroup">
+											<label class="control-label">Sconto %</label>
+											<div class="input-group">
+												<input id="camp_discount" name="camp_discount" class="form-control campDiscountAction" type="text" value="0" readonly>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group formGroupAction camp_descriptionGroup">
+						<label for="camp_description" class="control-label">{{ form.camp_description.label }} *</label>
+						<div class="input-group form_input_container_width_100">
+							<textarea id="camp_description" name="camp_description" class="form-control no-spinners" required>{% if post.camp_description %}{{ post.camp_description }}{% else %}{{ campaign_info_dict|get_item:"camp_description" }}{% endif %}</textarea>
+						</div>
+					</div>
+					<div class="form-group formGroupAction camp_imageGroup">
+						<label class="control-label">Immagine (Se non caricata verrà utilizzata un'immagine di default -&gt; <a target="_blank" href="/static/website/img/default_campaign_image_l.png">vedi default</a>)</label>
+						<div class="uploadedImagePreviewAction">
+							{% if campaign_info_dict.small_image_url %}
+								<img class="uploaded_image" src="{{ campaign_info_dict.small_image_url }}" alt="Campaign Image">
+							{% endif %}	
+						</div>
+						<div class="input-group">
+							<a href="#" class="btn btn-primary uploadCampaignImageAction">Carica immagine</a>
+						</div>
+					</div>
+
+					<div class="form-group text-md-right campaign_navigation_footer_container">
+						<div class="col-lg-10 col-lg-offset-2">
+							<button type="submit" class="btn btn-primary formSendButtonClickAction">Avanti &gt;&gt;</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>
+
+<form class="uploadCampaignImageFormAction" style="display: none;" enctype="multipart/form-data" method="POST" action="/ajax/ajax-upload-campaign-image/">
+	{% csrf_token %}
+	<input class="uploadCampImageClickAction" name="camp_image" type="file">
+</form>
+<script>
+	$(document).ready(function(){
+		$(document).on("click", ".uploadCampaignImageAction", function(){
+			$(".uploadCampImageClickAction").click();
+
+			return false;
+		});
+
+		// upload dell'immagine della promo
+		$(document).on("change", ".uploadCampImageClickAction", function(){
+			// prepare Options Object
+			var options = {
+				success: function(responseText, statusText, xhr, $form) {
+					// responseText.image_url;
+					// TODO
+					// salvare l'id dell'immagine in un campo hidden nel form della promozione
+					// responseText.campaign_image_id;
+					console.log(responseText.image_url);
+					var imageTemplate = "<img class=\"uploaded_image\" src=\"" + responseText.small_image_url + "\" alt=\"Campaign Image\">";
+					$(".uploadedImagePreviewAction").html(imageTemplate);
+
+					// setto gli id delle immagini salvate nei relativi campi hidden
+					$(".smallImageInputAction").val(responseText.small_campaign_image_id);
+					$(".largeImageInputAction").val(responseText.large_campaign_image_id);
+				}
+			};
+			$('.uploadCampaignImageFormAction').ajaxSubmit(options); 
+
+			return false;
+		});
+
+		// calcolo lo sconto
+		$(document).on("change keyup", ".calculateDiscountAction", function(){
+			calculate_discount();
+
+			return true;
+		});
+
+		// validazione del form
+		$(document).on("click", ".formSendButtonClickAction", function(){
+
+			// aggiorno il contenuto della textarea per la validazione
+			tinymce.triggerSave();
+
+			var returnVar = false;
+			// lavora sui "name" NON sugli "id"
+			var constraints = {
+				camp_title: {
+					presence: true,
+				},
+				camp_description: {
+					presence: true,
+				},
+				was_price: {
+					// trick per validare un campo di tipo number senza attributo required
+					// presence: (!was_price.validity.valid),
+					presence: true,
+					numericality: {
+						greaterThan: 0,
+					},
+				},
+				final_price: {
+					// trick per validare un campo di tipo number senza attributo required
+					// presence: (!final_price.validity.valid),
+					presence: true,
+					numericality: {
+						greaterThan: 0,
+					},
+				},
+			};
+
+			returnVar = validateForm(constraints);
+
+			return returnVar;
+		});
+
+		// calcolo lo sconto al caricamento della pagina
+		calculate_discount();
+	});
+
+	function calculate_discount() {
+		var was_price = $("#was_price").val() * 1;
+		var final_price = $("#final_price").val() * 1;
+		var discount = 0;
+
+		// se entrambi i valori sono compilati calcolo lo sconto
+		if (final_price > was_price) {
+			$(".campDiscountAction").val("errore");
+		} else {
+			if (was_price) {
+				$(".campDiscountAction").val(Math.round(100-(final_price / was_price) * 100));
+			}
+		}
+	}
+</script>
+{% endblock %}

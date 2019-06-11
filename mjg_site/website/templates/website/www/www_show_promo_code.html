@@ -1,0 +1,148 @@
+{% extends "website/inc/www_base.html" %}
+{% load staticfiles website_extras %}
+
+{% block header_block %}{% endblock %}
+{# page title #}
+{% block title %}MotorJab Garage | Il tuo codice promozionale{% endblock %}
+
+{# page description #}
+{% block description %}{% endblock %}
+
+{# custom page css block #}
+{% block custom_css %}
+<style>
+	.page_header_block { padding: 30px 0; background-color: #0a102c; }
+	.page_header_block h2 { padding: 0px 25px; margin: 0px; font-weight: bold; color: #fff; background-color: transparent; }
+	.btn-primary, .btn-primary:hover, .btn-primary:active { background-color: #ff0505!important; }
+	.info_block img, .info_block img.emailMainImage { display: inline-block; height: auto; max-width: 450px; width: 100%; }
+	.countdownContainer { color:#ff0505;font-size:25px;font-weight:100;font-style:normal;letter-spacing:normal;text-transform:none;text-align:center;padding:0;margin:0; }
+	.countdownContainer .timeLabel { font-size:20px; }
+	.display_none { display: none; }
+	.emailMainDescription > p { color:#333;font-size:18px;font-weight:300;font-style:normal;letter-spacing:normal;line-height:35px;text-transform:none;text-align:left;padding:0;margin:0; }
+	.emailCampaignPriceTitle { margin-bottom: 15px; line-height: 1; text-align: center; color:#333; font-size:16px; font-weight:bold; }
+	.emailCampaignPriceValue { line-height: 1; text-align: center; color:#008b99; font-size:47px; font-weight:bold; }
+	.how_it_works_block { margin-top: 40px; }
+	.emailMainDescription { line-height: 1; color:#333; font-size:18px; font-weight:300; }
+
+	@media all and (max-width: 600px){
+		.emailMainTitle{
+			font-size:22px !important;
+		}
+		.emailMainDescription{
+			font-size:16px !important;
+		}
+		.emailCouponInfo{
+			font-size:14px !important;
+		}
+		.emailCouponCode{
+			font-size:32px !important;
+		}
+		.emailMainLogo{
+			min-width:140px !important;
+			width:40% !important;
+		}
+		.emailMainImage{
+			width:75% !important;
+		}
+		.emailCampaignPriceTitle{
+			font-size:12px !important;
+		}
+		.emailCampaignPriceValue{
+			font-size:35px !important;
+		}
+	}
+</style>
+{% endblock %}
+{# Custom page script block #}
+{% block custom_js %}
+{# howto: https://validatejs.org #}
+<script src="{% static "website/js/vendor/validate.min.js" %}"></script>
+{% endblock %}
+
+{# container content #}
+{% block www_main_content %}
+<div class="page_header_block">
+	<div><h2>{{ campaign_info_dict|get_item:"camp_title" }}</h2></div>
+</div>
+<div class="container-fluid info_block info_block_color1">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1 pageContainerAction">
+			<div class="col-sm-4 padding-xs-only padding-sm-only">
+				<div class="text-center">
+					{% if campaign_info_dict.large_image_url %}
+						<img class="emailMainImage" src="{{ campaign_info_dict.large_image_url }}" alt="Image" border="0">
+					{% else %}
+						<img class="emailMainImage" src="{% static "website/img/default_campaign_image.png" %}" alt="Image" border="0">
+					{% endif %}
+				</div>
+			</div>
+			<div class="col-sm-offset-1 col-sm-7">
+				<div class="well bs-component">
+					<div class="text emailCampaignPriceTitle fallback-text">Il tuo coupon</div>
+					<div class="text emailCampaignPriceValue fallback-text">{{ camp_order_code }}</div>
+					<div class="how_it_works_block">
+						<div class="text emailCampaignPriceTitle fallback-text">Come utilizzare il coupon</div>
+						<div class="text emailMainDescription fallback-text">Presentaci il coupon in sede, <a href="https://www.google.com/maps/place/MotorJab+Garage+|+Gommista+Meccanica+Elettronica+Autoriparazioni+a+Torino/@45.065561,7.6723756,19z/data=!3m1!4b1!4m12!1m6!3m5!1s0x47886d9a1fc72099:0x6ee14cb2faa171a5!2sMotorJab+Garage+|+Gommista+Meccanica+Elettronica+Autoriparazioni+a+Torino!8m2!3d45.0655601!4d7.6729228!3m4!1s0x47886d9a1fc72099:0x6ee14cb2faa171a5!8m2!3d45.0655601!4d7.6729228" target="_blank">{{ business_address }}</a>, per poter utilizzare l'offerta.<br />Questo coupon non è cumulabile con altre offerte.</div>
+					</div>
+					<div class="how_it_works_block">
+						{% if messages %}
+							{% for message in messages %}
+								{% if message.tags == "success" %}
+									<div class="alert alert-success animated jackInTheBox">
+										<b>Una copia del coupon ti è stata inviata via email.</b><br />NOTA: se non lo trovi controlla la scheda "offerte" o "promozioni" della tua webmail.
+									</div>
+								{% endif %}
+							{% endfor %}
+						{% endif %}
+						{% if show_success_msg %}
+							<div class="alert alert-success animated jackInTheBox">
+								<b>Una copia del coupon ti è stata appena inviata via email.</b><br />NOTA: se non lo trovi controlla la scheda "offerte" o "promozioni" della tua webmail.
+							</div>
+						{% endif %}
+						{% if show_email_form %}
+							<div class="text emailCampaignPriceTitle fallback-text">Inviati il coupon via email</div>
+							<form class="form-horizontal validateFormAction" name="send_coupon_form" method="POST" action="">
+								{% csrf_token %}
+								<input type="hidden" name="send_coupon_form_sent" value="1" />
+								<input type="hidden" name="campaign_order_code" value="{{ camp_order_code }}" />
+								<fieldset>
+									<div class="form-group formGroupAction emailGroup">
+										<label class="control-label">Email *</label>
+										<div class="input-group">
+											<input id="email" name="email" class="form-control" placeholder="Inserisci la tua email" type="email" required>
+											<span class="input-group-btn">
+												<button type="submit" class="btn btn-primary btn-md formSendButtonClickAction">Invia</button>
+											</span>
+										</div>
+									</div>
+								</fieldset>
+							</form>
+						{% else %}
+							<div class="text-center">
+								<a href="/" class="btn btn-primary btn-lg">Torna in home page</a>
+							</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function(){
+	$(document).on("click", ".formSendButtonClickAction", function(){
+		// lavora sui "name" NON sugli "id"
+		var constraints = {
+			email: {
+				presence: true,
+				email: true,
+			},
+		};
+		return validateForm(constraints);
+	});
+});
+</script>
+{% endblock %}

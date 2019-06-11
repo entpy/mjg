@@ -1,0 +1,170 @@
+{% extends "website/inc/dashboard_base.html" %}
+{% load staticfiles website_extras %}
+
+{# page title #}
+{% block title %}MotorJab Garage | Campagne{% endblock %}
+
+{# page description #}
+{% block description %}{% endblock %}
+
+{# custom page css block #}
+{% block custom_css %}
+{{ block.super }}
+<style>
+	#campaignConfirmationModal .modal-content { background-color: #b6b6b6; }
+	.modal_text { color: #333; }
+	*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}section.wrapper{padding:40px 0}section.wrapper.dark{background:#313134}div.spinner{-moz-animation:rotate 10s infinite linear;-webkit-animation:rotate 10s infinite linear;animation:rotate 10s infinite linear;position:relative;display:block;margin:auto;width:142px;height:142px}div.spinner i{-moz-animation:rotate 3s infinite cubic-bezier(.09,.6,.8,.03);-webkit-animation:rotate 3s infinite cubic-bezier(.09,.6,.8,.03);animation:rotate 3s infinite cubic-bezier(.09,.6,.8,.03);-moz-transform-origin:50% 100% 0;-webkit-transform-origin:50% 100% 0;transform-origin:50% 100% 0;position:absolute;display:inline-block;top:50%;left:50%;border:solid 6px transparent;border-bottom:none}div.spinner i:nth-child(1){-moz-animation-timing-function:cubic-bezier(.09,.3,.12,.03);-webkit-animation-timing-function:cubic-bezier(.09,.3,.12,.03);animation-timing-function:cubic-bezier(.09,.3,.12,.03);width:44px;height:22px;margin-top:-22px;margin-left:-22px;border-color:#2172b8;border-top-left-radius:36px;border-top-right-radius:36px}div.spinner i:nth-child(2){-moz-animation-timing-function:cubic-bezier(.09,.6,.24,.03);-webkit-animation-timing-function:cubic-bezier(.09,.6,.24,.03);animation-timing-function:cubic-bezier(.09,.6,.24,.03);width:58px;height:29px;margin-top:-29px;margin-left:-29px;border-color:#18a39b;border-top-left-radius:42px;border-top-right-radius:42px}div.spinner i:nth-child(3){-moz-animation-timing-function:cubic-bezier(.09,.9,.36,.03);-webkit-animation-timing-function:cubic-bezier(.09,.9,.36,.03);animation-timing-function:cubic-bezier(.09,.9,.36,.03);width:72px;height:36px;margin-top:-36px;margin-left:-36px;border-color:#82c545;border-top-left-radius:48px;border-top-right-radius:48px}div.spinner i:nth-child(4){-moz-animation-timing-function:cubic-bezier(.09,1.2,.48,.03);-webkit-animation-timing-function:cubic-bezier(.09,1.2,.48,.03);animation-timing-function:cubic-bezier(.09,1.2,.48,.03);width:86px;height:43px;margin-top:-43px;margin-left:-43px;border-color:#f8b739;border-top-left-radius:54px;border-top-right-radius:54px}div.spinner i:nth-child(5){-moz-animation-timing-function:cubic-bezier(.09,1.5,.6,.03);-webkit-animation-timing-function:cubic-bezier(.09,1.5,.6,.03);animation-timing-function:cubic-bezier(.09,1.5,.6,.03);width:100px;height:50px;margin-top:-50px;margin-left:-50px;border-color:#f06045;border-top-left-radius:60px;border-top-right-radius:60px}div.spinner i:nth-child(6){-moz-animation-timing-function:cubic-bezier(.09,1.8,.72,.03);-webkit-animation-timing-function:cubic-bezier(.09,1.8,.72,.03);animation-timing-function:cubic-bezier(.09,1.8,.72,.03);width:114px;height:57px;margin-top:-57px;margin-left:-57px;border-color:#ed2861;border-top-left-radius:66px;border-top-right-radius:66px}div.spinner i:nth-child(7){-moz-animation-timing-function:cubic-bezier(.09,2.1,.84,.03);-webkit-animation-timing-function:cubic-bezier(.09,2.1,.84,.03);animation-timing-function:cubic-bezier(.09,2.1,.84,.03);width:128px;height:64px;margin-top:-64px;margin-left:-64px;border-color:#c12680;border-top-left-radius:72px;border-top-right-radius:72px}div.spinner i:nth-child(8){-moz-animation-timing-function:cubic-bezier(.09,2.4,.96,.03);-webkit-animation-timing-function:cubic-bezier(.09,2.4,.96,.03);animation-timing-function:cubic-bezier(.09,2.4,.96,.03);width:142px;height:71px;margin-top:-71px;margin-left:-71px;border-color:#5d3191;border-top-left-radius:78px;border-top-right-radius:78px}@-moz-keyframes rotate{to{-moz-transform:rotate(360deg);transform:rotate(360deg)}}@-webkit-keyframes rotate{to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@keyframes rotate{to{-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);-webkit-transform:rotate(360deg);transform:rotate(360deg)}}
+</style>
+{% endblock %}
+{# Custom page script block #}
+{% block custom_js %}
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script> -->
+<script src="{% static "website/js/vendor/jquery.form.js" %}"></script>
+{% endblock %}
+
+{# menu active element #}
+{% block navigation_active_campaigns %}active{% endblock %}
+
+{# container content #}
+{% block www_main_content %}
+{# title block {{{ #}
+{% block campaign_flow_container %}
+	{% include "website/dashboard/campaigns/campaign_header.html" with flow_active5="campaign_flow_block_active" complete_percentage="100" %}
+{% endblock %}
+{# title block }}} #}
+<div class="row no_gutter">
+	<div class="col-sm-12 col-md-offset-1">
+		<h4>4. Riepilogo finale</h4>
+		<p>Visualizza quali informazioni verranno inviate e invia la campagna ai tuoi clienti.</p>
+	</div>
+</div>
+<div class="row no_gutter">
+	<div class="col-sm-12">
+		<div class="col-md-offset-2 col-md-8 padding-xs-only padding-sm-only">
+			{# messages block #}
+			<div class="error_container"></div>
+			{% if form.errors %}
+				<div class="alert alert-danger">
+					<h4>Controlla questi errori</h4>
+					<ul>
+						{% for field in form %}
+							{% for error in field.errors %}
+								<li>{{ field.label|escape }}: {{ error|escape }}</li>
+							{% endfor %}
+						{% endfor %}
+						{% for form_error in form.non_field_errors %}
+							<li>{{ form_error }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% elif messages %}
+				{% for message in messages %}
+					{% if message.tags == "success" %}
+						<div class="alert alert-success">
+							{{ message|safe }}
+						</div>
+					{% elif message.tags == "error" %}
+						<div class="alert alert-danger">
+							{{ message|safe }}
+						</div>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+</div>
+<div class="row no_gutter">
+	<div class="col-sm-12 col-md-10 col-md-offset-1">
+		{# form #}
+		<div class="well bs-component campaign-bs-component">
+			<form class="form-horizontal step5_form submitFormAction validateFormAction" method="POST" action="">
+				{% csrf_token %}
+				<input name="step5_form_sent" value="1" type="hidden">
+				<input name="send_campaign" value="1" type="hidden">
+				<fieldset>
+					<div class="form-group formGroupAction camp_msg_subjectGroup">
+						<p><b>Oggetto del messaggio:</b><br />
+						{{ campaign_info_dict|get_item:"msg_subject" }}</p>
+					</div>
+					<div class="form-group formGroupAction camp_msg_subjectGroup">
+						<p><b>Testo del messaggio:</b><br />
+						{{ campaign_info_dict|get_item:"msg_text" }}</p>
+					</div>
+					<div class="form-group formGroupAction camp_msg_subjectGroup">
+						<p><b>Titolo della promozione:</b><br />
+						{{ campaign_info_dict|get_item:"camp_title" }}</p>
+					</div>
+					<div class="form-group formGroupAction camp_msg_subjectGroup">
+						<p><b>Totale destinatari:</b><br />
+						{{ count_campaign_sender }}</p>
+					</div>
+					<div class="form-group formGroupAction camp_msg_subjectGroup">
+						<p><b>URL della tua promozione:</b><br />
+						{{ campaign_url }}</p>
+					</div>
+
+					<div class="form-group text-xs-left campaign_navigation_footer_container">
+						<div class="col-xs-6">
+							<a href="/dashboard/campaigns/step4/{{ campaign_info_dict.campaign_id }}/" class="btn btn-primary">&lt; &lt; Indietro</a>
+						</div>
+						<div class="col-xs-6 text-xs-right">
+							<button type="button" class="btn btn-warning openConfirmModalAction">Invia Campagna</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="campaignConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel"><span class="modal_text">Conferma invio...</span></h4>
+			</div>
+			<div class="modal-body">
+				<span class="modal_text">Stai per inviare la campagna a <b>{{ count_campaign_sender }}</b> clienti, confermi l'invio?</span>
+				<div class="text-center">
+					<!-- <img src="{% static "website/img/campaign_loader.gif" %}" alt="Conferma invio"> -->
+					<section class="wrapper">
+						<div class="spinner">
+							<i></i>
+							<i></i>
+							<i></i>
+							<i></i>
+							<i></i>
+							<i></i>
+							<i></i>
+						</div>
+					</section>
+				</div>
+			</div>
+			<div class="modal-footer modalFooterAction">
+				<button type="button" class="btn btn-default" data-dismiss="modal">No aspetta...</button>
+				<button type="button" class="btn btn-primary formSendButtonClickAction">Invia Promozione</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function(){
+		// apertura modal di conferma invio
+		$(document).on("click", ".openConfirmModalAction", function(){
+			$('#campaignConfirmationModal').modal();
+
+			return false;
+		});
+
+		// invio la campagna
+		$(document).on("click", ".formSendButtonClickAction", function(){
+			$(".modalFooterAction").hide();
+			$(".submitFormAction").submit();
+
+			return false;
+		});
+	});
+</script>
+{% endblock %}
