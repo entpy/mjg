@@ -1063,7 +1063,7 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 .main_block .main_block_arrow_container { position: absolute; width: 100%; bottom: 160px; text-align: center; }
 .main_block .title_caption { color: #ffc812; font-size: 21px; font-weight: bold; }
 .main_block .main_block_arrow { font-size: 5em; color: white; position: absolute; top: -80px; }
-.footer_social_container { float: left; width: 100%; margin-left: 20px; }
+.footer_social_container { float: left; margin-left: 20px; }
 .footer_social_container a { font-size: 29px; }
 
 .force-left { text-align: left!important; }
