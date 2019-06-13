@@ -9,4 +9,6 @@ class EmailAppConfig(AppConfig):
 
     def ready(self):
         # https://simpleisbetterthancomplex.com/tutorial/2016/07/28/how-to-create-django-signals.html
-        import mjg_site.email_app.signals  # noqa
+        # import mjg_site.email_app.signals  # noqa
+        import email_app.signals  # noqa
+	pass
