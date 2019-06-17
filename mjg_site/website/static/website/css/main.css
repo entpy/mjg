@@ -1065,6 +1065,7 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 .main_block .main_block_arrow { font-size: 5em; color: white; position: absolute; top: -80px; }
 .footer_social_container { float: left; margin-left: 20px; }
 .footer_social_container a { font-size: 29px; }
+.footer_social_container > span  { display: inline-block; }
 .footer_social_container > span.social_spacing  { margin-right: 7px; }
 
 .force-left { text-align: left!important; }
