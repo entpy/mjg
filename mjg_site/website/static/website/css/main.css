@@ -1055,7 +1055,7 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 /*.page_anchor { display: inline-block; float: left; width: 100%; }*/
 .carousel-description * { color: white; text-shadow: 0px 0px 1px black; }
 .main_block { background-image: url("../img/motorjab_garage.jpg"); background-repeat: no-repeat; height: 100vh; margin-top: -80px; background-size: cover; min-height: 535px; position: relative; }
-.main_block .main_block_contents { position: absolute; margin-top: 150px; }
+.main_block .main_block_contents { position: absolute; margin-top: 150px; width: 100%; }
 .main_block .main_block_contents .main_block_contents_wrapper { width: 90%; margin: 0 auto; text-align: center; }
 .main_block .main_block_contents .main_block_contents_wrapper h1 { color: white; font-weight: bold; font-size: 4em; line-height: 70px; margin-top: -10px; }
 .main_block .main_block_contents_bottom { position: absolute; bottom: 0px; width: 100%; }
