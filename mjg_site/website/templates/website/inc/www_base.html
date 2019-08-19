@@ -27,23 +27,21 @@
 				<span class="icon-bar"></span>
 				</button>
 				<a title="MotorJab Garage" class="navbar-brand" href="/">
-					<img class="main-logo" src="{% static "website/img/logo_white.png" %}" alt="Autoriparazioni, elettrauto e gommista a Torino">
+					<img class="main-logo" src="{% static "website/img/logo.png" %}" alt="Autoriparazioni, elettrauto e gommista a Torino">
 				</a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
-				<ul class="nav navbar-nav navbar-right">
-					<li><a title="Home Page" class="{% block navigation_active_home %}{% endblock %}" href="/">HOME</a></li>
-					<li class="dropdown">
-						<a title="Servizi" href="/servizi" class="dropdown-toggle {% block navigation_active_services %}{% endblock %}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SERVIZI <span class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<li><a title="Meccanica" class="serviceNavigationClick" data-navigation-anchor="meccanica" href="/servizi?#_meccanica">MECCANICA</a></li>
-							<li><a title="Elettrauto" class="serviceNavigationClick" data-navigation-anchor="elettronica"  href="/servizi?#_elettronica">ELETTRAUTO</a></li>
-							<li><a title="Gommista" class="serviceNavigationClick" data-navigation-anchor="gommista"  href="/servizi?#_gommista">GOMMISTA</a></li>
-						</ul>
-					</li>
-					<li><a title="Contattaci" class="{% block navigation_active_contacts %}{% endblock %}" href="/contattaci">CONTATTACI</a></li>
-					<li><a title="Ricevi offerte" class="{% block navigation_active_get_offers %}{% endblock %}" href="/ricevi-offerte">RICEVI OFFERTE</a></li>
+				<ul class="nav navbar-nav navbar-right main_navbar">
+					<li><a title="Home Page" class="{% block navigation_active_home %}{% endblock %}" href="/"><span data-text="Home">Home</span></a></li>
+					<li><a title="Tagliando" class="" href="/tagliando-completo/"><span data-text="Tagliando">Tagliando</span></a></li>
+					<li><a title="Condizionatore" class="" href="/tagliando-completo/"><span data-text="Condizionatore">Condizionatore</span></a></li>
+					<li><a title="Meccanica" class="" href="/meccatronica/"><span data-text="Meccanica">Meccanica</span></a></li>
+					<li><a title="Meccatronica" class="" href="/meccatronica/"><span data-text="Meccatronica">Meccatronica</span></a></li>
+					<li><a title="Gommista" class="" href="/gommista/"><span data-text="Gommista">Gommista</span></a></li>
+					<li><a title="Servizi" href="/servizi/" class="{% block navigation_active_services %}{% endblock %}"><span data-text="Servizi">Servizi</span></a></li>
+					<li><a title="Contattaci" class="{% block navigation_active_contacts %}{% endblock %}" href="/contattaci"><span data-text="Contatti">Contatti</span></a></li>
+					<!--<li><a title="Ricevi offerte" class="{% block navigation_active_get_offers %}{% endblock %}" href="/ricevi-offerte">RICEVI OFFERTE</a></li>-->
 				</ul>
 			<!-- </div> -->
 			<!-- /.navbar-collapse -->

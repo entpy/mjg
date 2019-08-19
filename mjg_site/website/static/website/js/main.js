@@ -75,6 +75,17 @@ $(document).ready(function () {
 		'resizeDuration': 0,
 		'wrapAround': false,
 	})
+
+	// show/hide navigation
+	$(document).on("click", ".navbar-toggle", function(){
+		if ($("#bs-navbar-collapse-1").hasClass("collapse")) {
+			$("#bs-navbar-collapse-1").removeClass("collapse");
+		} else {
+			$("#bs-navbar-collapse-1").addClass("collapse");
+		}
+
+		return false;
+	});
 });
 
 function page_anchor(anchorName) {

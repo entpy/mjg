@@ -38,9 +38,13 @@
 		<!-- JavaScript -->
 		<script src="{% static "website/js/vendor/modernizr-3.6.0.min.js" %}"></script>
 		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-		<script>window.jQuery || document.write('<script src="{% static "website/js/vendor/jquery-3.3.1.min.js" %}"><\/script>')</script>
-		<script src="{% static "website/js/plugins.js" %}"></script>
-		<script src="{% static "website/js/bootstrap.js" %}"></script>
+		<script>
+		window.jQuery || document.write('<script src="{% static "website/js/vendor/jquery-3.3.1.min.js" %}"><\/script>')
+		// Avoid `console` errors in browsers that lack a console.
+		!function(){function e(){}for(var n,o=["assert","clear","count","debug","dir","dirxml","error","exception","group","groupCollapsed","groupEnd","info","log","markTimeline","profile","profileEnd","table","time","timeEnd","timeline","timelineEnd","timeStamp","trace","warn"],i=o.length,r=window.console=window.console||{};i--;)r[n=o[i]]||(r[n]=e)}();
+		</script>
+		<!--<script src="{% static "website/js/plugins.js" %}"></script>-->
+		<!--<script src="{% static "website/js/bootstrap.js" %}"></script>-->
 		<!-- load extra plugin here -->
 		{# Custom page script block #}
 		{% block custom_js %}
@@ -131,7 +135,6 @@
 		  window.dataLayer = window.dataLayer || [];
 		  function gtag(){dataLayer.push(arguments);}
 		  gtag('js', new Date());
-
 		  gtag('config', 'UA-132184239-1');
 		</script>
 	</head>
