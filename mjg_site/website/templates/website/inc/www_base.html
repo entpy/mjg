@@ -21,7 +21,6 @@
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse-1" aria-expanded="false">
-				<span class="sr-only">Toggle navigation</span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
@@ -34,11 +33,31 @@
 			<div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right main_navbar">
 					<li><a title="Home Page" class="{% block navigation_active_home %}{% endblock %}" href="/"><span data-text="Home">Home</span></a></li>
+					<li class="submenuBlockAction">
+						<a title="Meccanica" class="openSubmenuClickAction" href="#" aria-haspopup="true"><span data-text="Autoriparazioni &cudarrr;">Autoriparazioni &cudarrr;</i></span></a>
+						<ul class="submenu_container submenuAction">
+							<li><a title="Meccanica" href="#"><span>Officina&nbsp;autoriparazioni</span></a></li>
+							<li><a title="Meccanica" href="#"><span>Riparazione&nbsp;e&nbsp;restauro&nbsp;auto&nbsp;d'epoca</span></a></li>
+							<li><a title="Meccanica" href="#"><span>Riparazione&nbsp;veicoli&nbsp;ibridi&nbsp;ed&nbsp;elettrici</span></a></li>
+						</ul>
+					</li>
+					<li class="submenuBlockAction">
+						<a title="Gommista" class="openSubmenuClickAction" href="#" aria-haspopup="true"><span data-text="Gommista &cudarrr;">Gommista &cudarrr;</span></a>
+						<ul class="submenu_container submenuAction">
+							<li><a title="Meccanica" href="#"><span>Vendita</span></a></li>
+							<li><a title="Meccanica" href="#"><span>Cambio&nbsp;stagionale</span></a></li>
+							<li><a title="Meccanica" href="#"><span>Custodia&nbsp;pneumatici</span></a></li>
+						</ul>
+					</li>
+					<li><a title="Meccatronica" class="" href="/meccatronica/"><span data-text="Elettrauto">Elettrauto</span></a></li>
 					<li><a title="Tagliando" class="" href="/tagliando-completo/"><span data-text="Tagliando">Tagliando</span></a></li>
-					<li><a title="Condizionatore" class="" href="/tagliando-completo/"><span data-text="Condizionatore">Condizionatore</span></a></li>
-					<li><a title="Meccanica" class="" href="/meccatronica/"><span data-text="Meccanica">Meccanica</span></a></li>
-					<li><a title="Meccatronica" class="" href="/meccatronica/"><span data-text="Meccatronica">Meccatronica</span></a></li>
-					<li><a title="Gommista" class="" href="/gommista/"><span data-text="Gommista">Gommista</span></a></li>
+					<li class="submenuBlockAction">
+						<a title="Condizionatore" class="openSubmenuClickAction" href="#" aria-haspopup="true"><span data-text="Climatizzatore &cudarrr;">Climatizzatore &cudarrr;</span></a>
+						<ul class="submenu_container submenuAction">
+							<li><a title="Meccanica" href="#"><span>Ricarica&nbsp;clima</span></a></li>
+							<li><a title="Meccanica" href="#"><span>Riparazione&nbsp;climatizzatore</span></a></li>
+						</ul>
+					</li>
 					<li><a title="Servizi" href="/servizi/" class="{% block navigation_active_services %}{% endblock %}"><span data-text="Servizi">Servizi</span></a></li>
 					<li><a title="Contattaci" class="{% block navigation_active_contacts %}{% endblock %}" href="/contattaci"><span data-text="Contatti">Contatti</span></a></li>
 					<!--<li><a title="Ricevi offerte" class="{% block navigation_active_get_offers %}{% endblock %}" href="/ricevi-offerte">RICEVI OFFERTE</a></li>-->
