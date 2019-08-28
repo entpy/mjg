@@ -76,7 +76,7 @@ $(document).ready(function () {
 		'wrapAround': false,
 	})
 
-	// show/hide navigation
+	// show/hide navigation (visible only on mobile device)
 	$(document).on("click", ".navbar-toggle", function(){
 		if ($("#bs-navbar-collapse-1").hasClass("collapse")) {
 			$("#bs-navbar-collapse-1").removeClass("collapse");
@@ -86,6 +86,39 @@ $(document).ready(function () {
 
 		return false;
 	});
+
+	// per mostrare il sottomenu aggiungendo la classe "submenu_visible"
+	$(document).on("click", ".openSubmenuClickAction", function(){
+		// show selected submenu
+		if ($(this).siblings(".submenuAction").hasClass("submenu_visible")){
+			$(this).siblings(".submenuAction").removeClass("submenu_visible");
+		} else {
+			$(".submenuAction").removeClass("submenu_visible");
+			$(this).siblings(".submenuAction").addClass("submenu_visible");
+		}
+		// hide all submenu items
+		// setTimeout('$(".submenuAction").removeClass("submenu_visible");', 3000);
+
+		return false;
+	});
+
+	/*$(document).on("mouseover", ".openSubmenuClickAction", function(){
+		// show selected submenu
+		$(this).siblings(".submenuAction").addClass("submenu_visible");
+		// hide all submenu items
+		// setTimeout('$(".submenuAction").removeClass("submenu_visible");', 3000);
+
+		return false;
+	});*/
+
+
+	// per nascondere il sottomenu rimuovendo la classe "submenu_visible"
+	/*$(document).on("mouseleave", ".submenuBlockAction", function(){
+		// hide all submenu items
+		$(".submenuAction").removeClass("submenu_visible");
+
+		return false;
+	});*/
 });
 
 function page_anchor(anchorName) {

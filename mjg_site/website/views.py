@@ -172,7 +172,41 @@ def www_tires(request):
 
 def www_checkup(request):
     """View to show checkup info page"""
-    return render(request, 'website/www/www_checkup.html')
+    return render(request, 'website/www/www_tagliando_auto_torino.html')
+
+# TODO
+# nuovi {{{
+def www_officina_autoriparazioni(request):
+    """View to show www_officina_autoriparazioni page"""
+    return render(request, 'website/www/www_officina_autoriparazioni.html')
+def www_riparazioni_auto_epoca(request):
+    """View to show www_riparazioni_auto_epoca page"""
+    return render(request, 'website/www/www_riparazioni_auto_epoca.html')
+def www_riparazione_auto_ibride_ed_elettriche(request):
+    """View to show www_riparazione_auto_ibride_ed_elettriche page"""
+    return render(request, 'website/www/www_riparazione_auto_ibride_ed_elettriche.html')
+def www_vendita_montaggio_pneumatici(request):
+    """View to show www_vendita_montaggio_pneumatici page"""
+    return render(request, 'website/www/www_vendita_montaggio_pneumatici.html')
+def www_cambio_stagionale_pneumatici(request):
+    """View to show www_cambio_stagionale_pneumatici page"""
+    return render(request, 'website/www/www_cambio_stagionale_pneumatici.html')
+def www_custodia_pneumatici(request):
+    """View to show www_custodia_pneumatici page"""
+    return render(request, 'website/www/www_custodia_pneumatici.html')
+def www_elettrauto(request):
+    """View to show www_elettrauto page"""
+    return render(request, 'website/www/www_elettrauto.html')
+def www_tagliando_auto_torino(request):
+    """View to show www_tagliando_auto_torino page"""
+    return render(request, 'website/www/www_tagliando_auto_torino.html')
+def www_ricarica_climatizzatore(request):
+    """View to show www_ricarica_climatizzatore page"""
+    return render(request, 'website/www/www_ricarica_climatizzatore.html')
+def www_riparazione_climatizzatore(request):
+    """View to show www_riparazione_climatizzatore page"""
+    return render(request, 'website/www/www_riparazione_climatizzatore.html')
+# nuovi }}}
 
 def www_privacy_cookie_policy(request):
     """View to show privacy policy info page"""

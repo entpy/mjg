@@ -32,33 +32,33 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right main_navbar">
-					<li><a title="Home Page" class="{% block navigation_active_home %}{% endblock %}" href="/"><span data-text="Home">Home</span></a></li>
+					<li><a title="Torna in home" class="{% block navigation_active_home %}{% endblock %}" href="/"><span data-text="Home">Home</span></a></li>
 					<li class="submenuBlockAction">
-						<a title="Meccanica" class="openSubmenuClickAction" href="#" aria-haspopup="true"><span data-text="Autoriparazioni &cudarrr;">Autoriparazioni &cudarrr;</i></span></a>
+						<a class="openSubmenuClickAction {% block navigation_active_www_autoriparazioni %}{% endblock %}" href="#" aria-haspopup="true"><span data-text="Autoriparazioni &cudarrr;">Autoriparazioni &cudarrr;</i></span></a>
 						<ul class="submenu_container submenuAction">
-							<li><a title="Meccanica" href="#"><span>Officina&nbsp;autoriparazioni</span></a></li>
-							<li><a title="Meccanica" href="#"><span>Riparazione&nbsp;e&nbsp;restauro&nbsp;auto&nbsp;d'epoca</span></a></li>
-							<li><a title="Meccanica" href="#"><span>Riparazione&nbsp;veicoli&nbsp;ibridi&nbsp;ed&nbsp;elettrici</span></a></li>
+							<li class="{% block second_navigation_active_www_officina_autoriparazioni %}{% endblock %}"><a href="/officina-autoriparazioni-torino/"><span>Officina&nbsp;autoriparazioni</span></a></li>
+							<li class="{% block second_navigation_active_www_riparazioni_auto_epoca %}{% endblock %}"><a href="/riparazioni-auto-epoca-torino/"><span>Riparazione&nbsp;e&nbsp;restauro&nbsp;auto&nbsp;d'epoca</span></a></li>
+							<li class="{% block second_navigation_active_www_riparazione_auto_ibride_ed_elettriche %}{% endblock %}"><a href="/riparazione-auto-ibride-ed-elettriche-torino/"><span>Riparazione&nbsp;auto&nbsp;ibride&nbsp;ed&nbsp;elettriche</span></a></li>
 						</ul>
 					</li>
 					<li class="submenuBlockAction">
-						<a title="Gommista" class="openSubmenuClickAction" href="#" aria-haspopup="true"><span data-text="Gommista &cudarrr;">Gommista &cudarrr;</span></a>
+						<a class="openSubmenuClickAction {% block navigation_active_www_gommista %}{% endblock %}" href="#" aria-haspopup="true"><span data-text="Gommista &cudarrr;">Gommista &cudarrr;</span></a>
 						<ul class="submenu_container submenuAction">
-							<li><a title="Meccanica" href="#"><span>Vendita</span></a></li>
-							<li><a title="Meccanica" href="#"><span>Cambio&nbsp;stagionale</span></a></li>
-							<li><a title="Meccanica" href="#"><span>Custodia&nbsp;pneumatici</span></a></li>
+							<li class="{% block second_navigation_active_www_vendita_montaggio_pneumatici %}{% endblock %}"><a href="/vendita-montaggio-pneumatici-torino/"><span>Vendita&nbsp;&amp;&nbsp;Montaggio</span></a></li>
+							<li class="{% block second_navigation_active_www_cambio_stagionale_pneumatici %}{% endblock %}"><a href="/cambio-stagionale-pneumatici-torino/"><span>Cambio&nbsp;stagionale</span></a></li>
+							<li class="{% block second_navigation_active_www_custodia_pneumatici %}{% endblock %}"><a href="/custodia-pneumatici-torino/"><span>Custodia&nbsp;pneumatici</span></a></li>
 						</ul>
 					</li>
-					<li><a title="Meccatronica" class="" href="/meccatronica/"><span data-text="Elettrauto">Elettrauto</span></a></li>
-					<li><a title="Tagliando" class="" href="/tagliando-completo/"><span data-text="Tagliando">Tagliando</span></a></li>
+					<li><a title="Elettrauto" class="{% block navigation_active_www_elettrauto %}{% endblock %}" href="/elettrauto-torino/"><span data-text="Elettrauto">Elettrauto</span></a></li>
+					<li><a title="Il nostro Tagliando" class="{% block navigation_active_www_tagliando_auto %}{% endblock %}" href="/tagliando-auto-torino/"><span data-text="Tagliando">Tagliando</span></a></li>
 					<li class="submenuBlockAction">
-						<a title="Condizionatore" class="openSubmenuClickAction" href="#" aria-haspopup="true"><span data-text="Climatizzatore &cudarrr;">Climatizzatore &cudarrr;</span></a>
+						<a class="openSubmenuClickAction {% block navigation_active_www_climatizzatore %}{% endblock %}" href="#" aria-haspopup="true"><span data-text="Climatizzatore &cudarrr;">Climatizzatore &cudarrr;</span></a>
 						<ul class="submenu_container submenuAction">
-							<li><a title="Meccanica" href="#"><span>Ricarica&nbsp;clima</span></a></li>
-							<li><a title="Meccanica" href="#"><span>Riparazione&nbsp;climatizzatore</span></a></li>
+							<li class="{% block second_navigation_active_www_ricarica_climatizzatore %}{% endblock %}"><a href="/ricarica-climatizzatore-torino/"><span>Ricarica&nbsp;clima</span></a></li>
+							<li class="{% block second_navigation_active_www_riparazione_climatizzatore %}{% endblock %}"><a href="/riparazione-climatizzatore-torino/"><span>Riparazione&nbsp;climatizzatore</span></a></li>
 						</ul>
 					</li>
-					<li><a title="Servizi" href="/servizi/" class="{% block navigation_active_services %}{% endblock %}"><span data-text="Servizi">Servizi</span></a></li>
+					<li><a title="Tutti i nostri servizi" href="/servizi/" class="{% block navigation_active_services %}{% endblock %}"><span data-text="Servizi">Servizi</span></a></li>
 					<li><a title="Contattaci" class="{% block navigation_active_contacts %}{% endblock %}" href="/contattaci"><span data-text="Contatti">Contatti</span></a></li>
 					<!--<li><a title="Ricevi offerte" class="{% block navigation_active_get_offers %}{% endblock %}" href="/ricevi-offerte">RICEVI OFFERTE</a></li>-->
 				</ul>

@@ -33,7 +33,7 @@ urlpatterns = [
     url(r'^ricevi-offerte/(?:(?P<master_code>[^\/]+)/)?$', website.views.www_get_offers, {'source': project_constants.SOURCE_GET_OFFERS}),
     url(r'^meccatronica/?$', website.views.www_mechanics, name='www_mechanics'),
     url(r'^gommista/?$', website.views.www_tires, name='www_tires'),
-    url(r'^tagliando-completo/?$', website.views.www_checkup, name='www_checkup'),
+    url(r'^tagliando-completo/?$', website.views.www_checkup, name='www_checkup'), # XXX mantenuta per compatibilita' (ricercare in tutto il sito e sostituire con quella sotto!)
     url(r'^privacy/?$', website.views.www_privacy_cookie_policy, name='www_privacy_cookie_policy'),
     url(r'^cookie-policy/?$', website.views.www_cookie_law, name='www_cookie_law'),
     url(r'^disiscriviti/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/(?:(?P<unsubscribe_type>\w+)/)?$', website.views.www_unsubscribe, name='www_unsubscribe'),
@@ -41,6 +41,20 @@ urlpatterns = [
     url(r'^feedback/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/?$', website.views.www_feedback, name='www_feedback'),
     url(r'^invita-amici/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/?$', website.views.www_refer_friends, name='www_refer_friends'),
     url(r'^lascia-una-recensione/(?P<user_id>\d+)/(?P<account_code>[^\/]+)/?$', website.views.www_get_review, name='www_get_review'),
+
+    ### nuovi {{{
+    url(r'^officina-autoriparazioni-torino/?$', website.views.www_officina_autoriparazioni, name='www_officina_autoriparazioni'),
+    url(r'^riparazioni-auto-epoca-torino/?$', website.views.www_riparazioni_auto_epoca, name='www_riparazioni_auto_epoca'),
+    url(r'^riparazione-auto-ibride-ed-elettriche-torino/?$', website.views.www_riparazione_auto_ibride_ed_elettriche, name='www_riparazione_auto_ibride_ed_elettriche'),
+    url(r'^vendita-montaggio-pneumatici-torino/?$', website.views.www_vendita_montaggio_pneumatici, name='www_vendita_montaggio_pneumatici'),
+    url(r'^cambio-stagionale-pneumatici-torino/?$', website.views.www_cambio_stagionale_pneumatici, name='www_cambio_stagionale_pneumatici'),
+    url(r'^custodia-pneumatici-torino/?$', website.views.www_custodia_pneumatici, name='www_custodia_pneumatici'),
+    url(r'^elettrauto-torino/?$', website.views.www_elettrauto, name='www_elettrauto'),
+    url(r'^tagliando-auto-torino/?$', website.views.www_checkup, name='www_checkup'),
+    url(r'^ricarica-climatizzatore-torino/?$', website.views.www_ricarica_climatizzatore, name='www_ricarica_climatizzatore'),
+    url(r'^riparazione-climatizzatore-torino/?$', website.views.www_riparazione_climatizzatore, name='www_riparazione_climatizzatore'),
+    ### nuovi }}}
+
 
     # flyer 30
     url(r'^volantino/?$', website.views.www_get_offers, {'source': project_constants.SOURCE_FLYER_30}),
