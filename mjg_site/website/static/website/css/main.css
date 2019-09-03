@@ -256,7 +256,6 @@ html * {
 	z-index: 9;
 	min-height: auto;
 	margin-bottom: 0px;
-	padding-bottom: 7px;
 }
 
 .navbar.navbar-main {
@@ -276,7 +275,7 @@ html * {
 .navbar-brand {
 	/*height: 80px;*/
 	display: inline-block;
-	padding: 10px 0 15px 0px;
+	padding: 7px 0px 0px 15px;
 	letter-spacing: 0;
 	font-weight: 900;
 	color: #00B7EB;
@@ -322,28 +321,17 @@ html * {
 }
 
 .navbar-toggle .icon-bar {
-	background-color: #fff;
-	height: 1px;
+	background-color: #2e2e2e;
+	height: 3px;
+	width: 28px;
 }
 
 .navbar-toggle:hover .icon-bar {
-	background-color: #fff;
+	background-color: #0085ff;
 }
 
 .navbar-toggle {
-	border: 1px solid #fff;
-	border-radius: 2px;
 	margin-top: 25px;
-	background-color: #00B7EB;
-}
-
-.navbar-toggle:hover {
-	border: 1px solid #00B7EB;
-	background-color: #00B7EB;
-	-webkit-transition: color 0.3s ease;
-	-moz-transition: color 0.3s ease;
-	-o-transition: color 0.3s ease;
-	transition: color 0.3s ease;
 }
 
 .navbar.navbar-main ul.nav a {
@@ -358,11 +346,6 @@ html * {
 	-o-transition: color 0.1s ease;
 	transition: color 0.1s ease;
 }
-
-/*.navbar.navbar-main .navbar-nav li a {
-	padding-top: 0px;
-	padding-bottom: 0px;
-}*/
 
 .navbar.navbar-main .dropdown-menu>li>a {
 	line-height: 2.66 !important;
@@ -1053,8 +1036,11 @@ blockquote {
 
 @media (min-width: 1210px) {
 	.navbar-header { float: left; }
-	.navbar-brand { padding: 15px 0px 0px 25px; }
-	.navbar-right { margin-top: 39px; float: right!important; }
+	.navbar-right { margin-top: 32px; float: right!important; }
+}
+@media (min-width: 768px) and (max-width: 1209px) {
+	.navbar-brand { padding-left: 0px; padding-bottom: 5px; }
+	.navbar-main { padding-bottom: 5px; }
 }
 @media (max-width: 1055px) {
 	.main_navbar > li > a > span { padding: 0px 3px 2px 3px; }
@@ -1080,7 +1066,7 @@ blockquote {
 	.main_navbar > li > a { padding-top: 20px; padding-bottom: 20px; }
 	.main_navbar > li > a > span { padding: 0px; }
 	.main_navbar > li > a.active > span { border-bottom: 4px solid #0085ff; }
-	.navbar-brand { padding: 15px 0 5px 0px; }
+	.navbar-brand { padding: 5px 0 0px 0px; }
 	.navbar-toggle { position: absolute; right: 5px; }
 	.submenu_container {
 		position: relative!important;
@@ -1213,7 +1199,7 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 	.couponContainerTop { display: none; }
 	.promotionPageImage { padding-bottom: 40px; }
 
-	.main_block .main_block_contents { margin-top: 100px; }
+	.main_block .main_block_contents { margin-top: 120px; }
 	.main_block .main_block_contents .main_block_contents_wrapper h1 { font-size: 2.5em; line-height: 40px; margin-top: 5px; }
 	.main_block .main_block_contents_bottom h2 { font-size: 17px; line-height: 25px; padding: 15px; }
 	.main_block .main_block_arrow_container { bottom: 160px; }

@@ -14,7 +14,7 @@
 {% block custom_css %}{% endblock %}
 {# Custom page script block #}
 {% block custom_js %}
-<script src="{% static "website/js/vendor/jquery.scrollTo.min.js" %}"></script>
+<!--<script src="{% static "website/js/vendor/jquery.scrollTo.min.js" %}"></script>-->
 {% endblock %}
 {% block extra_js %}
 <script>
@@ -27,14 +27,14 @@
 		});
 
 		page_anchor();
-	});*/
+	});
 
 	$(document).ready(function(){
 		$(document).on("click", ".serviceNavigationClick", function(){
 			var navMain = $("#bs-navbar-collapse-1");
 			navMain.collapse('hide');
 		});
-	});
+	});*/
 </script>
 {% endblock %}
 
@@ -48,7 +48,6 @@
 	<div><h2>Meccanica, elettrauto, gommista: scopri tutto quello che facciamo</h2></div>
 </div>
 <!-- three elements block -->
-<div class="page_anchor" id="_meccanica">&nbsp;</div>
 <div class="row page_title_separator">
 	<div class="col-sm-12">
 		<h2>Meccanica</h2>
@@ -114,7 +113,6 @@ Dal <b>ricaricare l'aria condizionata</b> al <b>sostituire un filtro disidratato
 		</div>
 	</div>
 </div>
-<div class="page_anchor" id="_elettronica">&nbsp;</div>
 <div class="row page_title_separator">
 	<div class="col-sm-12">
 		<h2>Elettrauto</h2>
@@ -157,7 +155,6 @@ Controllare l'efficienza di un impianto elettrico è fondamentale per garantire 
 		</div>
 	</div>
 </div>
-<div class="page_anchor" id="_gommista">&nbsp;</div>
 <div class="row page_title_separator">
 	<div class="col-sm-12">
 		<h2>Gommista</h2>
