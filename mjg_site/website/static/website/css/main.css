@@ -1210,7 +1210,7 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 @media (max-width: 992px) {
 	.coupon_image_container img { max-width: 60%; }
 	.info_block { margin-top: 40px; }
-	.page_header_block h1 { display: inline-block; font-size: 35px; padding: 10px 20px; text-transform: uppercase; }
+	.page_header_block h1 { display: inline-block; font-size: 32px; padding: 10px 20px; text-transform: uppercase; }
 	.xs_only_img_margin_top { margin-top: 10px; }
 }
 /* sm only */
@@ -1220,7 +1220,7 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
 	.padding-sm-only-60 { padding-bottom: 60px; }
 	.single_service_block .readable_text1 { padding-bottom: 80px; }
 	.single_service_block:last-child .readable_text1 { padding-bottom: 0px; }
-	.page_header_block h1 { display: inline-block; font-size: 35px; padding: 10px 20px; text-transform: uppercase; }
+	.page_header_block h1 { display: inline-block; font-size: 32px; padding: 10px 20px; text-transform: uppercase; }
 	.sm_only_img_margin_top { margin-top: 10px; }
 	.review-sm-only-block { margin-top: 50px; }
 
