@@ -32,7 +32,8 @@ urlpatterns = [
     # TODO: testare che con i parametri al fondo master_code continui a funzionare
     url(r'^ricevi-offerte/(?:(?P<master_code>[^\/]+)/)?$', website.views.www_get_offers, {'source': project_constants.SOURCE_GET_OFFERS}),
     url(r'^meccatronica/?$', website.views.www_mechanics, name='www_mechanics'),
-    url(r'^gommista/?$', website.views.www_tires, name='www_tires'),
+    url(r'^gommista/?$', website.views.www_tires, name='www_tires'),  # XXX mantenuta per compatibilita' (ricercare in tutto il sito e sostituire con quella sotto!)
+    url(r'^gommista-torino/?$', website.views.www_tires, name='www_tires'),
     url(r'^tagliando-completo/?$', website.views.www_checkup, name='www_checkup'), # XXX mantenuta per compatibilita' (ricercare in tutto il sito e sostituire con quella sotto!)
     url(r'^privacy/?$', website.views.www_privacy_cookie_policy, name='www_privacy_cookie_policy'),
     url(r'^cookie-policy/?$', website.views.www_cookie_law, name='www_cookie_law'),
