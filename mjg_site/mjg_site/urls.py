@@ -55,6 +55,8 @@ urlpatterns = [
     url(r'^riparazione-climatizzatore-auto-torino/?$', website.views.www_riparazione_climatizzatore, name='www_riparazione_climatizzatore'),
     ### nuovi }}}
 
+    # per le wesite directory
+    url(r'^directory/?$', website.views.www_directory, name='www_directory'),
 
     # flyer 30
     url(r'^volantino/?$', website.views.www_get_offers, {'source': project_constants.SOURCE_FLYER_30}),

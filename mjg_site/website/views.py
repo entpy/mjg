@@ -216,6 +216,10 @@ def www_cookie_law(request):
     """View to show cookie law info page"""
     return render(request, 'website/www/www_cookie_law.html')
 
+def www_directory(request):
+    """View to show www_directory page"""
+    return render(request, 'website/www/www_directory.html')
+
 @ensure_csrf_cookie
 def www_unsubscribe(request, user_id, account_code, unsubscribe_type):
     """View to show unsubscribe page"""
