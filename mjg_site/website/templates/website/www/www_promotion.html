@@ -8,6 +8,22 @@
 {# page description #}
 {% block description %}{% endblock %}
 
+{% block social %}
+<!-- fb/tw meta -->
+<meta property="og:locale" content="it_IT" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="{{ campaign_info_dict|get_item:"camp_title" }}" />
+<meta property="og:description" content="MotorJab Garage - officina autoriparazioni, elettrauto, gommista" />
+<meta property="og:url" content="https://www.motorjab.it/p/{{ camp_dest_code }}/" />
+<meta property="og:image" content="https://www.motorjab.it{{ campaign_info_dict.large_image_url }}">
+<meta property="og:site_name" content="MotorJab Garage - officina autoriparazioni, elettrauto, gommista" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:description" content="{{ campaign_info_dict|get_item:"msg_text" }}" />
+<meta name="twitter:title" content="{{ campaign_info_dict|get_item:"camp_title" }}" />
+<meta name="twitter:image" content="https://www.motorjab.it{{ campaign_info_dict.large_image_url }}" />
+<!--<meta name="twitter:site" content="https://www.motorjab.it/">-->
+{% endblock %}
+
 {# custom page css block #}
 {% block custom_css %}
 <style>
