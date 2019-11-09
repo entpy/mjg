@@ -89,6 +89,8 @@ def run():
     ##### Bonus dicci la tua data di nascita per ottenere il bonus }}} #####
 
     ##### Chiedo all'utente di lasciare un feedback (informazioni interne) {{{ #####
+    # XXX: funzionante ma disattivato
+    """
     current_ma_event = "get_feedback"
     account_list = None
     if event_dictionary.get(current_ma_event, {}).get("status"):
@@ -104,9 +106,12 @@ def run():
     if account_list:
         for single_account in account_list:
             ma_event_obj.make_event(user_id=single_account["id"], ma_code=current_ma_event, strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
+    """
     ##### Chiedo all'utente di lasciare un feedback (informazioni interne) }}} #####
 
     ##### Chiedo all'utente di presentare degli amici {{{ #####
+    # XXX: funzionante ma disattivato
+    """
     current_ma_event = "refer_friend"
     account_list = None
     if event_dictionary.get(current_ma_event, {}).get("status"):
@@ -122,6 +127,7 @@ def run():
     if account_list:
         for single_account in account_list:
             ma_event_obj.make_event(user_id=single_account["id"], ma_code=current_ma_event, strings_ma_code=strings_ma_code, ma_code_dictionary=single_event_dictionary)
+    """
     ##### Chiedo all'utente di presentare degli amici }}} #####
 
     ##### Chiedo all'utente di lasciare una recensione (informazioni pubbliche) {{{ #####
