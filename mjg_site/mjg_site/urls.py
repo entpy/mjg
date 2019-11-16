@@ -96,6 +96,8 @@ urlpatterns = [
     url(r'^p/(?P<camp_dest_code>[^\/]+)/?$', website.views.www_promotion, name='www_promotion'),
     url(r'^p/(?P<camp_dest_code>[^\/]+)/(?P<camp_order_code>[^\/]+)/?$', website.views.www_show_promo_code, name='www_show_promo_code'),
     url(r'^promozione-scaduta/?$', website.views.www_expired_promotion, name='www_expired_promotion'),
+
+    url(r'^blog/', include('django_blog_it.urls')),
 ]
 
 if settings.DEBUG:

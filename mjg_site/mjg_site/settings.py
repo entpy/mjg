@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'mkauto_app',
     'email_app',
     'promotion_app',
+    'simple_pagination',
+    'django_blog_it.django_blog_it',
 ]
 
 MIDDLEWARE = [
