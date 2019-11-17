@@ -31,6 +31,7 @@ from django.views.generic import ListView, DetailView, CreateView, DeleteView,\
 from django.views.generic.edit import ProcessFormView
 from .mixins import AdminMixin, PostAccessRequiredMixin, AdminOnlyMixin, AuthorNotAllowedMixin
 from django.http import JsonResponse
+from django.conf import settings
 
 admin_required = user_passes_test(lambda user: user.is_active, login_url='/')
 
@@ -444,7 +445,7 @@ def upload_photos(request):
             obj.thumbnail.save(thumbnail_name, File(imdata))
         obj.save()
         os.remove(os.path.join(settings.BASE_DIR, thumbnail_name))
-        upurl = "/" + obj.upload.url
+        upurl = str(settings.SITE_URL) + obj.upload.url
     return HttpResponse(
         """<script type='text/javascript'>
         window.parent.CKEDITOR.tools.callFunction({0}, '{1}');
@@ -464,10 +465,10 @@ def recent_photos(request):
     ''' returns all the images from the data base '''
     imgs = []
     for obj in Image_File.objects.filter(is_image=True).order_by("-date_created"):
-        upurl = "/" + obj.upload.url
+        upurl = str(settings.SITE_URL) + obj.upload.url
         thumburl = ""
         if obj.thumbnail:
-            thumburl = "/" + obj.thumbnail.url
+            thumburl = str(settings.SITE_URL) + obj.thumbnail.url
         imgs.append({'src': upurl, 'thumb': thumburl, 'is_image': True})
     return render_to_response('dashboard/browse.html', {'files': imgs})
 

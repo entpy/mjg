@@ -5,6 +5,7 @@ from django.template.defaultfilters import slugify
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
+from django.utils import timezone
 
 
 ROLE_CHOICE = (
@@ -105,7 +106,7 @@ class Post(models.Model):
     tags = models.ManyToManyField(Tags, related_name='rel_posts')
     status = models.CharField(max_length=10, choices=STATUS_CHOICE, default='Drafted')
     keywords = models.TextField(max_length=500, blank=True)
-    featured_image = models.ImageField(upload_to='static/blog/uploads/%Y/%m/%d/', blank=True, null=True)
+    featured_image = models.ImageField(upload_to='blog/post_main_uploads/%Y/%m/%d/', blank=True, null=True)
 
     class Meta:
         ordering = ['-updated_on']
@@ -205,10 +206,10 @@ class PostHistory(models.Model):
 
 
 class Image_File(models.Model):
-    upload = models.FileField(upload_to="static/uploads/%Y/%m/%d/")
-    date_created = models.DateTimeField(default=datetime.datetime.now)
+    upload = models.FileField(upload_to="blog/post_upload/%Y/%m/%d/")
+    date_created = models.DateTimeField(default=timezone.now)
     is_image = models.BooleanField(default=True)
-    thumbnail = models.FileField(upload_to="static/uploads/%Y/%m/%d/", blank=True, null=True)
+    thumbnail = models.FileField(upload_to="blog/post_upload/%Y/%m/%d/", blank=True, null=True)
 
     def __str__(self):
         return self.date_created

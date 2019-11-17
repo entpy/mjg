@@ -6,6 +6,9 @@
   padding-left: 0px;
   padding-right: 0px; }
 
+.main-logo {
+	width: 120px;
+}
 body {
   font-family: 'Poppins', sans-serif;
   font-size: 13px;
@@ -13,14 +16,11 @@ body {
   background: #f7f7f7;
   padding: 0px;
   margin: 0px;
-  padding-top: 70px;
   position: relative;
   padding-bottom: 0px !important; }
   @media (min-width: 240px) and (max-width: 767px) {
     body {
       padding: 0px; } }
-  body.fixed-top-menu {
-    padding-top: 50px; }
 
 .no_row_margin {
   margin-left: 0px;
@@ -39,7 +39,8 @@ a:hover {
 
 header .navbar-default {
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#cb1312+0,f43e28+100 */
-  background: #ff7100;
+  background-image: url("../website/img/blog-header.png");
+  min-height: 100px;
  }
   header .navbar-default .navbar-header .navbar-brand {
     color: #fff;

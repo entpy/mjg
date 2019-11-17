@@ -8,7 +8,7 @@ MEDIA_ROOT = settings.MEDIA_ROOT if settings.MEDIA_ROOT else os.path.join(BASE_D
 
 DISQUS_SHORTNAME = "motorjabgarage"
 
-BLOG_TITLE = "My Django Blog"
-BLOG_DESCRIPTION = "Rapid development of web applications"
-BLOG_KEYWORDS = "django, python, webframework"
-BLOG_AUTHOR = "Micropyramid"
+BLOG_TITLE = "MotorJab Garage Blog"
+BLOG_DESCRIPTION = "Il blog ufficiale di MotorJab Garage"
+BLOG_KEYWORDS = "officina autoriparazioni, meccanica, elettrauto, gommista, ricarica clima"
+BLOG_AUTHOR = "motorjab"
