@@ -109,7 +109,7 @@ class Post(models.Model):
     featured_image = models.ImageField(upload_to='blog/post_main_uploads/%Y/%m/%d/', blank=True, null=True)
 
     class Meta:
-        ordering = ['-updated_on']
+        ordering = ['-id']
 
     def save(self, *args, **kwargs):
         tempslug = slugify(self.title)

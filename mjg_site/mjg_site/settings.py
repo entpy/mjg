@@ -159,6 +159,8 @@ GIT_PROJECT_NAME = "mjg"
 BACKGROUND_TASK_RUN_ASYNC=True
 PROMO_URL_PATH = "p"
 
+DISQUS_SHORTNAME = "motorjabgarage"
+
 # loading local settings
 try:
     LOCAL_SETTINGS

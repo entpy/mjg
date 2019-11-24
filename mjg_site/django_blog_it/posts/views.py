@@ -22,7 +22,7 @@ def categories_tags_lists():
     categories_list = Category.objects.filter(is_active=True, post__status='Published').distinct()
     tags_list = Tags.objects.annotate(
         Num=Count('rel_posts')).filter(Num__gt=0, rel_posts__status='Published', rel_posts__category__is_active=True)[:20]
-    posts = Post.objects.filter(status='Published').order_by('-updated_on')[0:3]
+    posts = Post.objects.filter(status='Published').order_by('-id')[0:3]
     return {'categories_list': categories_list, 'tags_list': tags_list, 'recent_posts': posts}
 
 
@@ -37,7 +37,7 @@ def categories_tags_lists():
 
 class Home(ListView):
     template_name = "posts/new_index.html"
-    queryset = Post.objects.filter(status='Published', category__is_active=True).order_by('-updated_on')
+    queryset = Post.objects.filter(status='Published', category__is_active=True).order_by('-id')
     context_object_name = "blog_posts"
 
     def get_context_data(self, *args, **kwargs):

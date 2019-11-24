@@ -23,7 +23,7 @@ Edit
             {% for field in form %}
               {% if field.name != 'content' %}
                 <div class="form-group">
-                  <label>{% if field.name == 'title' %}POST TITLE{% else %}{{ field.label }}{% endif %}</label>
+                  <label>{% if field.name == 'title' %}POST TITLE (usare un nome con più parole separate da trattini, altrimenti non funziona, esempio: il-titolo-del-post){% else %}{{ field.label }}{% endif %}</label>
                   <div class="controls">
                     {{ field }}
                     {% if field.help_text %}

@@ -6,7 +6,7 @@ BASE_DIR = getattr(settings, 'BASE_DIR')
 MEDIA_URL = settings.MEDIA_URL if settings.MEDIA_URL else '/media/'  # settings.MEDIA_URL if settings.MEDIA_URL else '/media/'
 MEDIA_ROOT = settings.MEDIA_ROOT if settings.MEDIA_ROOT else os.path.join(BASE_DIR + '/media/')  # settings.MEDIA_ROOT if settings.MEDIA_ROOT else os.path.join(BASE_DIR + '/media/')
 
-DISQUS_SHORTNAME = "motorjabgarage"
+DISQUS_SHORTNAME = getattr(settings, 'DISQUS_SHORTNAME', False)
 
 BLOG_TITLE = "MotorJab Garage Blog"
 BLOG_DESCRIPTION = "Il blog ufficiale di MotorJab Garage"
