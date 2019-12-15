@@ -152,11 +152,11 @@ header .navbar-default {
   .main_container .middle_container .main_left_container .blog_list_container .blog_container .blog_img {
     display: table-cell;
     width: 200px;
-    height: 175px;
+    height: auto;
     vertical-align: top; }
     .main_container .middle_container .main_left_container .blog_list_container .blog_container .blog_img img {
       width: 200px;
-      height: 175px; }
+      height: auto; }
   .main_container .middle_container .main_left_container .blog_list_container .blog_container .blog_content_container {
     display: table-cell;
     width: auto;
