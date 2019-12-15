@@ -104,7 +104,7 @@ class Campaign(models.Model):
         if "camp_description" in data_dict:
             campaign_obj.camp_description = data_dict["camp_description"]
         if "msg_subject" in data_dict:
-            campaign_obj.msg_subject = data_dict["msg_subject"]
+            campaign_obj.msg_subject = str(data_dict["msg_subject"]).lower()
         if "msg_text" in data_dict:
             campaign_obj.msg_text = data_dict["msg_text"]
         if "was_price" in data_dict:
@@ -195,6 +195,7 @@ class Campaign(models.Model):
 
         campaign_user_temp_obj = CampaignUserTemp()
         email_sent_obj = EmailSent()
+        ma_event_obj = MaEvent()
 
         # marco la campagna come 'in fase di invio'
         data_dict = { }
@@ -239,13 +240,13 @@ class Campaign(models.Model):
 
                 # 2) invio l'email con il template
                 email_context = {
-                    "subject" : campaign_info_dict["msg_subject"],
+                    "subject" : ma_event_obj.create_first_name_string(string=str(campaign_info_dict["msg_subject"]), separator=", ", first_name=str(single_tmp_dest["user__first_name"])),
                     "title" : campaign_info_dict["camp_title"],
                     "content" : campaign_info_dict["msg_text"],
                     "image_url" : settings.SITE_URL + campaign_info_dict["small_image_url"],
                     # "coupon_code" : "codice",
-                    "call_to_action_title" : "Ottieni il coupon della promozione",
-                    "call_to_action_label" : "Ottieni coupon",
+                    "call_to_action_title" : "Per scoprire maggiori dettagli<br />clicca sul pulsante sotto",
+                    "call_to_action_label" : "Maggiori dettagli",
                     "call_to_action_url" : self.get_camp_dest_url(camp_dest_code=dest_code),
                     "user_profile_url" : settings.SITE_URL + "/profilo/" + str(single_tmp_dest["user__id"]) + "/" + str(single_tmp_dest["user__account__account_code"]),
                     "email_unsubscribe_url" : settings.SITE_URL + "/disiscriviti/" + str(single_tmp_dest["user__id"]) + "/" + str(single_tmp_dest["user__account__account_code"] + "/"),
