@@ -32,6 +32,8 @@ from django.views.generic.edit import ProcessFormView
 from .mixins import AdminMixin, PostAccessRequiredMixin, AdminOnlyMixin, AuthorNotAllowedMixin
 from django.http import JsonResponse
 from django.conf import settings
+from mjg_site.CustomImagePIL import CustomImagePIL
+
 
 admin_required = user_passes_test(lambda user: user.is_active, login_url='/')
 
@@ -424,27 +426,13 @@ def upload_photos(request):
     upurl = ''
     if request.FILES.get("upload"):
         f = request.FILES.get("upload")
-        obj = Image_File.objects.create(upload=f, is_image=True)
+        obj = Image_File.objects.create(upload=f, thumbnail=f, is_image=True)
         obj.save()
         thumbnail_name = 'thumb' + f.name
-        if getattr(settings, 'AWS_ENABLED', False):
-            image_file = requests.get(obj.upload.url, stream=True)
-            with open(thumbnail_name, 'wb') as destination:
-                for chunk in image_file.iter_content():
-                    destination.write(chunk)
-        else:
-            image_file = f
-            with open(thumbnail_name, 'wb') as destination:
-                for chunk in image_file.chunks():
-                    destination.write(chunk)
-        im = Image.open(destination.name)
-        size = (128, 128)
-        im.thumbnail(size)
-        im.save(thumbnail_name)
-        with open(thumbnail_name, 'rb') as imdata:
-            obj.thumbnail.save(thumbnail_name, File(imdata))
-        obj.save()
-        os.remove(os.path.join(settings.BASE_DIR, thumbnail_name))
+
+	custom_image_PIL_obj = CustomImagePIL(file_path=str(obj.thumbnail.path), image_raw=None, box_width=300, box_height=300)
+	custom_image_PIL_obj.resize_image(filename=obj.thumbnail.path)
+
         upurl = str(settings.SITE_URL) + obj.upload.url
     return HttpResponse(
         """<script type='text/javascript'>
