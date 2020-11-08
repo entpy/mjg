@@ -12,3 +12,4 @@ BLOG_TITLE = "MotorJab Garage Blog"
 BLOG_DESCRIPTION = "Il blog ufficiale di MotorJab Garage"
 BLOG_KEYWORDS = "officina autoriparazioni, meccanica, elettrauto, gommista, ricarica clima"
 BLOG_AUTHOR = "motorjab"
+SITE_URL = settings.SITE_URL

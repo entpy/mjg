@@ -93,7 +93,8 @@ class BlogPostView(DetailView):
             "keywords": self.object.keywords,
             "author": author,
             "short_url": self.get_mini_url(self.request),
-            "blog_title": settings.BLOG_TITLE
+            "blog_title": settings.BLOG_TITLE,
+	    "site_url": str(settings.SITE_URL),
         })
         context.update(categories_tags_lists())
         return context

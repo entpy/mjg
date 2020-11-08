@@ -5,13 +5,20 @@
 <head>
   <meta charset="UTF-8">
   <title>{% blog_title as blogtitle %}{{ blogtitle }} - {% block title %}Home{% endblock %}</title>
-  <link rel="shortcut icon" href="{% static 'images/favicon.png' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <link rel="shortcut icon" href="{% static "website/favicon-32x32.png" %}">
     {% block description %}
     <link rel="canonical" href="{{ request.build_absolute_uri }}"/>
-    <meta property="og:url" content="{{ request.build_absolute_uri }}" />
-    <meta property="og:image" content="{{ og_image }}" />
-    <meta property="og:title"  content="{{ title }}" />
-    <meta property="og:description" content="{{ description|truncatechars:160 }}" />
+
+	<!-- fb tags -->
+	<meta property="og:url" content="{{ request.build_absolute_uri }}" />
+	{% if blog_name.featured_image %}
+		<meta property="og:image" content="{{ site_url }}{{ blog_name.featured_image.url }}" />
+	{% endif %}
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="{{ title }}" />
+	<meta property="og:description" content="{{ description|truncatechars:160 }}" />
 
     <meta name="title" content="{{ title }}" />
     <meta name="description" content="{{ description|truncatechars:160 }}" />
@@ -19,23 +26,54 @@
     <meta name="author" content="{{ author }}" />
     <meta name="robots" content="index, follow">
     {% endblock %}
+
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static "website/apple-touch-icon.png" %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static "website/favicon-32x32.png" %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static "website/favicon-16x16.png" %}">
+  <link rel="mask-icon" href="/static/website/safari-pinned-tab.svg" color="#5bbad5">
+
   <!-- Latest compiled and minified CSS -->
   <link href='https://fonts.googleapis.com/css?family=Poppins:400,300,500,600,700' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
   <link rel="stylesheet" href="{% static 'css/frontend_main.css' %}" type="text/css">
-  <!--
-  -->
   <link rel="stylesheet" href="{% static 'css/menu/sm-core-css.css' %}" type="text/css">
   <link rel="stylesheet" href="{% static 'css/menu/sm-blue.css' %}" type="text/css">
   <!-- for online links -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="{% static 'css/menu/dropdown_submenu.css' %}" type="text/css">
+  <!--<link rel="stylesheet" href="{% static 'css/menu/dropdown_submenu.css' %}" type="text/css">-->
   {% block extra_css %}
   {% endblock %}
   <link href="https://unpkg.com/ionicons@4.4.6/dist/css/ionicons.min.css" rel="stylesheet">
 </head>
 <body>
+  <!-- Load Facebook SDK for JavaScript -->
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+
+<script>window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));</script>
+
   <header>
   {% block menu_block %}
     {% load_menu %}

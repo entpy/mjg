@@ -2,6 +2,19 @@
 {% load blog_tags %}
 {% block title %} {{ blog_name.title }} {% endblock %}
 {% block blog_content %}
+<style>
+	.fb-share-button.fb_iframe_widget > span {
+		vertical-align: initial!important;
+	}
+	.main_container .middle_container .social_block {
+		margin-top: 20px;
+		display: inline-block;
+		width: 100%;
+	}
+	.main_container .middle_container .main_left_container .blog_detail_container .blog_details .blog_panel .panel-body .blog_detail_content .blog_img {
+		margin-bottom: 40px;
+	}
+</style>
 <!-- breadcrumbs-schema -->
 <ol itemscope itemtype="http://schema.org/BreadcrumbList" class="breadcrumb">
   <li itemprop="itemListElement" itemscope
@@ -65,15 +78,27 @@
                       -->
                     </div>
                     <div class="social_block">
+			<ul class="social_connections">
+				<li class="text-center">
+					<!-- fb share button -->
+					<div class="fb-share-button" data-href="{{ request.build_absolute_uri }}" data-layout="button" data-size="large"></div>
+				</li>
+				<li class="text-center">
+					<!-- tw share button -->
+					<a class="twitter-share-button" href="https://twitter.com/intent/tweet?text={{ description.title }}&url={{short_url}}&via=motorjabgarage&hashtags=motorjabgarage" data-size="large">Tweet</a>
+				</li>
+			</ul>
+
+			<!--
                        <ul class="social_connections">
                         <li class="text-center">
-                          <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{short_url}}&t={{blog_name.title}}" class="facebook">
+                          <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{short_url}}&t={{ blog_name.title }}" class="facebook">
                             <i class="fa fa-facebook"></i>
                             Facebook
                           </a>
                         </li>
                         <li class="text-center">
-                          <a target="_blank" href="https://twitter.com/intent/tweet?text={{blog_name.title}}&url={{short_url}}&via={{blog_title}}" class="twitter">
+                          <a target="_blank" href="https://twitter.com/intent/tweet?text={{ description.title }}&url={{short_url}}&via=motorjabgarage" class="twitter">
                             <i class="fa fa-twitter"></i>
                             Twitter
                           </a>
@@ -84,6 +109,7 @@
                             Linkedin
                           </a>
                         </li>
+			-->
                         <br clear="all">
                    </ul>
                     </div>
