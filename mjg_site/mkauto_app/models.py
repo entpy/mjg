@@ -284,7 +284,7 @@ class MaEvent(models.Model):
             if ma_code_dictionary["prize_type"] == "text":
                 coupon_extra_text = "Questo coupon non è cumulabile con altre offerte."
             else:
-                coupon_extra_text = "Questo coupon non è cumulabile con altre offerte e si applica al costo di manodopera."
+                coupon_extra_text = "Questo coupon non è cumulabile con altre offerte e si applica esclusivamente alla sola manodopera se questa è superiore di €100."
 
         email_context = {
             "subject" : event_strings["subject"] + " (" + formatted_cur_date + ")",

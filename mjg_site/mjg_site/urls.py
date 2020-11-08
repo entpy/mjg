@@ -46,7 +46,7 @@ urlpatterns = [
     ### nuovi {{{
     url(r'^officina-autoriparazioni-torino/?$', website.views.www_officina_autoriparazioni, name='www_officina_autoriparazioni'),
     url(r'^riparazione-auto-epoca-torino/?$', website.views.www_riparazioni_auto_epoca, name='www_riparazioni_auto_epoca'),
-    url(r'^riparazione-auto-ibride-ed-elettriche-torino/?$', website.views.www_riparazione_auto_ibride_ed_elettriche, name='www_riparazione_auto_ibride_ed_elettriche'),
+    # url(r'^riparazione-auto-ibride-ed-elettriche-torino/?$', website.views.www_riparazione_auto_ibride_ed_elettriche, name='www_riparazione_auto_ibride_ed_elettriche'),
     url(r'^vendita-montaggio-pneumatici-torino/?$', website.views.www_vendita_montaggio_pneumatici, name='www_vendita_montaggio_pneumatici'),
     url(r'^cambio-stagionale-pneumatici-torino/?$', website.views.www_cambio_stagionale_pneumatici, name='www_cambio_stagionale_pneumatici'),
     url(r'^servizio-custodia-pneumatici-torino/?$', website.views.www_custodia_pneumatici, name='www_custodia_pneumatici'),
